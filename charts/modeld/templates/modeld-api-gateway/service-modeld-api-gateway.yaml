@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: modeld-api-gateway
+  namespace: modeld-system
+spec:
+  selector:
+    app: modeld-api-gateway
+  ports:
+    - protocol: TCP
+      port: {{ .Values.ports.port }}
+      targetPort: {{ .Values.ports.targetPort }}

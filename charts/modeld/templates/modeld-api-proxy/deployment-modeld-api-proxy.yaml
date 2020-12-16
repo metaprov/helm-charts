@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modeld-api-proxy
+  namespace: modeld-system
+  labels:
+    app: modeld-api-proxy
+    app.kubernetes.io/name: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.global.tag }}
+    app.kubernetes.io/component: modeld-api-proxy
+    app.kubernetes.io/part-of: "modeld"
+    app.kubernetes.io/managed-by: "helm"
+  {{- if eq .Values.global.prometheus.enabled true }}
+  annotations:
+    prometheus.io/scrape: "{{ .Values.global.prometheus.enabled }}"
+    prometheus.io/port: "{{ .Values.global.prometheus.port }}"
+    prometheus.io/path: "/"
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: modeld-api-proxy
+  template:
+    metadata:
+      labels:
+        app: modeld-api-proxy
+        app.kubernetes.io/name: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Values.global.tag }}
+        app.kubernetes.io/component: modeld-api-proxy
+        app.kubernetes.io/part-of: "modeld"
+        app.kubernetes.io/managed-by: "helm"
+    spec:
+      serviceAccountName: modeld-service-account
+      containers:
+        - name: main
+        {{- if contains "/" .Values.image.name }}
+        image: "{{ .Values.image.name }}"
+        {{- else }}
+        image: "{{ .Values.global.registry }}/modeld-api-proxy:{{ .Values.global.tag }}"
+        {{- end }}
+        imagePullPolicy: {{ .Values.global.pullPolicy | quote }}
+        ports:
+          - containerPort: 8080
+            name: apiproxy
+        {{- if .Values.resources }}
+        resources: {{ toYaml .Values.resources | nindent 12 }}
+        {{- end }}
+

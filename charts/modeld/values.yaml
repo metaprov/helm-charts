@@ -1,0 +1,134 @@
+namespace: modeld-system
+
+
+
+
+global:
+  imageRegistry: quay.io
+  pullPolicy: IfNotPresent
+  debug: false
+  cachePath: "/home/modeld/data"
+  registry: quay.io/metaprov
+  tag: "latest"
+  logAsJson: false
+  imagePullPolicy: Always
+  imagePullSecrets: ""
+  ha:
+      enabled: false
+      replicaCount: 3
+  prometheus:
+      enabled: true
+      port: 9090
+  mtls:
+      enabled: true
+      workloadCertTTL: 24h
+      allowedClockSkew: 15m
+
+minikube:
+  enabled: true
+
+rbac:
+  create: true
+
+podSecurityPolicy:
+  enabled: false
+
+deployment:
+  updateStrategy:
+      type: Recreate
+
+imagePullSecrets:
+# - name: "image-pull-secret"
+
+apiproxy:
+  name: modeld-apiproxy
+  http:
+    port: 8080
+  image:
+    registry: quay.io
+    repository: metaprov/modeld-api-proxy
+    tag: latest
+  service:
+    type: NodePort
+
+clouds:
+  name: clouds
+  http:
+    port: 8090
+  image:
+      registry: quay.io
+      repository: metaprov/clouds
+      tag: latest
+
+
+apigateway:
+
+
+
+
+controlplane:
+  name: modeld-controlplane
+  image:
+    registry: quay.io
+    repository: metaprov/modeld-control-plane
+    tag: latest
+  http:
+    port: 8080
+
+
+dataplane:
+  name: model-dataplane
+  image:
+    registry: quay.io
+    repository: metaprov/modeld-data-plane
+    tag: latest
+  http:
+    port: 8080
+
+
+datadock:
+  name: modeld-datadock
+  image:
+    registry: quay.io
+    repository: metaprov/modeld-datadock
+    tag: latest
+  http:
+    port: 8095
+  service:
+    type: NodePort
+
+
+frontend:
+  replicaCount: 1
+
+  logLevel: info
+
+  image:
+    name: modeld-frontend
+
+
+  ports:
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+
+  service:
+    type: ClusterIP
+
+  nameOverride: ""
+  fullnameOverride: ""
+
+
+ingress:
+  name : modeld-ingress
+  host: modeld.info
+  enabled: true
+  certManager: false
+  tls: false
+
+
+presistence:
+  cachePath: /home/modeld/data
+
+
+## external resources

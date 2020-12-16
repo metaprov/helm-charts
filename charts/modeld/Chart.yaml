@@ -1,0 +1,57 @@
+apiVersion: v2
+name: modeld
+version: 0.1.0
+kubeVersion: ">= 1.15.0"
+description: Machine Learning Operators
+type: application
+keywords:
+  - kubernetes
+  - go
+  - golang
+  - ai
+  - machine learning
+home: https://modeld.io
+appVersion: v0.0.1
+sources:
+  - https://github.com/metaprov/modeld
+maintainers:
+  - name: metaprov
+    email: support@modeld.io
+    url: https://groups.google.com/forum/#!forum/modeld-discuss
+dependencies:
+  - name: modeld_api_gateway
+    version: "0.1.0"
+    repository: "file://modeld_api_gateway"
+#    - name: modeld_api_proxy
+#      version: "0.1.0"
+#      repository: "file://modeld_api_proxy"
+#    - name: modeld_catalog
+#      version: "0.1.0"
+#      repository: "file://modeld_catalog"
+#    - name: modeld_control_plane
+#      version: "0.1.0"
+#      repository: "file://modeld_control_plane"
+#    - name: modeld_data_dock
+#      version: "0.1.0"
+#      repository: "file://modeld_data_dock"
+#    - name: modeld_data_plane
+#      version: "0.1.0"
+#      repository: "file://modeld_data_plane"
+#    - name: modeld_default_tenant
+#      version: "0.1.0"
+#      repository: "file://modeld_default_tenant"
+#    - name: modeld_frontend
+#      version: "0.1.0"
+#      repository: "file://modeld_frontend"
+#    - name: modeld_ingress
+#      version: "0.1.0"
+#      repository: "file://modeld_ingress"
+#    - name: modeld_publisher
+#      version: "0.1.0"
+#      repository: "file://modeld_publisher"
+#    - name: modeld_rbac
+#      version: "0.1.0"
+#      repository: "file://modeld_rbac"
+#    - name: modeld_webhook
+#      version: "0.1.0"
+#      repository: "file://modeld_webhook"

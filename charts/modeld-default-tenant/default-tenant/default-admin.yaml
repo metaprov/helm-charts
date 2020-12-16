@@ -1,0 +1,22 @@
+apiVersion: infra.modeld.io/v1alpha1
+kind: Account
+metadata:
+  name: admin
+  namespace: default-tenant
+  labels:
+      environment: production
+      app: nginx
+spec:
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+  type: "user"
+  userName: "admin"
+  firstName: "admin"
+  lastName: "admin"
+  email: "admin@example"
+  phone: "444-4444-444"
+  productBindings:
+    - entity: iris-product
+      role: administrator
+

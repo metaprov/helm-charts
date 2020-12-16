@@ -1,0 +1,45 @@
+{{ if .Values.azure.create }}
+apiVersion: infra.modeld.io/v1alpha1
+kind: Connection
+metadata:
+  name: default-azure-connection
+  namespace: default-tenant
+  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+spec:
+  provider: azure
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+  secretName : default-azure-secret
+  {{ end }}
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: default-azure-secret
+  namespace: default-tenant
+  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+type: Opaque
+data:
+  {{- if .Values.azure.secret.storageAccessKey }}
+  accessKey: {{ .Values.azure.secret.storageAccessKey | b64enc | quote }}
+  {{ else }}
+  accessKey: {{ required "azure access key is required!" .Values.azure.secret.storageAccessKey }}
+  {{- end }}
+  {{- if .Values.azure.storageAccountName }}
+  accountName: {{ .Values.azure.secret.storageAccountName | b64enc | quote }}
+  {{ else }}
+  accountName: {{ required "azure storage account name is required!" .Values.azure.secret.storageAccountName }}
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: VirtualBucket
+metadata:
+  name: default-azure-bucket
+  namespace: default-tenant
+spec:
+  tenantRef:
+    namespace: modeld-system
+    name : default-tenant
+  connectionName: default-azure-connection
+{{ end }}
