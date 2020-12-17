@@ -8,6 +8,7 @@ spec:
     name: default-tenant
     namespace: {{ .Release.Namespace }}
   connectionName: default-license-credential
+  secretName: default-licnese-secret
   type: lite
   notifierSelector:
     app: general
