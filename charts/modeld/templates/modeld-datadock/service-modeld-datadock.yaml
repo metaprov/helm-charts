@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: modeld-data-dock
+  namespace: modeld-system
+spec:
+  selector:
+    app: modeld-data-dock
+  ports:
+    - protocol: TCP
+      port: {{ .Values.datadock.ports.port }}
+      targetPort: {{ .Values.datadock.ports.targetPort }}

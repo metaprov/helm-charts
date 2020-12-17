@@ -1,0 +1,106 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-controlplane
+    app.kubernetes.io/part-of: modeld
+  name: modeld-controlplane
+  namespace: modeld-system
+rules:
+  - apiGroups: ["catalog.modeld.io"] #
+    resources:
+      - algorithms
+      - mlframeworks
+      - workloadclasses
+      - userclasses
+    verbs: ["*"]
+  - apiGroups: ["data.modeld.io"]
+    resources:
+      - datasets
+      - datasources
+      - datapipelines
+      - datapipelineruns
+      - dataproducts
+      - dataproductversions
+      - entities
+      - features
+      - recipe
+    verbs: ["*"]
+  - apiGroups: ["inference.modeld.io"]
+    resources:
+      - predictors
+      - predcitions
+    verbs: ["*"]
+  - apiGroups: ["infra.modeld.io"]
+    resources:
+      - virtualbuckets
+      - labs
+      - servingsites
+      - tenants
+      - accounts
+      - connections
+      - licenses
+      - notifiers
+    verbs: ["*"]
+  - apiGroups: ["training.modeld.io"]
+    resources:
+      - models
+      - studies
+    verbs: ["*"]
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources:
+      - customresourcedefinitions
+    verbs: ["*"]
+  - apiGroups:
+      - batch
+    resources:
+      - job
+    verbs: ["*"]
+  - apiGroups:
+      - "extensions"
+      - "apps"
+    resources:
+      - deployments
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources:
+      - secret
+      - pod
+      - service
+    verbs: ["*"]
+
+  - apiGroups:
+      - "extensions"
+      - "networking.k8s.io"
+    resources:
+      - ingresses
+    verbs: ["*"]
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/name: modled-controlplane
+    app.kubernetes.io/part-of: modeld
+  name: modeld-controlplane
+  namespace: modeld-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: modeld-controlplane
+subjects:
+  - kind: User
+    apiGroup: rbac.authorization.k8s.io
+    name: system:serviceaccount:modeld-system:modeld-controlplane
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-controlplane
+    app.kubernetes.io/part-of: modeld
+  name: modeld-controlplane
+  namespace: modeld-system

@@ -30,19 +30,19 @@ spec:
         app.kubernetes.io/part-of: "modeld"
         app.kubernetes.io/managed-by: "helm"
     spec:
-      serviceAccountName: modeld-service-account
+      serviceAccountName: {{ .Values.apiproxy.serviceAccount }}
       containers:
         - name: main
-        {{- if contains "/" .Values.image.name }}
-        image: "{{ .Values.image.name }}"
+        {{- if contains "/" .Values.apiproxy.image.repository }}
+          image: "{{ .Values.apiproxy.image.repository }}"
         {{- else }}
-        image: "{{ .Values.global.registry }}/modeld-api-proxy:{{ .Values.global.tag }}"
+          image: "{{ .Values.global.registry }}/{{ .Values.apiproxy.image.repository }}:{{ .Values.global.tag }}"
         {{- end }}
-        imagePullPolicy: {{ .Values.global.pullPolicy | quote }}
-        ports:
+          imagePullPolicy: {{ .Values.global.pullPolicy | quote }}
+          ports:
           - containerPort: 8080
             name: apiproxy
         {{- if .Values.resources }}
-        resources: {{ toYaml .Values.resources | nindent 12 }}
+          resources: {{ toYaml .Values.apiproxy.resources | nindent 12 }}
         {{- end }}
 

@@ -27,7 +27,7 @@ spec:
       serviceAccountName: modeld-service-account
       containers:
         - name: main
-          image: "{{ .Values.global.registry }}/{{ .Values.frontend.image.name }}:{{ .Values.global.tag }}"
+          image: "{{ .Values.global.registry }}/{{ .Values.frontend.image.repository }}:{{ .Values.global.tag }}"
           imagePullPolicy: {{ .Values.global.pullPolicy | quote }}
           ports:
             - containerPort: 80

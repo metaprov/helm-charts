@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modeld-data-plane
+  namespace: modeld-system
+  labels:
+    app: modeld-data-plane
+    app.kubernetes.io/name: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.global.tag }}
+    app.kubernetes.io/component: modeld-data-plane
+    app.kubernetes.io/part-of: "modeld"
+    app.kubernetes.io/managed-by: "helm"
+spec:
+  selector:
+    matchLabels:
+      app: modeld-data-plane
+  template:
+    metadata:
+      labels:
+        app: modeld-data-plane
+  {{- if eq .Values.global.prometheus.enabled true }}
+    annotations:
+      prometheus.io/scrape: "{{ .Values.global.prometheus.enabled }}"
+      prometheus.io/port: "{{ .Values.global.prometheus.port }}"
+      prometheus.io/path: "/"
+  {{- end }}
+    spec:
+      serviceAccountName: modeld-service-account
+      containers:
+        - name: main
+          {{- if contains "/" .Values.dataplane.image.repository }}
+          image: "{{ .Values.dataplane.image.repository }}"
+          {{- else }}
+          image: "{{ .Values.global.registry }}/ {{ .Values.dataplane.image.repository }} :{{ .Values.global.tag }}"
+          {{- end }}
+          imagePullPolicy: {{ .Values.global.pullPolicy | quote }}
+          env:
+            - name:   HOST
+              value:  "0.0.0.0"
+            - name:   PORT
+              value: "8080"
+            - name:   DEBUG
+              value: "false"
+            - name: ENV
+              value: "dev"
+            - name: CACHE_PATH
+              value: {{ .Values.global.cachePath }}
+            - name: CLOUDS_HOST
+              value: "127.0.0.1"
+            - name: CLOUDS_PORT
+              value: "8090"
+          ports:
+            - containerPort: 8080
+              name: dataplane
+            - containerPort: 9090
+              name: metrics
+            - containerPort: 8008
+              name: profiling
+      {{- if .Values.resources }}
+          resources: {{ toYaml .Values.resources | nindent 12 }}
+      {{- end }}
+          volumeMounts:
+            - name: "data"
+              mountPath: {{ .Values.global.cachePath }}
+
+    - name: clouds
+      image: quay.io/metaprov/modeld-clouds
+      imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 8090
+          name: http
+        - containerPort: 9090
+          name: metrics
+        - containerPort: 8008
+          name: profiling
+      volumeMounts:
+        - name: data
+          mountPath: {{ .Values.global.cachePath }}
+      resources:
+        limits:
+          cpu: 50m
+          memory: 30Mi
+        requests:
+          cpu: 50m
+          memory: 20Mi
+      readinessProbe:
+        exec:
+          command: ["/bin/grpc_health_probe", "-addr=:8090"]
+        initialDelaySeconds: 5
+      livenessProbe:
+        exec:
+          command: ["/bin/grpc_health_probe", "-addr=:8090"]
+        initialDelaySeconds: 10
+      env:
+        - name:   HOST
+          value:  "0.0.0.0"
+        - name:   PORT
+          value: "8090"
+        - name:   DEBUG
+          value: "false"
+        - name: ENV
+          value: "dev"
+        - name: CACHE_PATH
+          value: {{ .Values.global.cachePath }}
+  volumes:
+    - name : data
+      emptyDir: {}

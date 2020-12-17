@@ -18,10 +18,10 @@ maintainers:
   - name: metaprov
     email: support@modeld.io
     url: https://groups.google.com/forum/#!forum/modeld-discuss
-dependencies:
-  - name: modeld_api_gateway
-    version: "0.1.0"
-    repository: "file://modeld_api_gateway"
+#dependencies:
+#  - name: modeld_api_gateway
+#    version: "0.1.0"
+#    repository: "file://modeld_api_gateway"
 #    - name: modeld_api_proxy
 #      version: "0.1.0"
 #      repository: "file://modeld_api_proxy"

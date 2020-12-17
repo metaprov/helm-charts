@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: modeld-data-plane
+  namespace: modeld-system
+spec:
+  selector:
+    app: modeld-data-plane
+  ports:
+    - protocol: TCP
+      port: {{ .Values.dataplane.ports.port }}
+      targetPort: {{ .Values.dataplane.ports.targetPort }}

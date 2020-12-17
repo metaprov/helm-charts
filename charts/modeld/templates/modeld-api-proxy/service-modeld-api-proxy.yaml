@@ -4,17 +4,17 @@ metadata:
   name: modeld-api-proxy
   namespace: modeld-system
 spec:
-  type: {{ .Values.service.type }}
-  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  type: {{ .Values.apiproxy.service.type }}
+  {{- if and (eq .Values.apiproxy.service.type "LoadBalancer") (not (empty .Values.apiproxy.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.apiproxy.service.loadBalancerIP }}
   {{- end }}
   ports:
     - name: apiproxy
-      port: {{ .Values.ports.port }}
+      port: {{ .Values.apiproxy.ports.port }}
       targetPort: apiproxy
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.ports.nodePort)) }}
-      nodePort: {{ .Values.ports.nodePort }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
+      {{- if and (or (eq .Values.apiproxy.service.type "NodePort") (eq .Values.apiproxy.service.type "LoadBalancer")) (not (empty .Values.apiproxy.ports.nodePort)) }}
+      nodePort: {{ .Values.apiproxy.ports.nodePort }}
+      {{- else if eq .Values.apiproxy.service.type "ClusterIP" }}
   {{- end }}
   selector:
     app: modeld-api-proxy

@@ -50,6 +50,11 @@ apiproxy:
     tag: latest
   service:
     type: NodePort
+  ports:
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  serviceAccount: modeld-apiproxy
 
 clouds:
   name: clouds
@@ -62,8 +67,20 @@ clouds:
 
 
 apigateway:
-
-
+  name: modeld-apiproxy
+  http:
+      port: 8080
+  image:
+      registry: quay.io
+      repository: metaprov/modeld-api-gateway
+      tag: latest
+  service:
+      type: NodePort
+  ports:
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  serviceAccount: modeld-apigateway
 
 
 controlplane:
@@ -74,7 +91,11 @@ controlplane:
     tag: latest
   http:
     port: 8080
-
+  ports:
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  serviceAccount: modeld-controlplane
 
 dataplane:
   name: model-dataplane
@@ -84,7 +105,11 @@ dataplane:
     tag: latest
   http:
     port: 8080
-
+  ports:
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  serviceAccount: modeld-dataplane
 
 datadock:
   name: modeld-datadock
@@ -96,7 +121,11 @@ datadock:
     port: 8095
   service:
     type: NodePort
-
+  ports:
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  serviceAccount: modeld-datadock
 
 frontend:
   replicaCount: 1

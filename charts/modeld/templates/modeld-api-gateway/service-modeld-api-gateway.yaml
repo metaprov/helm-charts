@@ -8,5 +8,5 @@ spec:
     app: modeld-api-gateway
   ports:
     - protocol: TCP
-      port: {{ .Values.ports.port }}
-      targetPort: {{ .Values.ports.targetPort }}
+      port: {{ .Values.apigateway.ports.port }}
+      targetPort: {{ .Values.apigateway.ports.targetPort }}

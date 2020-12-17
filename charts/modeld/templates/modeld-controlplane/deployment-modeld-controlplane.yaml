@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modeld-control-plane
+  namespace: modeld-system
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.global.tag }}
+    app.kubernetes.io/component: modeld-control-plane
+    app.kubernetes.io/part-of: "modeld"
+    app.kubernetes.io/managed-by: "helm"
+  {{- if eq .Values.global.prometheus.enabled true }}
+  annotations:
+    prometheus.io/scrape: "{{ .Values.global.prometheus.enabled }}"
+    prometheus.io/port: "{{ .Values.global.prometheus.port }}"
+    prometheus.io/path: "/"
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: modeld-control-plane
+  template:
+    metadata:
+      labels:
+        app: modeld-control-plane
+        app.kubernetes.io/name: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Values.global.tag }}
+        app.kubernetes.io/component: modeld-control-plane
+        app.kubernetes.io/part-of: "modeld"
+        app.kubernetes.io/managed-by: "helm"
+    spec:
+      serviceAccountName: modeld-service-account
+      containers:
+        - name: main
+          {{- if contains "/" .Values.controlplane.image.repository }}
+          image: "{{ .Values.controlplane.image.repository }}"
+          {{- else }}
+          image: "{{ .Values.global.registry }}/ {{ .Values.controlplane.image.repository }}:{{ .Values.global.tag }}"
+          {{- end }}
+          imagePullPolicy: {{ .Values.global.pullPolicy | quote }}
+          env:
+            - name:   HOST
+              value:  "0.0.0.0"
+            - name:   PORT
+              value: {{ .Values.controlplane.ports.port | quote }}
+            - name:   DEBUG
+              value: "false"
+            - name: ENV
+              value: "dev"
+            - name: CACHE_PATH
+              value: "/home/modeld/data"
+            - name: METRIC_ADDR
+              value: "9090"
+            - name: ENABLE_LEADER_ELECTION
+              value: "false"
+            - name: WH
+              value: "true"
+            - name: DS_HOST
+              value: "modeld-data-plane"
+            - name: DS_PORT
+              value: "8080"
+            - name: PUBLISHER_HOST
+              value: "modeld-publisher"
+            - name: PUBLISHER_PORT
+              value: "8080"
+          ports:
+            - containerPort: 8080
+              name: controlplane
+            - containerPort: 9090
+              name: metrics
+            - containerPort: 8008
+              name: profiling
+            - containerPort: 9443
+              name: webhook-server
+              protocol: TCP
+          {{- if .Values.controlplane.resources }}
+          resources: {{ toYaml .Values.controlplane.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: "data"
+              mountPath: {{ .Values.global.cachePath }}
+            - name: webhook-server-cert
+              mountPath: /tmp/k8s-webhook-server/serving-certs
+              readOnly: true
+
+
+        - name: clouds
+          image: quay.io/metaprov/modeld-clouds
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8090
+              name: http
+            - containerPort: 9090
+              name: metrics
+            - containerPort: 8008
+              name: profiling
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.global.cachePath }}
+          resources:
+            limits:
+              cpu: 50m
+              memory: 30Mi
+            requests:
+              cpu: 50m
+              memory: 20Mi
+          readinessProbe:
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8090"]
+            initialDelaySeconds: 5
+          livenessProbe:
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8090"]
+            initialDelaySeconds: 10
+          env:
+            - name:   HOST
+              value:  "0.0.0.0"
+            - name:   PORT
+              value: "8090"
+            - name:   DEBUG
+              value: "false"
+            - name: ENV
+              value: "dev"
+            - name: CACHE_PATH
+              value: {{ .Values.global.cachePath }}
+      volumes:
+        - name : data
+          emptyDir: {}
+        - name: webhook-server-cert
+          secret:
+            secretName: webhook-secret
