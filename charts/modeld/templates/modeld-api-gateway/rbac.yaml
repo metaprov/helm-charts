@@ -99,6 +99,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: modeld-apigateway
+    namespace: modeld-system
 
 ---
 
