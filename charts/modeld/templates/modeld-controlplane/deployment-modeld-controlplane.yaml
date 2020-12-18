@@ -1,68 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: modeld-control-plane
+  name: {{ include "modeld.controlplaneFullname" . }}
   namespace: modeld-system
   labels:
-    app.kubernetes.io/name: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Values.global.tag }}
-    app.kubernetes.io/component: modeld-control-plane
-    app.kubernetes.io/part-of: "modeld"
-    app.kubernetes.io/managed-by: "helm"
-  {{- if eq .Values.global.prometheus.enabled true }}
+  {{- include "modeld.controlplaneLabels" . | nindent 4 }}
+  {{- if eq .Values.modeld.prometheus.enabled true }}
   annotations:
-    prometheus.io/scrape: "{{ .Values.global.prometheus.enabled }}"
-    prometheus.io/port: "{{ .Values.global.prometheus.port }}"
+    prometheus.io/scrape: "{{ .Values.modeld.prometheus.enabled }}"
+    prometheus.io/port: "{{ .Values.modeld.prometheus.port }}"
     prometheus.io/path: "/"
   {{- end }}
 spec:
+  replicas: 1
+  revisionHistoryLimit: {{ .Values.modeld.revisionHistoryLimit }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
-      app: modeld-control-plane
+      {{- include "modeld.controlplaneSelectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: modeld-control-plane
-        app.kubernetes.io/name: {{ .Release.Name }}
-        app.kubernetes.io/version: {{ .Values.global.tag }}
-        app.kubernetes.io/component: modeld-control-plane
-        app.kubernetes.io/part-of: "modeld"
-        app.kubernetes.io/managed-by: "helm"
+        {{- include "modeld.controlplaneSelectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: modeld-service-account
+      serviceAccountName: modeld-controlplane
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- include "modeld.controlplanePriorityClassName" . | nindent 6 }}
+      securityContext:
+        {{- toYaml .Values.modeld.podSecurityContext | nindent 8 }}
+        terminationGracePeriodSeconds: {{ .Values.controlplane.terminationGracePeriodSeconds }}
       containers:
         - name: main
-          {{- if contains "/" .Values.controlplane.image.repository }}
-          image: "{{ .Values.controlplane.image.repository }}"
-          {{- else }}
-          image: "{{ .Values.global.registry }}/ {{ .Values.controlplane.image.repository }}:{{ .Values.global.tag }}"
-          {{- end }}
-          imagePullPolicy: {{ .Values.global.pullPolicy | quote }}
-          env:
-            - name:   HOST
-              value:  "0.0.0.0"
-            - name:   PORT
-              value: {{ .Values.controlplane.ports.port | quote }}
-            - name:   DEBUG
-              value: "false"
-            - name: ENV
-              value: "dev"
-            - name: CACHE_PATH
-              value: "/home/modeld/data"
-            - name: METRIC_ADDR
-              value: "9090"
-            - name: ENABLE_LEADER_ELECTION
-              value: "false"
-            - name: WH
-              value: "true"
-            - name: DS_HOST
-              value: "modeld-data-plane"
-            - name: DS_PORT
-              value: "8080"
-            - name: PUBLISHER_HOST
-              value: "modeld-publisher"
-            - name: PUBLISHER_PORT
-              value: "8080"
+          image: {{ include "modeld.controlplaneImage" . }}
+          imagePullPolicy: {{ .Values.modeld.pullPolicy | quote }}
           ports:
             - containerPort: 8080
               name: controlplane
@@ -73,20 +47,25 @@ spec:
             - containerPort: 9443
               name: webhook-server
               protocol: TCP
-          {{- if .Values.controlplane.resources }}
-          resources: {{ toYaml .Values.controlplane.resources | nindent 12 }}
+          {{- with .Values.controlplane.extraEnv }}
+          env:
+            {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with .Values.controlplane.extraEnvFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources: {{ toYaml .Values.controlplane.resources | nindent 12 }}
           volumeMounts:
             - name: "data"
-              mountPath: {{ .Values.global.cachePath }}
+              mountPath: {{ .Values.modeld.cachePath }}
             - name: webhook-server-cert
               mountPath: /tmp/k8s-webhook-server/serving-certs
               readOnly: true
 
-
         - name: clouds
-          image: quay.io/metaprov/modeld-clouds
-          imagePullPolicy: IfNotPresent
+          image: {{ include "modeld.cloudImage" . }}
+          imagePullPolicy: {{ .Values.modeld.pullPolicy | quote }}
           ports:
             - containerPort: 8090
               name: http
@@ -96,33 +75,25 @@ spec:
               name: profiling
           volumeMounts:
             - name: data
-              mountPath: {{ .Values.global.cachePath }}
-          resources:
-            limits:
-              cpu: 50m
-              memory: 30Mi
-            requests:
-              cpu: 50m
-              memory: 20Mi
-          readinessProbe:
-            exec:
-              command: ["/bin/grpc_health_probe", "-addr=:8090"]
-            initialDelaySeconds: 5
+              mountPath: {{ .Values.modeld.cachePath }}
+          resources: {{ toYaml .Values.clouds.resources | nindent 12 }}
           livenessProbe:
-            exec:
-              command: ["/bin/grpc_health_probe", "-addr=:8090"]
-            initialDelaySeconds: 10
-          env:
-            - name:   HOST
-              value:  "0.0.0.0"
-            - name:   PORT
-              value: "8090"
-            - name:   DEBUG
-              value: "false"
-            - name: ENV
-              value: "dev"
-            - name: CACHE_PATH
-              value: {{ .Values.global.cachePath }}
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          {{- with .Values.controlplane.extraEnv }}
+          env: {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.controlplane.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controlplane.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name : data
           emptyDir: {}

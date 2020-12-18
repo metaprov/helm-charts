@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "modeld.apiproxyFullname" . }}
+  namespace: modeld-system
+  labels:
+    {{- include "modeld.labels" . | nindent 4 }}
+    app.kubernetes.io/component: modeld-apiproxy
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+  selector:
+    {{- include "modeld.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: modeld-apiproxy
+
+
+

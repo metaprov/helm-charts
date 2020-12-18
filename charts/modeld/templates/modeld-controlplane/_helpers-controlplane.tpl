@@ -2,7 +2,7 @@
 modeld-controlplane fullname
 */}}
 {{- define "modeld.controlplaneFullname" -}}
-{{ include "modeld.fullname" . }}-controlplane
+modeld-controlplane
 {{- end }}
 
 {{/*
@@ -25,8 +25,7 @@ app.kubernetes.io/component: modeld-controlplane
 modeld-controlplane image
 */}}
 {{- define "modeld.controlplaneImage" -}}
-{{- $dict := dict "modeld" .Values.modeld.image "service" .Values.controlplane.image "global" .Values.global.image "defaultVersion" .Chart.AppVersion -}}
-{{- include "modeld.modeldImage" $dict -}}
+modeld-controlplane
 {{- end }}
 
 {{/*

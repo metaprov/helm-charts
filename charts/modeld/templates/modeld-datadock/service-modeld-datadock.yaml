@@ -1,12 +1,18 @@
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
-  name: modeld-data-dock
+  name: {{ include "modeld.datadockFullname" . }}
   namespace: modeld-system
+  labels:
+    {{- include "modeld.labels" . | nindent 4 }}
+    app.kubernetes.io/component: modeld-datadock
 spec:
-  selector:
-    app: modeld-data-dock
+  type: ClusterIP
   ports:
-    - protocol: TCP
-      port: {{ .Values.datadock.ports.port }}
-      targetPort: {{ .Values.datadock.ports.targetPort }}
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+  selector:
+    {{- include "modeld.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: modeld-datadock

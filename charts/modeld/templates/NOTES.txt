@@ -1,0 +1,13 @@
+***********************************************************************
+ Welcome to modeld
+ Chart version: {{ .Chart.Version }}
+ Loki version: {{ .Chart.AppVersion }}
+***********************************************************************
+
+Installed components:
+* api gateway
+* api proxy
+* control plane
+* data dock
+* data plane
+* frontend

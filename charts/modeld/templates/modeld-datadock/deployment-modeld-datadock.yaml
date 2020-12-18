@@ -1,55 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: modeld-data-dock
+  name: {{ include "modeld.datadockFullname" . }}
   namespace: modeld-system
   labels:
-    app: modeld-data-dock
-    app.kubernetes.io/name: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Values.global.tag }}
-    app.kubernetes.io/component: modeld-data-dock
-    app.kubernetes.io/part-of: "modeld"
-    app.kubernetes.io/managed-by: "helm"
+  {{- include "modeld.datadockLabels" . | nindent 4 }}
 spec:
+  replicas: 1
+  revisionHistoryLimit: {{ .Values.modeld.revisionHistoryLimit }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
-      app: modeld-data-dock
+      {{- include "modeld.datadockSelectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: modeld-data-dock
-        app.kubernetes.io/name: {{ .Release.Name }}
-        app.kubernetes.io/version: {{ .Values.global.tag }}
-        app.kubernetes.io/component: modeld-data-dock
-        app.kubernetes.io/part-of: "modeld"
-        app.kubernetes.io/managed-by: "helm"
-  {{- if eq .Values.global.prometheus.enabled true }}
+        {{- include "modeld.datadockSelectorLabels" . | nindent 8 }}
+  {{- if eq .Values.modeld.prometheus.enabled true }}
       annotations:
-        prometheus.io/scrape: "{{ .Values.global.prometheus.enabled }}"
-        prometheus.io/port: "{{ .Values.global.prometheus.port }}"
+        prometheus.io/scrape: "{{ .Values.modeld.prometheus.enabled }}"
+        prometheus.io/port: "{{ .Values.modeld.prometheus.port }}"
         prometheus.io/path: "/"
   {{- end }}
     spec:
-      serviceAccountName: modeld-service-account
+      serviceAccountName: modeld-datadock
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- include "modeld.datadockPriorityClassName" . | nindent 6 }}
+      securityContext:
+        {{- toYaml .Values.modeld.podSecurityContext | nindent 8 }}
+        terminationGracePeriodSeconds: {{ .Values.datadock.terminationGracePeriodSeconds }}
       containers:
         - name: main
-          image: "{{ .Values.global.registry }}/{{ .Values.datadock.image.repository }}:{{ .Values.global.tag }}"
-          env:
-            - name:   HOST
-              value:  "0.0.0.0"
-            - name:   PORT
-              value: "8080"
-            - name:   DEBUG
-              value: "false"
-            - name: ENV
-              value: "dev"
-            - name: CACHE_PATH
-              value: "/home/modeld/data"
-            - name: CLOUDS_HOST
-              value: "127.0.0.1"
-            - name: CLOUDS_PORT
-              value: "8090"
-
+          image: {{ include "modeld.datadockImage" . }}
+          imagePullPolicy: {{ .Values.modeld.pullPolicy | quote }}
           ports:
             - containerPort: 8095
               name: datadock
@@ -57,6 +44,18 @@ spec:
               name: metrics
             - containerPort: 8008
               name: profiling
+          {{- with .Values.apigateway.extraEnv }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.apigateway.envFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.modeld.containerSecurityContext | nindent 12 }}
+
+
           {{- if .Values.datadock.resources }}
           resources: {{ toYaml .Values.datadock.resources | nindent 12 }}
           {{- end }}
@@ -71,8 +70,8 @@ spec:
             periodSeconds: 10
 
         - name: clouds
-          image: quay.io/metaprov/modeld-clouds
-          imagePullPolicy: IfNotPresent
+          image: {{ include "modeld.cloudImage" . }}
+          imagePullPolicy: {{ .Values.modeld.pullPolicy | quote }}
           ports:
             - containerPort: 8090
               name: http
@@ -82,25 +81,26 @@ spec:
               name: profiling
           volumeMounts:
             - name: data
-              mountPath: {{ .Values.global.cachePath }}
-          resources:
-            limits:
-              cpu: 50m
-              memory: 30Mi
-            requests:
-              cpu: 50m
-              memory: 20Mi
-          env:
-            - name:   HOST
-              value:  "0.0.0.0"
-            - name:   PORT
-              value: "8090"
-            - name:   DEBUG
-              value: "false"
-            - name: ENV
-              value: "dev"
-            - name: CACHE_PATH
-              value: {{ .Values.global.cachePath }}
-      volumes:
-        - name : data
-          emptyDir: {}
+              mountPath: {{ .Values.modeld.cachePath }}
+          resources: {{ toYaml .Values.clouds.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          {{- with .Values.apigateway.extraEnv }}
+          env: {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+    {{- with .Values.apigateway.nodeSelector }}
+    nodeSelector:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.apigateway.tolerations }}
+    tolerations:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+    volumes:
+      - name: data
+        emptyDir: { }

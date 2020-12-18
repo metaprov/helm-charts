@@ -2,7 +2,7 @@
 modeld-frontend fullname
 */}}
 {{- define "modeld.frontendFullname" -}}
-{{ include "modeld.fullname" . }}-frontend
+modeld-frontend
 {{- end }}
 
 {{/*
@@ -26,7 +26,7 @@ modeld-frontend image
 */}}
 {{- define "modeld.frontendImage" -}}
 {{- $dict := dict "modeld" .Values.modeld.image "service" .Values.frontend.image "global" .Values.global.image "defaultVersion" .Chart.AppVersion -}}
-{{- include "modeld.modeldImage" $dict -}}
+modeld-frontend
 {{- end }}
 
 {{/*

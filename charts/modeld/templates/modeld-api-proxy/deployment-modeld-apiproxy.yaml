@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "modeld.apiproxyFullname" . }}
+  namespace: modeld-system
+  labels:
+  {{- include "modeld.apiproxyLabels" . | nindent 4 }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: {{ .Values.modeld.revisionHistoryLimit }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "modeld.apiproxySelectorLabels" . | nindent 6 }}
+  template:
+      metadata:
+        labels:
+          {{- include "modeld.apiproxySelectorLabels" . | nindent 8 }}
+        {{- if eq .Values.modeld.prometheus.enabled true }}
+        annotations:
+          prometheus.io/scrape: "{{ .Values.modeld.prometheus.enabled }}"
+          prometheus.io/port: "{{ .Values.modeld.prometheus.port }}"
+          prometheus.io/path: "/"
+        {{- end }}
+      spec:
+        serviceAccountName: modeld-apiproxy
+        {{- with .Values.imagePullSecrets }}
+        imagePullSecrets:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- include "modeld.apiproxyPriorityClassName" . | nindent 6 }}
+        securityContext:
+          {{- toYaml .Values.modeld.podSecurityContext | nindent 8 }}
+        terminationGracePeriodSeconds: {{ .Values.apiproxy.terminationGracePeriodSeconds }}
+        containers:
+          - name: main
+            image: {{ include "modeld.apiproxyImage" . }}
+            imagePullPolicy: {{ .Values.modeld.pullPolicy | quote  }}
+            ports:
+              - containerPort: 8080
+                name: apiproxy
+              - containerPort: 9090
+                name: metrics
+              - containerPort: 8008
+                name: profiling
+            {{- with .Values.apiproxy.extraEnv }}
+            env: {{ toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.apiproxy.extraEnvFrom }}
+            envFrom: {{- toYaml . | nindent 12 }}
+            {{- end }}
+            securityContext:
+              {{- toYaml .Values.modeld.containerSecurityContext | nindent 12 }}
+            resources: {{ toYaml .Values.apiproxy.resources | nindent 16 }}

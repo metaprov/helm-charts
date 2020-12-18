@@ -2,7 +2,7 @@
 modeld-dataplane fullname
 */}}
 {{- define "modeld.dataplaneFullname" -}}
-{{ include "modeld.fullname" . }}-query-dataplane
+modeld-dataplane
 {{- end }}
 
 {{/*
@@ -26,7 +26,7 @@ modeld-dataplane image
 */}}
 {{- define "modeld.dataplaneImage" -}}
 {{- $dict := dict "modeld" .Values.modeld.image "service" .Values.dataplane.image "global" .Values.global.image "defaultVersion" .Chart.AppVersion -}}
-{{- include "modeld.modeldImage" $dict -}}
+modeld-dataplane
 {{- end }}
 
 {{/*

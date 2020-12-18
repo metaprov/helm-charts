@@ -1,27 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: modeld-data-plane
+  name: {{ include "modeld.dataplaneFullname" . }}
   namespace: modeld-system
   labels:
-    app: modeld-data-plane
-    app.kubernetes.io/name: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Values.global.tag }}
-    app.kubernetes.io/component: modeld-data-plane
-    app.kubernetes.io/part-of: "modeld"
-    app.kubernetes.io/managed-by: "helm"
+  {{- include "modeld.dataplaneLabels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: modeld-data-plane
+      app: modeld-dataplane
   template:
     metadata:
       labels:
-        app: modeld-data-plane
-  {{- if eq .Values.global.prometheus.enabled true }}
+        app: modeld-dataplane
+  {{- if eq .Values.modeld.prometheus.enabled true }}
       annotations:
-        prometheus.io/scrape: "{{ .Values.global.prometheus.enabled }}"
-        prometheus.io/port: "{{ .Values.global.prometheus.port }}"
+        prometheus.io/scrape: "{{ .Values.modeld.prometheus.enabled }}"
+        prometheus.io/port: "{{ .Values.modeld.prometheus.port }}"
         prometheus.io/path: "/"
   {{- end }}
     spec:

@@ -1,13 +1,15 @@
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
-  name: modeld-frontend
+  name: {{ include "modeld.frontendFullname" . }}
   namespace: modeld-system
 spec:
-  type: {{ .Values.frontend.service.type }}
+  type: ClusterIP
   ports:
-    - name: frontend
-      port: {{ .Values.frontend.ports.port }}
-      targetPort: frontend
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
   selector:
-    app: modeld-frontend
+    {{- include "modeld.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: modeld-frontend
