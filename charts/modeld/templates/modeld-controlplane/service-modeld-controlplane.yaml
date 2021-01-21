@@ -3,9 +3,6 @@ kind: Service
 metadata:
   name: modeld-controlplane
   namespace: modeld-system
-  labels:
-    {{- include "modeld.labels" . | nindent 4 }}
-    app.kubernetes.io/component: modeld-controlplane
 spec:
   type: ClusterIP
   ports:
@@ -14,5 +11,4 @@ spec:
       targetPort: http
       protocol: TCP
   selector:
-    {{- include "modeld.selectorLabels" . | nindent 4 }}
-    app.kubernetes.io/component: modeld-controlplane
+    app: modeld-controlplane

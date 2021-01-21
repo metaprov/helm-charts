@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "modeld.dataplaneFullname" . }}
+  name: modeld-dataplane
   namespace: modeld-system
   labels:
-  {{- include "modeld.dataplaneLabels" . | nindent 4 }}
+      app: modeld-dataplane
 spec:
   selector:
     matchLabels:
@@ -13,21 +13,22 @@ spec:
     metadata:
       labels:
         app: modeld-dataplane
-  {{- if eq .Values.modeld.prometheus.enabled true }}
+        app.kubernetes.io/name: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Values.modeld.tag }}
+        app.kubernetes.io/component: dataplane
+        app.kubernetes.io/part-of: "modeld"
+        app.kubernetes.io/managed-by: "helm"
+{{- if eq .Values.modeld.prometheus.enabled true }}
       annotations:
         prometheus.io/scrape: "{{ .Values.modeld.prometheus.enabled }}"
         prometheus.io/port: "{{ .Values.modeld.prometheus.port }}"
         prometheus.io/path: "/"
-  {{- end }}
+{{- end }}
     spec:
       serviceAccountName: modeld-service-account
       containers:
         - name: main
-          {{- if contains "/" .Values.dataplane.image.repository }}
-          image: "{{ .Values.dataplane.image.repository }}"
-          {{- else }}
-          image: "{{ .Values.global.registry }}/ {{ .Values.dataplane.image.repository }} :{{ .Values.global.tag }}"
-          {{- end }}
+          image: "{{ .Values.dataplane.image }}"
           imagePullPolicy: {{ .Values.global.pullPolicy | quote }}
           ports:
             - containerPort: 8080
@@ -42,53 +43,50 @@ spec:
             - name:   PORT
               value: "8080"
             - name: CACHE_PATH
-              value: {{ .Values.global.cachePath | quote }}
-      {{- if .Values.resources }}
-          resources: {{ toYaml .Values.resources | nindent 12 }}
-      {{- end }}
+              value: /home/modeld/data
           volumeMounts:
-            - name: "data"
-              mountPath: {{ .Values.global.cachePath }}
-
+            - name: data
+              mountPath: /home/modeld/data
         - name: clouds
-          image: quay.io/metaprov/modeld-clouds
-          imagePullPolicy: IfNotPresent
-          ports:
-              - containerPort: 8090
-                name: http
-              - containerPort: 9090
-                name: metrics
-              - containerPort: 8008
-                name: profiling
-          volumeMounts:
-              - name: data
-                mountPath: {{ .Values.global.cachePath }}
-          resources:
-              limits:
-                cpu: 50m
-                memory: 30Mi
-              requests:
-                cpu: 50m
-                memory: 20Mi
-          readinessProbe:
-              exec:
-                command: ["/bin/grpc_health_probe", "-addr=:8090"]
-              initialDelaySeconds: 5
-          livenessProbe:
-              exec:
-                command: ["/bin/grpc_health_probe", "-addr=:8090"]
-              initialDelaySeconds: 10
-          env:
-              - name:   HOST
-                value:  "0.0.0.0"
-              - name:   PORT
-                value: "8090"
-              - name:   DEBUG
-                value: "false"
-              - name: ENV
-                value: "dev"
-              - name: CACHE_PATH
-                value: {{ .Values.global.cachePath }}
-      volumes:
-        - name : data
-          emptyDir: {}
+           image: {{ include "modeld.cloudImage" . }}
+           imagePullPolicy: {{ .Values.modeld.pullPolicy | quote }}
+           ports:
+                - containerPort: 8090
+                  name: http
+                - containerPort: 9090
+                  name: metrics
+                - containerPort: 8008
+                  name: profiling
+           volumeMounts:
+                - name: data
+                  mountPath: /home/modeld/data
+           resources:
+                limits:
+                  cpu: 1000m
+                  memory: 200Mi
+                requests:
+                  cpu: 100m
+                  memory: 20Mi
+           livenessProbe:
+                httpGet:
+                  path: /healthz
+                  port: 9090
+                initialDelaySeconds: 5
+                periodSeconds: 10
+  {{- with .Values.apigateway.extraEnv }}
+      env:
+        {{- toYaml . | nindent 14 }}
+  {{- end }}
+  {{- with .Values.apigateway.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 12 }}
+  {{- end }}
+  {{- with .Values.apigateway.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 12 }}
+  {{- end }}
+
+
+     volumes:
+       - name : data
+         emptyDir: {}

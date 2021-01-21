@@ -1,22 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "modeld.frontendFullname" . }}
+  name: modeld-frontend
   namespace: modeld-system
   labels:
-  {{- include "modeld.frontendLabels" . | nindent 4 }}
+      app: modeld-frontend
 spec:
   replicas: 1
-  revisionHistoryLimit: {{ .Values.modeld.revisionHistoryLimit }}
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
-      {{- include "modeld.frontendSelectorLabels" . | nindent 6 }}
+        app: modeld-frontend
   template:
     metadata:
       labels:
-        app: modeld-dataplane
+        app: modeld-frontend
+        app.kubernetes.io/name: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Values.modeld.tag }}
+        app.kubernetes.io/component: controlplane
+        app.kubernetes.io/part-of: "modeld"
+        app.kubernetes.io/managed-by: "helm"
   {{- if eq .Values.modeld.prometheus.enabled true }}
       annotations:
         prometheus.io/scrape: "{{ .Values.modeld.prometheus.enabled }}"

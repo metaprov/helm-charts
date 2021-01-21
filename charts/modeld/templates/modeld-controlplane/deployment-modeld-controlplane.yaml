@@ -1,38 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "modeld.controlplaneFullname" . }}
+  name: modeld-controlplane
   namespace: modeld-system
   labels:
-  {{- include "modeld.controlplaneLabels" . | nindent 4 }}
-  {{- if eq .Values.modeld.prometheus.enabled true }}
+    app: modeld-controlplane
+{{- if eq .Values.modeld.prometheus.enabled true }}
   annotations:
     prometheus.io/scrape: "{{ .Values.modeld.prometheus.enabled }}"
     prometheus.io/port: "{{ .Values.modeld.prometheus.port }}"
     prometheus.io/path: "/"
-  {{- end }}
+{{- end }}
 spec:
   replicas: 1
-  revisionHistoryLimit: {{ .Values.modeld.revisionHistoryLimit }}
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
-      {{- include "modeld.controlplaneSelectorLabels" . | nindent 6 }}
+      app: modeld-controlplane
   template:
     metadata:
       labels:
-        {{- include "modeld.controlplaneSelectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Values.modeld.tag }}
+        app.kubernetes.io/component: controlplane
+        app.kubernetes.io/part-of: "modeld"
+        app.kubernetes.io/managed-by: "helm"
     spec:
       serviceAccountName: modeld-controlplane
-      {{- with .Values.imagePullSecrets }}
+{{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- include "modeld.controlplanePriorityClassName" . | nindent 6 }}
-      securityContext:
-        {{- toYaml .Values.modeld.podSecurityContext | nindent 8 }}
-        terminationGracePeriodSeconds: {{ .Values.controlplane.terminationGracePeriodSeconds }}
+        {{- toYaml . | nindent 10 }}
+{{- end }}
       containers:
         - name: main
           image: {{ include "modeld.controlplaneImage" . }}
@@ -47,18 +44,19 @@ spec:
             - containerPort: 9443
               name: webhook-server
               protocol: TCP
-          {{- with .Values.controlplane.extraEnv }}
+{{- with .Values.controlplane.extraEnv }}
           env:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.controlplane.extraEnvFrom }}
+            {{- toYaml . | nindent 14 }}
+{{- end }}
+{{- with .Values.controlplane.extraEnvFrom }}
           envFrom:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          resources: {{ toYaml .Values.controlplane.resources | nindent 12 }}
+            {{- toYaml . | nindent 14 }}
+{{- end }}
+          resources:
+{{- toYaml .Values.controlplane.resources | nindent 14 }}
           volumeMounts:
-            - name: "data"
-              mountPath: {{ .Values.modeld.cachePath }}
+            - name: data
+              mountPath: /home/modeld/data
             - name: webhook-server-cert
               mountPath: /tmp/k8s-webhook-server/serving-certs
               readOnly: true
@@ -75,28 +73,26 @@ spec:
               name: profiling
           volumeMounts:
             - name: data
-              mountPath: {{ .Values.modeld.cachePath }}
-          resources: {{ toYaml .Values.clouds.resources | nindent 12 }}
+              mountPath: /home/modeld/data
+          resources:
+              {{- toYaml .Values.clouds.resources | nindent 14 }}
           livenessProbe:
             httpGet:
               path: /healthz
               port: 9090
             initialDelaySeconds: 5
             periodSeconds: 10
-          {{- with .Values.controlplane.extraEnv }}
-          env: {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.controlplane.nodeSelector }}
+{{- with .Values.controlplane.extraEnv }}
+          env:
+            {{- toYaml . | nindent 14 }}
+{{- end }}
+{{- with .Values.controlplane.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.controlplane.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      volumes:
-        - name : data
-          emptyDir: {}
-        - name: webhook-server-cert
-          secret:
-            secretName: webhook-secret
+        {{- toYaml . | nindent 12 }}
+{{- end }}
+    volumes:
+      - name : data
+        emptyDir: {}
+      - name: webhook-server-cert
+        secret:
+          secretName: webhook-secret

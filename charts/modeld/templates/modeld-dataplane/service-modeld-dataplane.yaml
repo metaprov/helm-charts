@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ include "modeld.dataplaneFullname" . }}
+  name: modeld-dataplane
   namespace: modeld-system
 spec:
   type: ClusterIP
@@ -11,5 +11,4 @@ spec:
       targetPort: http
       protocol: TCP
   selector:
-    {{- include "modeld.selectorLabels" . | nindent 4 }}
-    app.kubernetes.io/component: modeld-dataplane
+    app: modeld-dataplane

@@ -1,38 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "modeld.apiproxyFullname" . }}
+  name: modeld-apiproxy
   namespace: modeld-system
   labels:
-  {{- include "modeld.apiproxyLabels" . | nindent 4 }}
+    app: modeld-apiproxy
 spec:
   replicas: 1
-  revisionHistoryLimit: {{ .Values.modeld.revisionHistoryLimit }}
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
-      {{- include "modeld.apiproxySelectorLabels" . | nindent 6 }}
+      app: modeld-apiproxy
   template:
       metadata:
         labels:
-          {{- include "modeld.apiproxySelectorLabels" . | nindent 8 }}
-        {{- if eq .Values.modeld.prometheus.enabled true }}
+          app: modeld-apiproxy
+          app.kubernetes.io/name: {{ .Release.Name }}
+          app.kubernetes.io/version: {{ .Values.modeld.tag }}
+          app.kubernetes.io/component: apiproxy
+          app.kubernetes.io/part-of: "modeld"
+          app.kubernetes.io/managed-by: "helm"
+{{- if eq .Values.modeld.prometheus.enabled true }}
         annotations:
           prometheus.io/scrape: "{{ .Values.modeld.prometheus.enabled }}"
           prometheus.io/port: "{{ .Values.modeld.prometheus.port }}"
           prometheus.io/path: "/"
-        {{- end }}
+{{- end }}
       spec:
         serviceAccountName: modeld-apiproxy
-        {{- with .Values.imagePullSecrets }}
+{{- with .Values.imagePullSecrets }}
         imagePullSecrets:
           {{- toYaml . | nindent 8 }}
-        {{- end }}
-        {{- include "modeld.apiproxyPriorityClassName" . | nindent 6 }}
+{{- end }}
         securityContext:
-          {{- toYaml .Values.modeld.podSecurityContext | nindent 8 }}
-        terminationGracePeriodSeconds: {{ .Values.apiproxy.terminationGracePeriodSeconds }}
+          {{- toYaml .Values.modeld.podSecurityContext | nindent 12 }}
         containers:
           - name: main
             image: {{ include "modeld.apiproxyImage" . }}
@@ -44,12 +44,15 @@ spec:
                 name: metrics
               - containerPort: 8008
                 name: profiling
-            {{- with .Values.apiproxy.extraEnv }}
-            env: {{ toYaml . | nindent 12 }}
-            {{- end }}
-            {{- with .Values.apiproxy.extraEnvFrom }}
-            envFrom: {{- toYaml . | nindent 12 }}
-            {{- end }}
+{{- with .Values.apiproxy.extraEnv }}
+            env:
+              {{- toYaml . | nindent 14 }}
+{{- end }}
+{{- with .Values.apiproxy.extraEnvFrom }}
+            envFrom:
+              {{- toYaml . | nindent 14 }}
+{{- end }}
             securityContext:
-              {{- toYaml .Values.modeld.containerSecurityContext | nindent 12 }}
-            resources: {{ toYaml .Values.apiproxy.resources | nindent 16 }}
+              {{- toYaml .Values.modeld.containerSecurityContext  | nindent 14 }}
+            resources:
+              {{- toYaml .Values.apiproxy.resources | nindent 14 }}

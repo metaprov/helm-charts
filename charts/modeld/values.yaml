@@ -18,6 +18,7 @@ imagePullSecrets: []
 
 
 modeld:
+  tag: 0.0.1
   registry: quay.io
   pullPolicy: IfNotPresent
   debug: false
