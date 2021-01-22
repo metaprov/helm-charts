@@ -13,20 +13,11 @@ spec:
   - JSONPath: .spec.versionName
     name: Version
     type: string
-  - JSONPath: .spec.datasourceName
-    name: Location Origin
-    type: string
   - JSONPath: .status.phase
     name: Status
     type: string
   - JSONPath: .status.statistics.rows
     name: Rows
-    type: integer
-  - JSONPath: .status.statistics.cols
-    name: Columns
-    type: integer
-  - JSONPath: .status.statistics.fileSize
-    name: Size
     type: integer
   - JSONPath: .metadata.creationTimestamp
     name: Age
@@ -284,41 +275,93 @@ spec:
         spec:
           description: RecipeSpec defines the desired state of a dataset
           properties:
-            datasourceName:
-              description: DataSourceName is the name of the data source which created
-                this dataset. For example flat file
-              maxLength: 63
-              minLength: 1
-              type: string
             description:
               description: User provided description
               maxLength: 512
               type: string
-            inputDatasetName:
-              description: input dataset name for the recipe
-              type: string
-            inputRecipeName:
-              description: input recipe name for the recipe. The system will use the
-                output of the input recipe
-              type: string
-            location:
-              description: Folder of the actual data resides.
+            input:
+              description: The recipe input spec.
               properties:
-                bucketName:
+                datasetName:
                   type: string
-                path:
-                  description: Path to the full data file (e.g. csv file).
+                format:
+                  description: dataset name format
+                  enum:
+                  - url
+                  - path
+                  - password
+                  - time
+                  - count
+                  - interval
+                  - nominal
+                  - email
+                  - creditCard
+                  - uuid
+                  - uuid5
+                  - uuid
+                  - base64
+                  - latitude
+                  - longtitude
+                  - dns
+                  - ip4
+                  - ip6
+                  - ssn
+                  - alpha
+                  - alphanumeric
+                  - none
+                  - unknown
                   type: string
-              required:
-              - bucketName
-              - path
+                location:
+                  description: Folder of the actual data resides.
+                  properties:
+                    bucketName:
+                      type: string
+                    path:
+                      description: Path to the full data file (e.g. csv file).
+                      type: string
+                  required:
+                  - bucketName
+                  - path
+                  type: object
               type: object
-            outputDatasetName:
+            output:
               description: Use this as the output dataset name
-              type: string
+              properties:
+                createDataset:
+                  description: If true, create a new dataset when the recipe is done.
+                  type: boolean
+                datasetName:
+                  type: string
+                location:
+                  description: Folder of the actual data resides.
+                  properties:
+                    bucketName:
+                      type: string
+                    path:
+                      description: Path to the full data file (e.g. csv file).
+                      type: string
+                  required:
+                  - bucketName
+                  - path
+                  type: object
+              type: object
             ownerName:
               description: The account name of the owner of this dataset
               type: string
+            sample:
+              description: Specify the sampling paramters when viewing the recipe
+              properties:
+                rows:
+                  description: The number of rows. Default is 500
+                  format: int32
+                  type: integer
+                string:
+                  description: filter formula. Valid only if the sample is a filter.
+                  type: string
+                type:
+                  description: Define how the recipe file is sampled.
+                  type: string
+              type: object
             steps:
               description: The reciepe steps
               items:
@@ -327,12 +370,13 @@ spec:
                     type: string
                   parameters:
                     items:
-                      type: string
+                      properties:
+                        name:
+                          type: string
+                        value:
+                          type: string
+                      type: object
                     type: array
-                  sourceColumn:
-                    type: string
-                  targetColumn:
-                    type: string
                 type: object
               type: array
             versionName:

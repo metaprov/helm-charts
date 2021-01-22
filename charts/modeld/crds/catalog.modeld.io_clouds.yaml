@@ -262,9 +262,95 @@ spec:
               type: string
             defaultRegionRef:
               type: string
+            gpuClasses:
+              items:
+                properties:
+                  cloudName:
+                    type: string
+                  gpumem:
+                    type: string
+                  mem:
+                    type: string
+                  regionName:
+                    type: string
+                  storage:
+                    type: string
+                  vcpu:
+                    format: int32
+                    minimum: 0
+                    type: integer
+                required:
+                - cloudName
+                - regionName
+                type: object
+              type: array
+            machineClasses:
+              items:
+                properties:
+                  cloudName:
+                    type: string
+                  mem:
+                    type: string
+                  regionName:
+                    type: string
+                  storage:
+                    type: string
+                  vcpu:
+                    format: int32
+                    type: integer
+                type: object
+              type: array
+            regions:
+              items:
+                properties:
+                  billingCode:
+                    description: The billing code of the region
+                    type: string
+                  cloudName:
+                    type: string
+                  datacenters:
+                    items:
+                      properties:
+                        code:
+                          type: string
+                        name:
+                          type: string
+                      type: object
+                    type: array
+                  defaultDatacenterName:
+                    description: The default datacenter for a region
+                    type: string
+                  location:
+                    description: The location of the region
+                    type: string
+                type: object
+              type: array
           type: object
         status:
           description: CloudStatus defines the observed state of Cloud.
+          properties:
+            gpuCosts:
+              items:
+                properties:
+                  costPerMinute:
+                    type: string
+                  costSpot:
+                    type: string
+                  region:
+                    type: string
+                type: object
+              type: array
+            machineCosts:
+              items:
+                properties:
+                  costPerMinute:
+                    type: string
+                  costSpot:
+                    type: string
+                  region:
+                    type: string
+                type: object
+              type: array
           type: object
       required:
       - spec

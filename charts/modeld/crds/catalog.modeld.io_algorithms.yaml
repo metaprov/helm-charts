@@ -333,19 +333,22 @@ spec:
                   type:
                     description: Type is the datatype of the parameter
                     enum:
-                    - integer
-                    - number
-                    - number-list
+                    - numeric
+                    - numeric-list
                     - categorical
                     - categorical-list
                     - datetime
                     - string
                     - string-list
+                    - url
+                    - path
+                    - file
                     - useless
                     - image
                     - video
                     - audio
                     - boolean
+                    - json
                     type: string
                 type: object
               type: array

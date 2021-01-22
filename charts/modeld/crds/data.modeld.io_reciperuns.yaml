@@ -270,6 +270,9 @@ spec:
         spec:
           description: RecipeSpec defines the desired state of a dataset
           properties:
+            labName:
+              description: The execution env of this recipes
+              type: string
             output:
               description: The location of the data output.
               properties:

@@ -261,6 +261,10 @@ spec:
           type: object
         spec:
           properties:
+            clusterName:
+              description: The virtual cluster name in case that the lab is not on
+                the same cluster
+              type: string
             description:
               description: User provided description
               type: string

@@ -355,19 +355,22 @@ spec:
                       datatype:
                         description: Type specify the data type of the attribute required
                         enum:
-                        - integer
-                        - number
-                        - number-list
+                        - numeric
+                        - numeric-list
                         - categorical
                         - categorical-list
                         - datetime
                         - string
                         - string-list
+                        - url
+                        - path
+                        - file
                         - useless
                         - image
                         - video
                         - audio
                         - boolean
+                        - json
                         type: string
                       description:
                         description: Description is a description of the feature
