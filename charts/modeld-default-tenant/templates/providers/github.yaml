@@ -21,14 +21,14 @@ metadata:
 type: Opaque
 data:
   {{- if .Values.github.secret.token }}
-  github-token : {{ .Values.github.secret.token | b64enc | quote }}
+  token : {{ .Values.github.secret.token | b64enc | quote }}
   {{ else }}
-  github-token : {{ required "github token is required!" .Values.github.secret.token }}
+  token : {{ required "github token is required!" .Values.github.secret.token }}
   {{- end }}
   {{- if .Values.digitalocean.secret.token }}
-  github-username : {{ .Values.github.secret.username | b64enc | quote }}
+  username : {{ .Values.github.secret.username | b64enc | quote }}
   {{ else }}
-  github-username : {{ required "github username is required!" .Values.github.secret.username }}
+  username : {{ required "github username is required!" .Values.github.secret.username }}
   {{- end }}
 {{ end }}
 

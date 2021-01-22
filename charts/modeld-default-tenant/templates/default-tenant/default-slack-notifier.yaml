@@ -7,6 +7,5 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modeld-system
-  type: slack
-  slack:
-    webhook: {{ .Values.slack.webhook }}
+  connectionName: default-slack-connection
+

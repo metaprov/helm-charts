@@ -21,21 +21,21 @@ metadata:
 type: Opaque
 data:
   {{- if .Values.minio.secret.accesskey }}
-  minio-access-key : {{ .Values.minio.secret.accesskey | b64enc | quote }}
+  accessKey : {{ .Values.minio.secret.accesskey | b64enc | quote }}
   {{ else }}
-  minio-access-key : {{ required "minio access key is required!" .Values.minio.secret.accesskey }}
+  accessKey : {{ required "minio access key is required!" .Values.minio.secret.accesskey }}
   {{- end }}
 
   {{- if .Values.minio.secret.secretkey }}
-  minio-secret-key : {{ .Values.minio.secret.secretkey | b64enc | quote }}
+  secretKey : {{ .Values.minio.secret.secretkey | b64enc | quote }}
   {{ else }}
-  minio-secret-key : {{ required "minio secret key is required!" .Values.minio.secret.secretkey }}
+  secretKey : {{ required "minio secret key is required!" .Values.minio.secret.secretkey }}
   {{- end }}
 
   {{- if .Values.minio.secret.host }}
-  minio-host : {{ .Values.minio.secret.host | b64enc | quote }}
+  host : {{ .Values.minio.secret.host | b64enc | quote }}
   {{ else }}
-  minio-host : {{ required "minio host is required!" .Values.minio.secret.host }}
+  host : {{ required "minio host is required!" .Values.minio.secret.host }}
   {{- end }}
 ---
 apiVersion: infra.modeld.io/v1alpha1

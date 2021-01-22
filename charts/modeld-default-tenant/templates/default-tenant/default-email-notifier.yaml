@@ -7,12 +7,6 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modeld-system
-  type: email
-  email:
-    to:
-      - {{ .Values.email.to }}
-    from: {{ .Values.email.from}}
-    host: {{ .Values.email.host}}
-    port: {{ .Values.email.port}}
-    connectionName: {{ .Values.email.name }}
-
+  to: {{ .Values.email.to }}
+  from: {{ .Values.email.from}}
+  connectionName: default-smtp-connection

@@ -1,0 +1,27 @@
+apiVersion: data.modeld.io/v1alpha1
+kind: DataProduct
+metadata:
+  namespace: default-tenant
+  name: iris-product
+spec:
+  gitLocation:
+    gitConnectionName: default-git-repository
+    Url: ""
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+  imageLocation:
+    name: modeld/iris-product
+    registryConnectionName: default-dockerhub-connection
+  dataLocation:
+    bucketName: default-minio-bucket
+    path: modeld/live/dataproducts/iris
+  servingSiteName: default-serving-site
+  labName: default-lab
+  task: binary-classification
+  labelColumn: "class"
+  modelWorkloadClassName: model-workload-class
+  dataWorkloadClassName: data-workload-class
+
+
+

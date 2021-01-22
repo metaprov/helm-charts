@@ -8,15 +8,15 @@ metadata:
 type: Opaque
 stringData:
   {{- if .Values.email.secret.username }}
-  email-username: {{ .Values.email.secret.username | b64enc | quote }}
+  username: {{ .Values.email.secret.username | b64enc | quote }}
   {{ else }}
-  email-username: {{ required "email user name is required!" .Values.email.secret.username }}
+  username: {{ required "email user name is required!" .Values.email.secret.username }}
   {{- end }}
 
   {{- if .Values.email.secret.password }}
-  email-password: {{ .Values.email.secret.username | b64enc | quote }}
+  password: {{ .Values.email.secret.username | b64enc | quote }}
   {{ else }}
-  email-password: {{ required "email secret required!" .Values.email.secret.password }}
+  password: {{ required "email secret required!" .Values.email.secret.password }}
   {{- end }}
 ---
 apiVersion: infra.modeld.io/v1alpha1

@@ -21,13 +21,13 @@ metadata:
 type: Opaque
 data:
   {{- if .Values.slack.secret.username }}
-  slack-username : {{ .Values.slack.secret.username | b64enc | quote }}
+  username : {{ .Values.slack.secret.username | b64enc | quote }}
   {{ else }}
-  slack-username : {{ required "slack username is required!" .Values.slack.secret.username }}
+  username : {{ required "slack username is required!" .Values.slack.secret.username }}
   {{- end }}
   {{- if .Values.slack.secret.token }}
-  slack-token : {{ .Values.slack.secret.token | b64enc | quote }}
+  token : {{ .Values.slack.secret.token | b64enc | quote }}
   {{ else }}
-  slack-token : {{ required "slack token  is required!" .Values.slack.secret.token }}
+  token : {{ required "slack token  is required!" .Values.slack.secret.token }}
   {{- end }}
 {{ end }}

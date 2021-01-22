@@ -8,9 +8,9 @@ metadata:
 type: Opaque
 data:
   {{- if .Values.aws.secret.az }}
-  aws-az: {{ .Values.aws.secret.az | b64enc | quote }}
+  az: {{ .Values.aws.secret.az | b64enc | quote }}
   {{ else }}
-  aws-az: {{ required "aws az is required!" .Values.azure.secret.az }}
+  az: {{ required "aws az is required!" .Values.azure.secret.az }}
   {{- end }}
 
   {{- if .Values.aws.secret.accessKey }}

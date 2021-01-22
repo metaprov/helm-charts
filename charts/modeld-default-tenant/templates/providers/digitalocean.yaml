@@ -23,9 +23,9 @@ data:
   accessKey: {{ required "digitalocean spaces access key is required!" .Values.digitalocean.secret.storageAccountName }}
   {{- end }}
   {{- if .Values.digitalocean.secret.region }}
-  digitalocean-region: {{ .Values.digitalocean.secret.region | b64enc | quote }}
+  az: {{ .Values.digitalocean.secret.region | b64enc | quote }}
   {{ else }}
-  digitalocean-region: {{ required "digitalocean region is required!" .Values.digitalocean.secret.region }}
+  az: {{ required "digitalocean region is required!" .Values.digitalocean.secret.region }}
   {{- end }}
 ---
 apiVersion: infra.modeld.io/v1alpha1

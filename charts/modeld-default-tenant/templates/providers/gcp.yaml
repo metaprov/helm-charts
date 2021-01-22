@@ -20,11 +20,10 @@ metadata:
   labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
 type: Opaque
 stringData:
-  gcp-az: {{ .Values.gcp.secret.az }}
-  gcp-access-key: {{ .Values.gcp.secret.accessKey }}
-  gcp-secret-key: {{ .Values.gcp.secret.secretKey }}
-  gcp-keyfile: {{ .Values.gcp.secret.keyfile }}
-  gcp-project: {{ .Values.gcp.secret.project }}
+  az: {{ .Values.gcp.secret.az }}
+  accessKey: {{ .Values.gcp.secret.accessKey }}
+  secretKey: {{ .Values.gcp.secret.secretKey }}
+  keyfile: {{ .Values.gcp.secret.keyfile }}
 ---
 apiVersion: infra.modeld.io/v1alpha1
 kind: VirtualBucket

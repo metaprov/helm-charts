@@ -8,19 +8,19 @@ metadata:
 type: Opaque
 data:
   {{- if .Values.digitalocean.secret.token }}
-  image-registry-host: {{ .Values.dockerhub.secret.registryHost | b64enc | quote }}
+  host: {{ .Values.dockerhub.secret.registryHost | b64enc | quote }}
   {{ else }}
-  image-registry-host: {{ required "image registry host is required!" .Values.dockerhub.secret.registryHost }}
+  host: {{ required "image registry host is required!" .Values.dockerhub.secret.registryHost }}
   {{- end }}
   {{- if .Values.dockerhub.secret.username }}
-  image-registry-username: {{ .Values.dockerhub.secret.username | b64enc | quote }}
+  username: {{ .Values.dockerhub.secret.username | b64enc | quote }}
   {{ else }}
-  image-registry-username: {{ required "image registry username is required!" .Values.dockerhub.secret.username }}
+  username: {{ required "image registry username is required!" .Values.dockerhub.secret.username }}
   {{- end }}
   {{- if .Values.dockerhub.secret.password }}
-  image-registry-password: {{ .Values.dockerhub.secret.password | b64enc | quote }}
+  password: {{ .Values.dockerhub.secret.password | b64enc | quote }}
   {{ else }}
-  image-registry-password: {{ required "image registry secret is required!" .Values.dockerhub.secret.password }}
+  password: {{ required "image registry secret is required!" .Values.dockerhub.secret.password }}
   {{- end }}
 
 ---
