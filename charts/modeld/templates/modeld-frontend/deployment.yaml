@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-frontend
+  name: modeld-frontend
+  namespace: modeld-system
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: modeld-frontend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: modeld-frontend
+    spec:
+      containers:
+        - name: main
+          image: quay.io/metaprov/modeld-frontend
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+            - containerPort: 8008
+              name: profiling
+

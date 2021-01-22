@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: control-plane-metrics
+    app.kubernetes.io/part-of: modeld
+  name: control-plane-metrics
+  namespace: modeld-system
+spec:
+  ports:
+    - name: metrics
+      protocol: TCP
+      port: 9090
+      targetPort: 9090
+  selector:
+    app.kubernetes.io/name: modeld-control-plane

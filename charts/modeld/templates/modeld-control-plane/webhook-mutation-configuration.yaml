@@ -1,0 +1,711 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: data-mutating-webhook-configuration
+  namespace: modeld-system
+  annotations:
+    cert-manager.io/inject-ca-from: modeld-system/serving-cert
+webhooks:
+  - name: corpus.data.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - corpuses
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-data-modeld-io-v1alpha1-corpus
+      caBundle: CERT
+
+
+  - name: dataproduct.data.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - dataproducts
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-data-modeld-io-v1alpha1-dataproduct
+      caBundle: CERT
+
+  - name: dataproductversion.data.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - dataproductversions
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-data-modeld-io-v1alpha1-dataproductversion
+      caBundle: CERT
+
+
+  - name: dataset.data.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - datasets
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-data-modeld-io-v1alpha1-dataset
+      caBundle: CERT
+
+
+  - name: datasource.data.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - datasources
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-data-modeld-io-v1alpha1-datasource
+      caBundle: CERT
+
+  - name: datapipeline.data.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "datapipeline.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - datapipelines
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-data-modeld-io-v1alpha1-datapipeline
+      caBundle: CERT
+
+  - name: datapipelinerun.data.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "datapipelinerun.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - datapipelineruns
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-data-modeld-io-v1alpha1-datapipelinerun
+      caBundle: CERT
+
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: inference-mutating-webhook-configuration
+  namespace: modeld-system
+  annotations:
+    cert-manager.io/inject-ca-from: modeld-system/serving-cert
+webhooks:
+  - name: predictions.inference.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "inference.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - predictions
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-inference-modeld-io-v1alpha1-prediction
+      caBundle: CERT
+
+
+  - name: predictors.inference.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "inference.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - predictors
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-inference-modeld-io-v1alpha1-predictor
+      caBundle: CERT
+
+  - name: curtains.inference.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "inference.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - curtains
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-inference-modeld-io-v1alpha1-curtain
+      caBundle: CERT
+
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: infra-mutating-webhook-configuration
+  namespace: modeld-system
+  annotations:
+    cert-manager.io/inject-ca-from: modeld-system/serving-cert
+webhooks:
+  - name: account.infra.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "infra.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - accounts
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-infra-modeld-io-v1alpha1-account
+      caBundle: CERT
+
+  - name: connection.infra.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "infra.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - connections
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-infra-modeld-io-v1alpha1-connection
+      caBundle: CERT
+
+  - name: license.infra.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "infra.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - licenses
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-infra-modeld-io-v1alpha1-license
+      caBundle: CERT
+
+
+  - name: lab.infra.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "infra.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - labs
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-infra-modeld-io-v1alpha1-lab
+      caBundle: CERT
+
+  - name: notifier.infra.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "infra.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - notifiers
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-infra-modeld-io-v1alpha1-notifier
+      caBundle: CERT
+
+  - name: servingsite.infra.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "infra.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - servingsites
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-infra-modeld-io-v1alpha1-servingsite
+      caBundle: CERT
+
+  - name: tenant.infra.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "infra.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - tenants
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-infra-modeld-io-v1alpha1-tenant
+      caBundle: CERT
+
+  - name: virtualbucket.infra.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "infra.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - virtualbuckets
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-infra-modeld-io-v1alpha1-virtualbucket
+      caBundle: CERT
+
+
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: training-mutating-webhook-configuration
+  namespace: modeld-system
+  annotations:
+    cert-manager.io/inject-ca-from: modeld-system/serving-cert
+webhooks:
+  - name: model.training.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "training.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - models
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-training-modeld-io-v1alpha1-model
+      caBundle: CERT
+
+  - name: forecast.training.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "training.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - forecasts
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-training-modeld-io-v1alpha1-forecast
+      caBundle: CERT
+
+
+  - name: notebook.training.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "training.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - notebooks
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-training-modeld-io-v1alpha1-notebook
+      caBundle: CERT
+
+  - name: notebookrun.training.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "training.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - notebookruns
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-training-modeld-io-v1alpha1-notebookrun
+      caBundle: CERT
+
+  - name: modelpipeline.training.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "training.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - modelpipelines
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-training-modeld-io-v1alpha1-modelpipeline
+      caBundle: CERT
+
+  - name: modelpipelinerun.training.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "training.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - modelpipelineruns
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-training-modeld-io-v1alpha1-modelpipelinerun
+      caBundle: CERT
+
+  - name: pipelinetrigger.training.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "training.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - pipelinetriggers
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-training-modeld-io-v1alpha1-pipelinetrigger
+      caBundle: CERT
+
+
+
+  - name: study.training.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "training.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - studies
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-training-modeld-io-v1alpha1-study
+      caBundle: CERT
+
+  - name: trainer.training.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "training.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - trainers
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-training-modeld-io-v1alpha1-trainer
+      caBundle: CERT
+
+  - name: automlrun.training.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "training.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - automlruns
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-training-modeld-io-v1alpha1-automlrun
+      caBundle: CERT
+
+
+  - name: report.training.modeld.io
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "training.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - reports
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /mutate-training-modeld-io-v1alpha1-report
+      caBundle: CERT

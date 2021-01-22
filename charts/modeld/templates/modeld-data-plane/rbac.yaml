@@ -1,0 +1,50 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-data-plane
+    app.kubernetes.io/part-of: modeld
+  name: modeld-data-plane
+rules:
+  - apiGroups: ["infra.modeld.io"]
+    resources:
+      - virtualbuckets
+      - connections
+    verbs:
+      - get
+      - list
+  - apiGroups: [""]
+    resources:
+      - secrets
+    verbs:
+      - get
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-data-plane
+    app.kubernetes.io/part-of: modeld
+  name: modeld-data-plane
+  namespace: modeld-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: modeld-data-plane
+subjects:
+  - kind: User
+    apiGroup: rbac.authorization.k8s.io
+    name: system:serviceaccount:modeld-system:modeld-data-plane
+    namespace: modeld-system
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-data-plane
+    app.kubernetes.io/part-of: modeld
+  name: modeld-data-plane
+  namespace: modeld-system

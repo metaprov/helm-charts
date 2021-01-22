@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-data-dock
+  name: modeld-data-dock
+  namespace: modeld-system
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: modeld-data-dock
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: modeld-data-dock
+    spec:
+        serviceAccountName: modeld-data-dock
+        containers:
+        - name: main
+          image: quay.io/metaprov/modeld-data-dock
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: data
+              mountPath: /home/modeld/data
+          ports:
+            - containerPort: 8095
+              name: http
+            - containerPort: 9090
+              name: metrics
+            - containerPort: 8008
+              name: profiling
+          livenessProbe:
+              httpGet:
+                path: /healthz
+                port: 9090
+              initialDelaySeconds: 5
+              periodSeconds: 10
+          env:
+            - name: CLOUDS_HOST
+              value: "127.0.0.1"
+            - name: CLOUDS_PORT
+              value: "8090"
+            - name: HOST
+              value:  "0.0.0.0"
+            - name: PORT
+              value: "8095"
+            - name: DEBUG
+              value: "true"
+            - name: ENV
+              value:  "dev"
+            - name: CACHE_PATH
+              value: "/home/modeld/data"
+
+        - name: clouds
+          image: quay.io/metaprov/modeld-clouds
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8090
+              name: http
+            - containerPort: 9090
+              name: metrics
+            - containerPort: 8008
+              name: profiling
+          volumeMounts:
+              - name: data
+                mountPath: /home/modeld/data
+          livenessProbe:
+              httpGet:
+                path: /healthz
+                port: 9090
+              initialDelaySeconds: 5
+              periodSeconds: 10
+          env:
+            - name: HOST
+              value:  "0.0.0.0"
+            - name: PORT
+              value: "8090"
+            - name: DEBUG
+              value: "true"
+            - name: ENV
+              value:  "dev"
+            - name: CACHE_PATH
+              value: "/home/modeld/data"
+
+        volumes:
+        - name : data
+          emptyDir: {}

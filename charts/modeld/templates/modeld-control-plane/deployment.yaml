@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-control-plane
+    app.kubernetes.io/part-of: modeld
+  name: modeld-control-plane
+  namespace: modeld-system
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: modeld-control-plane
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: modeld-control-plane
+    spec:
+      serviceAccountName: modeld-control-plane
+      containers:
+        - name: main
+          image: quay.io/metaprov/modeld-control-plane:latest
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: data
+              mountPath: /home/modeld/data
+            - name: webhook-server-cert
+              mountPath: /tmp/k8s-webhook-server/serving-certs
+              readOnly: true
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 9090
+              name: metrics
+            - containerPort: 8008
+              name: profiling
+            - containerPort: 9443
+              name: webhook-server
+              protocol: TCP
+          env:
+            - name: DS_HOST
+              value: "modeld-data-plane"
+            - name: DS_PORT
+              value: "8080"
+            - name: CLOUDS_HOST
+              value: "127.0.0.1"
+            - name: CLOUDS_PORT
+              value: "8090"
+            - name: CACHE_PATH
+              value: "/home/modeld/data"
+            - name: FAKE
+              value: "false"
+            - name: METRIC_ADDR
+              value: ":9090"
+            - name: ENABLE_LEADER_ELECTION
+              value: "false"
+            - name: WH
+              value: "true"
+          resources:
+            limits:
+              cpu: 20m
+              memory: 256Mi
+            requests:
+              cpu: 20m
+              memory: 128Mi
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+        - name: clouds
+          image: quay.io/metaprov/modeld-clouds
+          imagePullPolicy: IfNotPresent
+          ports:
+                  - containerPort: 8090
+                    name: http
+                  - containerPort: 9090
+                    name: metrics
+                  - containerPort: 8008
+                    name: profiling
+          volumeMounts:
+                  - name: data
+                    mountPath: /home/modeld/data
+          livenessProbe:
+                  httpGet:
+                    path: /healthz
+                    port: 9090
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+          env:
+                  - name: HOST
+                    value:  "0.0.0.0"
+                  - name: PORT
+                    value: "8090"
+                  - name: DEBUG
+                    value: "true"
+                  - name: ENV
+                    value:  "dev"
+                  - name: CACHE_PATH
+                    value: "/home/modeld/data"
+
+
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: webhook-server-cert
+          secret:
+            secretName: webhook-server-cert

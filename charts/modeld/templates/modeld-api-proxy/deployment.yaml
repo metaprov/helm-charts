@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-api-proxy
+  name: modeld-api-proxy
+  namespace: modeld-system
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: modeld-api-proxy
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: modeld-api-proxy
+        app.kubernetes.io/version: {{ .Values.modeld.tag }}
+        app.kubernetes.io/component: api-proxy
+        app.kubernetes.io/part-of: "modeld"
+        app.kubernetes.io/managed-by: "helm"
+{{- if eq .Values.modeld.prometheus.enabled true }}
+      annotations:
+        prometheus.io/scrape: "{{ .Values.modeld.prometheus.enabled }}"
+        prometheus.io/port: "{{ .Values.modeld.prometheus.port }}"
+        prometheus.io/path: "/"
+{{- end }}
+    spec:
+      serviceAccountName: modeld-api-proxy
+      containers:
+        - name: main
+          image: quay.io/metaprov/modeld-api-proxy
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: grpc
+            - containerPort: 8008
+              name: profiling

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-data-plane
+    app.kubernetes.io/part-of: modeld
+  name: modeld-data-plane
+  namespace: modeld-system
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app.kubernetes.io/name: modeld-data-plane

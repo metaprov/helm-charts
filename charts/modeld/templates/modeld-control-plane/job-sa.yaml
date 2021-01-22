@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-control-plane
+    app.kubernetes.io/part-of: modeld
+  name: modeld-job-runner
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-control-plane
+    app.kubernetes.io/part-of: modeld
+  name: modeld-job-runner
+  namespace: modeld-system
+rules:
+  - apiGroups: ["batch"]
+    resources:
+      - job
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources:
+      - jobs
+      - pods
+    verbs:
+      - get
+      - create
+      - list
+      - watch
+      - update
+      - delete
