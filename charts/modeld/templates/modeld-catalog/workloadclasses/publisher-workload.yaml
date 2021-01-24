@@ -1,0 +1,79 @@
+apiVersion: catalog.modeld.io/v1alpha1
+kind: WorkloadClass
+metadata:
+  name: publisher-workload-class
+  namespace: modeld-catalog
+spec:
+  serviceAccountName: modeld-publisher
+  image: quay.io/metaprov/modeld-publisher:latest
+  tasks:
+   - binary-classification
+  podTemplate:
+      metadata:
+        labels:
+          app.kubernetes.io/name: modeld-trainer
+      spec:
+        restartPolicy: Never
+        containers:
+          - name: control
+            image: quay.io/metaprov/modeld-workload:latest
+            imagePullPolicy: IfNotPresent
+            ports:
+                - containerPort: 8080
+            volumeMounts:
+                - name: data
+                  mountPath: /home/modeld/data
+          - name: publisher
+            image: quay.io/metaprov/modeld-publisher:latest
+            imagePullPolicy: IfNotPresent
+            securityContext:
+                privileged: true
+            ports:
+             - containerPort: 8050
+               name: http
+             - containerPort: 9090
+               name: metrics
+            volumeMounts:
+             - name: data
+               mountPath: /home/modeld/data
+             - name: docker-sock-volume
+               mountPath: /var/run/docker.sock
+            resources:
+                  limits:
+                    cpu: 50m
+                    memory: 400Mi
+                  requests:
+                    cpu: 50m
+                    memory: 400Mi
+            env:
+                  - name: HOST
+                    value: "0.0.0.0"
+                  - name: PORT
+                    value: "8080"
+                  - name: DEBUG
+                    value: "true"
+                  - name: ENV
+                    value: "dev"
+                  - name: CACHE_PATH
+                    value: "/home/modeld/data"
+                  - name: CLOUDS_HOST
+                    value: "127.0.0.1"
+                  - name: CLOUDS_PORT
+                    value: "8090"
+
+          - name: storage
+            image: quay.io/metaprov/modeld-clouds:latest
+            imagePullPolicy: IfNotPresent
+            ports:
+               - name: http
+                 containerPort: 8090
+            volumeMounts:
+                - name: data
+                  mountPath: /home/modeld/data
+        volumes:
+          - name: data
+            emptyDir: {}
+          - name: docker-sock-volume
+            hostPath:
+               path: /var/run/docker.sock
+               type: File

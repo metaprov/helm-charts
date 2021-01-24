@@ -10,13 +10,13 @@ spec:
   task: binary-classification
   integerParameters:
     - name: n_estimators
-      type: number
+      type: numeric
       minimum: 50
       maximum: 500
       defaultValue: 50
   floatParameters:
     - name: learning_rate
-      type: number
+      type: numeric
       minimum: 0.01
       maximum: 2
       defaultValue: 0.1

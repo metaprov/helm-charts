@@ -17,7 +17,7 @@ spec:
       defaultValue:  gini
   integerParameters:
     - name:   min_samples_split
-      type: number
+      type: numeric
       domain: integer
       minValue: 2
       maxValue: 2

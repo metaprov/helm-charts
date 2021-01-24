@@ -117,10 +117,6 @@ push-helm-chart: build/chart/modeld-$(BASE_VERSION).tgz build/chart/modeld-defau
 	helm gcs push --force build/chart/modeld-$(BASE_VERSION).tgz modeld
 	helm gcs push --force build/chart/modeld-default-tenant-$(BASE_VERSION).tgz modeld
 
-push-cli: build-cli
-	gsutil cp $(REPOSITORY_ROOT)/cmd/modeld/dist/modeld_windows_amd64/modeld.exe gs://modeld-tools/install/v$(BASE_VERSION)/modeld_windows_amd64/modeld.exe
-	gsutil cp $(REPOSITORY_ROOT)/cmd/modeld/dist/modeld_darwin_amd64/modeld gs://modeld-tools/install/v$(BASE_VERSION)/modeld_darwin_amd64/modeld
-	gsutil cp $(REPOSITORY_ROOT)/cmd/modeld/dist/modeld_linux_amd64/modeld gs://modeld-tools/install/v$(BASE_VERSION)/modeld_linux_amd64/modeld
 
 # Update Helm cachehel
 update-helm-cache:

@@ -1,7 +1,7 @@
 apiVersion: catalog.modeld.io/v1alpha1
 kind: WorkloadClass
 metadata:
-  name: classical-trainer
+  name: model-workload-class
   namespace: modeld-catalog
 spec:
   image: quay.io/metaprov/modeld-trainer:latest
@@ -12,17 +12,26 @@ spec:
         labels:
           app.kubernetes.io/name: modeld-trainer
       spec:
+        restartPolicy: Never
         containers:
-          - name: main
+          - name: control
+            image: quay.io/metaprov/modeld-workload:latest
+            imagePullPolicy: IfNotPresent
+            ports:
+                - containerPort: 8070
+            volumeMounts:
+                - name: data
+                  mountPath: /home/modeld/data
+          - name: ml
             image: quay.io/metaprov/modeld-trainer:latest
             imagePullPolicy: IfNotPresent
             ports:
-              - containerPort: 8080
+                - containerPort: 8080
             volumeMounts:
-              - name: data
-                mountPath: /home/modeld/data
-          - name: sidecar
-            image: quay.io/metaprov/clouds:latest
+                - name: data
+                  mountPath: /home/modeld/data
+          - name: storage
+            image: quay.io/metaprov/modeld-clouds:latest
             imagePullPolicy: IfNotPresent
             ports:
               - name: http

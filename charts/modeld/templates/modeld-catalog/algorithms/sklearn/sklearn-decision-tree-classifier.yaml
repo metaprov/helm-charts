@@ -10,7 +10,7 @@ spec:
   frameworkName: scikit-learn
   integerParameters:
     - name:   min_samples_split
-      type: number
+      type: numeric
       domain: integer
       minimum: 2
       maximum: 2
