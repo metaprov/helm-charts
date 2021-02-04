@@ -23,7 +23,6 @@ modeld:
   pullPolicy: IfNotPresent
   debug: false
   cachePath: "/home/modeld/data"
-  tag: "latest"
   logAsJson: false
   imagePullSecrets: ""
   podAnnotations: { }
