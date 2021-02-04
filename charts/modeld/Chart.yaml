@@ -1,6 +1,6 @@
 apiVersion: v2
 name: modeld
-version: 0.1.1
+version: 0.1.2
 kubeVersion: ">= 1.15.0"
 description: Machine Learning Operators
 type: application
