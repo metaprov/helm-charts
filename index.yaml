@@ -3,7 +3,31 @@ entries:
   modeld:
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-02-04T01:33:35.662416793Z"
+    created: "2021-02-04T01:51:40.004639254Z"
+    description: Machine Learning Operators
+    digest: b59770dfbe60b2c5032f6033a5390bae41d9b542e8982d86070965913fffc801
+    home: https://modeld.io
+    keywords:
+    - kubernetes
+    - go
+    - golang
+    - ai
+    - machine learning
+    kubeVersion: '>= 1.15.0'
+    maintainers:
+    - email: support@modeld.io
+      name: metaprov
+      url: https://groups.google.com/forum/#!forum/modeld-discuss
+    name: modeld
+    sources:
+    - https://github.com/metaprov/modeld
+    type: application
+    urls:
+    - https://metaprov.github.io/helm-charts/modeld-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: v0.0.1
+    created: "2021-02-04T01:51:39.988008148Z"
     description: Machine Learning Operators
     digest: e1cb998f7ab5d3b7a8cf4aed3aca399fa365390c5ae8b3f8bec7b36b547e782b
     home: https://modeld.io
@@ -28,12 +52,12 @@ entries:
   modeld-default-tenant:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-02-04T01:33:35.663878001Z"
+    created: "2021-02-04T01:51:40.005712061Z"
     description: A Helm chart for default tenant
-    digest: bdaa3921878ef29bddf08db18f1ba8cf0bf6e736517af9e3b2421647c953fd0c
+    digest: ce9f6f8c4bebbc1667d90eb4e2caa65c492c3d08a09d8fa0a27121dc585648c4
     name: modeld-default-tenant
     type: application
     urls:
     - https://metaprov.github.io/helm-charts/modeld-default-tenant-0.1.0.tgz
     version: 0.1.0
-generated: "2021-02-04T01:33:35.646671113Z"
+generated: "2021-02-04T01:51:39.972226648Z"
