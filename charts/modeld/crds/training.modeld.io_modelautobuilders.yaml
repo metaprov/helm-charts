@@ -307,12 +307,14 @@ spec:
                 generic product name
               maxLength: 253
               minLength: 1
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             dataProductVersionName:
               description: Path product version, if not defined set to generic product
                 version.
               maxLength: 253
               minLength: 1
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             dataSourceSpec:
               description: The spec of the data source, if none, the runner will infer
@@ -390,6 +392,9 @@ spec:
                       description: If true, the import will fail if there is an error
                       type: boolean
                   type: object
+                owner:
+                  description: The owner account name
+                  type: string
                 ownerName:
                   description: The account name of the owner of this dataset
                   type: string
@@ -655,6 +660,7 @@ spec:
                       type: string
                     versionName:
                       maxLength: 64
+                      pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
                       type: string
                   type: object
                 type:
@@ -673,11 +679,13 @@ spec:
                 will be created otherwise, a dataset will be created based on the
                 file in the path section.
               maxLength: 63
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             datasourceName:
               description: The name of existing datasource, if empty the datasource
                 parameters will be inferred from the file
               maxLength: 253
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             maxModels:
               description: 'Max model Default: 10 models'
@@ -736,6 +744,10 @@ spec:
               - mape
               - smape
               - mdape
+              type: string
+            owner:
+              description: The owner account name
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             path:
               description: The location of the data in the cloud

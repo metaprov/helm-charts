@@ -304,6 +304,8 @@ spec:
             notifierName:
               description: a notifier to receive the license expiration notification
               type: string
+            owner:
+              type: string
             priceName:
               description: The price name
               type: string
@@ -364,6 +366,7 @@ spec:
               description: Is vision feature supported
               type: boolean
           required:
+          - owner
           - secretName
           type: object
         status:

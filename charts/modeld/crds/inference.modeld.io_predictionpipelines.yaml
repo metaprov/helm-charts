@@ -4,31 +4,47 @@ apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
-  name: conversations.team.modeld.io
+  name: predictionpipelines.inference.modeld.io
 spec:
   additionalPrinterColumns:
   - JSONPath: .status.conditions[?(@.type=="Ready")].status
     name: Ready
     type: string
+  - JSONPath: .spec.predictorName
+    name: Predictor
+    type: string
+  - JSONPath: .spec.datasetName
+    name: Bucket
+    type: string
+  - JSONPath: .spec.datasetName
+    name: File
+    type: string
+  - JSONPath: .spec.datasetName
+    name: Labeled
+    type: string
+  - JSONPath: .status.score
+    name: Score
+    type: string
+  - JSONPath: .status.phase
+    name: Status
+    type: string
   - JSONPath: .metadata.creationTimestamp
     name: Age
     type: date
-  group: team.modeld.io
+  group: inference.modeld.io
   names:
     categories:
-    - team
+    - inference
     - modeld
-    kind: Conversation
-    plural: conversations
-    shortNames:
-    - cv
-    singular: conversation
+    kind: PredictionPipeline
+    plural: predictionpipelines
+    singular: predictionpipeline
   scope: Namespaced
   subresources:
     status: {}
   validation:
     openAPIV3Schema:
-      description: Conversation represents a comment about any conversation
+      description: PredictionTemplate represents a prediction object
       properties:
         apiVersion:
           description: 'APIVersion defines the versioned schema of this representation
@@ -41,7 +57,8 @@ spec:
             submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
           type: string
         metadata:
-          description: 'Standard object''s metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata'
+          description: ObjectMeta is metadata that all persisted resources must have,
+            which includes all objects users must create.
           properties:
             annotations:
               additionalProperties:
@@ -262,113 +279,109 @@ spec:
               type: string
           type: object
         spec:
-          description: 'Spec is the desired state of the Converation. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status'
+          description: PredictionPipelineSpec represent the desired state of PredictionPipeline
           properties:
-            entityRef:
-              description: The target of the conversation
+            datasetName:
+              description: In where we are using a dataset name. This can be dataset
+                name
+              type: string
+            input:
+              description: DataLocation of the input if using direct input file
               properties:
-                apiVersion:
-                  description: API version of the referent.
+                bucketName:
                   type: string
-                fieldPath:
-                  description: 'If referring to a piece of an object instead of an
-                    entire object, this string should contain a valid JSON/Go field
-                    access statement, such as desiredState.manifest.containers[2].
-                    For example, if the object reference is to a container within
-                    a pod, this would take on a value like: "spec.containers{name}"
-                    (where "name" refers to the name of the container that triggered
-                    the event) or if no container name is specified "spec.containers[2]"
-                    (container with index 2 in this pod). This syntax is chosen only
-                    to have some well-defined way of referencing a part of an object.
-                    TODO: this design is not final and this field is subject to change
-                    in the future.'
+                path:
+                  description: Path to the full data file (e.g. csv file).
                   type: string
-                kind:
-                  description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                  type: string
-                name:
-                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                  type: string
-                namespace:
-                  description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
-                  type: string
-                resourceVersion:
-                  description: 'Specific resourceVersion to which this reference is
-                    made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
-                  type: string
-                uid:
-                  description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
-                  type: string
+              required:
+              - bucketName
+              - path
               type: object
-            messages:
-              description: Messages are the messages of the conversation.
-              items:
-                properties:
-                  authorRef:
-                    description: The author of the comment
-                    properties:
-                      apiVersion:
-                        description: API version of the referent.
-                        type: string
-                      fieldPath:
-                        description: 'If referring to a piece of an object instead
-                          of an entire object, this string should contain a valid
-                          JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                          For example, if the object reference is to a container within
-                          a pod, this would take on a value like: "spec.containers{name}"
-                          (where "name" refers to the name of the container that triggered
-                          the event) or if no container name is specified "spec.containers[2]"
-                          (container with index 2 in this pod). This syntax is chosen
-                          only to have some well-defined way of referencing a part
-                          of an object. TODO: this design is not final and this field
-                          is subject to change in the future.'
-                        type: string
-                      kind:
-                        description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                        type: string
-                      name:
-                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                        type: string
-                      namespace:
-                        description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
-                        type: string
-                      resourceVersion:
-                        description: 'Specific resourceVersion to which this reference
-                          is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
-                        type: string
-                      uid:
-                        description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
-                        type: string
-                    type: object
-                  content:
-                    description: The content of the comment
-                    type: string
-                  id:
-                    type: string
-                  postedAt:
-                    description: Time when the comment was posted
-                    format: date-time
-                    type: string
-                  replyTo:
-                    description: If this comment is a reply to an id
-                    type: string
-                type: object
-              type: array
+            labeled:
+              description: Labeled , true if this is labeled prediction request. Used
+                usally for unit testing
+              type: boolean
+            objective:
+              description: The objective metric used to score
+              enum:
+              - accuracy
+              - average-precision
+              - balanced-accuracy
+              - brier-score-loss
+              - f1
+              - f1-macro
+              - f1-micro
+              - f1-weighted
+              - log-loss
+              - precision
+              - precision-micro
+              - precision-macro
+              - precision-weighted
+              - recall
+              - recall-macro
+              - recall-micro
+              - recall-weighted
+              - auc
+              - fp
+              - fn
+              - tn
+              - tp
+              - explained_variance
+              - mae
+              - mse
+              - msle
+              - median-absolute-error
+              - r2
+              - adjusted-mutual-info-score
+              - adjusted-rand-score
+              - completeness-score
+              - fowlkes-mallows-score
+              - homogeneity-score
+              - mutual-info-score
+              - normalized-mutual-info-score
+              - v-measure-score
+              - rmse
+              - unknown
+              - mape
+              - smape
+              - mdape
+              type: string
+            output:
+              description: The key in the bucket for storing all the prediction output
+              properties:
+                bucketName:
+                  type: string
+                path:
+                  description: Path to the full data file (e.g. csv file).
+                  type: string
+              required:
+              - bucketName
+              - path
+              type: object
             owner:
               description: The owner account name
               type: string
+            predictorName:
+              description: PredictorName refer to the predictor which would predict
+                the dataset of this prediction.
+              maxLength: 63
+              minLength: 1
+              type: string
           required:
-          - entityRef
-          - messages
+          - labeled
+          - objective
+          - predictorName
           type: object
         status:
-          description: 'Status is the desired state of the Conversation. More info:
-            https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status'
+          description: PredictionPipelineStatus is the observed state of a PredictionTemplate
           properties:
+            completionTime:
+              description: CompletionTime is the time that this prediction job finished
+              format: date-time
+              type: string
             conditions:
               items:
-                description: VitualBucketCondition describes the state of a virtual
-                  bucket at a certain point.
+                description: PredictionPipelineCondition describes the state of PredictionTemplate
                 properties:
                   lastTransitionTime:
                     description: Last time the condition transitioned from one status
@@ -386,14 +399,27 @@ spec:
                     description: Status of the condition, one of True, False, Unknown.
                     type: string
                   type:
-                    description: Type of bucket condition.
+                    description: Type of  condition.
                     type: string
                 required:
                 - status
                 - type
                 type: object
               type: array
+            phase:
+              description: The phase of the prediction
+              type: string
+            score:
+              description: PredictionPipeline score based on the objective.
+              format: float
+              type: number
+            startTime:
+              description: StartTime is the times that this prediction job started
+              format: date-time
+              type: string
           type: object
+      required:
+      - spec
       type: object
   versions:
   - name: v1alpha1

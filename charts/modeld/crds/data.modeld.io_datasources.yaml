@@ -342,6 +342,9 @@ spec:
                   description: If true, the import will fail if there is an error
                   type: boolean
               type: object
+            owner:
+              description: The owner account name
+              type: string
             ownerName:
               description: The account name of the owner of this dataset
               type: string
@@ -602,6 +605,7 @@ spec:
                   type: string
                 versionName:
                   maxLength: 64
+                  pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
                   type: string
               type: object
             type:

@@ -274,9 +274,11 @@ spec:
               properties:
                 accessKey:
                   type: string
-                secretKey:
+                host:
                   type: string
-                subscriptionID:
+                region:
+                  type: string
+                secretKey:
                   type: string
               type: object
             athena:
@@ -360,6 +362,9 @@ spec:
                 defaultRegion:
                   description: Default digital ocean
                   type: string
+                host:
+                  description: url or connection string
+                  type: string
                 secretKey:
                   description: StorageSecret Key for digital ocean spaces
                   type: string
@@ -413,7 +418,7 @@ spec:
               type: object
             imageRegistry:
               properties:
-                hostName:
+                host:
                   description: Hostname for the image registry
                   type: string
                 password:
@@ -548,6 +553,9 @@ spec:
                 secret:
                   type: string
               type: object
+            owner:
+              description: Owner
+              type: string
             postgres:
               properties:
                 database:

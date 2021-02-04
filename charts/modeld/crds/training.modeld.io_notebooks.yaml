@@ -321,6 +321,9 @@ spec:
               - bucketName
               - path
               type: object
+            owner:
+              description: The owner account name
+              type: string
             requirements:
               description: python req file
               type: string

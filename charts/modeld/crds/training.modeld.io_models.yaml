@@ -594,6 +594,9 @@ spec:
               - smape
               - mdape
               type: string
+            owner:
+              description: The owner account name
+              type: string
             ownerName:
               description: The account name of the owner of this model
               type: string
@@ -688,7 +691,7 @@ spec:
                       type: string
                   type: object
                 featureSelector:
-                  description: Feature selector
+                  description: FeaturePipeline selector
                   enum:
                   - select-percentile
                   - select-kbest

@@ -485,6 +485,9 @@ spec:
                     type: object
                 type: object
               type: array
+            owner:
+              description: The owner account name
+              type: string
             ownerName:
               description: The account name of the owner of this predictor
               type: string

@@ -280,6 +280,10 @@ spec:
               description: Description is user provided description
               maxLength: 512
               type: string
+            owner:
+              description: The owner account name
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
+              type: string
             prevVersionName:
               description: PrevVersionName is a pointer to the version that we derived
                 from

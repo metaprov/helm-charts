@@ -264,9 +264,6 @@ spec:
         spec:
           description: DataPipelineSpec defines the desired state of a DataPipeline
           properties:
-            cron:
-              description: If the data pipeline is scheduled
-              type: string
             description:
               description: User provided description
               type: string
@@ -278,14 +275,23 @@ spec:
               type: array
             outputDataset:
               description: The output file of the pipeline
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
+              type: string
+            owner:
+              description: The owner account name
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             recipeNames:
               description: The recipe for this pipeline.
               items:
                 type: string
               type: array
+            schedule:
+              description: A cron field to schedule the data pipeline.
+              type: string
             versionName:
-              description: The product of the rejoiner
+              description: Dataproduct version
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
           type: object
         status:

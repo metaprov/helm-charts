@@ -315,6 +315,9 @@ spec:
               description: Min score to move from stage to stage. Default is 0
               format: float
               type: number
+            owner:
+              description: The owner account name
+              type: string
             releaseStage:
               description: ReleaseStage stage define how to place the model into production.
               properties:

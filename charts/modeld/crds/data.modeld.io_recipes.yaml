@@ -345,7 +345,7 @@ spec:
                   - path
                   type: object
               type: object
-            ownerName:
+            owner:
               description: The account name of the owner of this dataset
               type: string
             sample:
@@ -383,6 +383,10 @@ spec:
               description: VersionName is the data product version of the dataset
                 required.
               maxLength: 63
+              type: string
+            workloadClassName:
+              description: Specify the sampling paramters when viewing the recipe.
+                By default the recipe controller use the product workload class.
               type: string
           type: object
         status:

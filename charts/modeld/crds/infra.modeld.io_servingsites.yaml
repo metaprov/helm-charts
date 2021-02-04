@@ -327,6 +327,9 @@ spec:
               required:
               - limits
               type: object
+            owner:
+              description: The owner account name
+              type: string
             quotaSpec:
               description: Resource Quota for the serving site By default, not quota
                 is applied

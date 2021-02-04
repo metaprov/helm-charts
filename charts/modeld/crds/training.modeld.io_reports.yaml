@@ -333,6 +333,9 @@ spec:
               - bucketName
               - path
               type: object
+            owner:
+              description: The owner account name
+              type: string
             reportType:
               description: ReportType specify the report type (e.g. classification
                 / regression)

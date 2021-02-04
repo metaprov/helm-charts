@@ -291,6 +291,7 @@ spec:
             dataWorkloadClassName:
               description: A reference to the workload class used when running tasks
                 on the dataset, for example profiling or reports.
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             description:
               description: User provided description
@@ -320,6 +321,7 @@ spec:
                 registryConnectionName:
                   description: The connection of the docker registry provider If the
                     value is empty, the system will not push images. optional
+                  pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
                   type: string
               type: object
             labName:
@@ -327,17 +329,21 @@ spec:
                 Required.
               maxLength: 63
               minLength: 1
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             modelWorkloadClassName:
               description: A reference to the workload class used when training or
                 testing the model
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             notifierName:
               description: the notifier selector select the notifier for events that
                 occur in the product life cycle.
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
-            ownerName:
+            owner:
               description: The account name of the owner of this data product
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             retriesOnFailure:
               description: Denote how many time a job is retry after failure default
@@ -349,6 +355,7 @@ spec:
                 this product are deployed Required.
               maxLength: 63
               minLength: 1
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             stakeholders:
               description: Stake holders refer to a list of stackholders, which have

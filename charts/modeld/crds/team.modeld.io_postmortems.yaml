@@ -388,6 +388,9 @@ spec:
                   description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                   type: string
               type: object
+            owner:
+              description: The owner account name
+              type: string
             rootCause:
               description: Root cause
               type: string

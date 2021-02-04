@@ -494,6 +494,9 @@ spec:
               - smape
               - mdape
               type: string
+            owner:
+              description: The owner account name
+              type: string
             paused:
               description: Paused is set when we want to pause the training
               type: boolean
@@ -584,7 +587,7 @@ spec:
                       type: string
                   type: object
                 featureSelector:
-                  description: Feature selector
+                  description: FeaturePipeline selector
                   enum:
                   - select-percentile
                   - select-kbest

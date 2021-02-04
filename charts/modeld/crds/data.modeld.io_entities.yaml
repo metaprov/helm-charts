@@ -270,13 +270,18 @@ spec:
               description: User provided description
               maxLength: 512
               type: string
-            features:
+            keys:
               description: Reference to the feature names of this entity
               items:
                 type: string
               type: array
+            owner:
+              description: The owner account name
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
+              type: string
             versionName:
               description: The product version of the entity
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
           required:
           - versionName

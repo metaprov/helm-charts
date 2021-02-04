@@ -289,6 +289,7 @@ spec:
                 this dataset. For example flat file
               maxLength: 63
               minLength: 1
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             description:
               description: User provided description
@@ -323,8 +324,9 @@ spec:
               - bucketName
               - path
               type: object
-            ownerName:
+            owner:
               description: The account name of the owner of this dataset
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
             report:
               description: 'If true, a dataset report should be generated for this
@@ -337,6 +339,7 @@ spec:
               description: VersionName is the data product version of the dataset
                 required.
               maxLength: 63
+              pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
               type: string
           type: object
         status:

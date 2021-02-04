@@ -274,6 +274,9 @@ spec:
             from:
               description: The sender address. For example, from email.
               type: string
+            owner:
+              description: The owner account name
+              type: string
             tenantRef:
               description: The tenant that own the notifier Default to default tenant.
               properties:
