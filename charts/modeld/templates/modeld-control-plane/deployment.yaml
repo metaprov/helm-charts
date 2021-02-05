@@ -24,7 +24,7 @@ spec:
       serviceAccountName: modeld-control-plane
       containers:
         - name: main
-          image: "{{ .Values.controlplane.image.registry }}/metaprov/modeld-api-gateway:{{ .Values.apigateway.image.tag }}"
+          image: "{{ .Values.controlplane.image.registry }}/metaprov/modeld-control-plane:{{ .Values.apigateway.image.tag }}"
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
           volumeMounts:
             - name: data
