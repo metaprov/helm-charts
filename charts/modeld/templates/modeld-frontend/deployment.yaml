@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: main
-          image: "{{ .Values.frontend.image.registry }}/metaprov/modeld-api-gateway:{{ .Values.frontend.image.tag }}"
+          image: "{{ .Values.frontend.image.registry }}/metaprov/modeld-frontend:{{ .Values.frontend.image.tag }}"
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
             - containerPort: 80
