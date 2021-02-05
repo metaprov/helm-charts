@@ -365,9 +365,6 @@ spec:
             vision:
               description: Is vision feature supported
               type: boolean
-          required:
-          - owner
-          - secretName
           type: object
         status:
           description: LicenseStatus is the observed state of a License
