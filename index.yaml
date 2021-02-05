@@ -3,9 +3,9 @@ entries:
   modeld:
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-02-05T17:59:14.406429262Z"
+    created: "2021-02-05T18:51:39.967872201Z"
     description: Machine Learning Operators
-    digest: 5d0a4738bd9b14a971aacf52155f7a645916293e02c552b90b3cc241b42a908b
+    digest: 45ad0574fa3d4fbe12e059d15074fd7192783ed8f698b4422068a4629e95c4b6
     home: https://modeld.io
     keywords:
     - kubernetes
@@ -27,7 +27,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-02-05T17:59:14.388692767Z"
+    created: "2021-02-05T18:51:39.954650393Z"
     description: Machine Learning Operators
     digest: 5127ff797b92bbd6af33b53a2c994a29c843f7049acadfc3626105e169a18faf
     home: https://modeld.io
@@ -51,7 +51,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-02-05T17:59:14.371119379Z"
+    created: "2021-02-05T18:51:39.939610685Z"
     description: Machine Learning Operators
     digest: e1cb998f7ab5d3b7a8cf4aed3aca399fa365390c5ae8b3f8bec7b36b547e782b
     home: https://modeld.io
@@ -76,12 +76,12 @@ entries:
   modeld-default-tenant:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-02-05T17:59:14.407437508Z"
+    created: "2021-02-05T18:51:39.968737001Z"
     description: A Helm chart for default tenant
-    digest: 0f0717941f97371f4993a43551be152658fa5caeaa30b743f24a11c0bf5c195d
+    digest: 8ed9cc59116e20eaa51c48cd8c05444eb41aede1c8aa022f4e00ff713f9a88aa
     name: modeld-default-tenant
     type: application
     urls:
     - https://metaprov.github.io/helm-charts/modeld-default-tenant-0.1.0.tgz
     version: 0.1.0
-generated: "2021-02-05T17:59:14.354853249Z"
+generated: "2021-02-05T18:51:39.923524375Z"
