@@ -7,6 +7,7 @@ metadata:
   name: modeld-control-plane
   namespace: modeld-system
 spec:
+  replicas: {{ .Values.controlplane.replicas }}
   strategy:
     type: Recreate
   selector:
@@ -16,12 +17,15 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: modeld-control-plane
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9091'
     spec:
       serviceAccountName: modeld-control-plane
       containers:
         - name: main
-          image: quay.io/metaprov/modeld-control-plane:latest
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.controlplane.image.registry }}/metaprov/modeld-api-gateway:{{ .Values.apigateway.image.tag }}"
+          imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
           volumeMounts:
             - name: data
               mountPath: /home/modeld/data
@@ -59,11 +63,11 @@ spec:
               value: "true"
           resources:
             limits:
-              cpu: 20m
-              memory: 256Mi
+              cpu: "{{.Values.controlplane.resources.limits.cpu}}"
+              memory: "{{.Values.controlplane.resources.limits.memory}}"
             requests:
-              cpu: 20m
-              memory: 128Mi
+              cpu: "{{.Values.controlplane.resources.requests.cpu}}"
+              memory: "{{.Values.controlplane.resources.requests.memory}}"
           livenessProbe:
             httpGet:
               path: /healthz
@@ -72,35 +76,50 @@ spec:
             periodSeconds: 10
 
         - name: clouds
-          image: quay.io/metaprov/modeld-clouds
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.clouds.image.registry }}/metaprov/modeld-clouds:{{ .Values.clouds.image.tag }}"
+          imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
-                  - containerPort: 8090
-                    name: http
-                  - containerPort: 9090
-                    name: metrics
-                  - containerPort: 8008
-                    name: profiling
+            - containerPort: 8090
+              name: http
+            - containerPort: 9090
+              name: metrics
+            - containerPort: 8008
+              name: profiling
           volumeMounts:
-                  - name: data
-                    mountPath: /home/modeld/data
+            - name: data
+              mountPath: /home/modeld/data
+          resources:
+            limits:
+              cpu: "{{.Values.clouds.resources.limits.cpu}}"
+              memory: "{{.Values.clouds.resources.limits.memory}}"
+            requests:
+              cpu: "{{.Values.clouds.resources.requests.cpu}}"
+              memory: "{{.Values.clouds.resources.requests.memory}}"
           livenessProbe:
-                  httpGet:
-                    path: /healthz
-                    port: 9090
-                  initialDelaySeconds: 5
-                  periodSeconds: 10
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 10
           env:
-                  - name: HOST
-                    value:  "0.0.0.0"
-                  - name: PORT
-                    value: "8090"
-                  - name: DEBUG
-                    value: "true"
-                  - name: ENV
-                    value:  "dev"
-                  - name: CACHE_PATH
-                    value: "/home/modeld/data"
+            - name: GRPC_TRACE
+              value: "all"
+            - name:  GRPC_VERBOSITY
+              value: "DEBUG"
+            - name:  GRPC_GO_LOG_VERBOSITY_LEVEL
+              value: "99"
+            - name:  GRPC_GO_LOG_SEVERITY_LEVEL
+              value: "info"
+            - name:   HOST
+              value:  "0.0.0.0"
+            - name:   PORT
+              value: "8090"
+            - name:   DEBUG
+              value: "false"
+            - name: ENV
+              value: "dev"
+            - name: CACHE_PATH
+              value: "/home/modeld/data"
 
 
       volumes:

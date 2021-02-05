@@ -6,6 +6,7 @@ metadata:
   name: modeld-data-dock
   namespace: modeld-system
 spec:
+  replicas: {{ .Values.datadock.replicas }}
   strategy:
     type: Recreate
   selector:
@@ -15,15 +16,25 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: modeld-data-dock
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9091'
     spec:
         serviceAccountName: modeld-data-dock
         containers:
         - name: main
-          image: quay.io/metaprov/modeld-data-dock
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.datadock.image.registry }}/metaprov/modeld-data-dock:{{ .Values.datadock.image.tag }}"
+          imagePullPolicy: {{ .Values.datadock.image.pullPolicy }}
           volumeMounts:
             - name: data
               mountPath: /home/modeld/data
+          resources:
+            limits:
+              cpu: "{{.Values.datadock.resources.limits.cpu}}"
+              memory: "{{.Values.datadock.resources.limits.memory}}"
+            requests:
+              cpu: "{{.Values.datadock.resources.requests.cpu}}"
+              memory: "{{.Values.datadock.resources.requests.memory}}"
           ports:
             - containerPort: 8095
               name: http
@@ -54,8 +65,8 @@ spec:
               value: "/home/modeld/data"
 
         - name: clouds
-          image: quay.io/metaprov/modeld-clouds
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.clouds.image.registry }}/metaprov/modeld-clouds:{{ .Values.clouds.image.tag }}"
+          imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090
               name: http
@@ -64,23 +75,38 @@ spec:
             - containerPort: 8008
               name: profiling
           volumeMounts:
-              - name: data
-                mountPath: /home/modeld/data
+            - name: data
+              mountPath: /home/modeld/data
+          resources:
+            limits:
+              cpu: "{{.Values.clouds.resources.limits.cpu}}"
+              memory: "{{.Values.clouds.resources.limits.memory}}"
+            requests:
+              cpu: "{{.Values.clouds.resources.requests.cpu}}"
+              memory: "{{.Values.clouds.resources.requests.memory}}"
           livenessProbe:
-              httpGet:
-                path: /healthz
-                port: 9090
-              initialDelaySeconds: 5
-              periodSeconds: 10
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 10
           env:
-            - name: HOST
+            - name: GRPC_TRACE
+              value: "all"
+            - name:  GRPC_VERBOSITY
+              value: "DEBUG"
+            - name:  GRPC_GO_LOG_VERBOSITY_LEVEL
+              value: "99"
+            - name:  GRPC_GO_LOG_SEVERITY_LEVEL
+              value: "info"
+            - name:   HOST
               value:  "0.0.0.0"
-            - name: PORT
+            - name:   PORT
               value: "8090"
-            - name: DEBUG
-              value: "true"
+            - name:   DEBUG
+              value: "false"
             - name: ENV
-              value:  "dev"
+              value: "dev"
             - name: CACHE_PATH
               value: "/home/modeld/data"
 

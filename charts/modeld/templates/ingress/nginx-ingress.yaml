@@ -5,7 +5,6 @@ metadata:
   namespace: modeld-system
   labels:
     app.kubernetes.io/name: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Values.modeld.tag }}
     app.kubernetes.io/component: modeld-ingress
     app.kubernetes.io/part-of: "modeld"
     app.kubernetes.io/managed-by: "helm"

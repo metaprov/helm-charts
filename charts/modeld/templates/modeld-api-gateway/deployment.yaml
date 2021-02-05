@@ -7,32 +7,30 @@ metadata:
     app.kubernetes.io/component: infra
   name: modeld-api-gateway
   namespace: modeld-system
-{{- if eq .Values.modeld.prometheus.enabled true }}
-  annotations:
-    prometheus.io/scrape: "{{ .Values.modeld.prometheus.enabled }}"
-    prometheus.io/port: "{{ .Values.modeld.prometheus.port }}"
-    prometheus.io/path: "/"
-{{- end }}
 spec:
-  strategy:
-    type: Recreate
+  replicas: {{ .Values.apigateway.replicas }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: modeld-api-gateway
+      app.kubernetes.io/name: modeld-api-proxy
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: modeld-api-gateway
+        app.kubernetes.io/name: modeld-api-proxy
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9091'
     spec:
       serviceAccountName: modeld-api-gateway
       containers:
         - name: main
-          image: quay.io/metaprov/modeld-api-gateway:latest
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.apigateway.image.registry }}/metaprov/modeld-api-gateway:{{ .Values.apigateway.image.tag }}"
+          imagePullPolicy: {{ .Values.apigateway.image.pullPolicy }}
           ports:
             - containerPort: 8080
               name: grpc
-            - containerPort: 9090
+            - containerPort: 9091
               name: metrics
             - containerPort: 8008
               name: profiling
@@ -40,20 +38,22 @@ spec:
             - name: data
               mountPath: /home/modeld/data
           resources:
-              requests:
-                memory: "64Mi"
-                cpu: "250m"
               limits:
-                memory: "128Mi"
-                cpu: "500m"
+                cpu: "{{.Values.apigateway.resources.limits.cpu}}"
+                memory: "{{.Values.apigateway.resources.limits.memory}}"
+              requests:
+                cpu: "{{.Values.apigateway.resources.requests.cpu}}"
+                memory: "{{.Values.apigateway.resources.requests.memory}}"
           readinessProbe:
             exec:
               command: ["/bin/grpc_health_probe", "-addr=:8080"]
-            initialDelaySeconds: 5
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
           livenessProbe:
               exec:
                 command: ["/bin/grpc_health_probe", "-addr=:8080"]
               initialDelaySeconds: 10
+              timeoutSeconds: 5
           env:
             - name: AUTH_HOST
               value: "modeld-auth"
@@ -81,8 +81,8 @@ spec:
               value: "8080"
 
         - name: clouds
-          image: quay.io/metaprov/modeld-clouds
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.clouds.image.registry }}/metaprov/modeld-clouds:{{ .Values.clouds.image.tag }}"
+          imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090
               name: http
@@ -95,11 +95,11 @@ spec:
                 mountPath: /home/modeld/data
           resources:
             limits:
-              cpu: 250m
-              memory: 300Mi
+              cpu: "{{.Values.clouds.resources.limits.cpu}}"
+              memory: "{{.Values.clouds.resources.limits.memory}}"
             requests:
-              cpu: 250m
-              memory: 200Mi
+              cpu: "{{.Values.clouds.resources.requests.cpu}}"
+              memory: "{{.Values.clouds.resources.requests.memory}}"
           livenessProbe:
             httpGet:
               path: /healthz

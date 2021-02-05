@@ -1,22 +1,5 @@
 namespace: modeld-system
 
-global:
-  image:
-    # -- Overrides the Docker registry globally for all images
-    registry: quay.io
-  # -- Overrides the priorityClassName for all pods
-  priorityClassName: null
-
-# -- Overrides the chart's name
-nameOverride: null
-
-# -- Overrides the chart's computed fullname
-fullnameOverride: null
-
-# -- Image pull secrets for Docker images
-imagePullSecrets: []
-
-
 modeld:
   tag: 0.0.1
   registry: quay.io
@@ -26,15 +9,12 @@ modeld:
   logAsJson: false
   imagePullSecrets: ""
   podAnnotations: { }
-    # -- The number of old ReplicaSets to retain to allow rollback
   revisionHistoryLimit: 10
-  # -- The SecurityContext for modeld pods
   podSecurityContext:
       fsGroup: 10001
       runAsGroup: 10001
       runAsNonRoot: true
       runAsUser: 10001
-  # -- The SecurityContext for Loki containers
   containerSecurityContext:
       readOnlyRootFilesystem: true
       capabilities:
@@ -44,13 +24,43 @@ modeld:
   ha:
       enabled: false
       replicaCount: 3
-  prometheus:
-      enabled: true
-      port: 9090
   mtls:
-      enabled: true
-      workloadCertTTL: 24h
-      allowedClockSkew: 15m
+     enabled: true
+     workloadCertTTL: 24h
+     allowedClockSkew: 15m
+  grafana:
+    port: 3000
+    enableRemoteRendering: false
+  prometheus:
+    # -- Prometheus port
+    port: 7070
+    retention:
+      # -- Prometheus retention time
+      time: 15d
+  fluentBit:
+    # -- FluentBit Sidecar container name
+    name: fluentbit-logger
+    # -- Registry for FluentBit sidecar container
+    registry: fluent
+    # -- FluentBit sidecar image tag
+    tag: 1.6.4
+    # -- PullPolicy for FluentBit sidecar container
+    pullPolicy: IfNotPresent
+    # -- Log level for FluentBit
+    logLevel: error
+    # -- FluentBit Output Plugin, can be `stdout` or `azure`
+    outputPlugin: stdout
+    # -- WorkspaceId for FluentBit output plugin to Azure LogAnalytics
+    workspaceId: ""
+    # -- PrimaryKey for FluentBit output plugin to Azure LogAnalytics
+    primaryKey: ""
+    # -- Enable proxy support for FluentBit
+    enableProxySupport: false
+    # -- HTTP Proxy url for FluentBit
+    httpProxy: ""
+    # -- HTTPS Proxy url for FluentBit
+    httpsProxy: ""
+
 
 minikube:
   enabled: true
@@ -65,363 +75,103 @@ deployment:
   updateStrategy:
       type: Recreate
 
-# -- Api Gateway
 apigateway:
-  # -- Number of replicas
   replicas: 1
   image:
-    # -- The Docker registry
-    registry: null
-    # -- Docker image repository
-    repository: null
-    # -- Docker image tag
-    tag: null
-  # -- The name of the PriorityClass
-  priorityClassName: null
-  # -- Annotations for ingester pods
-  podAnnotations: {}
-  # -- Environment variables
-  extraEnv: []
-  # -- Environment variables from secrets or configmaps
-  extraEnvFrom: []
-  # -- Resource requests and limits for the ingester
-  resources: {}
-  # -- Grace period to allow the api gateway to shutdown before it is killed.
-  terminationGracePeriodSeconds: 300
-  # -- Affinity for ingester pods. Passed through `tpl` and, thus, to be configured as string
-  # @default -- Hard node and soft zone anti-affinity
-  affinity: |
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              {{- include "loki.ingesterSelectorLabels" . | nindent 10 }}
-          topologyKey: kubernetes.io/hostname
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                {{- include "loki.ingesterSelectorLabels" . | nindent 12 }}
-            topologyKey: failure-domain.beta.kubernetes.io/zone
-  # -- Node selector for ingester pods
-  nodeSelector: {}
-  # -- Tolerations for ingester pods
-  tolerations: []
-
+    registry: quay.io
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: "50m"
+      memory: "512M"
+    requests:
+      cpu: "50m"
+      memory: "32M"
 
 apiproxy:
-  # -- Number of replicas for the api proxy
   replicas: 1
   image:
-    # -- The Docker registry
     registry: quay.io
-    # -- Docker image repository
-    repository: apiproxy
-    # -- Docker image tag
-    tag: null
-  # -- The name of the PriorityClass
-  priorityClassName: null
-  # -- Annotations
-  podAnnotations: {}
-  # -- Environment variables
-  extraEnv: []
-  # -- Environment variables from secrets or configmaps
-  extraEnvFrom: []
-  # -- Resource requests and limits
-  resources: {}
-  # -- Grace period
-  terminationGracePeriodSeconds: 300
-  # -- Affinity
-  # @default -- Hard node and soft zone anti-affinity
-  affinity: |
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              {{- include "loki.ingesterSelectorLabels" . | nindent 10 }}
-          topologyKey: kubernetes.io/hostname
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                {{- include "loki.ingesterSelectorLabels" . | nindent 12 }}
-            topologyKey: failure-domain.beta.kubernetes.io/zone
-  # -- Node selector
-  nodeSelector: {}
-  # -- Tolerations
-  tolerations: []
-  persistence:
-    # -- Enable creating PVCs which is required when using boltdb-shipper
-    enabled: false
-    # -- Size of persistent disk
-    size: 10Gi
-    # -- Storage class to be used.
-    # If defined, storageClassName: <storageClass>.
-    # If set to "-", storageClassName: "", which disables dynamic provisioning.
-    # If empty or set to null, no storageClassName spec is
-    # set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-    storageClass: null
-
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: "50m"
+      memory: "512M"
+    requests:
+      cpu: "50m"
+      memory: "32M"
 
 controlplane:
-  # -- Number of replicas
   replicas: 1
   image:
-    # -- The Docker registry
-    registry: null
-    # -- Docker image repository
-    repository: null
-    # -- Docker image tag
-    tag: null
-  # -- The name of the PriorityClass
-  priorityClassName: null
-  # -- Annotations
-  podAnnotations: {}
-  # -- Environment variables to add to the
-  extraEnv: []
-  # -- Environment variables from secrets or configmaps to add to the ingester pods
-  extraEnvFrom: []
-  # -- Resource requests and limits
-  resources: {}
-  # -- Grace period to allow the ingester to shutdown before it is killed.
-  terminationGracePeriodSeconds: 300
-  # -- Affinity for ingester pods.
-  affinity: |
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              {{- include "loki.ingesterSelectorLabels" . | nindent 10 }}
-          topologyKey: kubernetes.io/hostname
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                {{- include "loki.ingesterSelectorLabels" . | nindent 12 }}
-            topologyKey: failure-domain.beta.kubernetes.io/zone
-  # -- Node selector
-  nodeSelector: {}
-  # -- Tolerations
-  tolerations: []
-  persistence:
-    # -- Enable creating PVCs which is required when using boltdb-shipper
-    enabled: false
-    # -- Size of persistent disk
-    size: 10Gi
-    # -- Storage class to be used.
-    # If defined, storageClassName: <storageClass>.
-    # If set to "-", storageClassName: "", which disables dynamic provisioning.
-    # If empty or set to null, no storageClassName spec is
-    # set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-    storageClass: null
+    registry: quay.io
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: "50m"
+      memory: "512M"
+    requests:
+      cpu: "50m"
+      memory: "32M"
 
 datadock:
-  # -- Number of replicas for the datadock
   replicas: 1
   image:
-    # -- The Docker registry
-    registry: null
-    # -- Docker image repository
-    repository: modeld-datadock
-    # -- Docker image tag
-    tag: null
-  # -- The name of the PriorityClass
-  priorityClassName: null
-  # -- Annotations
-  podAnnotations: {}
-  # -- Environment variables
-  extraEnv: []
-  # -- Environment variables from secrets or configmaps
-  extraEnvFrom: []
-  # -- Resource requests and limits for the data dock
-  resources: {}
-  # -- Grace period to allow the data dock to shutdown before it is killed.
-  terminationGracePeriodSeconds: 300
-  # -- Affinity for data dock pods. Passed through `tpl` and, thus, to be configured as string
-  # @default -- Hard node and soft zone anti-affinity
-  affinity: |
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              {{- include "loki.ingesterSelectorLabels" . | nindent 10 }}
-          topologyKey: kubernetes.io/hostname
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                {{- include "loki.ingesterSelectorLabels" . | nindent 12 }}
-            topologyKey: failure-domain.beta.kubernetes.io/zone
-  # -- Node selector
-  nodeSelector: {}
-  # -- Tolerations
-  tolerations: []
-  persistence:
-    # -- Enable creating PVCs which is required when using boltdb-shipper
-    enabled: false
-    # -- Size of persistent disk
-    size: 10Gi
-    # -- Storage class to be used.
-    # If defined, storageClassName: <storageClass>.
-    # If set to "-", storageClassName: "", which disables dynamic provisioning.
-    # If empty or set to null, no storageClassName spec is
-    # set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-    storageClass: null
+    registry: quay.io
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: "50m"
+      memory: "512M"
+    requests:
+      cpu: "50m"
+      memory: "32M"
 
 dataplane:
-  # -- Number of replicas for the data plane
   replicas: 1
   image:
-    # -- The Docker registry for the dataplane image.
-    registry: null
-    # -- Docker image repository for the data plane image
-    repository: modeld-dataplane
-    # -- Docker image tag for the dataplane image.
-    tag: null
-  # -- The name of the PriorityClass for dataplane pods
-  priorityClassName: null
-  # -- Annotations
-  podAnnotations: {}
-  # -- Environment variables to add to the data plane pods
-  extraEnv: []
-  # -- Environment variables from secrets or configmaps to add to the data plane
-  extraEnvFrom: []
-  # -- Resource requests and limits for the ingester
-  resources: {}
-  # -- Grace period to allow the ingester to shutdown before it is killed. Especially for the ingestor,
-  # this must be increased. It must be long enough so ingesters can be gracefully shutdown flushing/transferring
-  # all data and to successfully leave the member ring on shutdown.
-  terminationGracePeriodSeconds: 300
-  # -- Affinity for ingester pods. Passed through `tpl` and, thus, to be configured as string
-  # @default -- Hard node and soft zone anti-affinity
-  affinity: |
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              {{- include "loki.ingesterSelectorLabels" . | nindent 10 }}
-          topologyKey: kubernetes.io/hostname
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                {{- include "loki.ingesterSelectorLabels" . | nindent 12 }}
-            topologyKey: failure-domain.beta.kubernetes.io/zone
-  # -- Node selector for ingester pods
-  nodeSelector: {}
-  # -- Tolerations for ingester pods
-  tolerations: []
-  persistence:
-    # -- Enable creating PVCs which is required when using boltdb-shipper
-    enabled: false
-    # -- Size of persistent disk
-    size: 10Gi
-    # -- Storage class to be used.
-    # If defined, storageClassName: <storageClass>.
-    # If set to "-", storageClassName: "", which disables dynamic provisioning.
-    # If empty or set to null, no storageClassName spec is
-    # set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-    storageClass: null
+    registry: quay.io
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: "50m"
+      memory: "512M"
+    requests:
+      cpu: "50m"
+      memory: "32M"
 
 frontend:
-  # -- Number of replicas for the frontend
   replicas: 1
   image:
-    # -- docker registry for the frontend image
-    registry: null
-    # -- Docker image repository for the frontend image.
-    repository: modeld-frontend
-    # -- Docker image tag for the frontend image.
-    tag: null
-  # -- The name of the PriorityClass for frontend pods
-  priorityClassName: null
-  # -- Annotations for fronend pods
-  podAnnotations: {}
-  # -- Environment variables to add to the frontend pods
-  extraEnv: []
-  # -- Environment variables from secrets or configmaps to add to the frontend pods
-  extraEnvFrom: []
-  # -- Resource requests and limits for the frontend
-  resources: {}
-  # -- Grace period to allow the frontend to shutdown before it is killed.
-  terminationGracePeriodSeconds: 300
-  # -- Affinity for front end pods. Passed through `tpl` and, thus, to be configured as string
-  # @default -- Hard node and soft zone anti-affinity
-  affinity: |
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              {{- include "loki.ingesterSelectorLabels" . | nindent 10 }}
-          topologyKey: kubernetes.io/hostname
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                {{- include "loki.ingesterSelectorLabels" . | nindent 12 }}
-            topologyKey: failure-domain.beta.kubernetes.io/zone
-  # -- Node selector for frontend pods
-  nodeSelector: {}
-  # -- Tolerations for frontend pods
-  tolerations: []
-  # -- Service port
-  port: ClusterType
+    registry: quay.io
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: "50m"
+      memory: "512M"
+    requests:
+      cpu: "50m"
+      memory: "32M"
 
 clouds:
-  # -- Number of replicas for the clouds
   replicas: 1
   image:
-    # -- The Docker registry for the clouds image.
-    registry: null
-    # -- Docker image repository for the clouds image.
-    repository: modeld-clouds
-    # -- Docker image tag for the clouds image.
-    tag: null
-  # -- The name of the PriorityClass for clouds pods
-  priorityClassName: null
-  # -- Annotations for clouds pods
-  podAnnotations: {}
-  # -- Environment variables to add to the clouds pods
-  extraEnv: []
-  # -- Environment variables from secrets or configmaps to add to the clouds pods
-  extraEnvFrom: []
-  # -- Resource requests and limits for the clouds pods
-  resources: {}
-  # -- Grace period to allow the clouds to shutdown before it is killed.
-  terminationGracePeriodSeconds: 300
-  # -- Affinity for clouds pods.
-  affinity: |
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              {{- include "modeld.ingesterSelectorLabels" . | nindent 10 }}
-          topologyKey: kubernetes.io/hostname
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                {{- include "modeld.ingesterSelectorLabels" . | nindent 12 }}
-            topologyKey: failure-domain.beta.kubernetes.io/zone
-  # -- Node selector for clouds pods
-  nodeSelector: {}
-  # -- Tolerations for clouds pods
-  tolerations: []
-  livenessProbe: |
-    httpGet:
-      path: /healthz
-      port: 9090
-    initialDelaySeconds: 5
-    periodSeconds: 10
-
-
+    registry: quay.io
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: "50m"
+      memory: "512M"
+    requests:
+      cpu: "50m"
+      memory: "32M"
 
 ingress:
   name : modeld-ingress

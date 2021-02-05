@@ -6,6 +6,7 @@ metadata:
   name: modeld-frontend
   namespace: modeld-system
 spec:
+  replicas: {{ .Values.frontend.replicas }}
   strategy:
     type: Recreate
   selector:
@@ -18,8 +19,8 @@ spec:
     spec:
       containers:
         - name: main
-          image: quay.io/metaprov/modeld-frontend
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.frontend.image.registry }}/metaprov/modeld-api-gateway:{{ .Values.frontend.image.tag }}"
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
             - containerPort: 80
               name: http

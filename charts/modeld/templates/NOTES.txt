@@ -1,7 +1,7 @@
 ***********************************************************************
  Welcome to modeld
  Chart version: {{ .Chart.Version }}
- Loki version: {{ .Chart.AppVersion }}
+ modeld version: {{ .Chart.AppVersion }}
 ***********************************************************************
 
 Installed components:

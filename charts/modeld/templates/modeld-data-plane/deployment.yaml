@@ -7,6 +7,7 @@ metadata:
   name: modeld-data-plane
   namespace: modeld-system
 spec:
+  replicas: {{ .Values.dataplane.replicas }}
   strategy:
     type: Recreate
   selector:
@@ -19,8 +20,8 @@ spec:
     spec:
       containers:
         - name: main
-          image: quay.io/metaprov/modeld-data-plane:latest
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.dataplane.image.registry }}/metaprov/modeld-data-plane:{{ .Values.dataplane.image.tag }}"
+          imagePullPolicy: {{ .Values.dataplane.image.pullPolicy }}
           ports:
             - containerPort: 8080
               name: http
@@ -50,31 +51,48 @@ spec:
 
 
         - name: clouds
-          image: quay.io/metaprov/modeld-clouds
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.clouds.image.registry }}/metaprov/modeld-clouds:{{ .Values.clouds.image.tag }}"
+          imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
-            - name: grpc
-              containerPort: 8090
+            - containerPort: 8090
+              name: http
+            - containerPort: 9090
+              name: metrics
+            - containerPort: 8008
+              name: profiling
           volumeMounts:
-              - name: data
-                mountPath: /home/modeld/data
-          readinessProbe:
-            exec:
-              command: ["/bin/grpc_health_probe", "-addr=:8090"]
-            initialDelaySeconds: 5
+            - name: data
+              mountPath: /home/modeld/data
+          resources:
+            limits:
+              cpu: "{{.Values.clouds.resources.limits.cpu}}"
+              memory: "{{.Values.clouds.resources.limits.memory}}"
+            requests:
+              cpu: "{{.Values.clouds.resources.requests.cpu}}"
+              memory: "{{.Values.clouds.resources.requests.memory}}"
           livenessProbe:
-            exec:
-              command: ["/bin/grpc_health_probe", "-addr=:8090"]
-            initialDelaySeconds: 10
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 10
           env:
-            - name: HOST
+            - name: GRPC_TRACE
+              value: "all"
+            - name:  GRPC_VERBOSITY
+              value: "DEBUG"
+            - name:  GRPC_GO_LOG_VERBOSITY_LEVEL
+              value: "99"
+            - name:  GRPC_GO_LOG_SEVERITY_LEVEL
+              value: "info"
+            - name:   HOST
               value:  "0.0.0.0"
-            - name: PORT
+            - name:   PORT
               value: "8090"
-            - name: DEBUG
-              value: "true"
+            - name:   DEBUG
+              value: "false"
             - name: ENV
-              value:  "dev"
+              value: "dev"
             - name: CACHE_PATH
               value: "/home/modeld/data"
       volumes:
