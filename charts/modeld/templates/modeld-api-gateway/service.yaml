@@ -13,4 +13,4 @@ spec:
       port: 8080
       targetPort: 8080
   selector:
-    app.kubernetes.io/name: modeld-api-proxy
+    app.kubernetes.io/name: modeld-api-gateway
