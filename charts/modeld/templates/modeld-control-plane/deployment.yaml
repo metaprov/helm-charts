@@ -24,7 +24,7 @@ spec:
       serviceAccountName: modeld-control-plane
       containers:
         - name: main
-          image: "{{ .Values.controlplane.image.registry }}/metaprov/modeld-control-plane:{{ .Values.apigateway.image.tag }}"
+          image: "{{ .Values.modeld.registry }}/metaprov/modeld-control-plane:{{ .Values.modeld.tag }}"
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
           volumeMounts:
             - name: data
@@ -35,7 +35,7 @@ spec:
           ports:
             - containerPort: 8080
               name: http
-            - containerPort: 9090
+            - containerPort: 9091
               name: metrics
             - containerPort: 8008
               name: profiling
@@ -76,15 +76,11 @@ spec:
             periodSeconds: 10
 
         - name: clouds
-          image: "{{ .Values.clouds.image.registry }}/metaprov/modeld-clouds:{{ .Values.clouds.image.tag }}"
+          image: "{{ .Values.modeld.registry }}/metaprov/modeld-clouds:{{ .Values.modeld.tag }}"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090
-              name: http
-            - containerPort: 9090
-              name: metrics
-            - containerPort: 8008
-              name: profiling
+              name: http            
           volumeMounts:
             - name: data
               mountPath: /home/modeld/data

@@ -1,7 +1,7 @@
 namespace: modeld-system
 
 modeld:
-  tag: 0.0.1
+  tag: v0.3.13
   registry: quay.io
   pullPolicy: IfNotPresent
   debug: false
@@ -37,30 +37,6 @@ modeld:
     retention:
       # -- Prometheus retention time
       time: 15d
-  fluentBit:
-    # -- FluentBit Sidecar container name
-    name: fluentbit-logger
-    # -- Registry for FluentBit sidecar container
-    registry: fluent
-    # -- FluentBit sidecar image tag
-    tag: 1.6.4
-    # -- PullPolicy for FluentBit sidecar container
-    pullPolicy: IfNotPresent
-    # -- Log level for FluentBit
-    logLevel: error
-    # -- FluentBit Output Plugin, can be `stdout` or `azure`
-    outputPlugin: stdout
-    # -- WorkspaceId for FluentBit output plugin to Azure LogAnalytics
-    workspaceId: ""
-    # -- PrimaryKey for FluentBit output plugin to Azure LogAnalytics
-    primaryKey: ""
-    # -- Enable proxy support for FluentBit
-    enableProxySupport: false
-    # -- HTTP Proxy url for FluentBit
-    httpProxy: ""
-    # -- HTTPS Proxy url for FluentBit
-    httpsProxy: ""
-
 
 minikube:
   enabled: true
@@ -78,9 +54,7 @@ deployment:
 apigateway:
   replicas: 1
   image:
-    registry: quay.io
-    tag: latest
-    pullPolicy: IfNotPresent
+    tag: v0.3.13    
   resources:
     limits:
       cpu: "50m"
@@ -92,9 +66,7 @@ apigateway:
 apiproxy:
   replicas: 1
   image:
-    registry: quay.io
-    tag: latest
-    pullPolicy: IfNotPresent
+    tag: v0.3.13    
   resources:
     limits:
       cpu: "50m"
@@ -106,9 +78,7 @@ apiproxy:
 controlplane:
   replicas: 1
   image:
-    registry: quay.io
-    tag: latest
-    pullPolicy: IfNotPresent
+    tag: v0.3.13    
   resources:
     limits:
       cpu: "50m"
@@ -120,9 +90,7 @@ controlplane:
 datadock:
   replicas: 1
   image:
-    registry: quay.io
-    tag: latest
-    pullPolicy: IfNotPresent
+    tag: v0.3.13    
   resources:
     limits:
       cpu: "50m"
@@ -134,9 +102,7 @@ datadock:
 dataplane:
   replicas: 1
   image:
-    registry: quay.io
-    tag: latest
-    pullPolicy: IfNotPresent
+    tag: v0.3.13    
   resources:
     limits:
       cpu: "50m"
@@ -148,9 +114,7 @@ dataplane:
 frontend:
   replicas: 1
   image:
-    registry: quay.io
-    tag: latest
-    pullPolicy: IfNotPresent
+    tag: v0.3.13    
   resources:
     limits:
       cpu: "50m"
@@ -162,9 +126,7 @@ frontend:
 clouds:
   replicas: 1
   image:
-    registry: quay.io
-    tag: latest
-    pullPolicy: IfNotPresent
+    tag: v0.3.13    
   resources:
     limits:
       cpu: "50m"

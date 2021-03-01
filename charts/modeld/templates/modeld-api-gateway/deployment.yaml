@@ -25,15 +25,13 @@ spec:
       serviceAccountName: modeld-api-gateway
       containers:
         - name: main
-          image: "{{ .Values.apigateway.image.registry }}/metaprov/modeld-api-gateway:{{ .Values.apigateway.image.tag }}"
+          image: "{{ .Values.modeld.registry }}/metaprov/modeld-api-gateway:{{ .Values.modeld.tag }}"
           imagePullPolicy: {{ .Values.apigateway.image.pullPolicy }}
           ports:
             - containerPort: 8080
               name: grpc
             - containerPort: 9091
-              name: metrics
-            - containerPort: 8008
-              name: profiling
+              name: metrics          
           volumeMounts:
             - name: data
               mountPath: /home/modeld/data
@@ -62,7 +60,7 @@ spec:
             - name: FAKE
               value: "false"
             - name: HOST
-              value:  "0.0.0.0"
+              value: "0.0.0.0"
             - name: PORT
               value: "8080"
             - name: DEBUG
@@ -81,15 +79,11 @@ spec:
               value: "8080"
 
         - name: clouds
-          image: "{{ .Values.clouds.image.registry }}/metaprov/modeld-clouds:{{ .Values.clouds.image.tag }}"
+          image: "{{ .Values.modeld.registry }}/metaprov/modeld-clouds:{{ .Values.modeld.tag }}"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090
               name: http
-            - containerPort: 9090
-              name: metrics
-            - containerPort: 8008
-              name: profiling
           volumeMounts:
               - name: data
                 mountPath: /home/modeld/data

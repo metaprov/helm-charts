@@ -19,11 +19,10 @@ spec:
     spec:
       containers:
         - name: main
-          image: "{{ .Values.frontend.image.registry }}/metaprov/modeld-frontend:{{ .Values.frontend.image.tag }}"
+          image: "{{ .Values.image.registry }}/metaprov/modeld-frontend:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
             - containerPort: 80
               name: http
-            - containerPort: 8008
-              name: profiling
+           
 

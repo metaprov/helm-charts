@@ -19,20 +19,15 @@ spec:
         app.kubernetes.io/component: api-proxy
         app.kubernetes.io/part-of: "modeld"
         app.kubernetes.io/managed-by: "helm"
-      annotations:
-          prometheus.io/scrape: 'true'
-          prometheus.io/port: '9091'
     spec:
       serviceAccountName: modeld-api-proxy
       containers:
         - name: main
-          image: "{{ .Values.apiproxy.image.registry }}/metaprov/modeld-api-proxy:{{ .Values.apiproxy.image.tag }}"
+          image: "{{ .Values.modeld.registry }}/metaprov/modeld-api-proxy:{{ .Values.modeld.tag }}"
           imagePullPolicy: {{ .Values.apiproxy.image.pullPolicy }}
           ports:
             - containerPort: 8080
               name: grpc
-            - containerPort: 8008
-              name: profiling
           resources:
             limits:
               cpu: "{{.Values.apiproxy.resources.limits.cpu}}"
