@@ -39,6 +39,9 @@ modeld:
 minikube:
   enabled: true
 
+certManager:
+  enabled: true
+
 rbac:
   create: true
 
@@ -54,7 +57,7 @@ apigateway:
   image:
     registry: quay.io
     repository: metaprov/modeld-api-gateway
-    tag: v0.3.13    
+    tag: v0.3.31    
     pullPolicy: IfNotPresent
   resources:
     limits:
@@ -68,8 +71,8 @@ apiproxy:
   replicaCount: 1
   image:
     registry: quay.io
-    repository: metaprov/modeld-apiproxy
-    tag: v0.3.13
+    repository: metaprov/modeld-api-proxy
+    tag: v0.3.31
     pullPolicy: IfNotPresent    
   resources:
     limits:
@@ -84,7 +87,7 @@ controlplane:
   image:
     registry: quay.io
     repository: metaprov/modeld-control-plane
-    tag: v0.3.13    
+    tag: v0.3.31    
     pullPolicy: IfNotPresent
   resources:
     limits:
@@ -99,7 +102,7 @@ datadock:
   image:
     registry: quay.io
     repository: metaprov/modeld-data-dock
-    tag: v0.3.13    
+    tag: v0.3.31    
     pullPolicy: IfNotPresent
   resources:
     limits:
@@ -114,7 +117,7 @@ dataplane:
   image:
     registry: quay.io
     repository: metaprov/modeld-data-plane
-    tag: v0.3.13    
+    tag: v0.3.31    
     pullPolicy: IfNotPresent
   resources:
     limits:
@@ -128,7 +131,7 @@ frontend:
   replicaCount: 1
   image:
     registry: quay.io
-    tag: v0.3.13    
+    tag: v0.3.31    
     repository: metaprov/modeld-frontend
     pullPolicy: IfNotPresent
   resources:
@@ -143,7 +146,7 @@ clouds:
   replicaCount: 1
   image:
     registry: quay.io
-    tag: v0.3.13    
+    tag: v0.3.31    
     repository: metaprov/modeld-clouds
     pullPolicy: IfNotPresent
   resources:

@@ -30,34 +30,32 @@ spec:
         - constant
       defaultValue: invscaling
   floatParameters:
-      - name: alpha
-        type: float
-        minimum: 1e-7
-        maximum: 1e-1
+      - name: alpha        
+        min: 1e-7
+        max: 0.1
         log: True
         defaultValue: 0.0001
       - name: l1_ratio
-        minimum: 1e-9
-        maximum:  1
+        min: 1e-9
+        max: 1
         log: True
         defaultValue: 0.15
       - name: tol
-        minimum:  1e-5
-        maximum:  1e-1
+        min: 1e-5
+        max: 0.1
         log: True
         defaultValue: 1e-4
       - name: epsilon
-        minimum: 1e-5
-        maximum: 1e-1
+        min: 1e-5
+        max: 0.1
         defaultValue: 1e-4
         log: True
-      - name: eta0
-        type: float
-        min:   1e-7
-        max:   1e-1,
+      - name: eta0        
+        min: 1e-7
+        max: 0.1
         defaultValue: 0.01
         log: True
       - name: power_t
         min: 1e-5
-        max:  1,
-        default_value: 0.5
+        max: 1
+        defaultValue: 0.5

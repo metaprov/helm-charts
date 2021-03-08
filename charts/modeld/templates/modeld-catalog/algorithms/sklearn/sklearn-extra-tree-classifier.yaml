@@ -9,10 +9,10 @@ spec:
   frameworkName: scikit-learn
   integerParameters:
     - name: min_samples_split
-      minimum: 2
-      maximum: 20
+      min: 2
+      max: 20
       defaultValue: 2
     - name : min_samples_leaf
-      minimum: 1
-      maximum: 20
+      min: 1
+      max: 20
       defaultValue: 1

@@ -10,21 +10,18 @@ spec:
   task: binary-classification
   integerParameters:
     - name: n_estimators
-      type: numeric
-      minimum: 50
-      maximum: 500
+      min: 50
+      max: 500
       defaultValue: 50
   floatParameters:
     - name: learning_rate
-      type: numeric
-      minimum: 0.01
-      maximum: 2
+      min: 0.01
+      max: 2
       defaultValue: 0.1
       log: true
-  catagoricalParameters:
+  categoricalParameters:
     - name: algorithm
-      type: categorical
-      enum:
+      enums:
         - SAMME.R
         - SAMME
       defaultValue: SAMME.R

@@ -23,7 +23,7 @@ spec:
       serviceAccountName: modeld-api-proxy
       containers:
         - name: main
-          image: "{{ .Values.apiproxy.image.registry }}/ {{ .Values.apiproxy.image.repository }} :{{ .Values.apiproxy.image.tag }}"
+          image: "{{ .Values.apiproxy.image.registry }}/{{ .Values.apiproxy.image.repository }}:{{ .Values.apiproxy.image.tag }}"
           imagePullPolicy: {{ .Values.apiproxy.image.pullPolicy }}
           ports:
             - containerPort: 8080

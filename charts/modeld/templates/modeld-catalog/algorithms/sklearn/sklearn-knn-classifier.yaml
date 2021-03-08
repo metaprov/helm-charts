@@ -10,23 +10,20 @@ spec:
   task: binary-classification
   integerParameters:
    - name: n_neighbors
-     minimum: 1
-     maximum: 100
-     log: true
+     min: 1
+     max: 100     
      defaultValue: 1
-  catagoricalParameters:
+  categoricalParameters:
    - name: weights
-     type: categorical
-     enum:
-       - uniform
-       - distance
-     defaultValue: uniform
-   - name: p
-     type: categorical
      enums:
-       - 1
-       - 2
-     defaultValue : 2
+       - "uniform"
+       - "distance"
+     defaultValue: "uniform"
+   - name: p
+     enums:
+       - "1"
+       - "2"
+     defaultValue : "2"
 
 
 

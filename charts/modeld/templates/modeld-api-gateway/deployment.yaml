@@ -8,7 +8,7 @@ metadata:
   name: modeld-api-gateway
   namespace: modeld-system
 spec:
-  replicas: {{ .Values.apigateway.replicas }}
+  replicas: {{ .Values.apigateway.replicaCount }}
   selector:
     matchLabels:
       app.kubernetes.io/name: modeld-api-gateway
@@ -22,11 +22,10 @@ spec:
         prometheus.io/scrape: 'true'
         prometheus.io/port: '9091'
     spec:
-      replicas: {{ .Values.apigateway.replicaCount }}
       serviceAccountName: modeld-api-gateway
       containers:
         - name: main
-          image: "{{ .Values.apigateway.image.registry }}/ {{ .Values.apigateway.image.repository }} :{{ .Values.apigateway.image.tag }}"
+          image: "{{ .Values.apigateway.image.registry }}/{{ .Values.apigateway.image.repository }}:{{ .Values.apigateway.image.tag }}"
           imagePullPolicy: {{ .Values.apigateway.image.pullPolicy }}
           ports:
             - containerPort: 8080
@@ -80,7 +79,7 @@ spec:
               value: "8080"
 
         - name: clouds
-          image: "{{ .Values.clouds.image.registry }}/ {{ .Values.clouds.image.repository }} :{{ .Values.clouds.image.tag }}"
+          image: "{{ .Values.clouds.image.registry }}/{{ .Values.clouds.image.repository }}:{{ .Values.clouds.image.tag }}"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090

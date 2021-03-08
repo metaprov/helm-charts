@@ -9,18 +9,15 @@ spec:
   task: regression
   frameworkName: scikit-learn
   categoricalParameters:
-    - name:  criterion
-      type:  categorical
+    - name:  criterion      
       enums:
         - gini
         - entropy
       defaultValue:  gini
   integerParameters:
     - name:   min_samples_split
-      type: numeric
-      domain: integer
-      minValue: 2
-      maxValue: 2
+      min: 2
+      max: 2
       defaultValue: 2
 
 

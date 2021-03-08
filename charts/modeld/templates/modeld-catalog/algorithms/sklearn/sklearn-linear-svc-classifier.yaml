@@ -8,7 +8,7 @@ metadata:
 spec:
   frameworkName: scikit-learn
   task: binary-classification
-  catagoricalParameters:
+  categoricalParameters:
     - name: penalty
       enums:
       -  l1
@@ -21,14 +21,12 @@ spec:
       defaultValue: squared_hinge
   floatParameters:
     - name: tol
-      type: float
-      minimum: 1e-5
-      maximum: 1e-1
+      min: 1e-5
+      max: 1e-1
       defaultValue: 1e-4
       log: True
     - name: C
-      type: float
-      minimum: 0.03125
-      maximum: 32768
+      min: 0.03125
+      max: 32768
       defaultValue: 1.0
       log: True

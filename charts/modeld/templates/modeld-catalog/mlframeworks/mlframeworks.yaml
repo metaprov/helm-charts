@@ -1,20 +1,6 @@
 apiVersion: catalog.modeld.io/v1alpha1
 kind: MLFramework
 metadata:
-  name: catboost
-  namespace: modeld-catalog
-  labels:
-    app.kubernetes.io/part-of: modeld
-spec:
-  url: "https://catboost.ai/"
-  description: "catboost description"
-  version: "1.2.2"
-  language: "python"
----
-
-apiVersion: catalog.modeld.io/v1alpha1
-kind: MLFramework
-metadata:
   name: lightgbm
   namespace: modeld-catalog
   labels:
@@ -23,19 +9,7 @@ spec:
   url: "https://lightgbm.readthedocs.io/en/latest/"
   description: "lightgbm"
   version: "1.2.2"
-  language: "python"
-
----
-apiVersion: catalog.modeld.io/v1alpha1
-kind: MLFramework
-metadata:
-  name: fbprophet
-  namespace: modeld-catalog
-spec:
-  url: "https://facebook.github.io/prophet/docs/quick_start.html"
-  description: "fbprophet description"
-  version: "1.0.0"
-  language: "python"
+  lang: "python"
 
 ---
 apiVersion: catalog.modeld.io/v1alpha1
@@ -47,7 +21,7 @@ spec:
   url: "https://scikit-learn.org/stable/"
   description: "scikit-learn description"
   version: "2.1.0"
-  language: "python"
+  lang: "python"
 
 ---
 apiVersion: catalog.modeld.io/v1alpha1
@@ -59,31 +33,8 @@ spec:
   url: "https://xgboost.readthedocs.io/en/latest/"
   description: "xgboost description"
   version: "1.0.0"
-  language: "python"
+  lang: "python"
 
----
-apiVersion: catalog.modeld.io/v1alpha1
-kind: MLFramework
-metadata:
-  name: tensorflow
-  namespace: modeld-catalog
-spec:
-  url: "https://www.tensorflow.org/"
-  description: "tensorflow"
-  version: "1.0.0"
-  language: "python"
-
----
-apiVersion: catalog.modeld.io/v1alpha1
-kind: MLFramework
-metadata:
-  name: pytorch
-  namespace: modeld-catalog
-spec:
-  url: https://pytorch.devpost.com/
-  description: "pytorch"
-  version: "1.0.0"
-  language: "python"
 
 ---
 apiVersion: catalog.modeld.io/v1alpha1
@@ -95,4 +46,4 @@ spec:
   url: "https://github.com/facebook/prophet"
   description: "Prophet: Automatic Forecasting Procedure"
   version: "1.0.0"
-  language: "python"
+  lang: "python"

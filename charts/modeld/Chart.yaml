@@ -18,3 +18,8 @@ maintainers:
   - name: metaprov
     email: support@modeld.io
     url: https://groups.google.com/forum/#!forum/modeld-discuss
+dependencies:
+- name: cert-manager
+  version: "1.2.*"
+  repository: https://charts.jetstack.io
+  condition: certManager.enabled

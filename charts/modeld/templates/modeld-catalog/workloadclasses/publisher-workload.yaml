@@ -4,7 +4,6 @@ metadata:
   name: publisher-workload-class
   namespace: modeld-catalog
 spec:
-  serviceAccountName: modeld-publisher
   image: quay.io/metaprov/modeld-publisher:latest
   tasks:
    - binary-classification
@@ -13,6 +12,8 @@ spec:
         labels:
           app.kubernetes.io/name: modeld-trainer
       spec:
+        securityContext:                
+          runAsUser: 0
         restartPolicy: Never
         containers:
           - name: control
@@ -22,12 +23,12 @@ spec:
                 - containerPort: 8080
             volumeMounts:
                 - name: data
-                  mountPath: /home/modeld/data
+                  mountPath: /home/modeld/data:z
           - name: publisher
             image: quay.io/metaprov/modeld-publisher:latest
-            imagePullPolicy: IfNotPresent
             securityContext:
-                privileged: true
+               privileged: false
+            imagePullPolicy: IfNotPresent
             ports:
              - containerPort: 8050
                name: http
@@ -35,7 +36,7 @@ spec:
                name: metrics
             volumeMounts:
              - name: data
-               mountPath: /home/modeld/data
+               mountPath: /home/modeld/data:z
              - name: docker-sock-volume
                mountPath: /var/run/docker.sock
             resources:
@@ -69,11 +70,11 @@ spec:
                  containerPort: 8090
             volumeMounts:
                 - name: data
-                  mountPath: /home/modeld/data
+                  mountPath: /home/modeld/data:z
         volumes:
           - name: data
             emptyDir: {}
           - name: docker-sock-volume
             hostPath:
                path: /var/run/docker.sock
-               type: File
+               type: Socket

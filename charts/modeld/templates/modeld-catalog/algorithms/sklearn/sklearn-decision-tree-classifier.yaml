@@ -10,14 +10,11 @@ spec:
   frameworkName: scikit-learn
   integerParameters:
     - name:   min_samples_split
-      type: numeric
-      domain: integer
-      minimum: 2
-      maximum: 2
+      min: 2
+      max: 2
       defaultValue: 2
-  catagoricalParameters:
-    - name:  criterion
-      type:  categorical
+  categoricalParameters:
+    - name:  criterion      
       enums:
        - gini
        - entropy
