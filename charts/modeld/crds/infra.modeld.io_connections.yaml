@@ -1,779 +1,680 @@
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.5.0
   creationTimestamp: null
   name: connections.infra.modeld.io
 spec:
-  additionalPrinterColumns:
-  - JSONPath: .status.conditions[?(@.type=="Ready")].status
-    name: Ready
-    type: string
-  - JSONPath: .spec.provider
-    name: Provider
-    type: string
-  - JSONPath: .spec.secretName
-    name: StorageSecret
-    type: string
-  - JSONPath: .metadata.creationTimestamp
-    name: Age
-    type: date
   group: infra.modeld.io
   names:
     categories:
     - infra
     - modeld
     kind: Connection
+    listKind: ConnectionList
     plural: connections
     shortNames:
     - cred
     singular: connection
   scope: Namespaced
-  subresources:
-    status: {}
-  validation:
-    openAPIV3Schema:
-      properties:
-        apiVersion:
-          description: 'APIVersion defines the versioned schema of this representation
-            of an object. Servers should convert recognized schemas to the latest
-            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-          type: string
-        kind:
-          description: 'Kind is a string value representing the REST resource this
-            object represents. Servers may infer this from the endpoint the client
-            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-          type: string
-        metadata:
-          description: ObjectMeta is metadata that all persisted resources must have,
-            which includes all objects users must create.
-          properties:
-            annotations:
-              additionalProperties:
-                type: string
-              description: 'Annotations is an unstructured key value map stored with
-                a resource that may be set by external tools to store and retrieve
-                arbitrary metadata. They are not queryable and should be preserved
-                when modifying objects. More info: http://kubernetes.io/docs/user-guide/annotations'
-              type: object
-            clusterName:
-              description: The name of the cluster which the object belongs to. This
-                is used to distinguish resources with same name and namespace in different
-                clusters. This field is not set anywhere right now and apiserver is
-                going to ignore it if set in create or update request.
-              type: string
-            creationTimestamp:
-              description: "CreationTimestamp is a timestamp representing the server
-                time when this object was created. It is not guaranteed to be set
-                in happens-before order across separate operations. Clients may not
-                set this value. It is represented in RFC3339 form and is in UTC. \n
-                Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
-              format: date-time
-              type: string
-            deletionGracePeriodSeconds:
-              description: Number of seconds allowed for this object to gracefully
-                terminate before it will be removed from the system. Only set when
-                deletionTimestamp is also set. May only be shortened. Read-only.
-              format: int64
-              type: integer
-            deletionTimestamp:
-              description: "DeletionTimestamp is RFC 3339 date and time at which this
-                resource will be deleted. This field is set by the server when a graceful
-                deletion is requested by the user, and is not directly settable by
-                a client. The resource is expected to be deleted (no longer visible
-                from resource lists, and not reachable by name) after the time in
-                this field, once the finalizers list is empty. As long as the finalizers
-                list contains items, deletion is blocked. Once the deletionTimestamp
-                is set, this value may not be unset or be set further into the future,
-                although it may be shortened or the resource may be deleted prior
-                to this time. For example, a user may request that a pod is deleted
-                in 30 seconds. The Kubelet will react by sending a graceful termination
-                signal to the containers in the pod. After that 30 seconds, the Kubelet
-                will send a hard termination signal (SIGKILL) to the container and
-                after cleanup, remove the pod from the API. In the presence of network
-                partitions, this object may still exist after this timestamp, until
-                an administrator or automated process can determine the resource is
-                fully terminated. If not set, graceful deletion of the object has
-                not been requested. \n Populated by the system when a graceful deletion
-                is requested. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
-              format: date-time
-              type: string
-            finalizers:
-              description: Must be empty before the object is deleted from the registry.
-                Each entry is an identifier for the responsible component that will
-                remove the entry from the list. If the deletionTimestamp of the object
-                is non-nil, entries in this list can only be removed. Finalizers may
-                be processed and removed in any order.  Order is NOT enforced because
-                it introduces significant risk of stuck finalizers. finalizers is
-                a shared field, any actor with permission can reorder it. If the finalizer
-                list is processed in order, then this can lead to a situation in which
-                the component responsible for the first finalizer in the list is waiting
-                for a signal (field value, external system, or other) produced by
-                a component responsible for a finalizer later in the list, resulting
-                in a deadlock. Without enforced ordering finalizers are free to order
-                amongst themselves and are not vulnerable to ordering changes in the
-                list.
-              items:
-                type: string
-              type: array
-            generateName:
-              description: "GenerateName is an optional prefix, used by the server,
-                to generate a unique name ONLY IF the Name field has not been provided.
-                If this field is used, the name returned to the client will be different
-                than the name passed. This value will also be combined with a unique
-                suffix. The provided value has the same validation rules as the Name
-                field, and may be truncated by the length of the suffix required to
-                make the value unique on the server. \n If this field is specified
-                and the generated name exists, the server will NOT return a 409 -
-                instead, it will either return 201 Created or 500 with Reason ServerTimeout
-                indicating a unique name could not be found in the time allotted,
-                and the client should retry (optionally after the time indicated in
-                the Retry-After header). \n Applied only if Name is not specified.
-                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#idempotency"
-              type: string
-            generation:
-              description: A sequence number representing a specific generation of
-                the desired state. Populated by the system. Read-only.
-              format: int64
-              type: integer
-            labels:
-              additionalProperties:
-                type: string
-              description: 'Map of string keys and values that can be used to organize
-                and categorize (scope and select) objects. May match selectors of
-                replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels'
-              type: object
-            managedFields:
-              description: ManagedFields maps workflow-id and version to the set of
-                fields that are managed by that workflow. This is mostly for internal
-                housekeeping, and users typically shouldn't need to set or understand
-                this field. A workflow can be the user's name, a controller's name,
-                or the name of a specific apply path like "ci-cd". The set of fields
-                is always in the version that the workflow used when modifying the
-                object.
-              items:
-                description: ManagedFieldsEntry is a workflow-id, a FieldSet and the
-                  group version of the resource that the fieldset applies to.
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=="Ready")].status
+      name: Ready
+      type: string
+    - jsonPath: .spec.provider
+      name: Provider
+      type: string
+    - jsonPath: .spec.secretName
+      name: StorageSecret
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Connection define a connection to an external system (e.g. database,
+          public cloud)
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ConnectionSpec defines the desired state of Connection
+            properties:
+              aliCloud:
                 properties:
-                  apiVersion:
-                    description: APIVersion defines the version of this resource that
-                      this field set applies to. The format is "group/version" just
-                      like the top-level APIVersion field. It is necessary to track
-                      the version of a field set because it cannot be automatically
-                      converted.
+                  accessKey:
+                    default: ""
                     type: string
-                  fieldsType:
-                    description: 'FieldsType is the discriminator for the different
-                      fields format and version. There is currently only one possible
-                      value: "FieldsV1"'
+                  host:
+                    default: ""
                     type: string
-                  fieldsV1:
-                    description: FieldsV1 holds the first JSON version format as described
-                      in the "FieldsV1" type.
-                    type: object
-                  manager:
-                    description: Manager is an identifier of the workflow managing
-                      these fields.
+                  region:
+                    default: ""
                     type: string
-                  operation:
-                    description: Operation is the type of operation which lead to
-                      this ManagedFieldsEntry being created. The only valid values
-                      for this field are 'Apply' and 'Update'.
-                    type: string
-                  time:
-                    description: Time is timestamp of when these fields were set.
-                      It should always be empty if Operation is 'Apply'
-                    format: date-time
+                  secretKey:
+                    default: ""
                     type: string
                 type: object
-              type: array
-            name:
-              description: 'Name must be unique within a namespace. Is required when
-                creating resources, although some resources may allow a client to
-                request the generation of an appropriate name automatically. Name
-                is primarily intended for creation idempotence and configuration definition.
-                Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names'
-              type: string
-            namespace:
-              description: "Namespace defines the space within each name must be unique.
-                An empty namespace is equivalent to the \"default\" namespace, but
-                \"default\" is the canonical representation. Not all objects are required
-                to be scoped to a namespace - the value of this field for those objects
-                will be empty. \n Must be a DNS_LABEL. Cannot be updated. More info:
-                http://kubernetes.io/docs/user-guide/namespaces"
-              type: string
-            ownerReferences:
-              description: List of objects depended by this object. If ALL objects
-                in the list have been deleted, this object will be garbage collected.
-                If this object is managed by a controller, then an entry in this list
-                will point to this controller, with the controller field set to true.
-                There cannot be more than one managing controller.
-              items:
-                description: OwnerReference contains enough information to let you
-                  identify an owning object. An owning object must be in the same
-                  namespace as the dependent, or be cluster-scoped, so there is no
-                  namespace field.
+              athena:
+                description: =================== Definitions of spec files for each
+                  type AthenaSpec defines the connection to Athena db
+                properties:
+                  accessKey:
+                    default: ""
+                    type: string
+                  hostName:
+                    default: ""
+                    type: string
+                  s3OutputLocation:
+                    default: ""
+                    type: string
+                  secretKey:
+                    default: ""
+                    type: string
+                type: object
+              aws:
+                description: ////////////////////////// Cloud connection //////////////////////////
+                properties:
+                  accessKey:
+                    default: ""
+                    description: Aws Access key. This is an hidden fields which are
+                      stored in the secret
+                    type: string
+                  defaultRegion:
+                    default: ""
+                    description: Default zone.
+                    type: string
+                  secretKey:
+                    default: ""
+                    description: Aws StorageSecret key. This is an hidden fields which
+                      are stored in the secret
+                    type: string
+                type: object
+              azureStorage:
+                properties:
+                  accessKey:
+                    default: ""
+                    description: This is an hidden field which is stored in a p
+                    type: string
+                  storageAccount:
+                    default: ""
+                    type: string
+                type: object
+              bigQuery:
+                description: BigQuerySpec defines the connection to big query
+                properties:
+                  serviceAccount:
+                    default: ""
+                    type: string
+                type: object
+              bitbuckt:
+                properties:
+                  ssh:
+                    default: ""
+                    type: string
+                  token:
+                    default: ""
+                    type: string
+                  userName:
+                    default: ""
+                    type: string
+                type: object
+              cassandra:
+                description: CassandraSpec defines the connection to cassandra
+                properties:
+                  database:
+                    default: ""
+                    type: string
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 9042
+                    format: int32
+                    type: integer
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              category:
+                default: general
+                description: The connection category
+                enum:
+                - general
+                - cloud
+                - docker-image-registry
+                - database
+                - git
+                - messaging
+                type: string
+              digitalocean:
+                properties:
+                  accessKey:
+                    default: ""
+                    description: Access Key for digital ocean spaces
+                    type: string
+                  defaultRegion:
+                    default: ""
+                    description: Default digital ocean
+                    type: string
+                  host:
+                    default: ""
+                    description: url or connection string
+                    type: string
+                  secretKey:
+                    default: ""
+                    description: StorageSecret Key for digital ocean spaces
+                    type: string
+                  token:
+                    default: ""
+                    description: Token for digital ocean
+                    type: string
+                type: object
+              flock:
+                properties:
+                  url:
+                    default: ""
+                    type: string
+                type: object
+              gcpstorage:
+                properties:
+                  keyFile:
+                    default: ""
+                    type: string
+                  project:
+                    default: ""
+                    type: string
+                type: object
+              github:
+                properties:
+                  ssh:
+                    default: ""
+                    type: string
+                  token:
+                    default: ""
+                    type: string
+                  userName:
+                    default: ""
+                    type: string
+                type: object
+              gitlab:
+                properties:
+                  ssh:
+                    default: ""
+                    type: string
+                  token:
+                    default: ""
+                    type: string
+                type: object
+              hetzner:
+                properties:
+                  ssh:
+                    default: ""
+                    type: string
+                  token:
+                    default: ""
+                    type: string
+                type: object
+              hipchat:
+                properties:
+                  room:
+                    default: ""
+                    type: string
+                  token:
+                    default: ""
+                    type: string
+                  url:
+                    default: ""
+                    type: string
+                type: object
+              imageRegistry:
+                properties:
+                  host:
+                    default: ""
+                    description: Hostname for the image registry
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  username:
+                    default: ""
+                    description: Username for image registry
+                    type: string
+                type: object
+              linode:
+                properties:
+                  apikey:
+                    default: ""
+                    type: string
+                type: object
+              matterMost:
+                properties:
+                  channel:
+                    default: ""
+                    type: string
+                  url:
+                    default: ""
+                    type: string
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              minio:
+                properties:
+                  accessKey:
+                    default: ""
+                    description: Access key for minio
+                    type: string
+                  host:
+                    default: ""
+                    description: Minio url connection.
+                    type: string
+                  secretKey:
+                    default: ""
+                    description: StorageSecret key for minio
+                    type: string
+                type: object
+              mongodb:
+                properties:
+                  database:
+                    default: ""
+                    type: string
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 27017
+                    format: int32
+                    type: integer
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              mssqlserver:
+                properties:
+                  database:
+                    default: ""
+                    type: string
+                  domain:
+                    default: ""
+                    type: string
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 1433
+                    format: int32
+                    type: integer
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              msteam:
+                properties:
+                  webhook:
+                    default: ""
+                    type: string
+                type: object
+              mysql:
+                properties:
+                  database:
+                    default: ""
+                    type: string
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 3306
+                    format: int32
+                    type: integer
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              odbc:
+                properties:
+                  connectionString:
+                    default: ""
+                    type: string
+                type: object
+              openstack:
+                properties:
+                  authUrl:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  region:
+                    default: ""
+                    type: string
+                  tenantName:
+                    default: ""
+                    type: string
+                  userName:
+                    default: ""
+                    type: string
+                type: object
+              oracle:
+                properties:
+                  database:
+                    default: ""
+                    type: string
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 1521
+                    format: int32
+                    type: integer
+                  role:
+                    default: ""
+                    type: string
+                  serviceName:
+                    default: ""
+                    type: string
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              ovh:
+                properties:
+                  application:
+                    default: ""
+                    type: string
+                  consumerkey:
+                    default: ""
+                    type: string
+                  endpoint:
+                    default: ""
+                    type: string
+                  secret:
+                    default: ""
+                    type: string
+                type: object
+              owner:
+                type: string
+              postgres:
+                properties:
+                  database:
+                    default: ""
+                    type: string
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 5432
+                    format: int32
+                    type: integer
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              presto:
+                properties:
+                  catalog:
+                    default: ""
+                    type: string
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 8080
+                    format: int32
+                    type: integer
+                  schema:
+                    default: ""
+                    type: string
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              provider:
+                description: Provider specifies the name api provider (E.g. aws)
+                enum:
+                - alicloud
+                - athena
+                - azure
+                - big-query
+                - bitbucket
+                - cassandra
+                - digitalocean
+                - smtp
+                - gcp
+                - github
+                - hetzner
+                - linode
+                - mysql
+                - minio
+                - mongo-db
+                - ms-sql-server
+                - odbc
+                - oracle
+                - ovh
+                - postgres
+                - presto
+                - redshift
+                - aws
+                - slack
+                - snowflake
+                - sqlite
+                - image-registry
+                - license
+                - gitlab
+                - lm
+                - openstack
+                - hipchat
+                - pagerduty
+                - pushover
+                - opengenie
+                - webook
+                - victorops
+                - wechat
+                - flock
+                - msteam
+                - mattermost
+                - docker-hub
+                - unknown
+                type: string
+              redshift:
+                properties:
+                  database:
+                    default: ""
+                    type: string
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 5439
+                    format: int32
+                    type: integer
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              secretName:
+                description: SecretName is a reference to a secret which holds the
+                  connection credentials
+                type: string
+              slack:
+                properties:
+                  channel:
+                    default: ""
+                    type: string
+                  token:
+                    default: ""
+                    type: string
+                  userName:
+                    default: ""
+                    type: string
+                  webhookUrl:
+                    default: ""
+                    type: string
+                type: object
+              smtp:
+                properties:
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 25
+                    format: int32
+                    type: integer
+                  userName:
+                    default: ""
+                    type: string
+                type: object
+              snowflake:
+                properties:
+                  account:
+                    default: ""
+                    type: string
+                  database:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  username:
+                    default: ""
+                    type: string
+                  warehouse:
+                    default: ""
+                    type: string
+                type: object
+              sqlLight:
+                properties:
+                  fileName:
+                    type: string
+                type: object
+              tenantRef:
+                description: TenantRef is the tenant of the connection default to
+                  the default tenant
                 properties:
                   apiVersion:
                     description: API version of the referent.
                     type: string
-                  blockOwnerDeletion:
-                    description: If true, AND if the owner has the "foregroundDeletion"
-                      finalizer, then the owner cannot be deleted from the key-value
-                      store until this reference is removed. Defaults to false. To
-                      set this field, a user needs "delete" permission of the owner,
-                      otherwise 422 (Unprocessable Entity) will be returned.
-                    type: boolean
-                  controller:
-                    description: If true, this reference points to the managing controller.
-                    type: boolean
+                  fieldPath:
+                    description: 'If referring to a piece of an object instead of
+                      an entire object, this string should contain a valid JSON/Go
+                      field access statement, such as desiredState.manifest.containers[2].
+                      For example, if the object reference is to a container within
+                      a pod, this would take on a value like: "spec.containers{name}"
+                      (where "name" refers to the name of the container that triggered
+                      the event) or if no container name is specified "spec.containers[2]"
+                      (container with index 2 in this pod). This syntax is chosen
+                      only to have some well-defined way of referencing a part of
+                      an object. TODO: this design is not final and this field is
+                      subject to change in the future.'
+                    type: string
                   kind:
                     description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
                     type: string
                   name:
-                    description: 'Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names'
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                    type: string
+                  namespace:
+                    description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                    type: string
+                  resourceVersion:
+                    description: 'Specific resourceVersion to which this reference
+                      is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
                     type: string
                   uid:
-                    description: 'UID of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#uids'
+                    description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                     type: string
-                required:
-                - apiVersion
-                - kind
-                - name
-                - uid
                 type: object
-              type: array
-            resourceVersion:
-              description: "An opaque value that represents the internal version of
-                this object that can be used by clients to determine when objects
-                have changed. May be used for optimistic concurrency, change detection,
-                and the watch operation on a resource or set of resources. Clients
-                must treat these values as opaque and passed unmodified back to the
-                server. They may only be valid for a particular resource or set of
-                resources. \n Populated by the system. Read-only. Value must be treated
-                as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency"
-              type: string
-            selfLink:
-              description: "SelfLink is a URL representing this object. Populated
-                by the system. Read-only. \n DEPRECATED Kubernetes will stop propagating
-                this field in 1.20 release and the field is planned to be removed
-                in 1.21 release."
-              type: string
-            uid:
-              description: "UID is the unique in time and space value for this object.
-                It is typically generated by the server on successful creation of
-                a resource and is not allowed to change on PUT operations. \n Populated
-                by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids"
-              type: string
-          type: object
-        spec:
-          description: ConnectionSpec defines the desired state of Connection
-          properties:
-            aliCloud:
-              properties:
-                accessKey:
-                  type: string
-                host:
-                  type: string
-                region:
-                  type: string
-                secretKey:
-                  type: string
-              type: object
-            athena:
-              properties:
-                accessKey:
-                  type: string
-                hostName:
-                  type: string
-                s3OutputLocation:
-                  type: string
-                secretKey:
-                  type: string
-              type: object
-            aws:
-              description: ////////////////////////// Cloud connection //////////////////////////
-              properties:
-                accessKey:
-                  description: Aws Access key. This is an hidden fields which are
-                    stored in the secret
-                  type: string
-                defaultRegion:
-                  description: Default zone.
-                  type: string
-                secretKey:
-                  description: Aws StorageSecret key. This is an hidden fields which
-                    are stored in the secret
-                  type: string
-              type: object
-            azureStorage:
-              properties:
-                accessKey:
-                  description: This is an hidden field which is stored in a p
-                  type: string
-                storageAccount:
-                  type: string
-              type: object
-            bigQuery:
-              properties:
-                serviceAccount:
-                  type: string
-              type: object
-            bitbuckt:
-              properties:
-                ssh:
-                  type: string
-                token:
-                  type: string
-                userName:
-                  type: string
-              type: object
-            cassandra:
-              properties:
-                database:
-                  type: string
-                hostName:
-                  type: string
-                password:
-                  type: string
-                port:
-                  description: default 9042
-                  format: int32
-                  type: integer
-                username:
-                  type: string
-              type: object
-            category:
-              description: The connection category default for general
-              enum:
-              - general
-              - cloud
-              - docker-image-registry
-              - database
-              - git
-              - messaging
-              type: string
-            digitalocean:
-              properties:
-                accessKey:
-                  description: Access Key for digital ocean spaces
-                  type: string
-                defaultRegion:
-                  description: Default digital ocean
-                  type: string
-                host:
-                  description: url or connection string
-                  type: string
-                secretKey:
-                  description: StorageSecret Key for digital ocean spaces
-                  type: string
-                token:
-                  description: Token for digital ocean
-                  type: string
-              type: object
-            flock:
-              properties:
-                url:
-                  type: string
-              type: object
-            gcpstorage:
-              properties:
-                keyFile:
-                  type: string
-                project:
-                  type: string
-              type: object
-            github:
-              properties:
-                ssh:
-                  type: string
-                token:
-                  type: string
-                userName:
-                  type: string
-              type: object
-            gitlab:
-              properties:
-                ssh:
-                  type: string
-                token:
-                  type: string
-              type: object
-            hetzner:
-              properties:
-                ssh:
-                  type: string
-                token:
-                  type: string
-              type: object
-            hipchat:
-              properties:
-                room:
-                  type: string
-                token:
-                  type: string
-                url:
-                  type: string
-              type: object
-            imageRegistry:
-              properties:
-                host:
-                  description: Hostname for the image registry
-                  type: string
-                password:
-                  type: string
-                username:
-                  description: Username for image registry
-                  type: string
-              type: object
-            linode:
-              properties:
-                apikey:
-                  type: string
-              type: object
-            matterMost:
-              properties:
-                channel:
-                  type: string
-                url:
-                  type: string
-                username:
-                  type: string
-              type: object
-            minio:
-              properties:
-                accessKey:
-                  description: Access key for minio
-                  type: string
-                host:
-                  description: Minio url connection.
-                  type: string
-                secretKey:
-                  description: StorageSecret key for minio
-                  type: string
-              type: object
-            mongodb:
-              properties:
-                database:
-                  type: string
-                hostName:
-                  type: string
-                password:
-                  type: string
-                port:
-                  description: default 27017
-                  format: int32
-                  type: integer
-                username:
-                  type: string
-              type: object
-            mssqlserver:
-              properties:
-                database:
-                  type: string
-                domain:
-                  type: string
-                hostName:
-                  type: string
-                password:
-                  type: string
-                port:
-                  description: Default 1433
-                  format: int32
-                  type: integer
-                username:
-                  type: string
-              type: object
-            msteam:
-              properties:
-                webhook:
-                  type: string
-              type: object
-            mysql:
-              properties:
-                database:
-                  type: string
-                hostName:
-                  type: string
-                password:
-                  type: string
-                port:
-                  description: default 3306
-                  format: int32
-                  type: integer
-                username:
-                  type: string
-              type: object
-            odbc:
-              properties:
-                connectionString:
-                  type: string
-              type: object
-            openstack:
-              properties:
-                authUrl:
-                  type: string
-                password:
-                  type: string
-                region:
-                  type: string
-                tenantName:
-                  type: string
-                userName:
-                  type: string
-              type: object
-            oracle:
-              properties:
-                database:
-                  type: string
-                hostName:
-                  type: string
-                password:
-                  type: string
-                port:
-                  description: Default 1521
-                  format: int32
-                  type: integer
-                role:
-                  type: string
-                serviceName:
-                  type: string
-                username:
-                  type: string
-              type: object
-            ovh:
-              properties:
-                application:
-                  type: string
-                consumerkey:
-                  type: string
-                endpoint:
-                  type: string
-                secret:
-                  type: string
-              type: object
-            owner:
-              description: Owner
-              type: string
-            postgres:
-              properties:
-                database:
-                  type: string
-                hostName:
-                  type: string
-                password:
-                  type: string
-                port:
-                  description: "5432"
-                  format: int32
-                  type: integer
-                username:
-                  type: string
-              type: object
-            presto:
-              properties:
-                catalog:
-                  type: string
-                hostName:
-                  type: string
-                password:
-                  type: string
-                port:
-                  description: Default 8080
-                  format: int32
-                  type: integer
-                schema:
-                  type: string
-                username:
-                  type: string
-              type: object
-            provider:
-              description: Provider specifies the name api provider (E.g. aws) required
-              enum:
-              - alicloud
-              - athena
-              - azure
-              - big-query
-              - bitbucket
-              - cassandra
-              - digitalocean
-              - smtp
-              - gcp
-              - github
-              - hetzner
-              - linode
-              - mysql
-              - minio
-              - mongo-db
-              - ms-sql-server
-              - odbc
-              - oracle
-              - ovh
-              - postgres
-              - presto
-              - redshift
-              - aws
-              - slack
-              - snowflake
-              - sqlite
-              - image-registry
-              - license
-              - gitlab
-              - lm
-              - openstack
-              - hipchat
-              - pagerduty
-              - pushover
-              - opengenie
-              - webook
-              - victorops
-              - wechat
-              - flock
-              - msteam
-              - mattermost
-              - docker-hub
-              - unknown
-              type: string
-            redshift:
-              properties:
-                database:
-                  type: string
-                hostName:
-                  type: string
-                password:
-                  type: string
-                port:
-                  description: Default 5439
-                  format: int32
-                  type: integer
-                username:
-                  type: string
-              type: object
-            secretName:
-              type: string
-            slack:
-              properties:
-                channel:
-                  type: string
-                token:
-                  type: string
-                userName:
-                  type: string
-                webhookUrl:
-                  type: string
-              type: object
-            smtp:
-              properties:
-                host:
-                  type: string
-                password:
-                  type: string
-                port:
-                  format: int32
-                  type: integer
-                userName:
-                  type: string
-              type: object
-            snowflake:
-              properties:
-                account:
-                  type: string
-                database:
-                  type: string
-                password:
-                  type: string
-                username:
-                  type: string
-                warehouse:
-                  type: string
-              type: object
-            sqlLight:
-              properties:
-                fileName:
-                  type: string
-              type: object
-            tenantRef:
-              description: The owner of the connection default to the default tenant
-              properties:
-                apiVersion:
-                  description: API version of the referent.
-                  type: string
-                fieldPath:
-                  description: 'If referring to a piece of an object instead of an
-                    entire object, this string should contain a valid JSON/Go field
-                    access statement, such as desiredState.manifest.containers[2].
-                    For example, if the object reference is to a container within
-                    a pod, this would take on a value like: "spec.containers{name}"
-                    (where "name" refers to the name of the container that triggered
-                    the event) or if no container name is specified "spec.containers[2]"
-                    (container with index 2 in this pod). This syntax is chosen only
-                    to have some well-defined way of referencing a part of an object.
-                    TODO: this design is not final and this field is subject to change
-                    in the future.'
-                  type: string
-                kind:
-                  description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                  type: string
-                name:
-                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                  type: string
-                namespace:
-                  description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
-                  type: string
-                resourceVersion:
-                  description: 'Specific resourceVersion to which this reference is
-                    made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
-                  type: string
-                uid:
-                  description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
-                  type: string
-              type: object
-            webhook:
-              properties:
-                url:
-                  type: string
-              type: object
-          required:
-          - provider
-          - secretName
-          type: object
-        status:
-          description: ConnectionStatus is the observed state of a Connection
-          properties:
-            conditions:
-              items:
-                description: ConnectionCondition describes the state of a connection
-                  at a certain point.
+              webhook:
                 properties:
-                  lastTransitionTime:
-                    description: Last time the condition transitioned from one status
-                      to another.
-                    format: date-time
+                  url:
+                    default: ""
                     type: string
-                  message:
-                    description: A human readable message indicating details about
-                      the transition.
-                    type: string
-                  reason:
-                    description: The reason for the condition's last transition.
-                    type: string
-                  status:
-                    description: Status of the condition, one of True, False, AutoScaler.
-                    type: string
-                  type:
-                    description: Type of account condition.
-                    type: string
-                required:
-                - status
-                - type
                 type: object
-              type: array
-          type: object
-      required:
-      - spec
-      type: object
-  versions:
-  - name: v1alpha1
+            type: object
+          status:
+            description: ConnectionStatus is the observed state of a Connection
+            properties:
+              conditions:
+                items:
+                  description: ConnectionCondition describes the state of a connection
+                    at a certain point.
+                  properties:
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A human readable message indicating details about
+                        the transition.
+                      type: string
+                    reason:
+                      description: The reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status of the condition, one of True, False, AutoScaler.
+                      type: string
+                    type:
+                      description: Type of account condition.
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+            type: object
+        required:
+        - spec
+        type: object
     served: true
     storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

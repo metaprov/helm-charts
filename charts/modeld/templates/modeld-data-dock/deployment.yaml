@@ -6,7 +6,7 @@ metadata:
   name: modeld-data-dock
   namespace: modeld-system
 spec:
-  replicas: {{ .Values.datadock.replicas }}
+  replicas: {{ .Values.datadock.replicaCount }}
   strategy:
     type: Recreate
   selector:
@@ -23,7 +23,7 @@ spec:
         serviceAccountName: modeld-data-dock
         containers:
         - name: main
-          image: "{{ .Values.modeld.registry }}/metaprov/modeld-data-dock:{{ .Values.modeld.tag }}"
+          image: "{{ .Values.datadock.image.registry }}/ {{ .Values.datadock.image.repository }} :{{ .Values.datadock.image.tag }}"
           imagePullPolicy: {{ .Values.datadock.image.pullPolicy }}
           volumeMounts:
             - name: data
@@ -65,7 +65,7 @@ spec:
               value: "/home/modeld/data"
 
         - name: clouds
-          image: "{{ .Values.modeld.registry }}/metaprov/modeld-clouds:{{ .Values.modeld.tag }}"
+          image: "{{ .Values.clouds.image.registry }}/ {{ .Values.clouds.image.repository }} :{{ .Values.clouds.image.tag }}"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090

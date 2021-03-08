@@ -1,9 +1,7 @@
 namespace: modeld-system
 
+
 modeld:
-  tag: v0.3.13
-  registry: quay.io
-  pullPolicy: IfNotPresent
   debug: false
   cachePath: "/home/modeld/data"
   logAsJson: false
@@ -52,9 +50,12 @@ deployment:
       type: Recreate
 
 apigateway:
-  replicas: 1
+  replicaCount: 1
   image:
+    registry: quay.io
+    repository: metaprov/modeld-api-gateway
     tag: v0.3.13    
+    pullPolicy: IfNotPresent
   resources:
     limits:
       cpu: "50m"
@@ -64,9 +65,12 @@ apigateway:
       memory: "32M"
 
 apiproxy:
-  replicas: 1
+  replicaCount: 1
   image:
-    tag: v0.3.13    
+    registry: quay.io
+    repository: metaprov/modeld-apiproxy
+    tag: v0.3.13
+    pullPolicy: IfNotPresent    
   resources:
     limits:
       cpu: "50m"
@@ -76,9 +80,12 @@ apiproxy:
       memory: "32M"
 
 controlplane:
-  replicas: 1
+  replicaCount: 1
   image:
+    registry: quay.io
+    repository: metaprov/modeld-control-plane
     tag: v0.3.13    
+    pullPolicy: IfNotPresent
   resources:
     limits:
       cpu: "50m"
@@ -88,9 +95,12 @@ controlplane:
       memory: "32M"
 
 datadock:
-  replicas: 1
+  replicaCount: 1
   image:
+    registry: quay.io
+    repository: metaprov/modeld-data-dock
     tag: v0.3.13    
+    pullPolicy: IfNotPresent
   resources:
     limits:
       cpu: "50m"
@@ -100,9 +110,12 @@ datadock:
       memory: "32M"
 
 dataplane:
-  replicas: 1
+  replicaCount: 1
   image:
+    registry: quay.io
+    repository: metaprov/modeld-data-plane
     tag: v0.3.13    
+    pullPolicy: IfNotPresent
   resources:
     limits:
       cpu: "50m"
@@ -112,9 +125,12 @@ dataplane:
       memory: "32M"
 
 frontend:
-  replicas: 1
+  replicaCount: 1
   image:
+    registry: quay.io
     tag: v0.3.13    
+    repository: metaprov/modeld-frontend
+    pullPolicy: IfNotPresent
   resources:
     limits:
       cpu: "50m"
@@ -124,9 +140,12 @@ frontend:
       memory: "32M"
 
 clouds:
-  replicas: 1
+  replicaCount: 1
   image:
+    registry: quay.io
     tag: v0.3.13    
+    repository: metaprov/modeld-clouds
+    pullPolicy: IfNotPresent
   resources:
     limits:
       cpu: "50m"

@@ -6,7 +6,7 @@ metadata:
   name: modeld-api-proxy
   namespace: modeld-system
 spec:
-  replicas: 1
+  replicas: {{ .Values.apiproxy.replicaCount }}
   strategy:
     type: Recreate
   selector:
@@ -23,7 +23,7 @@ spec:
       serviceAccountName: modeld-api-proxy
       containers:
         - name: main
-          image: "{{ .Values.modeld.registry }}/metaprov/modeld-api-proxy:{{ .Values.modeld.tag }}"
+          image: "{{ .Values.apiproxy.image.registry }}/ {{ .Values.apiproxy.image.repository }} :{{ .Values.apiproxy.image.tag }}"
           imagePullPolicy: {{ .Values.apiproxy.image.pullPolicy }}
           ports:
             - containerPort: 8080

@@ -6,7 +6,7 @@ metadata:
   name: modeld-frontend
   namespace: modeld-system
 spec:
-  replicas: {{ .Values.frontend.replicas }}
+  replicas: {{ .Values.frontend.replicaCount }}
   strategy:
     type: Recreate
   selector:
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: main
-          image: "{{ .Values.image.registry }}/metaprov/modeld-frontend:{{ .Values.image.tag }}"
+          image: "{{ .Values.frontend.image.registry }}/ {{ .Values.frontend.image.repository }} :{{ .Values.frontend.image.tag }}"
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
             - containerPort: 80

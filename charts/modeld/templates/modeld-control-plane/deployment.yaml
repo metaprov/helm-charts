@@ -7,7 +7,7 @@ metadata:
   name: modeld-control-plane
   namespace: modeld-system
 spec:
-  replicas: {{ .Values.controlplane.replicas }}
+  replicas: {{ .Values.controlplane.replicaCount }}
   strategy:
     type: Recreate
   selector:
@@ -24,7 +24,7 @@ spec:
       serviceAccountName: modeld-control-plane
       containers:
         - name: main
-          image: "{{ .Values.modeld.registry }}/metaprov/modeld-control-plane:{{ .Values.modeld.tag }}"
+          image: "{{ .Values.controlplane.image.registry }}/ {{ .Values.controlplane.image.repository }} :{{ .Values.controlplane.image.tag }}"
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
           volumeMounts:
             - name: data
@@ -76,7 +76,7 @@ spec:
             periodSeconds: 10
 
         - name: clouds
-          image: "{{ .Values.modeld.registry }}/metaprov/modeld-clouds:{{ .Values.modeld.tag }}"
+          image: "{{ .Values.clouds.image.registry }}/ {{ .Values.clouds.image.repository }} :{{ .Values.clouds.image.tag }}"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090

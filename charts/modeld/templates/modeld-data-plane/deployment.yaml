@@ -7,7 +7,7 @@ metadata:
   name: modeld-data-plane
   namespace: modeld-system
 spec:
-  replicas: {{ .Values.dataplane.replicas }}
+  replicas: {{ .Values.dataplane.replicaCount }}
   strategy:
     type: Recreate
   selector:
@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: main
-          image: "{{ .Values.dataplane.image.registry }}/metaprov/modeld-data-plane:{{ .Values.dataplane.image.tag }}"
+          image: "{{ .Values.dataplane.image.registry }}/{{ .Values.dataplane.image.repository }}:{{ .Values.dataplane.image.tag }}"
           imagePullPolicy: {{ .Values.dataplane.image.pullPolicy }}
           ports:
             - containerPort: 8080
@@ -54,7 +54,7 @@ spec:
 
 
         - name: clouds
-          image: "{{ .Values.clouds.image.registry }}/metaprov/modeld-clouds:{{ .Values.clouds.image.tag }}"
+          image: "{{ .Values.clouds.image.registry }}/ {{ .Values.clouds.image.repository }} :{{ .Values.clouds.image.tag }}"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090

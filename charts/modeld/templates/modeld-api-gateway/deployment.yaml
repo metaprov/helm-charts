@@ -22,10 +22,11 @@ spec:
         prometheus.io/scrape: 'true'
         prometheus.io/port: '9091'
     spec:
+      replicas: {{ .Values.apigateway.replicaCount }}
       serviceAccountName: modeld-api-gateway
       containers:
         - name: main
-          image: "{{ .Values.modeld.registry }}/metaprov/modeld-api-gateway:{{ .Values.modeld.tag }}"
+          image: "{{ .Values.apigateway.image.registry }}/ {{ .Values.apigateway.image.repository }} :{{ .Values.apigateway.image.tag }}"
           imagePullPolicy: {{ .Values.apigateway.image.pullPolicy }}
           ports:
             - containerPort: 8080
@@ -79,7 +80,7 @@ spec:
               value: "8080"
 
         - name: clouds
-          image: "{{ .Values.modeld.registry }}/metaprov/modeld-clouds:{{ .Values.modeld.tag }}"
+          image: "{{ .Values.clouds.image.registry }}/ {{ .Values.clouds.image.repository }} :{{ .Values.clouds.image.tag }}"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090
