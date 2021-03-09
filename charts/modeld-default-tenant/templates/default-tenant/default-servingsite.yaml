@@ -5,9 +5,6 @@ metadata:
   namespace: default-tenant
 spec:
   fdqn: {{ .Values.servingsite.fdqn }}
-  ingressref:
-    namespace: default-tenant
-    name: default-ingress
   tenantRef:
     name: default-tenant
-    namespace: {{ .Release.Namespace }}
+    namespace: modeld-system

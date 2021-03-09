@@ -11,6 +11,10 @@ spec:
     name: default-tenant
     namespace: modeld-system
   secretName : default-azure-secret
+  category: cloud
+  azureStorage:
+    storageAccount: ''
+    accessKey: '[hidden]'
   {{ end }}
 
 ---

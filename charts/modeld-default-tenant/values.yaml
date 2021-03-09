@@ -1,5 +1,5 @@
 aws:
-  create: true
+  create: false
   name: default-aws
   secret:
     az: amazon-az
@@ -7,7 +7,7 @@ aws:
     secretKey: amazon-secret-key
 
 azure:
-  create: true
+  create: false
   name: default-azure
   secret:
     storageAccessKey: test
@@ -44,7 +44,7 @@ email:
 
 
 gcp:
-  create: true
+  create: false
   name: default-gcp
   secret:
     az: gcp-az
@@ -96,14 +96,6 @@ adminaccount:
   create: true
   name: default-admin
 
-bucket:
-  create: true
-  name: default-bucket
-
-tenant:
-  create: true
-  name: default-tenant
-
 dataproduct:
   create: true
-  name: default-data-prodcut
+  name: iris

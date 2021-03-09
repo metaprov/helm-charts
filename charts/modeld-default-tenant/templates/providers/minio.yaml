@@ -9,8 +9,12 @@ spec:
   provider: minio
   tenantRef:
     name: default-tenant
-    namespace: {{ .Release.Namespace }}
+    namespace: modeld-system
   secretName : default-minio-secret
+  minio:
+    accessKey: '[hidden]'
+    secretKey: '[hidden]'
+    host: my-minio.minio.svc.cluster.local
 ---
 apiVersion: v1
 kind: Secret

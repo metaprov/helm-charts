@@ -38,6 +38,11 @@ spec:
     name: default-tenant
     namespace: modeld-system
   secretName : default-aws-secret
+  category: cloud
+  aws:
+    defaultRegion: us-east-1
+    accessKey: '[hidden]'
+    secretKey: '[hidden]'
 ---
 apiVersion: infra.modeld.io/v1alpha1
 kind: VirtualBucket
@@ -49,7 +54,5 @@ spec:
     namespace: modeld-system
     name : default-tenant
   connectionName: default-aws-connection
-
-
 {{ end }}
 

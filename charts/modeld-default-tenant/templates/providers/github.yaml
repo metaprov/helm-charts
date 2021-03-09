@@ -9,8 +9,9 @@ spec:
   provider: github
   tenantRef:
     name: default-tenant
-    namespace: {{ .Release.Namespace }}
+    namespace: modeld-system
   secretName : default-github-secret
+  category: git
 ---
 apiVersion: v1
 kind: Secret

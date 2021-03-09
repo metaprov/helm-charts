@@ -1,4 +1,4 @@
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: data-validating-webhook-configuration
@@ -8,6 +8,8 @@ metadata:
 webhooks:
   - name: corpus.data.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -31,6 +33,8 @@ webhooks:
 
   - name: dataproduct.data.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
         - v1beta1
         - v1alpha1
@@ -54,6 +58,8 @@ webhooks:
 
   - name: dataproductversion.data.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -77,6 +83,8 @@ webhooks:
 
   - name: datasource.data.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -100,6 +108,8 @@ webhooks:
 
   - name: datapipeline.data.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -123,6 +133,8 @@ webhooks:
 
   - name: datapipelineruns.data.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -144,8 +156,235 @@ webhooks:
         path: /validate-data-modeld-io-v1alpha1-datapipelinerun
       caBundle: CERT
 
+  - name: entity.data.modeld.io
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - entities
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-data-modeld-io-v1alpha1-entity
+      caBundle: CERT
+
+  - name: feature.data.modeld.io
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - features
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-data-modeld-io-v1alpha1-feature
+      caBundle: CERT
+
+  - name: featurepipeline.data.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - featurepipelines
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-data-modeld-io-v1alpha1-featurepipeline
+      caBundle: CERT
+
+  - name: featurepipelinerun.data.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - featurepipelineruns
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-data-modeld-io-v1alpha1-featurepipelinerun
+      caBundle: CERT
+
+  - name: featureset.data.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - featuresets
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-data-modeld-io-v1alpha1-featureset
+      caBundle: CERT
+
+  - name: labelingpipeline.data.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - labelingpipelines
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-data-modeld-io-v1alpha1-labelingpipeline
+      caBundle: CERT
+
+  - name: labelingpipelinerun.data.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - labelingpipelineruns
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-data-modeld-io-v1alpha1-labelingpipelineruns
+      caBundle: CERT
+
+
+  - name: recipe.data.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - recipes
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-data-modeld-io-v1alpha1-recipe
+      caBundle: CERT
+
+  - name: reciperun.data.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - reciperuns
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-data-modeld-io-v1alpha1-reciperun
+      caBundle: CERT
+
+
 ---
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: inference-validating-webhook-configuration
@@ -153,7 +392,9 @@ metadata:
   annotations:
     cert-manager.io/inject-ca-from: modeld-system/serving-cert
 webhooks:
-  - name: prediction.inference.modeld.io
+  - name: predictionpipeline.inference.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
     failurePolicy: Fail
     admissionReviewVersions:
       - v1beta1
@@ -168,15 +409,43 @@ webhooks:
           - CREATE
           - UPDATE
         resources:
-          - predictions
+          - predictionpipelines
     clientConfig:
       service:
         namespace: modeld-system
         name: modeld-control-plane-webhook
-        path: /validate-inference-modeld-io-v1alpha1-prediction
+        path: /validate-inference-modeld-io-v1alpha1-predictionpipeline
       caBundle: CERT
 
+  - name: predictionpipelinerun.inference.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "inference.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - predictionpipelineruns
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-inference-modeld-io-v1alpha1-predictionpipelinerun
+      caBundle: CERT
+
+
   - name: predictor.inference.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
     failurePolicy: Fail
     admissionReviewVersions:
       - v1beta1
@@ -200,6 +469,8 @@ webhooks:
       caBundle: CERT
 
   - name: curtain.inference.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
     failurePolicy: Fail
     admissionReviewVersions:
       - v1beta1
@@ -223,7 +494,7 @@ webhooks:
       caBundle: CERT
 
 ---
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: infra-validating-webhook-configuration
@@ -232,6 +503,8 @@ metadata:
     cert-manager.io/inject-ca-from: modeld-system/serving-cert
 webhooks:
   - name: account.infra.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
     failurePolicy: Fail
     admissionReviewVersions:
       - v1beta1
@@ -255,6 +528,8 @@ webhooks:
       caBundle: CERT
 
   - name: connection.infra.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
     failurePolicy: Fail
     admissionReviewVersions:
       - v1beta1
@@ -279,6 +554,8 @@ webhooks:
 
   - name: lab.infra.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -302,6 +579,8 @@ webhooks:
 
   - name: notifier.infra.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -324,6 +603,8 @@ webhooks:
       caBundle: CERT
 
   - name: license.infra.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
     failurePolicy: Fail
     admissionReviewVersions:
       - v1beta1
@@ -348,6 +629,8 @@ webhooks:
 
 
   - name: servingsite.infra.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
     failurePolicy: Fail
     admissionReviewVersions:
       - v1beta1
@@ -371,6 +654,8 @@ webhooks:
       caBundle: CERT
 
   - name: tenant.infra.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
     failurePolicy: Fail
     admissionReviewVersions:
       - v1beta1
@@ -394,6 +679,8 @@ webhooks:
       caBundle: CERT
 
   - name: virtualbucket.infra.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
     failurePolicy: Fail
     admissionReviewVersions:
       - v1beta1
@@ -417,7 +704,7 @@ webhooks:
       caBundle: CERT
 
 ---
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: training-validating-webhook-configuration
@@ -426,6 +713,8 @@ metadata:
     cert-manager.io/inject-ca-from: modeld-system/serving-cert
 webhooks:
   - name: model.training.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
     failurePolicy: Fail
     admissionReviewVersions:
       - v1beta1
@@ -449,6 +738,8 @@ webhooks:
       caBundle: CERT
 
   - name: forecast.training.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
     failurePolicy: Fail
     admissionReviewVersions:
       - v1beta1
@@ -474,6 +765,8 @@ webhooks:
 
   - name: notebook.training.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -497,6 +790,8 @@ webhooks:
 
   - name: notebookrun.training.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -520,6 +815,8 @@ webhooks:
 
   - name: modelpipeline.training.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -543,6 +840,8 @@ webhooks:
 
   - name: modelpipelinerun.training.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -566,6 +865,8 @@ webhooks:
 
   - name: pipelinetrigger.training.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -590,6 +891,8 @@ webhooks:
 
   - name: study.training.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -613,6 +916,8 @@ webhooks:
 
   - name: trainer.training.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -637,6 +942,8 @@ webhooks:
 
   - name: automlrun.training.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1
@@ -660,6 +967,8 @@ webhooks:
 
   - name: report.training.modeld.io
     failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
     admissionReviewVersions:
       - v1beta1
       - v1alpha1

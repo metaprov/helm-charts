@@ -31,4 +31,11 @@ spec:
     name: default-tenant
     namespace: modeld-system
   secretName : default-email-secret
+  category: general
+  smtp:
+    host: ''
+    port: 25
+    userName: ''
+    password: ''
+
 {{ end }}

@@ -6,7 +6,7 @@ metadata:
 spec:
   gitLocation:
     gitConnectionName: default-git-repository
-    Url: ""
+    url: ""
   tenantRef:
     name: default-tenant
     namespace: modeld-system
@@ -18,10 +18,7 @@ spec:
     path: modeld/live/dataproducts/iris
   servingSiteName: default-serving-site
   labName: default-lab
-  task: binary-classification
-  labelColumn: "class"
+  task: binary-classification  
   modelWorkloadClassName: model-workload-class
   dataWorkloadClassName: data-workload-class
-
-
-
+  owner: admin

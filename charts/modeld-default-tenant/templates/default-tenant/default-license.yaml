@@ -8,6 +8,4 @@ spec:
     name: default-teant
     namespace: modeld-system
   secretName: default-license-secret
-  type: lite
-  notifierSelector:
-    app: general
+  

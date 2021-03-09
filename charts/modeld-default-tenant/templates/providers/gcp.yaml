@@ -9,8 +9,12 @@ spec:
   provider: gcp
   tenantRef:
     name: default-tenant
-    namespace: {{ .Release.Namespace }}
-  secretName : default-gcp-secret
+    namespace: modeld-system
+  secretName : modeld-gcp-secret
+  category: cloud
+  gcpstorage:
+    keyFile: ''
+    project: ''
 ---
 apiVersion: v1
 kind: Secret

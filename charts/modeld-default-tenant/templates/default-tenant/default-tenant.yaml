@@ -8,8 +8,5 @@ spec:
       name: default-lab
       namespace: default-tenant
   defaultServingSiteRef:
-      name: default-servingsite
-      namespace: default-tenant
-  adminRef:
-      name: {{ template "modeld.fullname" . }}-{{ .Values.adminaccount.name }}
+      name: default-serving-site
       namespace: default-tenant

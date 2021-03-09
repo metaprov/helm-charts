@@ -6,5 +6,5 @@ metadata:
 spec:
   tenantRef:
     name: default-tenant
-    namespace: {{ .Release.Namespace }}
-  gitrepoName: default-github-repo
+    namespace: modeld-system
+

@@ -34,6 +34,12 @@ spec:
   provider: docker-hub
   tenantRef:
     name: default-tenant
-    namespace: {{ .Release.Namespace }}
+    namespace: modeld-system
   secretName : default-dockerhub-secret
+  category: docker-image-registry
+  imageRegistry:
+    host: hub.docker.com
+    username: '[hidden]'
+    password: '[hidden]'
+
 {{ end }}

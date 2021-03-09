@@ -39,7 +39,14 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modeld-system
-  secretName : default-digitalocean-secret
+  secretName: default-digitalocean-secret
+  category: cloud
+  digitalocean:
+    token: '[hidden]'
+    accessKey: '[hidden]'
+    secretKey: '[hidden]'
+    defaultRegion: 'nyc3'
+
 ---
 apiVersion: infra.modeld.io/v1alpha1
 kind: VirtualBucket

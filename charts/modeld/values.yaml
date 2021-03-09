@@ -57,7 +57,7 @@ apigateway:
   image:
     registry: quay.io
     repository: metaprov/modeld-api-gateway
-    tag: v0.3.31    
+    tag: v0.3.42    
     pullPolicy: IfNotPresent
   resources:
     limits:
@@ -72,7 +72,7 @@ apiproxy:
   image:
     registry: quay.io
     repository: metaprov/modeld-api-proxy
-    tag: v0.3.31
+    tag: v0.3.42
     pullPolicy: IfNotPresent    
   resources:
     limits:
@@ -87,7 +87,7 @@ controlplane:
   image:
     registry: quay.io
     repository: metaprov/modeld-control-plane
-    tag: v0.3.31    
+    tag: v0.3.42    
     pullPolicy: IfNotPresent
   resources:
     limits:
@@ -102,7 +102,7 @@ datadock:
   image:
     registry: quay.io
     repository: metaprov/modeld-data-dock
-    tag: v0.3.31    
+    tag: v0.3.42    
     pullPolicy: IfNotPresent
   resources:
     limits:
@@ -117,7 +117,7 @@ dataplane:
   image:
     registry: quay.io
     repository: metaprov/modeld-data-plane
-    tag: v0.3.31    
+    tag: v0.3.42    
     pullPolicy: IfNotPresent
   resources:
     limits:
@@ -131,7 +131,7 @@ frontend:
   replicaCount: 1
   image:
     registry: quay.io
-    tag: v0.3.31    
+    tag: v0.3.42    
     repository: metaprov/modeld-frontend
     pullPolicy: IfNotPresent
   resources:
@@ -146,7 +146,7 @@ clouds:
   replicaCount: 1
   image:
     registry: quay.io
-    tag: v0.3.31    
+    tag: v0.3.42    
     repository: metaprov/modeld-clouds
     pullPolicy: IfNotPresent
   resources:
