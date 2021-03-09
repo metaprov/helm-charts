@@ -61,11 +61,11 @@ apigateway:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: "50m"
+      cpu: "500m"
       memory: "512M"
     requests:
-      cpu: "50m"
-      memory: "32M"
+      cpu: "500m"
+      memory: "512M"
 
 apiproxy:
   replicaCount: 1
@@ -76,11 +76,11 @@ apiproxy:
     pullPolicy: IfNotPresent    
   resources:
     limits:
-      cpu: "50m"
+      cpu: "250m"
       memory: "512M"
     requests:
-      cpu: "50m"
-      memory: "32M"
+      cpu: "250m"
+      memory: "512M"
 
 controlplane:
   replicaCount: 1
@@ -91,11 +91,11 @@ controlplane:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: "50m"
+      cpu: "500m"
       memory: "512M"
     requests:
-      cpu: "50m"
-      memory: "32M"
+      cpu: "500m"
+      memory: "512M"
 
 datadock:
   replicaCount: 1
@@ -106,11 +106,11 @@ datadock:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: "50m"
+      cpu: "200m"
       memory: "512M"
     requests:
-      cpu: "50m"
-      memory: "32M"
+      cpu: "200m"
+      memory: "512M"
 
 dataplane:
   replicaCount: 1
@@ -121,11 +121,11 @@ dataplane:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: "50m"
-      memory: "512M"
+      cpu: "1000m"
+      memory: "1Gi"
     requests:
-      cpu: "50m"
-      memory: "32M"
+      cpu: "1000m"
+      memory: "1Gi"
 
 frontend:
   replicaCount: 1
@@ -136,11 +136,11 @@ frontend:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: "50m"
+      cpu: "500m"
       memory: "512M"
     requests:
-      cpu: "50m"
-      memory: "32M"
+      cpu: "500m"
+      memory: "512M"
 
 clouds:
   replicaCount: 1
