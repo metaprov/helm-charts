@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: modeld-archive-metrics
+    app.kubernetes.io/part-of: modeld
+  name: modeld-archive-metrics
+  namespace: modeld-system
+spec:
+  ports:
+    - name: metrics
+      protocol: TCP
+      port: 9091
+      targetPort: 9091
+  selector:
+    app.kubernetes.io/name: modeld-archive

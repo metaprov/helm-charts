@@ -82,6 +82,22 @@ apiproxy:
       cpu: "250m"
       memory: "512M"
 
+archive:
+  replicaCount: 1
+  image:
+    registry: quay.io
+    repository: metaprov/modeld-archive
+    tag: v0.3.42
+    pullPolicy: IfNotPresent    
+  resources:
+    limits:
+      cpu: "250m"
+      memory: "512M"
+    requests:
+      cpu: "250m"
+      memory: "512M"
+
+
 controlplane:
   replicaCount: 1
   image:
