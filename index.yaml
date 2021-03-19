@@ -3,14 +3,14 @@ entries:
   modeld:
   - apiVersion: v2
     appVersion: v0.3.13
-    created: "2021-03-14T21:28:27.942290519Z"
+    created: "2021-03-19T22:03:07.773278183Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
       repository: https://charts.jetstack.io
       version: 1.2.*
     description: Machine Learning Operators
-    digest: 547069ef035717f17e78e9882819d13952a287797527d8e281364fb3e259db5e
+    digest: 9ffe6ac55f7070502a1d6850887c1f7433302a4957af734fa32b794bd82a2fcd
     home: https://modeld.io
     keywords:
     - kubernetes
@@ -32,7 +32,7 @@ entries:
     version: 0.3.13
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-03-14T21:28:27.923649389Z"
+    created: "2021-03-19T22:03:07.754247767Z"
     description: Machine Learning Operators
     digest: 45ad0574fa3d4fbe12e059d15074fd7192783ed8f698b4422068a4629e95c4b6
     home: https://modeld.io
@@ -56,7 +56,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-03-14T21:28:27.909002294Z"
+    created: "2021-03-19T22:03:07.737353964Z"
     description: Machine Learning Operators
     digest: 5127ff797b92bbd6af33b53a2c994a29c843f7049acadfc3626105e169a18faf
     home: https://modeld.io
@@ -80,7 +80,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-03-14T21:28:27.893156859Z"
+    created: "2021-03-19T22:03:07.720887364Z"
     description: Machine Learning Operators
     digest: e1cb998f7ab5d3b7a8cf4aed3aca399fa365390c5ae8b3f8bec7b36b547e782b
     home: https://modeld.io
@@ -105,12 +105,12 @@ entries:
   modeld-default-tenant:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-03-14T21:28:27.943184549Z"
+    created: "2021-03-19T22:03:07.774274289Z"
     description: A Helm chart for default tenant
-    digest: 99eab9162109349ff616d8b702d3cc37a5fd109cd4b49d3bd9b747ba9cd5685e
+    digest: 1a6ba5b5eee78c2bc4c76e73b5129c62c95def451286f5e0b10966b5e4aadced
     name: modeld-default-tenant
     type: application
     urls:
     - https://metaprov.github.io/helm-charts/modeld-default-tenant-0.1.0.tgz
     version: 0.1.0
-generated: "2021-03-14T21:28:27.878182653Z"
+generated: "2021-03-19T22:03:07.704750766Z"
