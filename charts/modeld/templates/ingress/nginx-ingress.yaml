@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
+apiVersion: networking.k8s.io/v1 
 kind: Ingress
 metadata:
   name: modeld-ingress
@@ -27,16 +27,26 @@ spec:
           paths:
             - path: /
               backend:
-                serviceName: frontend
-                servicePort: 80
+                service:
+                  name: frontend
+                  port: 
+                    number: 80
+              pathType: ImplementationSpecific      
+
             - path: /upload
               backend:
-                serviceName: modeld-datadock
-                servicePort: 8095
+                service:
+                  name: modeld-datadock
+                  port: 
+                    number: 8095
+              pathType: ImplementationSpecific      
       - host: api.modeld.info
         http:
           paths:
             - path: /
               backend:
-                serviceName: modeld-api-proxy
-                servicePort: 8080
+                service:
+                  name: modeld-api-proxy
+                  port: 
+                    number: 8080
+              pathType: ImplementationSpecific      

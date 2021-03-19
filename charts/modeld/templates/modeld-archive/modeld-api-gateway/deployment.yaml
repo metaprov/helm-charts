@@ -22,7 +22,6 @@ spec:
         prometheus.io/scrape: 'true'
         prometheus.io/port: '9091'
     spec:
-      serviceAccountName: modeld-archive
       containers:
         - name: main
           image: "{{ .Values.archive.image.registry }}/{{ .Values.archive.image.repository }}:{{ .Values.archive.image.tag }}"

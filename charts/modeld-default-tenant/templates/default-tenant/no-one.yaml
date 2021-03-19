@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: no-one
+  namespace: default-tenant
+  labels:
+    app.kubernetes.io/part-of: modeld
+    app.kubernetes.io/component: infra
+type: Opaque
+stringData:
+  password: '$2a$14$d154O63mraxngBiKDbiUc.fZskDLOH9j1VZ9LCl9l3/4dIre/lRny'
+---
+
+apiVersion: infra.modeld.io/v1alpha1
+kind: Account
+metadata:
+  name: no-one
+  namespace: default-tenant
+  labels:
+      environment: production
+      app: nginx
+spec:
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+  type: "user"
+  userName: "no-one"
+  firstName: "no"
+  lastName: "one"
+  email: "no-one@example"
+  phone: "444-4444-444"
+  

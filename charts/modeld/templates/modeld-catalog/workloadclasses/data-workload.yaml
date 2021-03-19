@@ -4,9 +4,10 @@ metadata:
   name: data-workload-class
   namespace: modeld-catalog
 spec:
-  image: quay.io/metaprov/modeld-trainer:latest
-  tasks:
-   - binary-classification
+  dataImage: quay.io/metaprov/modeld-data-plane:latest
+  controlImage: quay.io/metaprov/modeld-workload:latest
+  trainerImage: quay.io/metaprov/modeld-trainer:latest
+  publisherImage: quay.io/metaprov/modeld-publisher:latest
   podTemplate:
       metadata:
         labels:
