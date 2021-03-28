@@ -392,7 +392,7 @@ metadata:
   annotations:
     cert-manager.io/inject-ca-from: modeld-system/serving-cert
 webhooks:
-  - name: predictionpipeline.inference.modeld.io
+  - name: prediction.inference.modeld.io
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -409,15 +409,15 @@ webhooks:
           - CREATE
           - UPDATE
         resources:
-          - predictionpipelines
+          - prediction
     clientConfig:
       service:
         namespace: modeld-system
         name: modeld-control-plane-webhook
-        path: /validate-inference-modeld-io-v1alpha1-predictionpipeline
+        path: /validate-inference-modeld-io-v1alpha1-prediction
       caBundle: CERT
 
-  - name: predictionpipelinerun.inference.modeld.io
+  - name: cronprediction.inference.modeld.io
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -434,12 +434,12 @@ webhooks:
           - CREATE
           - UPDATE
         resources:
-          - predictionpipelineruns
+          - cronpredictions
     clientConfig:
       service:
         namespace: modeld-system
         name: modeld-control-plane-webhook
-        path: /validate-inference-modeld-io-v1alpha1-predictionpipelinerun
+        path: /validate-inference-modeld-io-v1alpha1-cronprediction
       caBundle: CERT
 
 
