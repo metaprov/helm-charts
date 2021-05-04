@@ -44,7 +44,10 @@ spec:
               protocol: TCP
           env:
             - name: CACHE_PATH
-              value: "/home/modeld/data"
+              valueFrom:
+                configMapKeyRef:
+                    name: controlplane-configmap
+                    key: cache-path          
           resources:
             limits:
               cpu: "{{.Values.controlplane.resources.limits.cpu}}"
@@ -59,7 +62,7 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
 
-        - name: clouds
+        - name: cloud-proxy
           image: "{{ .Values.clouds.image.registry }}/{{ .Values.clouds.image.repository }}:{{ .Values.clouds.image.tag }}"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
@@ -83,10 +86,13 @@ spec:
             periodSeconds: 10
           env:
             - name: CACHE_PATH
-              value: "/home/modeld/data"
+              valueFrom:
+                  configMapKeyRef:
+                    name: controlplane-configmap
+                    key: cache-path
 
         - name: db-proxy
-          image: quay.io/metaprov/modeld-database-proxy
+          image: "{{ .Values.dbproxy.image.registry }}/{{ .Values.dbproxy.image.repository }}:{{ .Values.dbproxy.image.tag }}"
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8091

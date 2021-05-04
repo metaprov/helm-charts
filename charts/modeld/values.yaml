@@ -98,6 +98,22 @@ archive:
       memory: "512M"
 
 
+dbproxy:
+  replicaCount: 1
+  image:
+    registry: quay.io
+    repository: metaprov/modeld-database-proxy
+    tag: latest
+    pullPolicy: IfNotPresent    
+  resources:
+    limits:
+      cpu: "250m"
+      memory: "512M"
+    requests:
+      cpu: "250m"
+      memory: "512M"
+
+
 controlplane:
   replicaCount: 1
   image:

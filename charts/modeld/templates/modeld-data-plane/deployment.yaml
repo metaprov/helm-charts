@@ -36,21 +36,11 @@ spec:
             - name: data
               mountPath: /home/modeld/data
           env:
-            - name: HOST
-              value:  "0.0.0.0"
-            - name: PORT
-              value: "8080"
-            - name: DEBUG
-              value: "true"
-            - name: ENV
-              value:  "dev"
             - name: CACHE_PATH
-              value: "/home/modeld/data"
-            - name: CLOUDS_HOST
-              value: "127.0.0.1"
-            - name: CLOUDS_PORT
-              value: "8090"
-
+              valueFrom:
+                  configMapKeyRef:
+                    name: controlplane-configmap
+                    key: cache-path
 
 
         - name: clouds
@@ -80,24 +70,12 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
           env:
-            - name: GRPC_TRACE
-              value: "all"
-            - name:  GRPC_VERBOSITY
-              value: "DEBUG"
-            - name:  GRPC_GO_LOG_VERBOSITY_LEVEL
-              value: "99"
-            - name:  GRPC_GO_LOG_SEVERITY_LEVEL
-              value: "info"
-            - name:   HOST
-              value:  "0.0.0.0"
-            - name:   PORT
-              value: "8090"
-            - name:   DEBUG
-              value: "false"
-            - name: ENV
-              value: "dev"
             - name: CACHE_PATH
-              value: "/home/modeld/data"
+              valueFrom:
+                  configMapKeyRef:
+                    name: controlplane-configmap
+                    key: cache-path
+
       volumes:
         - name : data
           emptyDir: {}
