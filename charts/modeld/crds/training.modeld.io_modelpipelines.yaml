@@ -50,168 +50,715 @@ spec:
             description: ModelPipelineSpec define the desired state of the ModelPipeline
               resource.
             properties:
-              acceptanceStage:
-                description: Acceptance stage is used for further testing
-                properties:
-                  auto:
-                    default: true
-                    description: Auto defines if we move to the next stage without
-                      human intervation
-                    type: boolean
-                  servingSiteName:
-                    description: The serving site for the testing
-                    type: string
-                  testDatasetName:
-                    description: The name of test dataset name
-                    type: string
-                type: object
-              capacityStage:
+              approverAccountName:
+                description: ApproverAccountName is the name of the approver for stages
+                  that need approvals.
+                type: string
+              baselineModelName:
+                description: BaselineModelName is the name of the model which is used
+                  to compare with this pipeline results.
+                type: string
+              capacity:
                 description: Capacity stage for capacity
                 properties:
-                  auto:
-                    default: true
-                    description: Auto defines if we move from stage to stage automatically.
+                  enabled:
+                    default: false
+                    description: Enabled indicates that the stage is enabled
+                    type: boolean
+                  manualApproval:
+                    default: false
+                    description: ManualApproval dentoes if we need manual apporval
+                      before advancing to further stages in the pipeline
                     type: boolean
                   servingSiteName:
                     description: ServingSiteName is the serving site for the testing
+                      during the capacity stage If the serving site is empty or null,
+                      the system will skip the capacity stage unit tests.
                     type: string
-                  testDatasetName:
-                    description: TestDatasetName is the name of dataset used to test
-                      the model at this stage.
+                  tests:
+                    description: Tests is the specification of tests to run in this
+                      stage
+                    items:
+                      properties:
+                        datasetName:
+                          description: DatasetName is the name of the test dataset.
+                          type: string
+                        metric:
+                          description: Metric is the name of the metric
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        op:
+                          description: Op is the operator used during comparison
+                          type: string
+                        score:
+                          description: Score is the expected score
+                          type: number
+                      type: object
+                    type: array
+                  workloadClassName:
+                    default: default-model-workload-class
+                    description: A reference to the workload class that is used for
+                      running the prediction
                     type: string
                 type: object
-              dataStage:
+              data:
                 description: Datastage build new dataset from the data sources.
                 properties:
-                  wranglerName:
+                  dataPipelineName:
+                    description: If not null, run the data pipeline and create a dataset.
+                      else, use the data in the data location
+                    type: string
+                  datasourceName:
+                    description: The data source name for the data in the location.
+                      The data source will be used to create a new dataset for this
+                      pipeline based on the file in the location.
+                    type: string
+                  dockerImage:
+                    description: If Not null, run a docker image is used in order
+                      to generate the data. The data must reside in location after
+                      the container run
+                    type: string
+                  enabled:
+                    default: true
+                    description: Enabled indicates that the stage is enabled
+                    type: boolean
+                  labName:
+                    description: LabName is the lab that execute processing of the
+                      data pipeline
                     type: string
                 type: object
-              defaultServingSiteName:
-                description: Servingsite name is the default serving site for each
-                  stage.
-                type: string
+              datasetSelector:
+                additionalProperties:
+                  type: string
+                description: DatasetSelector is used to select dataset for training
+                type: object
+              deployment:
+                description: Deployment stage define how to place the model into production.
+                properties:
+                  enabled:
+                    default: true
+                    description: Enabled indicates that we want to release the model
+                      into production
+                    type: boolean
+                  manualApproval:
+                    default: true
+                    description: ManualApproval dentoes if we need manual approval
+                      before advancing from deployed to released By default a user
+                      is needed to apporve the release to production
+                    type: boolean
+                  servingSiteName:
+                    description: ServingSiteName is the serving site for the release,
+                      if empty, the system will use the default serving site name
+                    type: string
+                  tests:
+                    description: Tests is the specification of tests to run in this
+                      stage
+                    items:
+                      properties:
+                        datasetName:
+                          description: DatasetName is the name of the test dataset.
+                          type: string
+                        metric:
+                          description: Metric is the name of the metric
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        op:
+                          description: Op is the operator used during comparison
+                          type: string
+                        score:
+                          description: Score is the expected score
+                          type: number
+                      type: object
+                    type: array
+                  workloadClassName:
+                    default: default-inference-workload-class
+                    description: A reference to the workload class that is used for
+                      running the test prediction
+                    type: string
+                type: object
               description:
                 description: User provided description
                 type: string
-              folder:
+              labeling:
+                description: Labeling stage define how to sample and label live data
+                  for retraining
+                properties:
+                  enabled:
+                    default: false
+                    description: Enabled indicates that the stage is enabled
+                    type: boolean
+                  sampleLabels:
+                    additionalProperties:
+                      type: string
+                    description: SampleLabels indicates the kubernetes labels to set
+                      on the sample dataset
+                    type: object
+                  samplePrecent:
+                    default: 0
+                    description: How many rows to sample from the live data for
+                    format: int32
+                    type: integer
+                  workloadClassName:
+                    default: default-model-workload-class
+                    description: A reference to the workload class that is used for
+                      running the test prediction
+                    type: string
+                type: object
+              location:
                 description: Folder for the pipeline and pipeline run artifacts. The
                   folder contains all the study artifacts - metadata, reports, profile,models
-                type: string
-              minScore:
-                default: 0
-                description: Min score to move from stage to stage.
-                type: number
-              owner:
-                type: string
-              releaseStage:
-                description: ReleaseStage stage define how to place the model into
-                  production.
                 properties:
-                  predictorName:
+                  bucketName:
                     type: string
+                  path:
+                    description: Path to the full data file (e.g. csv file).
+                    type: string
+                required:
+                - bucketName
+                - path
                 type: object
-              trainingStage:
-                description: TrainingSpec stage
+              monitoring:
+                description: Monitoring stage define how to monitor the model in production
                 properties:
-                  auto:
-                    default: true
-                    description: Auto defines if we move from stage to stage automatically.
+                  autoRetrain:
+                    default: false
+                    description: AutoRetrain denoted if we autoamtically retrain models.
                     type: boolean
-                  labName:
-                    description: LabName is the name of the lab used for training
-                    type: string
-                  notebookName:
-                    description: NotebookName template specify the notebook
-                    type: string
-                  studyName:
-                    description: Study FileName is a name of a study which will be
-                      cloned for this stage.
+                  enabled:
+                    default: false
+                    type: boolean
+                  tests:
+                    description: Tests is the specification of tests to run in this
+                      stage
+                    items:
+                      properties:
+                        datasetName:
+                          description: DatasetName is the name of the test dataset.
+                          type: string
+                        metric:
+                          description: Metric is the name of the metric
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        op:
+                          description: Op is the operator used during comparison
+                          type: string
+                        score:
+                          description: Score is the expected score
+                          type: number
+                      type: object
+                    type: array
+                  workloadClassName:
+                    default: default-model-workload-class
+                    description: A reference to the workload class that is used for
+                      running the test prediction
                     type: string
                 type: object
-              trigger:
-                description: Trigger is definition of the pipeline trigger
+              notifierName:
+                description: NotifierName is the name of the notifier to use in case
+                  of pipeline failure
+                type: string
+              owner:
+                default: no-one
+                description: The owner of the run, set to the owner of the pipeline
+                pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
+                type: string
+              release:
+                description: Deployment stage define how to place the model into production.
                 properties:
-                  githubEvents:
-                    description: Definition of git hub events
+                  enabled:
+                    default: true
+                    description: Enabled indicates that we want to release the model
+                      into production
+                    type: boolean
+                  manualApproval:
+                    default: true
+                    description: ManualApproval dentoes if we need manual approval
+                      before advancing from deployed to released By default a user
+                      is needed to apporve the release to production
+                    type: boolean
+                  predictorName:
+                    description: PredictorName is the release predictor. The predictor
+                      will be created if it does not exist.
+                    type: string
+                  servingSiteName:
+                    description: ServingSiteName is the serving site for the release,
+                      if empty, the system will use the default serving site name
+                    type: string
+                  template:
+                    description: Template defines the default model deployment for
+                      this model
                     properties:
-                      blobNameRegex:
-                        description: Blobname regex is a regular expression on the
-                          blob name that changed
-                        type: string
-                      branch:
-                        description: Branch is the name of the github branch. By default
-                          the trigger listen to all branch
-                        type: string
-                      events:
-                        description: Events is the name of the github events.
+                      canary:
+                        description: 'Canary denotes if this deployment is staged
+                          release. A staged release will serve traffic in incerements
+                          Default: false'
+                        type: boolean
+                      canaryMetrics:
+                        description: 'If the deployment is canary, the metric define
+                          how to evaluate the canary. Default: none'
                         items:
+                          description: CanaryMetric is used when testing the canary
+                          enum:
+                          - cpu
+                          - mem
+                          - latency
+                          - crash
                           type: string
                         type: array
-                      gitConnectionName:
-                        description: The github connections used to loginto git
+                      deployed:
+                        description: 'a deployed model is a model whose containers
+                          are up, but does not serve production traffic. Default:
+                          false'
+                        type: boolean
+                      maxTraffic:
+                        description: 'How much traffic this deployment model should
+                          serve. Default: 100.'
+                        format: int32
+                        maximum: 100
+                        minimum: 0
+                        type: integer
+                      modelName:
+                        description: ModelName is the name of the model. The name
+                          must be unique within
                         type: string
-                      repository:
-                        description: Repository is the name of the github repository
+                      modelVersion:
+                        description: The version of the model. Note that a single
+                          predictor might serve different models
                         type: string
-                    required:
-                    - blobNameRegex
-                    - branch
-                    - events
-                    - gitConnectionName
-                    - repository
+                      released:
+                        description: 'A released model is a model that should serve
+                          production traffic. Default: false'
+                        type: boolean
+                      shadow:
+                        description: 'Shadow denotes if the model is running in shadow
+                          mode. a shadow model face the production traffic, however,
+                          the predictions are not served back to the client Default:
+                          false'
+                        type: boolean
+                      traffic:
+                        description: 'Traffic is the current amount of production
+                          traffic served by this model. Default: 100.'
+                        format: int32
+                        maximum: 100
+                        minimum: 0
+                        type: integer
+                      trafficSelector:
+                        description: TrafficSelector is a filter on the traffic to
+                          this model
+                        type: string
                     type: object
-                  schedule:
-                    description: Spec for a schedule in case that the trigger
+                  tests:
+                    description: Tests is the List of expectation run against the
+                      deployed model before moving production traffic to the model
+                    items:
+                      properties:
+                        datasetName:
+                          description: DatasetName is the name of the test dataset.
+                          type: string
+                        metric:
+                          description: Metric is the name of the metric
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        op:
+                          description: Op is the operator used during comparison
+                          type: string
+                        score:
+                          description: Score is the expected score
+                          type: number
+                      type: object
+                    type: array
+                  workloadClassName:
+                    default: default-inference-workload-class
+                    description: A reference to the workload class that is used for
+                      running the release
+                    type: string
+                type: object
+              schedule:
+                description: Schedule for running the pipeline
+                properties:
+                  cron:
+                    description: Cron string of the schedule.
+                    type: string
+                  endDay:
+                    description: EndDay is the end day of the schedule
+                    format: date-time
+                    type: string
+                  endTime:
+                    description: EndTime is the end time of the schedule
                     properties:
-                      cron:
-                        description: Cron string of the schedule.
-                        type: string
-                      endDay:
-                        description: EndDay is the end day of the schedule
-                        format: date-time
-                        type: string
-                      endTime:
-                        description: EndTime is the end time of the schedule
-                        properties:
-                          nanos:
-                            description: Non-negative fractions of a second at nanosecond
-                              resolution. Negative second values with fractions must
-                              still have non-negative nanos values that count forward
-                              in time. Must be from 0 to 999,999,999 inclusive. This
-                              field may be limited in precision depending on context.
-                            format: int32
-                            type: integer
-                          seconds:
-                            description: Represents seconds of UTC time since Unix
-                              epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z
-                              to 9999-12-31T23:59:59Z inclusive.
-                            format: int64
-                            type: integer
-                        required:
-                        - nanos
-                        - seconds
-                        type: object
-                      startDay:
-                        description: StartDay is the start day of the schedule
-                        format: date-time
-                        type: string
-                      startTime:
-                        description: The start time of the schedule
-                        format: date-time
-                        type: string
-                      type:
-                        description: The type of schedule events.
-                        enum:
-                        - now
-                        - once
-                        - hourly
-                        - daily
-                        - weekly
-                        - monthly
-                        - yearly
-                        - cron
-                        type: string
+                      nanos:
+                        description: Non-negative fractions of a second at nanosecond
+                          resolution. Negative second values with fractions must still
+                          have non-negative nanos values that count forward in time.
+                          Must be from 0 to 999,999,999 inclusive. This field may
+                          be limited in precision depending on context.
+                        format: int32
+                        type: integer
+                      seconds:
+                        description: Represents seconds of UTC time since Unix epoch
+                          1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z
+                          to 9999-12-31T23:59:59Z inclusive.
+                        format: int64
+                        type: integer
+                    required:
+                    - nanos
+                    - seconds
                     type: object
+                  startDay:
+                    description: StartDay is the start day of the schedule
+                    format: date-time
+                    type: string
+                  startTime:
+                    description: The start time of the schedule
+                    format: date-time
+                    type: string
+                  type:
+                    description: The type of schedule events.
+                    enum:
+                    - now
+                    - once
+                    - hourly
+                    - daily
+                    - weekly
+                    - monthly
+                    - yearly
+                    - cron
+                    type: string
+                type: object
+              training:
+                description: TrainingSpec stage
+                properties:
+                  enabled:
+                    default: true
+                    description: Enabled indicates that the stage is enabled
+                    type: boolean
+                  labName:
+                    description: LabName is the name of the lab used for training.
+                      If empty, the system will use the default lab assigned to the
+                      data product
+                    type: string
+                  manualApproval:
+                    default: false
+                    description: ManualApproval dentoes if we need manual apporval
+                      before advancing to further stages in the pipeline
+                    type: boolean
+                  notebookName:
+                    description: NotebookName specify the notebook to run before training.
+                    type: string
+                  smoke:
+                    description: Smoke is the expectation on the result from testing
+                      the model during training. If the model cannot pass this smoke
+                      test, the system will fail the pipeline If the smoke is empty,
+                      the system does not perform the test
+                    properties:
+                      datasetName:
+                        description: DatasetName is the name of the test dataset.
+                        type: string
+                      metric:
+                        description: Metric is the name of the metric
+                        enum:
+                        - accuracy
+                        - average-precision
+                        - balanced-accuracy
+                        - brier-score-loss
+                        - f1
+                        - f1-macro
+                        - f1-micro
+                        - f1-weighted
+                        - log-loss
+                        - precision
+                        - precision-micro
+                        - precision-macro
+                        - precision-weighted
+                        - recall
+                        - recall-macro
+                        - recall-micro
+                        - recall-weighted
+                        - auc
+                        - fp
+                        - fn
+                        - tn
+                        - tp
+                        - explained_variance
+                        - mae
+                        - mse
+                        - msle
+                        - median-absolute-error
+                        - r2
+                        - adjusted-mutual-info-score
+                        - adjusted-rand-score
+                        - completeness-score
+                        - fowlkes-mallows-score
+                        - homogeneity-score
+                        - mutual-info-score
+                        - normalized-mutual-info-score
+                        - v-measure-score
+                        - rmse
+                        - unknown
+                        - mape
+                        - smape
+                        - mdape
+                        type: string
+                      op:
+                        description: Op is the operator used during comparison
+                        type: string
+                      score:
+                        description: Score is the expected score
+                        type: number
+                    type: object
+                  studyTemplateName:
+                    description: StudyName is the name of a study template. The actual
+                      study will clone the study template and will use the dataset
+                      created in the data stage.
+                    type: string
+                type: object
+              uat:
+                description: Acceptance stage is used for further testing
+                properties:
+                  enabled:
+                    default: false
+                    description: Enabled indicates that the stage is enabled
+                    type: boolean
+                  manualApproval:
+                    default: true
+                    description: ManualApproval dentoes if we need manual apporval
+                      before advancing to further stages in the pipeline
+                    type: boolean
+                  servingSiteName:
+                    description: The serving site (name space) used for running the
+                      uat tests. If the serving site is empty, the system will skip
+                      the uat stage
+                    type: string
+                  tests:
+                    description: Tests defines the machine learning test cases to
+                      run against the new trained model.
+                    items:
+                      properties:
+                        datasetName:
+                          description: DatasetName is the name of the test dataset.
+                          type: string
+                        metric:
+                          description: Metric is the name of the metric
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        op:
+                          description: Op is the operator used during comparison
+                          type: string
+                        score:
+                          description: Score is the expected score
+                          type: number
+                      type: object
+                    type: array
+                  workloadClassName:
+                    default: default-model-workload-class
+                    description: WorkloadClassName is a reference to the workload
+                      class that is used for running the tests in the serving site.
+                    type: string
                 type: object
               versionName:
                 description: The product version of the resource
@@ -221,6 +768,7 @@ spec:
             description: ModelPipelineStatus define the observed state of the pipeline
             properties:
               conditions:
+                description: Condition is the list of the condition of the pipeline.
                 items:
                   description: ModelPipelineCondition describes the state of a pipeline
                     at a certain point.
@@ -248,6 +796,11 @@ spec:
                   - type
                   type: object
                 type: array
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
             type: object
         required:
         - spec

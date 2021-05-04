@@ -23,8 +23,15 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=="Ready")].status
-      name: Ready
+    - jsonPath: .status.phase
+      name: Status
+      type: string
+    - jsonPath: .status.best
+      name: Best
+      type: boolean
+    - jsonPath: .spec.owner
+      name: Owner
+      priority: 1
       type: string
     - jsonPath: .spec.versionName
       name: Version
@@ -50,12 +57,6 @@ spec:
     - jsonPath: .status.testScore
       name: Test Score
       type: number
-    - jsonPath: .status.best
-      name: Best
-      type: boolean
-    - jsonPath: .status.phase
-      name: Status
-      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -85,9 +86,34 @@ spec:
                 default: false
                 description: Aborted indicate the desire to abort the model
                 type: boolean
+              activeDeadlineSeconds:
+                default: 600
+                description: ActiveDeadlineSeconds is the deadline of a job for this
+                  model.
+                format: int64
+                type: integer
               archived:
                 default: false
                 description: Archived is true when the model should be archived
+                type: boolean
+              chatbot:
+                description: Dnn is a specification of the DNN estimator specification.
+                  Not supported for this release.
+                type: object
+              compiler:
+                description: The compiler specification
+                properties:
+                  compiler:
+                    type: string
+                  targets:
+                    description: Set one or more targets
+                    items:
+                      type: string
+                    type: array
+                type: object
+              complied:
+                default: false
+                description: Compiled is true when the model should perform a forecast
                 type: boolean
               datasetName:
                 description: DatasetName refer to the dataset object for which the
@@ -99,17 +125,36 @@ spec:
                 description: Dnn is a specification of the DNN estimator specification.
                   Not supported for this release.
                 properties:
-                  architecture:
-                    description: Architecture is the dnn architue
+                  batchSize:
+                    description: Batch size specify about
+                    format: int32
+                    minimum: 0
+                    type: integer
+                  epochs:
+                    description: Budget size specify about
+                    format: int32
+                    minimum: 0
+                    type: integer
+                  gpus:
+                    description: Gpus denote of gpu for trainer, any number more than
+                      1 denote distribute training
+                    format: int32
+                    minimum: 0
+                    type: integer
+                  isSeq:
+                    description: Is this a seq model
+                    type: boolean
+                  layers:
+                    description: Layers is the dnn architecture
                     items:
                       properties:
                         inputLayers:
-                          description: Input layers are the layer input to this layer
+                          description: InputLayers are the layer input to this layer
                           items:
                             type: string
                           type: array
                         name:
-                          description: FileName is the name of the layer
+                          description: Name is the name of the layer
                           type: string
                         parameters:
                           description: Parameters are the hyper parameters of this
@@ -126,7 +171,7 @@ spec:
                             type: object
                           type: array
                         type:
-                          description: The type if the layer type
+                          description: Type is the type of the layers
                           type: string
                       required:
                       - inputLayers
@@ -135,22 +180,6 @@ spec:
                       - type
                       type: object
                     type: array
-                  batchSize:
-                    description: Batch size specify about
-                    format: int32
-                    type: integer
-                  epochs:
-                    description: Budget size specify about
-                    format: int32
-                    type: integer
-                  gpus:
-                    description: Gpus denote of gpu for trainer, any number more than
-                      1 denote distribute training
-                    format: int32
-                    type: integer
-                  isSeq:
-                    description: Is this a seq model
-                    type: boolean
                   loss:
                     description: compile
                     type: string
@@ -160,6 +189,7 @@ spec:
                   validationSplit:
                     description: ValidationSplit specify about
                     format: int32
+                    minimum: 0
                     type: integer
                 type: object
               ensemble:
@@ -201,6 +231,16 @@ spec:
                       type: object
                     type: array
                 type: object
+              estimatorType:
+                default: classical
+                description: ModelType is the type of model for this estimator
+                enum:
+                - classical
+                - dnn
+                - transformer
+                - chatbot
+                - rl
+                type: string
               forecasted:
                 default: false
                 description: Forecasted is true when the model should perform a forecast
@@ -218,18 +258,21 @@ spec:
                         description: The initial number of data points, default to
                           80% of rows.
                         format: int32
+                        minimum: 0
                         type: integer
                       windows:
                         default: 3
                         description: The number of backtesting windows. Default to
                           3. can be from 1 to 5.
                         format: int32
+                        minimum: 0
                         type: integer
                     type: object
                   confidenceIntervals:
                     description: The confidence levels for the forecast, each level
                       must be between 1-100.
                     format: int32
+                    minimum: 0
                     type: integer
                   countryForHoliday:
                     description: Set an holiday schedule for a country.
@@ -290,8 +333,9 @@ spec:
                     properties:
                       interval:
                         default: 1
-                        description: Default to 1. optional
+                        description: Default to 1.
                         format: int32
+                        minimum: 0
                         type: integer
                       unit:
                         description: required
@@ -308,8 +352,9 @@ spec:
                     type: object
                   horizon:
                     description: Horizon is the number of data points to predict in
-                      the future. Required.
+                      the future.
                     format: int32
+                    minimum: 0
                     type: integer
                   repressors:
                     description: List of other columns to take into consideration
@@ -322,7 +367,7 @@ spec:
                       this is the target column from the dataset.
                     type: string
                   timeColumn:
-                    description: The name of the time column Required.
+                    description: The name of the time column
                     type: string
                 type: object
               location:
@@ -338,6 +383,9 @@ spec:
                 - bucketName
                 - path
                 type: object
+              modelVersion:
+                description: ModelVersion is a semver version of a model
+                type: string
               objective:
                 description: 'Objective is the metric by which the system compare
                   models Default: based on the task. classification is logloss. Regression
@@ -757,18 +805,21 @@ spec:
                             description: The initial number of data points, default
                               to 80% of rows.
                             format: int32
+                            minimum: 0
                             type: integer
                           windows:
                             default: 3
                             description: The number of backtesting windows. Default
                               to 3. can be from 1 to 5.
                             format: int32
+                            minimum: 0
                             type: integer
                         type: object
                       confidenceIntervals:
                         description: The confidence levels for the forecast, each
                           level must be between 1-100.
                         format: int32
+                        minimum: 0
                         type: integer
                       countryForHoliday:
                         description: Set an holiday schedule for a country.
@@ -829,8 +880,9 @@ spec:
                         properties:
                           interval:
                             default: 1
-                            description: Default to 1. optional
+                            description: Default to 1.
                             format: int32
+                            minimum: 0
                             type: integer
                           unit:
                             description: required
@@ -847,8 +899,9 @@ spec:
                         type: object
                       horizon:
                         description: Horizon is the number of data points to predict
-                          in the future. Required.
+                          in the future.
                         format: int32
+                        minimum: 0
                         type: integer
                       repressors:
                         description: List of other columns to take into consideration
@@ -861,7 +914,7 @@ spec:
                           default this is the target column from the dataset.
                         type: string
                       timeColumn:
-                        description: The name of the time column Required.
+                        description: The name of the time column
                         type: string
                     type: object
                   priority:
@@ -926,6 +979,15 @@ spec:
                         minimum: 0
                         type: integer
                     type: object
+                  workloadClassName:
+                    default: default-workload-class
+                    description: WorkloadClassName is the name of the workload class
+                      used to run this model. This is assigned by the study
+                    type: string
+                type: object
+              transformer:
+                description: Dnn is a specification of the DNN estimator specification.
+                  Not supported for this release.
                 type: object
               versionName:
                 default: latest
@@ -935,6 +997,7 @@ spec:
                 type: string
             required:
             - datasetName
+            - modelVersion
             - objective
             - studyName
             - task
@@ -991,6 +1054,17 @@ spec:
               imageName:
                 description: ImageName is the image name of the model
                 type: string
+              importance:
+                description: Importance is list of feature importance based on the
+                  alg of this model, sorted by importance
+                items:
+                  properties:
+                    feature:
+                      type: string
+                    importance:
+                      type: number
+                  type: object
+                type: array
               labelsEncoderUri:
                 description: LabelEncoderUri is the URI of the label encoder binary
                   file, if there is one.
@@ -1006,6 +1080,11 @@ spec:
                 description: MisclassUri is a reference to the mis-classification
                   file which were produce during processing
                 type: string
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
               phase:
                 description: Phase is the phase of the model
                 type: string
@@ -1013,9 +1092,31 @@ spec:
                 description: ProfileUri is a reference to the visualization uri which
                   were produce during processing
                 type: string
+              pythonPackages:
+                additionalProperties:
+                  type: string
+                description: Python packages is the result of running pip freeze
+                type: object
+              pythonVersion:
+                description: Python version is the result of python vewrsion call.
+                type: string
               reportName:
                 description: ReportName is a reference to the model report
                 type: string
+              resourceConsumed:
+                description: ResourceConsumed is the avg resource consumed during
+                  the training of the model
+                properties:
+                  cpu:
+                    format: int32
+                    type: integer
+                  gpu:
+                    format: int32
+                    type: integer
+                  mem:
+                    format: int32
+                    type: integer
+                type: object
               startTime:
                 description: StartTime represents time when the model is first handled
                   by the model controller
@@ -1027,6 +1128,19 @@ spec:
                   It is represented in RFC3339 form and is in UTC.
                 format: date-time
                 type: string
+              testDataset:
+                description: TestDatasetLocation is the location of the test dataset
+                  used to test this model
+                properties:
+                  bucketName:
+                    type: string
+                  path:
+                    description: Path to the full data file (e.g. csv file).
+                    type: string
+                required:
+                - bucketName
+                - path
+                type: object
               testResult:
                 description: TestResult is the results of training the model (pipeline)
                   on the full training set, and test it on the test set
@@ -1101,6 +1215,18 @@ spec:
                   training
                 format: date-time
                 type: string
+              trainDataset:
+                description: TrainDatasetLocation is the location of the train dataset
+                properties:
+                  bucketName:
+                    type: string
+                  path:
+                    description: Path to the full data file (e.g. csv file).
+                    type: string
+                required:
+                - bucketName
+                - path
+                type: object
               trainResult:
                 description: TrainResult is the results of training the model (pipeline)
                   on the full training set, and test it on the training set
@@ -1169,12 +1295,22 @@ spec:
                   training.
                 format: date-time
                 type: string
+              validationDataset:
+                description: ValidationDatasetLocation is the location of the dataset
+                  used for validation
+                properties:
+                  bucketName:
+                    type: string
+                  path:
+                    description: Path to the full data file (e.g. csv file).
+                    type: string
+                required:
+                - bucketName
+                - path
+                type: object
               weightsUri:
                 description: WeightsUri is the URI of the model binary file.
                 type: string
-            required:
-            - imageName
-            - misclassUri
             type: object
         required:
         - spec

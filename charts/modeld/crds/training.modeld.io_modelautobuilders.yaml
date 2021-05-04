@@ -23,12 +23,9 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=="Ready")].status
-      name: Ready
+    - jsonPath: .status.phase
+      name: Status
       type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
     - jsonPath: .spec.dataProductName
       name: Location Product
       type: string
@@ -44,9 +41,17 @@ spec:
     - jsonPath: .status.predictorName
       name: Predictor
       type: string
-    - jsonPath: .status.phase
-      name: Status
-      type: string
+    - jsonPath: .status.startTime
+      name: StartTime
+      priority: 1
+      type: date
+    - jsonPath: .status.completionTime
+      name: CompletionTime
+      priority: 1
+      type: date
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
     name: v1alpha1
     schema:
       openAPIV3Schema:
@@ -107,6 +112,52 @@ spec:
                 description: The spec of the data source, if none, the runner will
                   infer the schema, and will create a new schema with
                 properties:
+                  api:
+                    description: Api define the specification of the api
+                    properties:
+                      connectionRef:
+                        description: Connection refer to a connection object that
+                          point to secret
+                        properties:
+                          apiVersion:
+                            description: API version of the referent.
+                            type: string
+                          fieldPath:
+                            description: 'If referring to a piece of an object instead
+                              of an entire object, this string should contain a valid
+                              JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                              For example, if the object reference is to a container
+                              within a pod, this would take on a value like: "spec.containers{name}"
+                              (where "name" refers to the name of the container that
+                              triggered the event) or if no container name is specified
+                              "spec.containers[2]" (container with index 2 in this
+                              pod). This syntax is chosen only to have some well-defined
+                              way of referencing a part of an object. TODO: this design
+                              is not final and this field is subject to change in
+                              the future.'
+                            type: string
+                          kind:
+                            description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                            type: string
+                          namespace:
+                            description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                            type: string
+                          resourceVersion:
+                            description: 'Specific resourceVersion to which this reference
+                              is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                            type: string
+                          uid:
+                            description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                            type: string
+                        type: object
+                      topic:
+                        default: ""
+                        description: URI is the uri of the api
+                        type: string
+                    type: object
                   description:
                     description: User provided description of the data source
                     maxLength: 512
@@ -133,6 +184,7 @@ spec:
                         - pipe
                         type: string
                       encoding:
+                        default: utf-8
                         description: Encoding for Unicode (e.g., 'utf-8' for UTF-8
                           encoded text).
                         type: string
@@ -140,6 +192,7 @@ spec:
                         description: the char used to escape the delimiter when quoting
                         type: string
                       fileType:
+                        default: csv
                         description: 'The text file type Default: csv'
                         enum:
                         - csv
@@ -155,15 +208,17 @@ spec:
                         - feather
                         type: string
                       header:
+                        default: true
                         description: Check if there is an header
                         type: boolean
                       maxRows:
                         description: The maximum number of rows to read.
                         format: int32
+                        minimum: 0
                         type: integer
                       nullValues:
-                        description: "NullValue\tis a sequence of values to replace
-                          with NA."
+                        description: NullValue is a sequence of values to replace
+                          with NA.
                         type: string
                       quote:
                         description: The quata char.
@@ -172,10 +227,13 @@ spec:
                         - single-quote
                         type: string
                       skipRows:
+                        default: 0
                         description: The number of rows to skip
                         format: int32
+                        minimum: 0
                         type: integer
                       strict:
+                        default: true
                         description: If true, the import will fail if there is an
                           error
                         type: boolean
@@ -195,26 +253,37 @@ spec:
                         description: Columns
                         items:
                           properties:
+                            DefaultValueNum:
+                              description: The following attribute concern with syntatic
+                                data and validation DefaultValueNum is the default
+                                value for numbers
+                              type: number
                             datatype:
                               description: Type specify the data type of the attribute
                                 required
                               enum:
-                              - numeric
-                              - numeric-list
-                              - categorical
-                              - categorical-list
+                              - boolean
+                              - color
+                              - currency
+                              - date
                               - datetime
-                              - string
-                              - string-list
-                              - url
+                              - guid
+                              - hyperlink
+                              - image
+                              - media
+                              - categorical
+                              - number
+                              - text
+                              - json
                               - path
                               - file
+                              - time
+                              - record
+                              - embedding
+                              - number-list
+                              - categorical-list
+                              - text-list
                               - useless
-                              - image
-                              - video
-                              - audio
-                              - boolean
-                              - json
                               type: string
                             description:
                               description: Description is a description of the feature
@@ -226,15 +295,18 @@ spec:
                                 type: string
                               type: array
                             example:
+                              default: ""
                               description: Example
                               type: string
                             exclusiveMaximum:
                               description: ExclusiveMaximum
                               type: boolean
                             exclusiveMinimum:
+                              default: false
                               description: ExclusiveMinimum
                               type: boolean
                             externalDocs:
+                              default: ""
                               description: External Docs
                               type: string
                             featureName:
@@ -271,38 +343,61 @@ spec:
                               - unknown
                               type: string
                             ignore:
+                              default: false
                               description: Ignore specify if the attribute should
                                 be ignored when building the model default is false
                               type: boolean
                             label:
+                              default: false
                               description: Label should be true if this attribute
                                 is the predictable target Default is false
                               type: boolean
+                            log:
+                              default: false
+                              description: Log if true, values from this column will
+                                be sampled on logaritmic scale
+                              type: boolean
                             maxItems:
+                              default: 0
                               description: Max Items in the data in case of a list
                               format: int32
+                              minimum: 0
                               type: integer
                             maxLength:
+                              default: 0
                               description: MaxLength
                               format: int32
+                              minimum: 0
                               type: integer
                             maximum:
+                              default: 0
                               description: MaximumFloat
                               type: number
                             minItems:
+                              default: 0
                               description: Min Items in the data in case of a list.
                               format: int32
+                              minimum: 0
                               type: integer
                             minLength:
+                              default: 0
                               description: MinLength
                               format: int32
+                              minimum: 0
                               type: integer
                             minimum:
+                              default: 0
                               description: MinimumFloat
                               type: number
+                            mu:
+                              default: 0
+                              description: Mu is the mean of the normal distribution
+                              type: number
                             multipleOf:
+                              default: 0
                               description: MultipleOf
                               format: int32
+                              minimum: 0
                               type: integer
                             name:
                               description: FileName specify the name of the attribute
@@ -311,32 +406,51 @@ spec:
                               minLength: 1
                               type: string
                             nullable:
+                              default: false
                               description: Nullable indicates if a column can contain
                                 string Default is false
                               type: boolean
                             pattern:
+                              default: ""
                               description: Pattern Default is empty
                               type: string
                             pk:
+                              default: false
                               description: PrimaryKey denotes if this column is part
                                 of the file key.
                               type: boolean
+                            preservePrivacy:
+                              default: false
+                              description: PreservePrivacy is true if the column content
+                                should not be exposed due to privacy concerns
+                              type: boolean
                             required:
+                              default: false
                               description: Required
                               type: boolean
+                            sigma:
+                              default: 0
+                              description: Sigma is the standard deviation of the
+                                distribution
+                              type: number
                             timeColumn:
-                              description: True if this column is used as the time
-                                axis in time series foreacst Default is false.
+                              default: false
+                              description: TimeColumn is true if this column is used
+                                as the time axis in time series foreacst Default is
+                                false.
                               type: boolean
                             title:
+                              default: ""
                               description: Title
                               maxLength: 63
                               type: string
                             transformerHint:
+                              default: ""
                               description: Preprocessor hint constrain the transformer
                                 Default is empty
                               type: string
                             uniqueItems:
+                              default: false
                               description: Enforce that all the items in the list
                                 are unique
                               type: boolean
@@ -385,6 +499,52 @@ spec:
                             type: string
                         type: object
                     type: object
+                  stream:
+                    description: Stream define the specification of the stream
+                    properties:
+                      connectionRef:
+                        description: Connection refer to a connection object that
+                          point to secret
+                        properties:
+                          apiVersion:
+                            description: API version of the referent.
+                            type: string
+                          fieldPath:
+                            description: 'If referring to a piece of an object instead
+                              of an entire object, this string should contain a valid
+                              JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                              For example, if the object reference is to a container
+                              within a pod, this would take on a value like: "spec.containers{name}"
+                              (where "name" refers to the name of the container that
+                              triggered the event) or if no container name is specified
+                              "spec.containers[2]" (container with index 2 in this
+                              pod). This syntax is chosen only to have some well-defined
+                              way of referencing a part of an object. TODO: this design
+                              is not final and this field is subject to change in
+                              the future.'
+                            type: string
+                          kind:
+                            description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                            type: string
+                          namespace:
+                            description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                            type: string
+                          resourceVersion:
+                            description: 'Specific resourceVersion to which this reference
+                              is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                            type: string
+                          uid:
+                            description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                            type: string
+                        type: object
+                      topic:
+                        default: ""
+                        description: Topic is the stream topic
+                        type: string
+                    type: object
                   table:
                     description: Table access specification if the data source is
                       a table
@@ -427,30 +587,13 @@ spec:
                             description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                             type: string
                         type: object
-                      connectionString:
-                        description: ConnectionString to connect to the database server
-                        maxLength: 128
-                        type: string
-                      description:
-                        description: User provided description
-                        type: string
                       query:
+                        default: ""
                         description: The actual query. this is required.
                         type: string
-                      serverType:
-                        description: Type of server
-                        enum:
-                        - sqlserver
-                        - mysql
-                        - postgress
-                        - sqlite
-                        type: string
-                      serverVersion:
-                        description: The version of the server.
-                        type: string
-                      versionName:
-                        maxLength: 64
-                        pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
+                      tableName:
+                        default: ""
+                        description: TableName refer to whole table
                         type: string
                     type: object
                   type:
@@ -458,6 +601,8 @@ spec:
                     enum:
                     - flatfile
                     - table
+                    - stream
+                    - api
                     type: string
                   versionName:
                     default: ""
@@ -478,6 +623,55 @@ spec:
                 maxLength: 253
                 pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
                 type: string
+              labRef:
+                description: LabRef is a reference to the lab where the trainers for
+                  this study run. If no value is provided, the lab is taken from the
+                properties:
+                  apiVersion:
+                    description: API version of the referent.
+                    type: string
+                  fieldPath:
+                    description: 'If referring to a piece of an object instead of
+                      an entire object, this string should contain a valid JSON/Go
+                      field access statement, such as desiredState.manifest.containers[2].
+                      For example, if the object reference is to a container within
+                      a pod, this would take on a value like: "spec.containers{name}"
+                      (where "name" refers to the name of the container that triggered
+                      the event) or if no container name is specified "spec.containers[2]"
+                      (container with index 2 in this pod). This syntax is chosen
+                      only to have some well-defined way of referencing a part of
+                      an object. TODO: this design is not final and this field is
+                      subject to change in the future.'
+                    type: string
+                  kind:
+                    description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                    type: string
+                  name:
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                    type: string
+                  namespace:
+                    description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                    type: string
+                  resourceVersion:
+                    description: 'Specific resourceVersion to which this reference
+                      is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                    type: string
+                  uid:
+                    description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                    type: string
+                type: object
+              location:
+                description: Location is the location of the data in the cloud
+                properties:
+                  bucketName:
+                    type: string
+                  path:
+                    description: Path to the full data file (e.g. csv file).
+                    type: string
+                required:
+                - bucketName
+                - path
+                type: object
               maxModels:
                 default: 10
                 description: Max model
@@ -544,10 +738,6 @@ spec:
                 description: The owner account name
                 pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
                 type: string
-              path:
-                description: Path is the location of the data in the cloud
-                maxLength: 256
-                type: string
               searchMethod:
                 default: random
                 description: Specify the search method
@@ -586,6 +776,11 @@ spec:
                 description: Specify the number of trainers. Default 1 trainer.
                 format: int32
                 type: integer
+              workloadClassName:
+                default: default-workload-class
+                description: WorkloadClassName is the name of the workload class used
+                  to run this pipeline.
+                type: string
             type: object
           status:
             description: ModelAutobuilderStatus define the observed state of the pipeline
@@ -678,6 +873,11 @@ spec:
               models:
                 description: Total models created for the study
                 format: int32
+                type: integer
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
                 type: integer
               phase:
                 description: The phase of the auto ml run

@@ -25,14 +25,20 @@ spec:
     - jsonPath: .status.conditions[?(@.type=="Ready")].status
       name: Ready
       type: string
+    - jsonPath: .spec.type
+      name: Type
+      type: string
     - jsonPath: .spec.userName
       name: Username
+      type: string
+    - jsonPath: .spec.groupName
+      name: Groupname
       type: string
     - jsonPath: .spec.phone
       name: Phone
       type: string
     - jsonPath: .spec.email
-      name: Smtp
+      name: Email
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
@@ -92,12 +98,14 @@ spec:
                       description: The role in relation to the entity.
                       enum:
                       - administrator
+                      - data-analyst
                       - data-scientist
                       - data-engineer
-                      - data-operations
-                      - sponsor
-                      - end-user
-                      - domain-expert
+                      - data-steward
+                      - product-manager
+                      - risk-manager
+                      - software-engineer
+                      - ml-engineer
                       type: string
                   type: object
                 type: array
@@ -124,12 +132,14 @@ spec:
                       description: The role in relation to the entity.
                       enum:
                       - administrator
+                      - data-analyst
                       - data-scientist
                       - data-engineer
-                      - data-operations
-                      - sponsor
-                      - end-user
-                      - domain-expert
+                      - data-steward
+                      - product-manager
+                      - risk-manager
+                      - software-engineer
+                      - ml-engineer
                       type: string
                   type: object
                 type: array
@@ -150,12 +160,14 @@ spec:
                       description: The role in relation to the entity.
                       enum:
                       - administrator
+                      - data-analyst
                       - data-scientist
                       - data-engineer
-                      - data-operations
-                      - sponsor
-                      - end-user
-                      - domain-expert
+                      - data-steward
+                      - product-manager
+                      - risk-manager
+                      - software-engineer
+                      - ml-engineer
                       type: string
                   type: object
                 type: array
@@ -242,6 +254,11 @@ spec:
                   - type
                   type: object
                 type: array
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
             type: object
         required:
         - spec

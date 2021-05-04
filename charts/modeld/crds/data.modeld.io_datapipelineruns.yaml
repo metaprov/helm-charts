@@ -17,13 +17,26 @@ spec:
     kind: DataPipelineRun
     listKind: DataPipelineRunList
     plural: datapipelineruns
+    shortNames:
+    - dpr
     singular: datapipelinerun
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=="Ready")].status
-      name: Ready
+    - jsonPath: .status.phase
+      name: Status
       type: string
+    - jsonPath: .spec.datapipelineName
+      name: Pipeline
+      type: string
+    - jsonPath: .status.startTime
+      name: StartTime
+      priority: 1
+      type: date
+    - jsonPath: .status.completionTime
+      name: CompletionTime
+      priority: 1
+      type: date
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -71,12 +84,17 @@ spec:
               versionName:
                 description: The data product version of the run
                 type: string
+              workloadClassName:
+                default: default-data-workload-class
+                description: WorkloadClassName is the name of the workload class used
+                  to run this pip0eline. This is assigned by the datapipelineeun
+                type: string
             type: object
           status:
             description: DataPipelineRunStatus defines the observed state of DataPipelineRun
             properties:
               completionTime:
-                description: CompletionTime is the time that this pipeline finishes
+                description: CompletionTime is the end time of the pipeline
                 format: date-time
                 type: string
               conditions:
@@ -107,25 +125,36 @@ spec:
                   - type
                   type: object
                 type: array
-              inputs:
-                description: Pointers to the done datasets
-                items:
-                  type: string
-                type: array
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
               output:
                 description: the resulting dataset from the flow
-                type: string
+                properties:
+                  bucketName:
+                    type: string
+                  path:
+                    description: Path to the full data file (e.g. csv file).
+                    type: string
+                required:
+                - bucketName
+                - path
+                type: object
               phase:
                 description: the phase of the run
                 type: string
+              recipeRuns:
+                description: RecipeRuns is the names of the recipe runs that occur
+                  during running of the pipeline.
+                items:
+                  type: string
+                type: array
               startTime:
-                description: StartTime is the times that this data pipeline started
+                description: StartTime is the start time of the pipeline
                 format: date-time
                 type: string
-            required:
-            - inputs
-            - output
-            - phase
             type: object
         required:
         - metadata

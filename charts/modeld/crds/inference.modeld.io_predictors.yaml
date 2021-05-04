@@ -23,18 +23,19 @@ spec:
     - jsonPath: .status.conditions[?(@.type=="Ready")].status
       name: Ready
       type: string
-    - jsonPath: .spec.port
+    - jsonPath: .spec.owner
+      name: Owner
+      priority: 1
+      type: string
+    - jsonPath: .spec.servingsiteRef.name
+      name: Serving Site
+      type: integer
+    - jsonPath: .spec.input.online.port
       name: Port
       type: integer
-    - jsonPath: .spec.prod.modelName
-      name: Production
-      type: string
-    - jsonPath: .spec.prod.weight
-      name: Weight
-      type: string
-    - jsonPath: .spec.accessType
+    - jsonPath: .spec.input.online.accessType
       name: Access
-      type: string
+      type: integer
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -58,22 +59,30 @@ spec:
           spec:
             description: PredictorSpec define the desired state of the predictor
             properties:
-              accessType:
-                description: 'The access method specified how external clients will
-                  access the predictor Default: ClusterPort'
-                enum:
-                - cluster-port
-                - node-port
-                - load-balancer
-                - ingress
-                - mesh
-                - none
-                type: string
               artifactsFolder:
                 description: The key in the bucket for storing all the predictor artifacts.
                 maxLength: 512
                 minLength: 1
                 type: string
+              autoscale:
+                default: false
+                description: Does the current model pods needs autoscaling. If yes
+                  we will use HPA.
+                type: boolean
+              backwardCurtain:
+                description: The backward curtain recieve the curtain after the prediction.
+                type: string
+              cache:
+                description: Cache is the specification of prediction cache
+                properties:
+                  active:
+                    default: false
+                    description: Active indicate if the cache is active
+                    type: boolean
+                  serviceName:
+                    description: the name of the cache service
+                    type: string
+                type: object
               description:
                 description: User provided description
                 maxLength: 256
@@ -94,196 +103,273 @@ spec:
                     description: The drift threshold.
                     type: number
                 type: object
-              inputChannels:
+              forwardCurtain:
+                description: The forward curtain recieve the prediction request before
+                  the prediction.
+                type: string
+              input:
                 description: set of input channel, the predictor will watch those
                   channels for predictions
-                items:
-                  description: The specific of a prediction channel
-                  properties:
-                    bot:
-                      description: Define a prediction via a bot
-                      properties:
-                        connectionName:
-                          description: the connection to the messaging provider Required,
-                          type: string
-                        notifierName:
-                          description: The name of the notifier that will be used
-                            by the prediction bot. Required
-                          type: string
-                      type: object
-                    bucket:
-                      description: Define a prediction via a bot
-                      properties:
-                        connectionName:
-                          description: the connection to the cloud provider Required,
-                          type: string
-                        databaseConnectionName:
-                          description: Required,
-                          type: string
-                        inputKey:
-                          description: The location of the input or the output Required,
-                          type: string
-                        scanInterval:
-                          description: In seconds, the interval.
-                          format: int32
-                          type: integer
-                      type: object
-                    streaming:
-                      description: Define a streaming spec for the predictor
-                      properties:
-                        connectionName:
-                          description: StorageConnection name to the streaming provider
-                          type: string
-                        inputKey:
-                          description: the streaming topic (input or output)
-                          type: string
-                      type: object
-                    table:
-                      description: Define a prediction via table
-                      properties:
-                        connectionName:
-                          description: connection to the database provider
-                          type: string
-                        datasourceName:
-                          description: Options, this is the datasource containing
-                            the table schema
-                          type: string
-                        scanInterval:
-                          description: In seconds, the interval.
-                          format: int32
-                          type: integer
-                        tableName:
-                          description: The table name. Optional Default to the predictor
-                            name
-                          type: string
-                      type: object
-                  type: object
-                type: array
+                properties:
+                  bot:
+                    description: Bot is a channel that uses chats for input and output
+                    properties:
+                      connectionName:
+                        description: the connection to the messaging provider Required,
+                        type: string
+                      notifierName:
+                        description: The name of the notifier that will be used by
+                          the prediction bot. Required
+                        type: string
+                    type: object
+                  bucket:
+                    description: Bucket is a channel where predictions are placed
+                      in a bucket folder and results are placed in another folder
+                    properties:
+                      connectionName:
+                        description: the connection to the cloud provider Required,
+                        type: string
+                      databaseConnectionName:
+                        description: Required,
+                        type: string
+                      inputKey:
+                        description: The location of the input or the output Required,
+                        type: string
+                      scanInterval:
+                        description: In seconds, the interval.
+                        format: int32
+                        type: integer
+                    type: object
+                  online:
+                    description: Online is a  deployment of the predictor as a microservice.
+                    properties:
+                      accessType:
+                        description: 'The access method specified how external clients
+                          will access the predictor Default: ClusterPort'
+                        enum:
+                        - cluster-port
+                        - node-port
+                        - load-balancer
+                        - ingress
+                        - mesh
+                        - none
+                        type: string
+                      path:
+                        description: 'This is the path relative to the ingress path
+                          Default: /predict'
+                        maxLength: 256
+                        minLength: 1
+                        type: string
+                      port:
+                        description: 'Service port specify the predictor port. Default:
+                          8080'
+                        format: int32
+                        minimum: 0
+                        type: integer
+                    type: object
+                  streaming:
+                    description: Define a streaming channel for the predictor
+                    properties:
+                      connectionName:
+                        description: StorageConnection name to the streaming provider
+                        type: string
+                      inputKey:
+                        description: the streaming topic (input or output)
+                        type: string
+                    type: object
+                  table:
+                    description: Table is a channel that uses RDBMS for input and
+                      output
+                    properties:
+                      connectionName:
+                        description: connection to the database provider
+                        type: string
+                      datasourceName:
+                        description: Options, this is the datasource containing the
+                          table schema
+                        type: string
+                      scanInterval:
+                        description: In seconds, the interval.
+                        format: int32
+                        type: integer
+                      tableName:
+                        description: The table name. Optional Default to the predictor
+                          name
+                        type: string
+                    type: object
+                type: object
+              maxReplicas:
+                default: 1
+                description: Max num of replicates. Used during auto scaling
+                format: int32
+                maximum: 10
+                minimum: 1
+                type: integer
+              minReplicas:
+                default: 1
+                description: Min num of replicates
+                format: int32
+                minimum: 1
+                type: integer
               models:
-                description: Production model deployment
+                description: Models is the list of models
                 items:
                   description: The desired state of the model.
                   properties:
-                    autoscale:
-                      description: Does the current model pods needs autoscaling.
-                        If yes we will use HPA. Default is false
-                      type: boolean
                     canary:
-                      description: 'Denotes if this deployment is canary. This must
-                        be false for the prod deployment. Default: false'
+                      description: 'Canary denotes if this deployment is staged release.
+                        A staged release will serve traffic in incerements Default:
+                        false'
                       type: boolean
                     canaryMetrics:
                       description: 'If the deployment is canary, the metric define
                         how to evaluate the canary. Default: none'
                       items:
+                        description: CanaryMetric is used when testing the canary
+                        enum:
+                        - cpu
+                        - mem
+                        - latency
+                        - crash
                         type: string
                       type: array
-                    filter:
-                      description: Filter donotes a selection on the model
-                      type: string
-                    modelName:
-                      description: The model serving the prediction
-                      type: string
-                    replicas:
-                      description: 'number of replicas of the current model Default:
-                        1'
-                      format: int32
-                      maximum: 10
-                      minimum: 0
-                      type: integer
-                    shadow:
-                      description: 'Denotes if the model is a shadow. This must be
-                        false for the prod deployment. Default: false'
+                    deployed:
+                      description: 'a deployed model is a model whose containers are
+                        up, but does not serve production traffic. Default: false'
                       type: boolean
-                    weight:
-                      description: 'How much traffic to the current model Default:
-                        100.'
+                    maxTraffic:
+                      description: 'How much traffic this deployment model should
+                        serve. Default: 100.'
                       format: int32
                       maximum: 100
                       minimum: 0
                       type: integer
+                    modelName:
+                      description: ModelName is the name of the model. The name must
+                        be unique within
+                      type: string
+                    modelVersion:
+                      description: The version of the model. Note that a single predictor
+                        might serve different models
+                      type: string
+                    released:
+                      description: 'A released model is a model that should serve
+                        production traffic. Default: false'
+                      type: boolean
+                    shadow:
+                      description: 'Shadow denotes if the model is running in shadow
+                        mode. a shadow model face the production traffic, however,
+                        the predictions are not served back to the client Default:
+                        false'
+                      type: boolean
+                    traffic:
+                      description: 'Traffic is the current amount of production traffic
+                        served by this model. Default: 100.'
+                      format: int32
+                      maximum: 100
+                      minimum: 0
+                      type: integer
+                    trafficSelector:
+                      description: TrafficSelector is a filter on the traffic to this
+                        model
+                      type: string
                   type: object
                 type: array
-              outputChannels:
-                description: set of output channels, the predictor will
-                items:
-                  description: The specific of a prediction channel
-                  properties:
-                    bot:
-                      description: Define a prediction via a bot
-                      properties:
-                        connectionName:
-                          description: the connection to the messaging provider Required,
-                          type: string
-                        notifierName:
-                          description: The name of the notifier that will be used
-                            by the prediction bot. Required
-                          type: string
-                      type: object
-                    bucket:
-                      description: Define a prediction via a bot
-                      properties:
-                        connectionName:
-                          description: the connection to the cloud provider Required,
-                          type: string
-                        databaseConnectionName:
-                          description: Required,
-                          type: string
-                        inputKey:
-                          description: The location of the input or the output Required,
-                          type: string
-                        scanInterval:
-                          description: In seconds, the interval.
-                          format: int32
-                          type: integer
-                      type: object
-                    streaming:
-                      description: Define a streaming spec for the predictor
-                      properties:
-                        connectionName:
-                          description: StorageConnection name to the streaming provider
-                          type: string
-                        inputKey:
-                          description: the streaming topic (input or output)
-                          type: string
-                      type: object
-                    table:
-                      description: Define a prediction via table
-                      properties:
-                        connectionName:
-                          description: connection to the database provider
-                          type: string
-                        datasourceName:
-                          description: Options, this is the datasource containing
-                            the table schema
-                          type: string
-                        scanInterval:
-                          description: In seconds, the interval.
-                          format: int32
-                          type: integer
-                        tableName:
-                          description: The table name. Optional Default to the predictor
-                            name
-                          type: string
-                      type: object
-                  type: object
-                type: array
+              output:
+                description: set of output channels, the predictor will output the
+                  result on any channel that is active in the output
+                properties:
+                  bot:
+                    description: Bot is a channel that uses chats for input and output
+                    properties:
+                      connectionName:
+                        description: the connection to the messaging provider Required,
+                        type: string
+                      notifierName:
+                        description: The name of the notifier that will be used by
+                          the prediction bot. Required
+                        type: string
+                    type: object
+                  bucket:
+                    description: Bucket is a channel where predictions are placed
+                      in a bucket folder and results are placed in another folder
+                    properties:
+                      connectionName:
+                        description: the connection to the cloud provider Required,
+                        type: string
+                      databaseConnectionName:
+                        description: Required,
+                        type: string
+                      inputKey:
+                        description: The location of the input or the output Required,
+                        type: string
+                      scanInterval:
+                        description: In seconds, the interval.
+                        format: int32
+                        type: integer
+                    type: object
+                  online:
+                    description: Online is a  deployment of the predictor as a microservice.
+                    properties:
+                      accessType:
+                        description: 'The access method specified how external clients
+                          will access the predictor Default: ClusterPort'
+                        enum:
+                        - cluster-port
+                        - node-port
+                        - load-balancer
+                        - ingress
+                        - mesh
+                        - none
+                        type: string
+                      path:
+                        description: 'This is the path relative to the ingress path
+                          Default: /predict'
+                        maxLength: 256
+                        minLength: 1
+                        type: string
+                      port:
+                        description: 'Service port specify the predictor port. Default:
+                          8080'
+                        format: int32
+                        minimum: 0
+                        type: integer
+                    type: object
+                  streaming:
+                    description: Define a streaming channel for the predictor
+                    properties:
+                      connectionName:
+                        description: StorageConnection name to the streaming provider
+                        type: string
+                      inputKey:
+                        description: the streaming topic (input or output)
+                        type: string
+                    type: object
+                  table:
+                    description: Table is a channel that uses RDBMS for input and
+                      output
+                    properties:
+                      connectionName:
+                        description: connection to the database provider
+                        type: string
+                      datasourceName:
+                        description: Options, this is the datasource containing the
+                          table schema
+                        type: string
+                      scanInterval:
+                        description: In seconds, the interval.
+                        format: int32
+                        type: integer
+                      tableName:
+                        description: The table name. Optional Default to the predictor
+                          name
+                        type: string
+                    type: object
+                type: object
               owner:
+                default: no-one
                 description: The owner account name
                 type: string
-              ownerName:
-                description: The account name of the owner of this predictor
-                type: string
-              path:
-                description: 'This is the path relative to the ingress path Default:
-                  /predict'
-                maxLength: 256
-                minLength: 1
-                type: string
-              port:
-                description: 'Service port specify the predictor port. Default: 8080'
-                format: int32
-                type: integer
               productRef:
                 description: The product that this predictor serve.
                 properties:
@@ -328,6 +414,12 @@ spec:
                     description: What metric to use when comparing the candidate to
                       the current
                     items:
+                      description: CanaryMetric is used when testing the canary
+                      enum:
+                      - cpu
+                      - mem
+                      - latency
+                      - crash
                       type: string
                     type: array
                   trafficIncrement:
@@ -346,7 +438,7 @@ spec:
                     type: integer
                 type: object
               servingsiteRef:
-                description: The serving site that owns the
+                description: The serving site that hosts this predictor and the models
                 properties:
                   apiVersion:
                     description: API version of the referent.
@@ -379,6 +471,17 @@ spec:
                     type: string
                   uid:
                     description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                    type: string
+                type: object
+              store:
+                description: Store is the specification of the online data store.
+                properties:
+                  active:
+                    default: false
+                    description: Active indicate if the cache is active
+                    type: boolean
+                  serviceName:
+                    description: the name of the cache service
                     type: string
                 type: object
               template:
@@ -6959,6 +7062,18 @@ spec:
                         type: object
                     type: object
                 type: object
+              type:
+                default: online
+                description: Type is the type of predictor
+                enum:
+                - online
+                - batch
+                - streaming
+                type: string
+              workloadClassName:
+                description: A reference to the workload class for this predictor
+                  deployment
+                type: string
             type: object
           status:
             description: PredictorStatus contain the current state of the Predictor
@@ -7021,6 +7136,11 @@ spec:
                     dailyPredictionAvg:
                       format: int32
                       type: integer
+                    deployedAt:
+                      description: DeployedAt is the last time that this model was
+                        deployed
+                      format: date-time
+                      type: string
                     deploymentName:
                       description: The deployment name that serves this model
                       type: string
@@ -7031,16 +7151,27 @@ spec:
                     imageName:
                       description: The model image name
                       type: string
-                    lastPrediction:
-                      description: Last current prediction
+                    lastFailure:
+                      description: LastFailure is the last faiure that occur with
+                        the model
+                      type: string
+                    lastPredictionTime:
+                      description: Last prediction time is the time of the last prediction
                       format: date-time
                       type: string
-                    p9:
-                      description: P95 latency
-                      type: number
                     p95:
                       description: P95 latency
                       type: number
+                    p99:
+                      description: P99 is the 99% latency of the model
+                      type: number
+                    phase:
+                      description: Phase is the current phase of this model deployment
+                      type: string
+                    releasedAt:
+                      description: ReleasedAt is the time that this model was released
+                      format: date-time
+                      type: string
                     serviceName:
                       description: The service name that serves this model
                       type: string
@@ -7072,6 +7203,72 @@ spec:
               monitorLastScore:
                 description: What was the last score
                 type: number
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
+              prevModel:
+                description: Prev model spec stores the prev working model, The field
+                  is used in case of a roll back
+                properties:
+                  canary:
+                    description: 'Canary denotes if this deployment is staged release.
+                      A staged release will serve traffic in incerements Default:
+                      false'
+                    type: boolean
+                  canaryMetrics:
+                    description: 'If the deployment is canary, the metric define how
+                      to evaluate the canary. Default: none'
+                    items:
+                      description: CanaryMetric is used when testing the canary
+                      enum:
+                      - cpu
+                      - mem
+                      - latency
+                      - crash
+                      type: string
+                    type: array
+                  deployed:
+                    description: 'a deployed model is a model whose containers are
+                      up, but does not serve production traffic. Default: false'
+                    type: boolean
+                  maxTraffic:
+                    description: 'How much traffic this deployment model should serve.
+                      Default: 100.'
+                    format: int32
+                    maximum: 100
+                    minimum: 0
+                    type: integer
+                  modelName:
+                    description: ModelName is the name of the model. The name must
+                      be unique within
+                    type: string
+                  modelVersion:
+                    description: The version of the model. Note that a single predictor
+                      might serve different models
+                    type: string
+                  released:
+                    description: 'A released model is a model that should serve production
+                      traffic. Default: false'
+                    type: boolean
+                  shadow:
+                    description: 'Shadow denotes if the model is running in shadow
+                      mode. a shadow model face the production traffic, however, the
+                      predictions are not served back to the client Default: false'
+                    type: boolean
+                  traffic:
+                    description: 'Traffic is the current amount of production traffic
+                      served by this model. Default: 100.'
+                    format: int32
+                    maximum: 100
+                    minimum: 0
+                    type: integer
+                  trafficSelector:
+                    description: TrafficSelector is a filter on the traffic to this
+                      model
+                    type: string
+                type: object
               statuses:
                 description: The channels
                 items:

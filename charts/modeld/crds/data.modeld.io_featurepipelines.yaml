@@ -49,6 +49,13 @@ spec:
           spec:
             description: FeaturePipelineSpec contain the desired state of a FeaturePipeline
             properties:
+              activeDeadlineSeconds:
+                default: 600
+                description: ActiveDeadlineSeconds is the deadline setup on jobs for
+                  this labeling pipeline.
+                format: int64
+                minimum: 0
+                type: integer
               aggregation:
                 description: Aggregation is the aggregation spec
                 properties:
@@ -73,6 +80,12 @@ spec:
                   slidePeriod:
                     type: string
                 type: object
+              datasetSelector:
+                additionalProperties:
+                  type: string
+                description: DatasetSelector is used to select datasets to process
+                  the features from.
+                type: object
               description:
                 description: Description of the feature pipeline
                 maxLength: 512
@@ -87,11 +100,14 @@ spec:
                 description: Materialization
                 properties:
                   backfill:
+                    default: 21
                     description: Number of days to store information from the past
                       in the feature store.
                     format: int32
+                    minimum: 0
                     type: integer
                   offline:
+                    default: false
                     description: If true update the offline store.
                     type: boolean
                   online:
@@ -103,7 +119,9 @@ spec:
                     format: date-time
                     type: string
                   ttl:
+                    default: 0
                     format: int32
+                    minimum: 0
                     type: integer
                 type: object
               owner:
@@ -111,9 +129,66 @@ spec:
                 description: Owner is the owner of the feature pipeline
                 pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
                 type: string
+              schedule:
+                description: Schedule for running the pipeline
+                properties:
+                  cron:
+                    description: Cron string of the schedule.
+                    type: string
+                  endDay:
+                    description: EndDay is the end day of the schedule
+                    format: date-time
+                    type: string
+                  endTime:
+                    description: EndTime is the end time of the schedule
+                    properties:
+                      nanos:
+                        description: Non-negative fractions of a second at nanosecond
+                          resolution. Negative second values with fractions must still
+                          have non-negative nanos values that count forward in time.
+                          Must be from 0 to 999,999,999 inclusive. This field may
+                          be limited in precision depending on context.
+                        format: int32
+                        type: integer
+                      seconds:
+                        description: Represents seconds of UTC time since Unix epoch
+                          1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z
+                          to 9999-12-31T23:59:59Z inclusive.
+                        format: int64
+                        type: integer
+                    required:
+                    - nanos
+                    - seconds
+                    type: object
+                  startDay:
+                    description: StartDay is the start day of the schedule
+                    format: date-time
+                    type: string
+                  startTime:
+                    description: The start time of the schedule
+                    format: date-time
+                    type: string
+                  type:
+                    description: The type of schedule events.
+                    enum:
+                    - now
+                    - once
+                    - hourly
+                    - daily
+                    - weekly
+                    - monthly
+                    - yearly
+                    - cron
+                    type: string
+                type: object
               versionName:
                 description: Version name is the the product version for the feature.
                 pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
+                type: string
+              workloadClassName:
+                default: default-data-workload-class
+                description: A reference to the workload class that is used for running
+                  the workload class
                 type: string
             type: object
           status:
@@ -150,6 +225,11 @@ spec:
                   - type
                   type: object
                 type: array
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
             type: object
         required:
         - metadata

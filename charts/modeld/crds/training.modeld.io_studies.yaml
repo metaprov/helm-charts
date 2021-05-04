@@ -22,11 +22,16 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=="Ready")].status
-      name: Ready
+    - jsonPath: .status.phase
+      name: Status
+      type: string
+    - jsonPath: .spec.owner
+      name: Owner
+      priority: 1
       type: string
     - jsonPath: .spec.versionName
       name: Version
+      priority: 1
       type: string
     - jsonPath: .spec.datasetName
       name: Dataset
@@ -43,12 +48,20 @@ spec:
     - jsonPath: .status.bestModel
       name: Best model
       type: string
-    - jsonPath: .status.totalTrainers
-      name: TotalTrainers
-      type: string
-    - jsonPath: .status.phase
-      name: Status
-      type: string
+    - jsonPath: .status.trainedModels
+      name: Trained
+      type: number
+    - jsonPath: .status.testedModels
+      name: Tested
+      type: number
+    - jsonPath: .status.startTime
+      name: StartTime
+      priority: 1
+      type: date
+    - jsonPath: .status.completionTime
+      name: CompletionTime
+      priority: 1
+      type: date
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -77,10 +90,17 @@ spec:
                 default: false
                 description: Aborted is set when we want to abort the training
                 type: boolean
+              activeDeadlineSeconds:
+                default: 600
+                description: ActiveDeadlineSeconds is the deadline of a job for this
+                  study.
+                format: int64
+                minimum: 0
+                type: integer
               datasetName:
                 default: ""
                 description: DatasetName refer to the dataset object for which the
-                  study is for. Required.
+                  study is for.
                 type: string
               description:
                 default: ""
@@ -239,6 +259,12 @@ spec:
                 description: Set to true if you want the system to create a docker
                   model image, at the end of training.
                 type: boolean
+              modelVersion:
+                description: ModelVersion is the semver version of the resulting model.
+                  Note that multiplie models can have the same version
+                maxLength: 63
+                minLength: 1
+                type: string
               objective:
                 description: Objective is the objective defined how the study controller
                   will compare model performance.
@@ -679,12 +705,14 @@ spec:
                         description: The rate of elimination during SH search, such
                           that only 1/rate of models are promoted to the next half
                         format: int32
+                        minimum: 0
                         type: integer
                       maxBudget:
                         default: 81
                         description: The maximum budget allocated to each model during
                           SH search. The default max budget is 81
                         format: int32
+                        minimum: 0
                         type: integer
                       modality:
                         default: epochs
@@ -714,6 +742,7 @@ spec:
                     description: The desired number of trainers running during search.
                     format: int32
                     maximum: 50
+                    minimum: 0
                     type: integer
                   type:
                     default: random
@@ -781,7 +810,7 @@ spec:
                 type: object
               task:
                 description: Task specify the machine learning task (e.g classification).
-                  This must match the task of the data product. Required.
+                  This must match the task of the data product.
                 enum:
                 - binary-classification
                 - multi-classification
@@ -797,43 +826,10 @@ spec:
                 - auto
                 - unknown
                 type: string
-              trainerClassRef:
-                description: 'WorkloadClassRef is a reference to the workload class
-                  object from the catalog. Default : scikit learn trainer.'
-                properties:
-                  apiVersion:
-                    description: API version of the referent.
-                    type: string
-                  fieldPath:
-                    description: 'If referring to a piece of an object instead of
-                      an entire object, this string should contain a valid JSON/Go
-                      field access statement, such as desiredState.manifest.containers[2].
-                      For example, if the object reference is to a container within
-                      a pod, this would take on a value like: "spec.containers{name}"
-                      (where "name" refers to the name of the container that triggered
-                      the event) or if no container name is specified "spec.containers[2]"
-                      (container with index 2 in this pod). This syntax is chosen
-                      only to have some well-defined way of referencing a part of
-                      an object. TODO: this design is not final and this field is
-                      subject to change in the future.'
-                    type: string
-                  kind:
-                    description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                    type: string
-                  name:
-                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                    type: string
-                  namespace:
-                    description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
-                    type: string
-                  resourceVersion:
-                    description: 'Specific resourceVersion to which this reference
-                      is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
-                    type: string
-                  uid:
-                    description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
-                    type: string
-                type: object
+              template:
+                default: false
+                description: Set to true if this study is a template
+                type: boolean
               training:
                 description: Training template contain the desired training parameter
                   for the models.
@@ -927,18 +923,21 @@ spec:
                             description: The initial number of data points, default
                               to 80% of rows.
                             format: int32
+                            minimum: 0
                             type: integer
                           windows:
                             default: 3
                             description: The number of backtesting windows. Default
                               to 3. can be from 1 to 5.
                             format: int32
+                            minimum: 0
                             type: integer
                         type: object
                       confidenceIntervals:
                         description: The confidence levels for the forecast, each
                           level must be between 1-100.
                         format: int32
+                        minimum: 0
                         type: integer
                       countryForHoliday:
                         description: Set an holiday schedule for a country.
@@ -999,8 +998,9 @@ spec:
                         properties:
                           interval:
                             default: 1
-                            description: Default to 1. optional
+                            description: Default to 1.
                             format: int32
+                            minimum: 0
                             type: integer
                           unit:
                             description: required
@@ -1017,8 +1017,9 @@ spec:
                         type: object
                       horizon:
                         description: Horizon is the number of data points to predict
-                          in the future. Required.
+                          in the future.
                         format: int32
+                        minimum: 0
                         type: integer
                       repressors:
                         description: List of other columns to take into consideration
@@ -1031,7 +1032,7 @@ spec:
                           default this is the target column from the dataset.
                         type: string
                       timeColumn:
-                        description: The name of the time column Required.
+                        description: The name of the time column
                         type: string
                     type: object
                   priority:
@@ -1096,17 +1097,20 @@ spec:
                         minimum: 0
                         type: integer
                     type: object
+                  workloadClassName:
+                    default: default-workload-class
+                    description: WorkloadClassName is the name of the workload class
+                      used to run this model. This is assigned by the study
+                    type: string
                 type: object
               versionName:
                 description: VersionName is the data product version of the study
-                  required
                 maxLength: 63
                 minLength: 1
                 type: string
             required:
             - datasetName
             - task
-            - versionName
             type: object
           status:
             description: StudyStatus defines the observed state of the Study
@@ -1167,6 +1171,11 @@ spec:
                 description: Total models created for the study
                 format: int32
                 type: integer
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
               phase:
                 description: The phase of the study
                 type: string
@@ -1226,9 +1235,6 @@ spec:
                 description: models waiting for a trainer
                 format: int32
                 type: integer
-            required:
-            - phase
-            - profileUri
             type: object
         type: object
     served: true

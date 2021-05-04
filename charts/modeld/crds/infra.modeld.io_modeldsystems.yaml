@@ -6,48 +6,41 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.5.0
   creationTimestamp: null
-  name: reciperuns.data.modeld.io
+  name: modeldsystems.infra.modeld.io
 spec:
-  group: data.modeld.io
+  group: infra.modeld.io
   names:
     categories:
-    - data
+    - infra
     - modeld
-    - all
-    kind: RecipeRun
-    listKind: RecipeRunList
-    plural: reciperuns
-    shortNames:
-    - rr
-    singular: reciperun
+    kind: ModeldSystem
+    listKind: ModeldSystemList
+    plural: modeldsystems
+    singular: modeldsystem
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.phase
-      name: Status
+    - jsonPath: .status.conditions[?(@.type=="Ready")].status
+      name: Ready
       type: string
-    - jsonPath: .spec.owner
-      name: Owner
+    - jsonPath: .spec.level
+      name: Level
       type: string
-    - jsonPath: .spec.versionName
-      name: Version
+    - jsonPath: .spec.subject
+      name: Subject
       type: string
-    - jsonPath: .spec.recipeName
-      name: Recipe
+    - jsonPath: .spec.entityRef.Name
+      name: Entity Namespace
       type: string
-    - jsonPath: .status.startTime
-      name: StartTime
-      priority: 1
-      type: date
-    - jsonPath: .status.completionTime
-      name: CompletionTime
-      priority: 1
+    - jsonPath: .spec.entityRef.Namespace
+      name: Entity Name
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
       type: date
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Recipe run represent one execution of the recipe. Execution is
-          performed by creating a Kubernetes job.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -62,46 +55,15 @@ spec:
           metadata:
             type: object
           spec:
-            description: RecipeSpec defines the desired state of a dataset
-            properties:
-              labName:
-                description: The execution env of this recipes
-                type: string
-              output:
-                description: The location of the data output.
-                properties:
-                  bucketName:
-                    type: string
-                  path:
-                    description: Path to the full data file (e.g. csv file).
-                    type: string
-                required:
-                - bucketName
-                - path
-                type: object
-              recipeName:
-                description: The name of the recipe that execute this run
-                type: string
-              versionName:
-                type: string
-              workloadClassName:
-                description: WorkloadClassName is the name of the workload used to
-                  execute this recipe run, The value is set from the Recipe definition.
-                type: string
+            description: ModeldSystemSpec defines the desired state of ModeldSystem
             type: object
           status:
-            description: RecipeStatus defines the observed state of Recipe
+            description: ModeldSystemStatus is the observed state of a ModeldSystem
             properties:
-              completionTime:
-                description: Represents the end time
-                format: date-time
-                type: string
               conditions:
-                description: Represents the latest available observations of a dataset
-                  state.
                 items:
-                  description: RecipeCondition describes the state of a dataset at
-                    a certain point.
+                  description: ModeldSystemCondition describes the state of the license
+                    at a certain point.
                   properties:
                     lastTransitionTime:
                       description: Last time the condition transitioned from one status
@@ -116,10 +78,10 @@ spec:
                       description: The reason for the condition's last transition.
                       type: string
                     status:
-                      description: Status of the condition, one of True, False, Unknown.
+                      description: Status of the condition, one of True, False, AutoScaler.
                       type: string
                     type:
-                      description: RecipeConditionType is the condition on the Recipe
+                      description: Type of account condition.
                       type: string
                   required:
                   - status
@@ -131,16 +93,8 @@ spec:
                   on
                 format: int64
                 type: integer
-              phase:
-                description: The phase of the dataset processing
-                type: string
-              startTime:
-                description: Represents the start time
-                format: date-time
-                type: string
             type: object
         required:
-        - metadata
         - spec
         type: object
     served: true

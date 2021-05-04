@@ -24,8 +24,11 @@ spec:
     - jsonPath: .status.conditions[?(@.type=="Ready")].status
       name: Ready
       type: string
-    - jsonPath: .spec.gitrepoName
-      name: Git SecretRepo
+    - jsonPath: .spec.ownerName
+      name: Owner
+      type: string
+    - jsonPath: .spec.clusterName
+      name: Cluster
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
@@ -270,6 +273,11 @@ spec:
                   - type
                   type: object
                 type: array
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
             type: object
         required:
         - spec

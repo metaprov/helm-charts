@@ -23,17 +23,17 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=="Ready")].status
-      name: Ready
+    - jsonPath: .status.phase
+      name: Status
+      type: string
+    - jsonPath: .spec.owner
+      name: Owner
       type: string
     - jsonPath: .spec.versionName
       name: Version
       type: string
     - jsonPath: .spec.datasourceName
-      name: Location Origin
-      type: string
-    - jsonPath: .status.phase
-      name: Status
+      name: Data Source
       type: string
     - jsonPath: .status.statistics.rows
       name: Rows
@@ -67,6 +67,12 @@ spec:
           spec:
             description: DatasetSpec defines the desired state of a dataset
             properties:
+              activeDeadlineSeconds:
+                default: 600
+                description: ActiveDeadlineSeconds is the deadline of a job for this
+                  dataset.
+                format: int64
+                type: integer
               datasourceName:
                 description: DataSourceName is the name of the data source which created
                   this dataset. For example flat file
@@ -115,14 +121,29 @@ spec:
                 description: If true, a dataset report should be generated for this
                   dataset.
                 type: boolean
+              syntacticRows:
+                default: 0
+                description: If syntactic is true, indicates how many rows to generate
+                format: int32
+                type: integer
+              syntatic:
+                default: false
+                description: Syntactic indicates if we want to generate this dataset
+                  based on the data source
+                type: boolean
               validate:
                 default: true
                 description: If true, we should validate the dataset
                 type: boolean
               versionName:
+                default: ""
                 description: VersionName is the data product version of the dataset
-                  required.
                 maxLength: 63
+                type: string
+              workloadClassName:
+                default: default-data-workload-class
+                description: A reference to the workload class this is used to analyze
+                  the workload
                 type: string
             type: object
           status:
@@ -161,6 +182,11 @@ spec:
               imbalanced:
                 description: Based on the actual data, treat this dataset as imbalanced.
                 type: boolean
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
               phase:
                 description: The phase of the dataset processing
                 type: string
@@ -193,7 +219,9 @@ spec:
                     type: string
                 required:
                 - data
+                - test
                 - train
+                - validation
                 type: object
               statistics:
                 description: Statistics for the dataset. The statistics contain information
@@ -211,9 +239,16 @@ spec:
                       description: Hold the statistical parameters about a single
                         attribute
                       properties:
+                        completeness:
+                          description: Completeness is the ratio between non null
+                            to null
+                          type: number
                         distinc:
                           format: int32
                           type: integer
+                        distinctValueCount:
+                          description: The ratio between distinc to total
+                          type: number
                         highCorr:
                           description: This column has high corrolation with another
                             feature and should be dropped. The value is set during
@@ -229,6 +264,9 @@ spec:
                           type: boolean
                         importance:
                           description: The feature importance
+                          type: number
+                        indexOfPeculiarity:
+                          description: Used for text attributes
                           type: number
                         invalid:
                           description: The number of invalid values
@@ -251,6 +289,9 @@ spec:
                           description: The number of missing values
                           format: int32
                           type: integer
+                        mostFreqValuesRatio:
+                          description: The ratio between most freq value to total
+                          type: number
                         name:
                           description: FileName is the name of the column
                           type: string

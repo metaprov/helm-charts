@@ -18,23 +18,28 @@ spec:
     listKind: ModelPipelineRunList
     plural: modelpipelineruns
     shortNames:
-    - pr
+    - mpr
     singular: modelpipelinerun
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=="Ready")].status
-      name: Ready
-      type: string
     - jsonPath: .status.phase
       name: Status
       type: string
     - jsonPath: .status.pipelineName
-      name: ModelPipeline
+      name: Pipeline
       type: string
     - jsonPath: .status.versionName
       name: Version
       type: string
+    - jsonPath: .status.startTime
+      name: StartTime
+      priority: 1
+      type: date
+    - jsonPath: .status.completionTime
+      name: CompletionTime
+      priority: 1
+      type: date
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -59,62 +64,134 @@ spec:
             description: ModelPipelineRunSpec is the desired state of the ModelPipelineRun
               resource
             properties:
+              datasetName:
+                default: ""
+                description: DatasetName is the name of the dataset that we trained
+                  on.
+                type: string
               description:
                 default: ""
-                description: User provided description
+                description: Description is the user provided description
                 type: string
               owner:
                 default: ""
-                description: The owner account name
+                description: The owner of the ruyn.
                 type: string
               pipelineName:
                 default: ""
-                description: PipelineName is the name of the pipeline specification
-                  for this pipeline
-                type: string
-              triggerName:
-                default: ""
-                description: TriggerName denote the trigger that fired this pipeline
-                  run
+                description: PipelineName is the name of the ModelPipeline for this
+                  pipeline
                 type: string
               versionName:
                 default: ""
-                description: User provided description
+                description: VersionName is the data product version of the run
                 type: string
             type: object
           status:
             description: ModelPipelineRunStatus is the observed state of the ModelPipelineRun
               resource .
             properties:
-              acceptance:
-                description: Staging is status for each qa stage.
+              capacityStatus:
+                description: CapacityStatus is the status for the capacity stage.
                 properties:
                   approved:
+                    description: Approved indicates that the stage is approved.
                     type: boolean
+                  approvedAt:
+                    description: ApprovedAt indicates the time of approval
+                    format: date-time
+                    type: string
                   approvedBy:
+                    description: ApprovedBy indicates the account that approve this
+                      model.
                     type: string
                   endTime:
+                    description: End time is the end time of the stage.
                     format: date-time
                     type: string
-                  score:
-                    type: number
+                  error:
+                    description: Error record error.
+                    type: string
+                  phase:
+                    description: Phase is the phase of the stage
+                    type: string
+                  results:
+                    description: Results is the results of running the test datasets
+                      against the new model
+                    items:
+                      description: Model Test Result holds the results for a single
+                        metric on a single dataset
+                      properties:
+                        datasetName:
+                          description: The name of the dataset
+                          type: string
+                        duration:
+                          description: Duration is the time that it took to run the
+                            test
+                          type: string
+                        error:
+                          description: Error is a name of any error that occurred
+                            during the test.
+                          type: string
+                        expected:
+                          description: Expected is the expected value for this expecation
+                            as defined by the test
+                          type: number
+                        op:
+                          description: The operation
+                          type: string
+                        result:
+                          description: Metric is the name of the metric measured
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        value:
+                          description: Value is the value of the metric
+                          type: number
+                      type: object
+                    type: array
                   startTime:
-                    format: date-time
-                    type: string
-                type: object
-              capacity:
-                description: ReleaseStage is the status for the production stage.
-                properties:
-                  approved:
-                    type: boolean
-                  approvedBy:
-                    type: string
-                  endTime:
-                    format: date-time
-                    type: string
-                  score:
-                    type: number
-                  startTime:
+                    description: Start time is the start time of the stage
                     format: date-time
                     type: string
                 type: object
@@ -149,19 +226,216 @@ spec:
                   - type
                   type: object
                 type: array
-              data:
-                description: data is the status for the data stage.
+              dataStatus:
+                description: DataStatus is the status of the data stage data is the
+                  status for the data stage.
                 properties:
                   approved:
+                    description: Approved indicates that the stage is approved.
                     type: boolean
-                  approvedBy:
-                    type: string
-                  endTime:
+                  approvedAt:
+                    description: ApprovedAt indicates the time of approval
                     format: date-time
                     type: string
-                  score:
-                    type: number
+                  approvedBy:
+                    description: ApprovedBy indicates the account that approve this
+                      model.
+                    type: string
+                  endTime:
+                    description: End time is the end time of the stage.
+                    format: date-time
+                    type: string
+                  error:
+                    description: Error record error.
+                    type: string
+                  phase:
+                    description: Phase is the phase of the stage
+                    type: string
+                  results:
+                    description: Results is the results of running the test datasets
+                      against the new model
+                    items:
+                      description: Model Test Result holds the results for a single
+                        metric on a single dataset
+                      properties:
+                        datasetName:
+                          description: The name of the dataset
+                          type: string
+                        duration:
+                          description: Duration is the time that it took to run the
+                            test
+                          type: string
+                        error:
+                          description: Error is a name of any error that occurred
+                            during the test.
+                          type: string
+                        expected:
+                          description: Expected is the expected value for this expecation
+                            as defined by the test
+                          type: number
+                        op:
+                          description: The operation
+                          type: string
+                        result:
+                          description: Metric is the name of the metric measured
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        value:
+                          description: Value is the value of the metric
+                          type: number
+                      type: object
+                    type: array
                   startTime:
+                    description: Start time is the start time of the stage
+                    format: date-time
+                    type: string
+                type: object
+              datasetName:
+                description: The name of the dataset that was captured by the label
+                  filter.
+                type: string
+              deploymentStatus:
+                description: DeploymentStatus is the status for the prod stage
+                properties:
+                  approved:
+                    description: Approved indicates that the stage is approved.
+                    type: boolean
+                  approvedAt:
+                    description: ApprovedAt indicates the time of approval
+                    format: date-time
+                    type: string
+                  approvedBy:
+                    description: ApprovedBy indicates the account that approve this
+                      model.
+                    type: string
+                  endTime:
+                    description: End time is the end time of the stage.
+                    format: date-time
+                    type: string
+                  error:
+                    description: Error record error.
+                    type: string
+                  phase:
+                    description: Phase is the phase of the stage
+                    type: string
+                  results:
+                    description: Results is the results of running the test datasets
+                      against the new model
+                    items:
+                      description: Model Test Result holds the results for a single
+                        metric on a single dataset
+                      properties:
+                        datasetName:
+                          description: The name of the dataset
+                          type: string
+                        duration:
+                          description: Duration is the time that it took to run the
+                            test
+                          type: string
+                        error:
+                          description: Error is a name of any error that occurred
+                            during the test.
+                          type: string
+                        expected:
+                          description: Expected is the expected value for this expecation
+                            as defined by the test
+                          type: number
+                        op:
+                          description: The operation
+                          type: string
+                        result:
+                          description: Metric is the name of the metric measured
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        value:
+                          description: Value is the value of the metric
+                          type: number
+                      type: object
+                    type: array
+                  startTime:
+                    description: Start time is the start time of the stage
                     format: date-time
                     type: string
                 type: object
@@ -170,43 +444,543 @@ spec:
                   the system The folder contains all the pipeline artifacts - metadata,
                   logs
                 type: string
-              phase:
-                description: The phase of the pipeline run
-                type: string
-              prod:
-                description: ReleaseStage is the status for the production stage.
+              labelingStatus:
+                description: Labeling status if the status of the labeling process
                 properties:
                   approved:
+                    description: Approved indicates that the stage is approved.
                     type: boolean
-                  approvedBy:
-                    type: string
-                  endTime:
+                  approvedAt:
+                    description: ApprovedAt indicates the time of approval
                     format: date-time
                     type: string
-                  score:
-                    type: number
+                  approvedBy:
+                    description: ApprovedBy indicates the account that approve this
+                      model.
+                    type: string
+                  endTime:
+                    description: End time is the end time of the stage.
+                    format: date-time
+                    type: string
+                  error:
+                    description: Error record error.
+                    type: string
+                  phase:
+                    description: Phase is the phase of the stage
+                    type: string
+                  results:
+                    description: Results is the results of running the test datasets
+                      against the new model
+                    items:
+                      description: Model Test Result holds the results for a single
+                        metric on a single dataset
+                      properties:
+                        datasetName:
+                          description: The name of the dataset
+                          type: string
+                        duration:
+                          description: Duration is the time that it took to run the
+                            test
+                          type: string
+                        error:
+                          description: Error is a name of any error that occurred
+                            during the test.
+                          type: string
+                        expected:
+                          description: Expected is the expected value for this expecation
+                            as defined by the test
+                          type: number
+                        op:
+                          description: The operation
+                          type: string
+                        result:
+                          description: Metric is the name of the metric measured
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        value:
+                          description: Value is the value of the metric
+                          type: number
+                      type: object
+                    type: array
                   startTime:
+                    description: Start time is the start time of the stage
                     format: date-time
                     type: string
                 type: object
+              modelName:
+                description: The name of the best model
+                type: string
+              monitoringStatus:
+                description: Monitoring status is the status of the monitor phase.
+                properties:
+                  approved:
+                    description: Approved indicates that the stage is approved.
+                    type: boolean
+                  approvedAt:
+                    description: ApprovedAt indicates the time of approval
+                    format: date-time
+                    type: string
+                  approvedBy:
+                    description: ApprovedBy indicates the account that approve this
+                      model.
+                    type: string
+                  endTime:
+                    description: End time is the end time of the stage.
+                    format: date-time
+                    type: string
+                  error:
+                    description: Error record error.
+                    type: string
+                  phase:
+                    description: Phase is the phase of the stage
+                    type: string
+                  results:
+                    description: Results is the results of running the test datasets
+                      against the new model
+                    items:
+                      description: Model Test Result holds the results for a single
+                        metric on a single dataset
+                      properties:
+                        datasetName:
+                          description: The name of the dataset
+                          type: string
+                        duration:
+                          description: Duration is the time that it took to run the
+                            test
+                          type: string
+                        error:
+                          description: Error is a name of any error that occurred
+                            during the test.
+                          type: string
+                        expected:
+                          description: Expected is the expected value for this expecation
+                            as defined by the test
+                          type: number
+                        op:
+                          description: The operation
+                          type: string
+                        result:
+                          description: Metric is the name of the metric measured
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        value:
+                          description: Value is the value of the metric
+                          type: number
+                      type: object
+                    type: array
+                  startTime:
+                    description: Start time is the start time of the stage
+                    format: date-time
+                    type: string
+                type: object
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
+              phase:
+                description: The phase of the pipeline run
+                type: string
+              releaseStatus:
+                description: DeploymentStatus is the status for the prod stage
+                properties:
+                  approved:
+                    description: Approved indicates that the stage is approved.
+                    type: boolean
+                  approvedAt:
+                    description: ApprovedAt indicates the time of approval
+                    format: date-time
+                    type: string
+                  approvedBy:
+                    description: ApprovedBy indicates the account that approve this
+                      model.
+                    type: string
+                  endTime:
+                    description: End time is the end time of the stage.
+                    format: date-time
+                    type: string
+                  error:
+                    description: Error record error.
+                    type: string
+                  phase:
+                    description: Phase is the phase of the stage
+                    type: string
+                  results:
+                    description: Results is the results of running the test datasets
+                      against the new model
+                    items:
+                      description: Model Test Result holds the results for a single
+                        metric on a single dataset
+                      properties:
+                        datasetName:
+                          description: The name of the dataset
+                          type: string
+                        duration:
+                          description: Duration is the time that it took to run the
+                            test
+                          type: string
+                        error:
+                          description: Error is a name of any error that occurred
+                            during the test.
+                          type: string
+                        expected:
+                          description: Expected is the expected value for this expecation
+                            as defined by the test
+                          type: number
+                        op:
+                          description: The operation
+                          type: string
+                        result:
+                          description: Metric is the name of the metric measured
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        value:
+                          description: Value is the value of the metric
+                          type: number
+                      type: object
+                    type: array
+                  startTime:
+                    description: Start time is the start time of the stage
+                    format: date-time
+                    type: string
+                type: object
+              stage:
+                description: The current stage of the pipeline
+                type: string
               startTime:
                 format: date-time
                 type: string
               studyName:
+                description: The name of the study generated.
                 type: string
-              training:
-                description: dev is the status for the dev stage.
+              trainingStatus:
+                description: TrainingStatus is the status for the training stage
                 properties:
                   approved:
+                    description: Approved indicates that the stage is approved.
                     type: boolean
-                  approvedBy:
-                    type: string
-                  endTime:
+                  approvedAt:
+                    description: ApprovedAt indicates the time of approval
                     format: date-time
                     type: string
-                  score:
-                    type: number
+                  approvedBy:
+                    description: ApprovedBy indicates the account that approve this
+                      model.
+                    type: string
+                  endTime:
+                    description: End time is the end time of the stage.
+                    format: date-time
+                    type: string
+                  error:
+                    description: Error record error.
+                    type: string
+                  phase:
+                    description: Phase is the phase of the stage
+                    type: string
+                  results:
+                    description: Results is the results of running the test datasets
+                      against the new model
+                    items:
+                      description: Model Test Result holds the results for a single
+                        metric on a single dataset
+                      properties:
+                        datasetName:
+                          description: The name of the dataset
+                          type: string
+                        duration:
+                          description: Duration is the time that it took to run the
+                            test
+                          type: string
+                        error:
+                          description: Error is a name of any error that occurred
+                            during the test.
+                          type: string
+                        expected:
+                          description: Expected is the expected value for this expecation
+                            as defined by the test
+                          type: number
+                        op:
+                          description: The operation
+                          type: string
+                        result:
+                          description: Metric is the name of the metric measured
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        value:
+                          description: Value is the value of the metric
+                          type: number
+                      type: object
+                    type: array
                   startTime:
+                    description: Start time is the start time of the stage
+                    format: date-time
+                    type: string
+                type: object
+              uatStatus:
+                description: UATStatus is the status of the uat stage
+                properties:
+                  approved:
+                    description: Approved indicates that the stage is approved.
+                    type: boolean
+                  approvedAt:
+                    description: ApprovedAt indicates the time of approval
+                    format: date-time
+                    type: string
+                  approvedBy:
+                    description: ApprovedBy indicates the account that approve this
+                      model.
+                    type: string
+                  endTime:
+                    description: End time is the end time of the stage.
+                    format: date-time
+                    type: string
+                  error:
+                    description: Error record error.
+                    type: string
+                  phase:
+                    description: Phase is the phase of the stage
+                    type: string
+                  results:
+                    description: Results is the results of running the test datasets
+                      against the new model
+                    items:
+                      description: Model Test Result holds the results for a single
+                        metric on a single dataset
+                      properties:
+                        datasetName:
+                          description: The name of the dataset
+                          type: string
+                        duration:
+                          description: Duration is the time that it took to run the
+                            test
+                          type: string
+                        error:
+                          description: Error is a name of any error that occurred
+                            during the test.
+                          type: string
+                        expected:
+                          description: Expected is the expected value for this expecation
+                            as defined by the test
+                          type: number
+                        op:
+                          description: The operation
+                          type: string
+                        result:
+                          description: Metric is the name of the metric measured
+                          enum:
+                          - accuracy
+                          - average-precision
+                          - balanced-accuracy
+                          - brier-score-loss
+                          - f1
+                          - f1-macro
+                          - f1-micro
+                          - f1-weighted
+                          - log-loss
+                          - precision
+                          - precision-micro
+                          - precision-macro
+                          - precision-weighted
+                          - recall
+                          - recall-macro
+                          - recall-micro
+                          - recall-weighted
+                          - auc
+                          - fp
+                          - fn
+                          - tn
+                          - tp
+                          - explained_variance
+                          - mae
+                          - mse
+                          - msle
+                          - median-absolute-error
+                          - r2
+                          - adjusted-mutual-info-score
+                          - adjusted-rand-score
+                          - completeness-score
+                          - fowlkes-mallows-score
+                          - homogeneity-score
+                          - mutual-info-score
+                          - normalized-mutual-info-score
+                          - v-measure-score
+                          - rmse
+                          - unknown
+                          - mape
+                          - smape
+                          - mdape
+                          type: string
+                        value:
+                          description: Value is the value of the metric
+                          type: number
+                      type: object
+                    type: array
+                  startTime:
+                    description: Start time is the start time of the stage
                     format: date-time
                     type: string
                 type: object
@@ -216,7 +990,8 @@ spec:
         type: object
     served: true
     storage: true
-    subresources: {}
+    subresources:
+      status: {}
 status:
   acceptedNames:
     kind: ""

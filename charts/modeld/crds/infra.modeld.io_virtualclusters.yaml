@@ -19,7 +19,35 @@ spec:
     singular: virtualcluster
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=="Ready")].status
+      name: Ready
+      type: string
+    - description: cluster owner account
+      jsonPath: .spec.ownerName
+      name: Owner
+      type: string
+    - description: virtual bucket connections
+      jsonPath: .spec.connectionName
+      name: Nodes
+      type: integer
+    - description: virtual bucket connections
+      jsonPath: .spec.connectionName
+      name: Node Class
+      type: string
+    - description: virtual bucket connections
+      jsonPath: .spec.connectionName
+      name: Gpus
+      type: integer
+    - description: virtual bucket connections
+      jsonPath: .spec.connectionName
+      name: Gpu Class
+      type: string
+    - description: virtual bucket connections
+      jsonPath: .spec.connectionName
+      name: Connection
+      type: string
+    name: v1alpha1
     schema:
       openAPIV3Schema:
         properties:
@@ -89,9 +117,11 @@ spec:
               availableGpus:
                 description: Number of available Gpus
                 format: int32
+                minimum: 0
                 type: integer
               availableNodes:
                 format: int32
+                minimum: 0
                 type: integer
               conditions:
                 items:
@@ -121,6 +151,11 @@ spec:
                   - type
                   type: object
                 type: array
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
             type: object
         required:
         - metadata

@@ -50,6 +50,13 @@ spec:
           spec:
             description: NotebookSpec is the desired state of the notebook resource.
             properties:
+              activeDeadlineSeconds:
+                default: 600
+                description: ActiveDeadlineSeconds is the deadline of a job for this
+                  notebook.
+                format: int64
+                minimum: 0
+                type: integer
               debPackages:
                 description: DebPackages is a list of deb package to install
                 type: string
@@ -129,6 +136,11 @@ spec:
                 default: latest
                 description: The version of the notebook
                 type: string
+              workloadClassName:
+                default: default-workload-class
+                description: WorkloadClassName is the name of the workload class used
+                  to run this pipeline.
+                type: string
             type: object
           status:
             description: NotebookStatus is the observed state of the notebook resource
@@ -166,6 +178,11 @@ spec:
               image:
                 description: Image is the name of the image after publication
                 type: string
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
               uri:
                 description: The URI of the notebook in the bucket.
                 type: string

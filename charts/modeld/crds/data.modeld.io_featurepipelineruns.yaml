@@ -20,12 +20,26 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=="Ready")].status
-      name: Ready
+    - jsonPath: .status.phase
+      name: Status
+      type: string
+    - jsonPath: .spec.owner
+      name: Owner
       type: string
     - jsonPath: .spec.versionName
       name: Version
       type: string
+    - jsonPath: .spec.pipelineName
+      name: Pipeline
+      type: string
+    - jsonPath: .status.startTime
+      name: StartTime
+      priority: 1
+      type: date
+    - jsonPath: .status.completionTime
+      name: CompletionTime
+      priority: 1
+      type: date
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -65,6 +79,11 @@ spec:
                 description: The product version for the feature.
                 pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
                 type: string
+              workloadClassName:
+                default: default-data-workload-class
+                description: A reference to the workload class that is used for running
+                  the workload class. this is setup based on the feature pipeline
+                type: string
             type: object
           status:
             description: FeatureStatus defines the observed state of Feature
@@ -101,6 +120,14 @@ spec:
                   - type
                   type: object
                 type: array
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
+              phase:
+                description: The phase of the dataset processing
+                type: string
               startTime:
                 description: The Start time of the run
                 format: date-time

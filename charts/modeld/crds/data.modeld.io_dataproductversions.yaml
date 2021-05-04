@@ -26,9 +26,15 @@ spec:
     - jsonPath: .status.conditions[?(@.type=="Ready")].status
       name: Ready
       type: string
+    - jsonPath: .spec.owner
+      name: Owner
+      type: string
     - jsonPath: .spec.productRef.name
       name: Entity
       type: string
+    - jsonPath: .spec.baseline
+      name: Base
+      type: boolean
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -145,6 +151,11 @@ spec:
                   - type
                   type: object
                 type: array
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
             type: object
         required:
         - metadata

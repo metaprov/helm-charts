@@ -26,15 +26,12 @@ spec:
     - jsonPath: .status.conditions[?(@.type=="Ready")].status
       name: Ready
       type: string
+    - jsonPath: .spec.owner
+      name: Owner
+      type: string
     - jsonPath: .spec.versionName
       name: Version
       type: string
-    - jsonPath: .status.phase
-      name: Status
-      type: string
-    - jsonPath: .status.statistics.rows
-      name: Rows
-      type: integer
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -58,6 +55,12 @@ spec:
           spec:
             description: RecipeSpec defines the desired state of a dataset
             properties:
+              activeDeadlineSeconds:
+                default: 600
+                description: ActiveDeadlineSeconds is the deadline setup on jobs for
+                  this recipe.
+                format: int64
+                type: integer
               description:
                 description: Description is the user provided description
                 maxLength: 512
@@ -66,37 +69,28 @@ spec:
                 description: Input is the input recipe spec
                 properties:
                   datasetName:
+                    default: ""
                     description: DatasetName is the name of the dataset
                     type: string
                   format:
+                    default: csv
                     description: Format is the dataset format
                     enum:
-                    - url
-                    - path
-                    - password
-                    - time
-                    - count
-                    - interval
-                    - nominal
-                    - email
-                    - creditCard
-                    - uuid
-                    - uuid5
-                    - uuid
-                    - base64
-                    - latitude
-                    - longtitude
-                    - dns
-                    - ip4
-                    - ip6
-                    - ssn
-                    - alpha
-                    - alphanumeric
-                    - none
-                    - unknown
+                    - csv
+                    - json
+                    - parquet
+                    - tde
+                    - sql
+                    - table
+                    - fwf
+                    - excel
+                    - sas
+                    - spss
+                    - auto
                     type: string
                   location:
-                    description: Location is the folder of the actual data resides.
+                    description: Location is the folder of the actual data resides,
+                      if not using dataset
                     properties:
                       bucketName:
                         type: string
@@ -108,6 +102,11 @@ spec:
                     - path
                     type: object
                 type: object
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
               output:
                 description: Output is the desired output
                 properties:
@@ -142,14 +141,18 @@ spec:
                   recipe
                 properties:
                   rows:
+                    default: 500
                     description: Rows is the number of rows. Default is 500
                     format: int32
+                    minimum: 0
                     type: integer
                   string:
+                    default: ""
                     description: Filter formula. Valid only if the sample is a filter.
                     type: string
                   type:
-                    description: Type is the sampling type
+                    default: random
+                    description: Type is the sampling type Default is random
                     type: string
                 type: object
               steps:
@@ -207,7 +210,7 @@ spec:
                       description: The reason for the condition's last transition.
                       type: string
                     status:
-                      description: Status of the condition, one of True, False, AutoScaler.
+                      description: Status of the condition, one of True, False, Unknown.
                       type: string
                     type:
                       description: RecipeConditionType is the condition on the Recipe

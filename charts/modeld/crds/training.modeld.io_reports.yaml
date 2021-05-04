@@ -21,8 +21,12 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=="Ready")].status
-      name: Ready
+    - jsonPath: .status.phase
+      name: Status
+      type: string
+    - jsonPath: .spec.owner
+      name: Owner
+      priority: 1
       type: string
     - jsonPath: .spec.versionName
       name: Version
@@ -30,12 +34,12 @@ spec:
     - jsonPath: .spec.reportType
       name: Type
       type: string
-    - jsonPath: .status.uri
-      name: Uri
-      type: string
-    - jsonPath: .status.phase
-      name: Status
-      type: string
+    - jsonPath: .status.startTime
+      name: StartTime
+      type: date
+    - jsonPath: .status.completionTime
+      name: CompletionTime
+      type: date
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -61,6 +65,12 @@ spec:
             description: ReportSpec specifies the desired state of the ReportName
               resource
             properties:
+              activeDeadlineSeconds:
+                default: 600
+                description: ActiveDeadlineSeconds is the deadline of a job for this
+                  report.
+                format: int64
+                type: integer
               description:
                 description: NotifierRef is areference to the notifier that is used
                   to send the report
@@ -140,11 +150,19 @@ spec:
                 - study-report
                 - feature-report
                 - invalid-report
+                - daily-report
+                - weekly-report
+                - monthly-report
                 type: string
               versionName:
                 default: latest
                 description: VersionName is the data product version name for this
                   report.
+                type: string
+              workloadClassName:
+                default: default-workload-class
+                description: WorkloadClassName is the name of the workload class used
+                  to run this report
                 type: string
             type: object
           status:
@@ -185,6 +203,11 @@ spec:
                   - type
                   type: object
                 type: array
+              observedGeneration:
+                description: ObservedGeneration is the Last generation that was acted
+                  on
+                format: int64
+                type: integer
               phase:
                 description: Phase is the phase of the report
                 type: string
