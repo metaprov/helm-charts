@@ -43,24 +43,8 @@ spec:
               name: webhook-server
               protocol: TCP
           env:
-            - name: DS_HOST
-              value: "modeld-data-plane"
-            - name: DS_PORT
-              value: "8080"
-            - name: CLOUDS_HOST
-              value: "127.0.0.1"
-            - name: CLOUDS_PORT
-              value: "8090"
             - name: CACHE_PATH
               value: "/home/modeld/data"
-            - name: FAKE
-              value: "false"
-            - name: METRIC_ADDR
-              value: ":9090"
-            - name: ENABLE_LEADER_ELECTION
-              value: "false"
-            - name: WH
-              value: "true"
           resources:
             limits:
               cpu: "{{.Values.controlplane.resources.limits.cpu}}"
@@ -98,24 +82,46 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
           env:
-            - name: GRPC_TRACE
-              value: "all"
-            - name:  GRPC_VERBOSITY
-              value: "DEBUG"
-            - name:  GRPC_GO_LOG_VERBOSITY_LEVEL
-              value: "99"
-            - name:  GRPC_GO_LOG_SEVERITY_LEVEL
-              value: "info"
-            - name:   HOST
-              value:  "0.0.0.0"
-            - name:   PORT
-              value: "8090"
-            - name:   DEBUG
-              value: "false"
-            - name: ENV
-              value: "dev"
             - name: CACHE_PATH
               value: "/home/modeld/data"
+
+        - name: db-proxy
+          image: quay.io/metaprov/modeld-database-proxy
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8091
+              name: http
+            - containerPort: 9090
+              name: metrics
+            - containerPort: 8008
+              name: profiling
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: controlplane-configmap
+                  key: db-host
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: controlplane-configmap
+                  key: db-port
+            - name: DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: controlplane-configmap
+                  key: db-port
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: postgresql-password
 
 
       volumes:

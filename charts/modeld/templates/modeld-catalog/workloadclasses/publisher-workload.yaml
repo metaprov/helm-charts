@@ -64,7 +64,7 @@ spec:
                     value: "8090"
 
           - name: storage
-            image: quay.io/metaprov/modeld-clouds:latest
+            image: quay.io/metaprov/modeld-cloud-proxy:latest
             imagePullPolicy: IfNotPresent
             ports:
                - name: http
