@@ -163,7 +163,7 @@ frontend:
   replicaCount: 1
   image:
     registry: quay.io
-    tag: v0.3.267
+    tag: latest
     repository: metaprov/modeld-frontend
     pullPolicy: IfNotPresent
   resources:
@@ -178,7 +178,7 @@ clouds:
   replicaCount: 1
   image:
     registry: quay.io
-    tag: v0.3.267
+    tag: latest
     repository: metaprov/modeld-cloud-proxy
     pullPolicy: IfNotPresent
   resources:
