@@ -24,5 +24,13 @@ spec:
           ports:
             - containerPort: 80
               name: http
+          resources:        
+            limits:
+              cpu: "{{.Values.frontend.resources.limits.cpu}}"
+              memory: "{{.Values.frontend.resources.limits.memory}}"
+            requests:
+              cpu: "{{.Values.frontend.resources.requests.cpu}}"
+              memory: "{{.Values.frontend.resources.requests.memory}}"
+      
            
 

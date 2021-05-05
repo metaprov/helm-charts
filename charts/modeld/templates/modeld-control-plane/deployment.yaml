@@ -107,6 +107,13 @@ spec:
               port: 9090
             initialDelaySeconds: 5
             periodSeconds: 10
+          resources:
+            limits:
+              cpu: "{{.Values.dbproxy.resources.limits.cpu}}"
+              memory: "{{.Values.dbproxy.resources.limits.memory}}"
+            requests:
+              cpu: "{{.Values.dbproxy.resources.requests.cpu}}"
+              memory: "{{.Values.dbproxy.resources.requests.memory}}"
           env:
             - name: DB_HOST
               valueFrom:

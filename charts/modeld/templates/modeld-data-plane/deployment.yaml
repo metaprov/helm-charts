@@ -32,6 +32,14 @@ spec:
               name: metrics
             - containerPort: 8008
               name: profiling
+          resources:
+            limits:
+              cpu: "{{.Values.dataplane.resources.limits.cpu}}"
+              memory: "{{.Values.dataplane.resources.limits.memory}}"
+            requests:
+              cpu: "{{.Values.dataplane.resources.requests.cpu}}"
+              memory: "{{.Values.dataplane.resources.requests.memory}}"
+    
           volumeMounts:
             - name: data
               mountPath: /home/modeld/data

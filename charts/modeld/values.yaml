@@ -62,10 +62,10 @@ apigateway:
   resources:
     limits:
       cpu: 100m
-      memory: 30Mi
+      memory: 100Mi
     requests:
       cpu: 100m
-      memory: 20Mi
+      memory: 80Mi
 
 apiproxy:
   replicaCount: 1
@@ -76,11 +76,11 @@ apiproxy:
     pullPolicy: IfNotPresent    
   resources:
     limits:
-      cpu: "250m"
-      memory: "512M"
+      cpu: 250m
+      memory: 100Mi
     requests:
-      cpu: "250m"
-      memory: "512M"
+      cpu: 100m
+      memory: 100Mi
 
 dbproxy:
   replicaCount: 1
@@ -138,11 +138,11 @@ dataplane:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: "1000m"
-      memory: "750Mi"
+      cpu: 1000m
+      memory: 750Mi
     requests:
-      cpu: "1000m"
-      memory: "500Mi"
+      cpu: 1000m
+      memory: 500Mi
 
 frontend:
   replicaCount: 1
@@ -153,11 +153,11 @@ frontend:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: "500m"
-      memory: "250Mi"
+      cpu: 500m
+      memory: 250Mi
     requests:
-      cpu: "500m"
-      memory: "200Mi"
+      cpu: 500m
+      memory: 200Mi
 
 clouds:
   replicaCount: 1
