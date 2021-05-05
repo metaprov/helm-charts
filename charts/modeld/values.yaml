@@ -107,11 +107,11 @@ controlplane:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: 100m
-      memory: 60Mi
+      cpu: 500m
+      memory: 150Mi
     requests:
-      cpu: 100m
-      memory: 50Mi
+      cpu: 300m
+      memory: 150Mi
 
 datadock:
   replicaCount: 1
@@ -123,11 +123,11 @@ datadock:
   resources:
   resources:
     limits:
-      cpu: 100m
-      memory: 60Mi
+      cpu: 1000m
+      memory: 250Mi
     requests:
-      cpu: 100m
-      memory: 50Mi
+      cpu: 1000m
+      memory: 200Mi
 
 dataplane:
   replicaCount: 1
@@ -153,11 +153,11 @@ frontend:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: "100m"
-      memory: "150Mi"
+      cpu: "500m"
+      memory: "250Mi"
     requests:
-      cpu: "100m"
-      memory: "100Mi"
+      cpu: "500m"
+      memory: "200Mi"
 
 clouds:
   replicaCount: 1
@@ -168,11 +168,11 @@ clouds:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: "50m"
-      memory: "512M"
+      cpu: "100m"
+      memory: "512Mi"
     requests:
-      cpu: "50m"
-      memory: "32M"
+      cpu: "100m"
+      memory: "256Mi"
 
 ingress:
   name : modeld-ingress
