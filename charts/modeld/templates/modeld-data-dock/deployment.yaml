@@ -49,6 +49,8 @@ spec:
               initialDelaySeconds: 5
               periodSeconds: 10
           env:
+            - name: PORT
+              value: "8095"
             - name: CACHE_PATH
               valueFrom:
                   configMapKeyRef:
