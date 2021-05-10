@@ -1,6 +1,6 @@
 apiVersion: v2
 name: modeld
-version: 0.3.23
+version: 0.3.24
 kubeVersion: ">= 1.15.0"
 description: Machine Learning Operators
 type: application
@@ -11,15 +11,11 @@ keywords:
   - ai
   - machine learning
 home: https://modeld.io
-appVersion: v0.3.23
+appVersion: v0.3.24
 sources:
   - https://github.com/metaprov/modeld
 maintainers:
   - name: metaprov
     email: support@modeld.io
     url: https://groups.google.com/forum/#!forum/modeld-discuss
-dependencies:
-- name: cert-manager
-  version: "1.2.*"
-  repository: https://charts.jetstack.io
-  condition: certManager.enabled
+

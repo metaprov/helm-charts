@@ -12,6 +12,9 @@ metadata:
   name: serving-cert
   namespace: modeld-system
 spec:
+  isCA: true
+  commonName: osm-system
+  secretName: osm-ca
   dnsNames:
     - modeld-control-plane-webhook.svc.cluster.local
     - modeld-control-plane-webhook.modeld-system.svc
