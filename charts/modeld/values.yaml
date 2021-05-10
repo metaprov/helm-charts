@@ -61,11 +61,11 @@ apigateway:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: 100m
-      memory: 100Mi
+      cpu: 250m
+      memory: 256i
     requests:
-      cpu: 100m
-      memory: 80Mi
+      cpu: 250m
+      memory: 256i
 
 apiproxy:
   replicaCount: 1
@@ -77,10 +77,10 @@ apiproxy:
   resources:
     limits:
       cpu: 250m
-      memory: 100Mi
+      memory: 256i
     requests:
-      cpu: 100m
-      memory: 100Mi
+      cpu: 250m
+      memory: 256i
 
 dbproxy:
   replicaCount: 1
@@ -91,11 +91,11 @@ dbproxy:
     pullPolicy: IfNotPresent    
   resources:
     limits:
-      cpu: 100m
-      memory: 30Mi
+      cpu: 250m
+      memory: 256i
     requests:
-      cpu: 100m
-      memory: 20Mi
+      cpu: 250m
+      memory: 256i
 
 
 controlplane:
@@ -107,11 +107,11 @@ controlplane:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: 500m
-      memory: 150Mi
+      cpu: 250m
+      memory: 256i
     requests:
-      cpu: 300m
-      memory: 150Mi
+      cpu: 250m
+      memory: 256i
 
 datadock:
   replicaCount: 1
@@ -121,12 +121,11 @@ datadock:
     tag: latest
     pullPolicy: IfNotPresent
   resources:
-  resources:
     limits:
-      cpu: 1000m
+      cpu: 250m
       memory: 250Mi
     requests:
-      cpu: 1000m
+      cpu: 250m
       memory: 200Mi
 
 dataplane:
@@ -139,10 +138,10 @@ dataplane:
   resources:
     limits:
       cpu: 1000m
-      memory: 750Mi
+      memory: 1000Mi
     requests:
       cpu: 1000m
-      memory: 500Mi
+      memory: 1000Mi
 
 frontend:
   replicaCount: 1
@@ -153,11 +152,12 @@ frontend:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: 500m
+      cpu: 250m
       memory: 250Mi
     requests:
-      cpu: 500m
+      cpu: 250m
       memory: 200Mi
+
 
 clouds:
   replicaCount: 1
@@ -168,10 +168,10 @@ clouds:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: "100m"
-      memory: "512Mi"
+      cpu: "250m"
+      memory: "256Mi"
     requests:
-      cpu: "100m"
+      cpu: "250m"
       memory: "256Mi"
 
 ingress:
