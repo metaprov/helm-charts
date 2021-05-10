@@ -133,9 +133,8 @@ spec:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: db-secret
+                  name: modeld-postgresql
                   key: postgresql-password
-
 
       volumes:
         - name: data

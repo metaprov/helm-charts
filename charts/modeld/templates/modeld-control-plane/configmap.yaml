@@ -4,7 +4,7 @@ metadata:
    name: controlplane-configmap
    namespace: modeld-system
 data:
-  db-host: "my-release-postgresql.default.svc.cluster.local"
+  db-host: "modeld-postgresql.modeld-system.svc.cluster.local"
   db-port: "5432"
   db-name: "modeld"
   db-username: "postgres"
