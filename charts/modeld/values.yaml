@@ -62,10 +62,10 @@ apigateway:
   resources:
     limits:
       cpu: 250m
-      memory: 256i
+      memory: 256Mi
     requests:
       cpu: 250m
-      memory: 256i
+      memory: 256Mi
 
 apiproxy:
   replicaCount: 1
@@ -77,10 +77,10 @@ apiproxy:
   resources:
     limits:
       cpu: 250m
-      memory: 256i
+      memory: 256Mi
     requests:
       cpu: 250m
-      memory: 256i
+      memory: 256Mi
 
 dbproxy:
   replicaCount: 1
@@ -92,10 +92,10 @@ dbproxy:
   resources:
     limits:
       cpu: 250m
-      memory: 256i
+      memory: 256Mi
     requests:
       cpu: 250m
-      memory: 256i
+      memory: 256Mi
 
 
 controlplane:
@@ -108,10 +108,10 @@ controlplane:
   resources:
     limits:
       cpu: 250m
-      memory: 256i
+      memory: 256Mi
     requests:
       cpu: 250m
-      memory: 256i
+      memory: 256Mi
 
 datadock:
   replicaCount: 1
@@ -123,10 +123,10 @@ datadock:
   resources:
     limits:
       cpu: 250m
-      memory: 250Mi
+      memory: 256Mi
     requests:
       cpu: 250m
-      memory: 200Mi
+      memory: 206Mi
 
 dataplane:
   replicaCount: 1
