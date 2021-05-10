@@ -8,17 +8,27 @@ metadata:
 spec:
   task: regression
   frameworkName: scikit-learn
-  categoricalParameters:
-    - name:  criterion      
-      enums:
-        - gini
-        - entropy
-      defaultValue:  gini
   integerParameters:
     - name:   min_samples_split
       min: 2
-      max: 2
+      max: 20
       defaultValue: 2
+    - name:   min_samples_leaf
+      min: 1
+      max: 20
+      defaultValue: 1
+  categoricalParameters:
+    - name:  criterion      
+      enums:
+       - mse
+       - friedman_mse
+       - mae
+      defaultValue:  mse
+    - name:  splitter
+      enums:
+       - best
+       - random
+      defaultValue:  best
 
 
 
