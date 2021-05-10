@@ -3,9 +3,9 @@ entries:
   modeld:
   - apiVersion: v2
     appVersion: v0.3.27
-    created: "2021-05-10T22:27:53.942366663Z"
+    created: "2021-05-10T23:18:43.894082687Z"
     description: Machine Learning Operators
-    digest: 9eeb396195b01c1411bbe8f6a90c718aabac6c9792d9e732e51b3c21b2483997
+    digest: 23388efa0f24770f6665489a2be143a1057f6c9ed36e178983b7304584eda799
     home: https://modeld.io
     keywords:
     - kubernetes
@@ -27,7 +27,7 @@ entries:
     version: 0.3.27
   - apiVersion: v2
     appVersion: v0.3.26
-    created: "2021-05-10T22:27:53.932740182Z"
+    created: "2021-05-10T23:18:43.885056861Z"
     description: Machine Learning Operators
     digest: 2ca8f7b45dd7d4210e893aef9df962a0df8ffdb888fade0d127bcd2c36fb344c
     home: https://modeld.io
@@ -51,7 +51,7 @@ entries:
     version: 0.3.26
   - apiVersion: v2
     appVersion: v0.3.25
-    created: "2021-05-10T22:27:53.923641606Z"
+    created: "2021-05-10T23:18:43.876840146Z"
     description: Machine Learning Operators
     digest: f4fad84a8a6292a4aa6eef6a6834ce669d8defc3dc47448a936ca13a70d24f64
     home: https://modeld.io
@@ -75,7 +75,7 @@ entries:
     version: 0.3.25
   - apiVersion: v2
     appVersion: v0.3.24
-    created: "2021-05-10T22:27:53.913548921Z"
+    created: "2021-05-10T23:18:43.867613217Z"
     description: Machine Learning Operators
     digest: 3236f877230ef4c6b7bd3348ed2ca6558c6d0f1826bddf7a233f6626b220216f
     home: https://modeld.io
@@ -99,7 +99,7 @@ entries:
     version: 0.3.24
   - apiVersion: v2
     appVersion: v0.3.23
-    created: "2021-05-10T22:27:53.904560246Z"
+    created: "2021-05-10T23:18:43.859329301Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -128,7 +128,7 @@ entries:
     version: 0.3.23
   - apiVersion: v2
     appVersion: v0.3.22
-    created: "2021-05-10T22:27:53.887834506Z"
+    created: "2021-05-10T23:18:43.842946472Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -157,7 +157,7 @@ entries:
     version: 0.3.22
   - apiVersion: v2
     appVersion: v0.3.21
-    created: "2021-05-10T22:27:53.870975865Z"
+    created: "2021-05-10T23:18:43.827433855Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -186,7 +186,7 @@ entries:
     version: 0.3.21
   - apiVersion: v2
     appVersion: v0.3.20
-    created: "2021-05-10T22:27:53.85361972Z"
+    created: "2021-05-10T23:18:43.812221942Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -215,7 +215,7 @@ entries:
     version: 0.3.20
   - apiVersion: v2
     appVersion: v0.3.19
-    created: "2021-05-10T22:27:53.836605477Z"
+    created: "2021-05-10T23:18:43.796917128Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -244,7 +244,7 @@ entries:
     version: 0.3.19
   - apiVersion: v2
     appVersion: v0.3.18
-    created: "2021-05-10T22:27:53.819391733Z"
+    created: "2021-05-10T23:18:43.781537413Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -273,7 +273,7 @@ entries:
     version: 0.3.18
   - apiVersion: v2
     appVersion: v0.3.17
-    created: "2021-05-10T22:27:53.802013387Z"
+    created: "2021-05-10T23:18:43.765953095Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -302,7 +302,7 @@ entries:
     version: 0.3.17
   - apiVersion: v2
     appVersion: v0.3.16
-    created: "2021-05-10T22:27:53.783967536Z"
+    created: "2021-05-10T23:18:43.750111674Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -331,7 +331,7 @@ entries:
     version: 0.3.16
   - apiVersion: v2
     appVersion: v0.3.15
-    created: "2021-05-10T22:27:53.767455598Z"
+    created: "2021-05-10T23:18:43.733724544Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -360,7 +360,7 @@ entries:
     version: 0.3.15
   - apiVersion: v2
     appVersion: v0.3.14
-    created: "2021-05-10T22:27:53.750081453Z"
+    created: "2021-05-10T23:18:43.717727021Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -389,7 +389,7 @@ entries:
     version: 0.3.14
   - apiVersion: v2
     appVersion: v0.3.13
-    created: "2021-05-10T22:27:53.734555123Z"
+    created: "2021-05-10T23:18:43.702109102Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -418,7 +418,7 @@ entries:
     version: 0.3.13
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-05-10T22:27:53.71866699Z"
+    created: "2021-05-10T23:18:43.685931876Z"
     description: Machine Learning Operators
     digest: 45ad0574fa3d4fbe12e059d15074fd7192783ed8f698b4422068a4629e95c4b6
     home: https://modeld.io
@@ -442,7 +442,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-05-10T22:27:53.706467387Z"
+    created: "2021-05-10T23:18:43.67194188Z"
     description: Machine Learning Operators
     digest: 5127ff797b92bbd6af33b53a2c994a29c843f7049acadfc3626105e169a18faf
     home: https://modeld.io
@@ -466,7 +466,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-05-10T22:27:53.693489379Z"
+    created: "2021-05-10T23:18:43.65833469Z"
     description: Machine Learning Operators
     digest: e1cb998f7ab5d3b7a8cf4aed3aca399fa365390c5ae8b3f8bec7b36b547e782b
     home: https://modeld.io
@@ -491,9 +491,9 @@ entries:
   modeld-default-tenant:
   - apiVersion: v2
     appVersion: 0.3.17
-    created: "2021-05-10T22:27:53.944070977Z"
+    created: "2021-05-10T23:18:43.89570421Z"
     description: A Helm chart for default tenant
-    digest: e15b665fdc690e07167a566f926ccfc7caf2b71efdb8fb97b165de8194d1391c
+    digest: 28e105bd4d796eaafea926162c5c0a6d35d6de90f7f4f425ff4dee6463c16899
     name: modeld-default-tenant
     type: application
     urls:
@@ -501,7 +501,7 @@ entries:
     version: 0.3.17
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-05-10T22:27:53.94323647Z"
+    created: "2021-05-10T23:18:43.894940099Z"
     description: A Helm chart for default tenant
     digest: 56259d7a88d351e0a0c924e9555021f61ccd29b4c03cf228a175387340b60418
     name: modeld-default-tenant
@@ -509,4 +509,4 @@ entries:
     urls:
     - https://metaprov.github.io/helm-charts/modeld-default-tenant-0.1.0.tgz
     version: 0.1.0
-generated: "2021-05-10T22:27:53.679140059Z"
+generated: "2021-05-10T23:18:43.644652399Z"
