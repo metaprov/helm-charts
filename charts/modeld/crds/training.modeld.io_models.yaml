@@ -100,21 +100,21 @@ spec:
                 description: Dnn is a specification of the DNN estimator specification.
                   Not supported for this release.
                 type: object
-              compiler:
-                description: The compiler specification
+              compilation:
+                description: Compilation denotes how to compile the model.
                 properties:
                   compiler:
-                    type: string
-                  targets:
                     description: Set one or more targets
+                    type: string
+                  enable:
+                    description: Enable set the enable to
+                    type: boolean
+                  targets:
+                    description: Set one or more targets for the compiler
                     items:
                       type: string
                     type: array
                 type: object
-              complied:
-                default: false
-                description: Compiled is true when the model should perform a forecast
-                type: boolean
               datasetName:
                 description: DatasetName refer to the dataset object for which the
                   study is for.

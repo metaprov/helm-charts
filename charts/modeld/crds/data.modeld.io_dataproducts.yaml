@@ -70,19 +70,42 @@ spec:
               attachments:
                 description: List of documents attached to the this data product
                 items:
-                  description: data reference contain pointers to the actual data
-                    objects
                   properties:
-                    bucketName:
+                    description:
+                      description: Description is the description of the attachment
                       type: string
-                    path:
-                      description: Path to the full data file (e.g. csv file).
+                    location:
+                      description: Location is the location of the attachment
+                      properties:
+                        bucketName:
+                          type: string
+                        path:
+                          description: Path to the full data file (e.g. csv file).
+                          type: string
+                      required:
+                      - bucketName
+                      - path
+                      type: object
+                    name:
+                      description: Name is the name of the attachment.
                       type: string
-                  required:
-                  - bucketName
-                  - path
                   type: object
                 type: array
+              compilation:
+                description: List of documents attached to the this data product
+                properties:
+                  compiler:
+                    description: Set one or more targets
+                    type: string
+                  enable:
+                    description: Enable set the enable to
+                    type: boolean
+                  targets:
+                    description: Set one or more targets for the compiler
+                    items:
+                      type: string
+                    type: array
+                type: object
               currentModelVersion:
                 description: Semver counter that is used when generating new models
                 properties:
