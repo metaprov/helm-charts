@@ -62,10 +62,10 @@ apigateway:
   resources:
     limits:
       cpu: 250m
-      memory: 256Mi
+      memory: 128Mi
     requests:
       cpu: 250m
-      memory: 256Mi
+      memory: 128Mi
 
 apiproxy:
   replicaCount: 1
@@ -77,10 +77,10 @@ apiproxy:
   resources:
     limits:
       cpu: 250m
-      memory: 256Mi
+      memory: 128Mi
     requests:
       cpu: 250m
-      memory: 256Mi
+      memory: 128Mi
 
 dbproxy:
   replicaCount: 1
@@ -92,10 +92,10 @@ dbproxy:
   resources:
     limits:
       cpu: 250m
-      memory: 256Mi
+      memory: 128Mi
     requests:
       cpu: 250m
-      memory: 256Mi
+      memory: 128Mi
 
 
 controlplane:
@@ -108,10 +108,10 @@ controlplane:
   resources:
     limits:
       cpu: 250m
-      memory: 256Mi
+      memory: 128Mi
     requests:
       cpu: 250m
-      memory: 256Mi
+      memory: 128Mi
 
 datadock:
   replicaCount: 1
@@ -122,11 +122,11 @@ datadock:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: 250m
-      memory: 256Mi
+      cpu: 100m
+      memory: 128Mi
     requests:
-      cpu: 250m
-      memory: 206Mi
+      cpu: 100m
+      memory: 128Mi
 
 dataplane:
   replicaCount: 1
@@ -137,11 +137,11 @@ dataplane:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: 1000m
-      memory: 2Gi
+      cpu: 250m
+      memory: 256Mi
     requests:
-      cpu: 1000m
-      memory: 2Gi
+      cpu: 250m
+      memory: 256Mi
 
 frontend:
   replicaCount: 1
@@ -153,10 +153,10 @@ frontend:
   resources:
     limits:
       cpu: 250m
-      memory: 250Mi
+      memory: 256Mi
     requests:
       cpu: 250m
-      memory: 200Mi
+      memory: 256Mi
 
 
 clouds:
@@ -168,11 +168,11 @@ clouds:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: "250m"
-      memory: "256Mi"
+      cpu: "128m"
+      memory: "128i"
     requests:
-      cpu: "250m"
-      memory: "256Mi"
+      cpu: "128m"
+      memory: "128i"
 
 ingress:
   name : modeld-ingress
