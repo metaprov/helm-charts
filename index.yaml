@@ -2,8 +2,32 @@ apiVersion: v1
 entries:
   modeld:
   - apiVersion: v2
+    appVersion: v0.3.29
+    created: "2021-05-19T18:18:17.705717865Z"
+    description: Machine Learning Operators
+    digest: b9c3bc9a46c6ce3d54971f93094e64b7b97cbc13eed592d9969d268fad19b43e
+    home: https://modeld.io
+    keywords:
+    - kubernetes
+    - go
+    - golang
+    - ai
+    - machine learning
+    kubeVersion: '>= 1.15.0'
+    maintainers:
+    - email: support@modeld.io
+      name: metaprov
+      url: https://groups.google.com/forum/#!forum/modeld-discuss
+    name: modeld
+    sources:
+    - https://github.com/metaprov/modeld
+    type: application
+    urls:
+    - https://metaprov.github.io/helm-charts/modeld-0.3.29.tgz
+    version: 0.3.29
+  - apiVersion: v2
     appVersion: v0.3.28
-    created: "2021-05-19T16:49:59.439419996Z"
+    created: "2021-05-19T18:18:17.696757992Z"
     description: Machine Learning Operators
     digest: 9060e84d31dbea0e648c9b486c6575e438f9412b8216e70d75666c6d658b30dc
     home: https://modeld.io
@@ -27,7 +51,7 @@ entries:
     version: 0.3.28
   - apiVersion: v2
     appVersion: v0.3.27
-    created: "2021-05-19T16:49:59.427674029Z"
+    created: "2021-05-19T18:18:17.687210907Z"
     description: Machine Learning Operators
     digest: ddd5b75c5f2cc6d86ebe7d5e9f8e8f8cbcb046ac2be2eb6ae6683f4a609f39ce
     home: https://modeld.io
@@ -51,7 +75,7 @@ entries:
     version: 0.3.27
   - apiVersion: v2
     appVersion: v0.3.26
-    created: "2021-05-19T16:49:59.416674473Z"
+    created: "2021-05-19T18:18:17.677755324Z"
     description: Machine Learning Operators
     digest: 2ca8f7b45dd7d4210e893aef9df962a0df8ffdb888fade0d127bcd2c36fb344c
     home: https://modeld.io
@@ -75,7 +99,7 @@ entries:
     version: 0.3.26
   - apiVersion: v2
     appVersion: v0.3.25
-    created: "2021-05-19T16:49:59.406443328Z"
+    created: "2021-05-19T18:18:17.669092256Z"
     description: Machine Learning Operators
     digest: f4fad84a8a6292a4aa6eef6a6834ce669d8defc3dc47448a936ca13a70d24f64
     home: https://modeld.io
@@ -99,7 +123,7 @@ entries:
     version: 0.3.25
   - apiVersion: v2
     appVersion: v0.3.24
-    created: "2021-05-19T16:49:59.39528657Z"
+    created: "2021-05-19T18:18:17.659586372Z"
     description: Machine Learning Operators
     digest: 3236f877230ef4c6b7bd3348ed2ca6558c6d0f1826bddf7a233f6626b220216f
     home: https://modeld.io
@@ -123,7 +147,7 @@ entries:
     version: 0.3.24
   - apiVersion: v2
     appVersion: v0.3.23
-    created: "2021-05-19T16:49:59.38473592Z"
+    created: "2021-05-19T18:18:17.651148609Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -152,7 +176,7 @@ entries:
     version: 0.3.23
   - apiVersion: v2
     appVersion: v0.3.22
-    created: "2021-05-19T16:49:59.364947739Z"
+    created: "2021-05-19T18:18:17.634604689Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -181,7 +205,7 @@ entries:
     version: 0.3.22
   - apiVersion: v2
     appVersion: v0.3.21
-    created: "2021-05-19T16:49:59.346234574Z"
+    created: "2021-05-19T18:18:17.61861548Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -210,7 +234,7 @@ entries:
     version: 0.3.21
   - apiVersion: v2
     appVersion: v0.3.20
-    created: "2021-05-19T16:49:59.325978487Z"
+    created: "2021-05-19T18:18:17.60208766Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -239,7 +263,7 @@ entries:
     version: 0.3.20
   - apiVersion: v2
     appVersion: v0.3.19
-    created: "2021-05-19T16:49:59.305909802Z"
+    created: "2021-05-19T18:18:17.585943448Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -268,7 +292,7 @@ entries:
     version: 0.3.19
   - apiVersion: v2
     appVersion: v0.3.18
-    created: "2021-05-19T16:49:59.282560771Z"
+    created: "2021-05-19T18:18:17.569320326Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -297,7 +321,7 @@ entries:
     version: 0.3.18
   - apiVersion: v2
     appVersion: v0.3.17
-    created: "2021-05-19T16:49:59.252026537Z"
+    created: "2021-05-19T18:18:17.553143113Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -326,7 +350,7 @@ entries:
     version: 0.3.17
   - apiVersion: v2
     appVersion: v0.3.16
-    created: "2021-05-19T16:49:59.232079654Z"
+    created: "2021-05-19T18:18:17.53643629Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -355,7 +379,7 @@ entries:
     version: 0.3.16
   - apiVersion: v2
     appVersion: v0.3.15
-    created: "2021-05-19T16:49:59.212115171Z"
+    created: "2021-05-19T18:18:17.51935626Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -384,7 +408,7 @@ entries:
     version: 0.3.15
   - apiVersion: v2
     appVersion: v0.3.14
-    created: "2021-05-19T16:49:59.192527393Z"
+    created: "2021-05-19T18:18:17.502543834Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -413,7 +437,7 @@ entries:
     version: 0.3.14
   - apiVersion: v2
     appVersion: v0.3.13
-    created: "2021-05-19T16:49:59.171979602Z"
+    created: "2021-05-19T18:18:17.486250919Z"
     dependencies:
     - condition: certManager.enabled
       name: cert-manager
@@ -442,7 +466,7 @@ entries:
     version: 0.3.13
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-05-19T16:49:59.152046919Z"
+    created: "2021-05-19T18:18:17.468548477Z"
     description: Machine Learning Operators
     digest: 45ad0574fa3d4fbe12e059d15074fd7192783ed8f698b4422068a4629e95c4b6
     home: https://modeld.io
@@ -466,7 +490,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-05-19T16:49:59.136098993Z"
+    created: "2021-05-19T18:18:17.455515825Z"
     description: Machine Learning Operators
     digest: 5127ff797b92bbd6af33b53a2c994a29c843f7049acadfc3626105e169a18faf
     home: https://modeld.io
@@ -490,7 +514,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2021-05-19T16:49:59.119749861Z"
+    created: "2021-05-19T18:18:17.44131045Z"
     description: Machine Learning Operators
     digest: e1cb998f7ab5d3b7a8cf4aed3aca399fa365390c5ae8b3f8bec7b36b547e782b
     home: https://modeld.io
@@ -515,9 +539,9 @@ entries:
   modeld-default-tenant:
   - apiVersion: v2
     appVersion: 0.3.17
-    created: "2021-05-19T16:49:59.441486625Z"
+    created: "2021-05-19T18:18:17.707354197Z"
     description: A Helm chart for default tenant
-    digest: 27b154970bb56bda9c36562b40949441cd1012359111aa02fe0b94a0b6b83eb6
+    digest: a2fdce429a6c61b9811eb13da04b233ad72a8cab9fa4eeb55347a4ff2955d3e6
     name: modeld-default-tenant
     type: application
     urls:
@@ -525,7 +549,7 @@ entries:
     version: 0.3.17
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-05-19T16:49:59.44040131Z"
+    created: "2021-05-19T18:18:17.706560281Z"
     description: A Helm chart for default tenant
     digest: 56259d7a88d351e0a0c924e9555021f61ccd29b4c03cf228a175387340b60418
     name: modeld-default-tenant
@@ -533,4 +557,4 @@ entries:
     urls:
     - https://metaprov.github.io/helm-charts/modeld-default-tenant-0.1.0.tgz
     version: 0.1.0
-generated: "2021-05-19T16:49:59.098016653Z"
+generated: "2021-05-19T18:18:17.427662786Z"
