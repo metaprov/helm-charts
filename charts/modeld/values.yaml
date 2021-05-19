@@ -169,10 +169,10 @@ clouds:
   resources:
     limits:
       cpu: "128m"
-      memory: "128i"
+      memory: "128Mi"
     requests:
       cpu: "128m"
-      memory: "128i"
+      memory: "128Mi"
 
 ingress:
   name : modeld-ingress
