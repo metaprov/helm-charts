@@ -1,0 +1,16 @@
+apiVersion: catalog.modeld.io/v1alpha1
+kind: PublicDataset
+metadata:
+  name: iris
+  namespace: modeld-catalog
+spec:
+  url: https://github.com/metaprov/modeldapi/blob/main/datasets/iris
+  description: Iris flower dataset
+  task: multi-classification
+  dataUrl: https://raw.githubusercontent.com/metaprov/modeldapi/main/datasets/iris/iris.csv
+  citation: ""
+  rows: 120
+  columns: 5
+  fileSize: 20000
+  targetColumn:  ""
+  imbalanced: false

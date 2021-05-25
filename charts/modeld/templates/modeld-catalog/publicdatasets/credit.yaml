@@ -1,0 +1,16 @@
+apiVersion: catalog.modeld.io/v1alpha1
+kind: PublicDataset
+metadata:
+  name: credit
+  namespace: modeld-catalog
+spec:
+  url: https://github.com/metaprov/modeldapi/tree/main/datasets/credit
+  description: This dataset classifies people described by a set of attributes as good or bad credit risks
+  task: binary-classification
+  dataUrl: https://raw.githubusercontent.com/metaprov/modeldapi/main/datasets/credit/credit.csv
+  citation: ""
+  rows: 1000
+  columns: 20
+  fileSize: 20000
+  targetColumn:  ""
+  imbalanced: false
