@@ -6,18 +6,12 @@ metadata:
   namespace: default-tenant
   labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
 spec:
-  provider: smtp
+  provider: slack
   tenantRef:
     name: default-tenant
     namespace: modeld-system
   secretName : default-slack-secret
   category: general
-  smtp:
-    host: ''
-    port: 34
-    userName: ''
-    password: ''
-
 ---
 apiVersion: v1
 kind: Secret
