@@ -129,7 +129,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: controlplane-configmap
-                  key: db-port
+                  key: db-username
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
