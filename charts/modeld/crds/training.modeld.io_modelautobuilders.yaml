@@ -97,15 +97,13 @@ spec:
                 type: boolean
               dataProductName:
                 description: DataProductName is the name of the data product
-                maxLength: 253
-                minLength: 1
+                maxLength: 63
                 pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
                 type: string
               dataProductVersionName:
                 description: DataProductVersionName is a reference to data product
                   version
                 maxLength: 253
-                minLength: 1
                 pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
                 type: string
               dataSourceSpec:
@@ -168,6 +166,7 @@ spec:
                     - video
                     type: string
                   description:
+                    default: ""
                     description: User provided description of the data source
                     maxLength: 512
                     type: string
@@ -226,6 +225,7 @@ spec:
                         minimum: 0
                         type: integer
                       nullValues:
+                        default: ""
                         description: NullValue is a sequence of values to replace
                           with NA.
                         type: string
@@ -295,6 +295,7 @@ spec:
                               - useless
                               type: string
                             description:
+                              default: ""
                               description: Description is a description of the feature
                               maxLength: 63
                               type: string
@@ -319,6 +320,7 @@ spec:
                               description: External Docs
                               type: string
                             featureName:
+                              default: ""
                               description: FileName specify the name of the feature,
                                 if this attribute comes from a feature
                               maxLength: 63
@@ -410,7 +412,6 @@ spec:
                               type: integer
                             name:
                               description: FileName specify the name of the attribute
-                                required
                               maxLength: 63
                               minLength: 1
                               type: string
@@ -798,7 +799,7 @@ spec:
                 format: int32
                 type: integer
               workloadClassName:
-                default: default-workload-class
+                default: nano-cpu-250m-mem-256mi
                 description: WorkloadClassName is the name of the workload class used
                   to run this pipeline.
                 type: string

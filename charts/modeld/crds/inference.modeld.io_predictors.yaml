@@ -62,9 +62,9 @@ spec:
             description: PredictorSpec define the desired state of the predictor
             properties:
               artifactsFolder:
+                default: ""
                 description: The key in the bucket for storing all the predictor artifacts.
                 maxLength: 512
-                minLength: 1
                 type: string
               autoscale:
                 default: false
@@ -72,6 +72,7 @@ spec:
                   we will use HPA.
                 type: boolean
               backwardCurtain:
+                default: ""
                 description: The backward curtain recieve the curtain after the prediction.
                 type: string
               cache:
@@ -82,10 +83,12 @@ spec:
                     description: Active indicate if the cache is active
                     type: boolean
                   serviceName:
+                    default: ""
                     description: the name of the cache service
                     type: string
                 type: object
               description:
+                default: ""
                 description: User provided description
                 maxLength: 256
                 type: string
@@ -96,6 +99,7 @@ spec:
                     description: The crdn schedule to run the drift detection
                     type: string
                   notifierName:
+                    default: ""
                     description: The notifier to invoke in case of
                     type: string
                   testDataset:
@@ -106,6 +110,7 @@ spec:
                     type: number
                 type: object
               forwardCurtain:
+                default: ""
                 description: The forward curtain recieve the prediction request before
                   the prediction.
                 type: string
@@ -157,10 +162,9 @@ spec:
                         - none
                         type: string
                       path:
-                        description: 'This is the path relative to the ingress path
-                          Default: /predict'
+                        default: ""
+                        description: This is the path relative to the ingress path
                         maxLength: 256
-                        minLength: 1
                         type: string
                       port:
                         description: 'Service port specify the predictor port. Default:
@@ -176,6 +180,7 @@ spec:
                         description: StorageConnection name to the streaming provider
                         type: string
                       inputKey:
+                        default: ""
                         description: the streaming topic (input or output)
                         type: string
                     type: object
@@ -187,6 +192,7 @@ spec:
                         description: connection to the database provider
                         type: string
                       datasourceName:
+                        default: ""
                         description: Options, this is the datasource containing the
                           table schema
                         type: string
@@ -195,6 +201,7 @@ spec:
                         format: int32
                         type: integer
                       tableName:
+                        default: ""
                         description: The table name. Optional Default to the predictor
                           name
                         type: string
@@ -288,6 +295,7 @@ spec:
                     description: If true monitoring is enabled.
                     type: boolean
                   notifierName:
+                    default: ""
                     description: NotifierName is the name of notifer to alert in case
                       of
                     type: string
@@ -303,6 +311,7 @@ spec:
                     format: int32
                     type: integer
                   schedule:
+                    default: ""
                     description: Schedule is a cron schedule to run the monitor. By
                       default the monitor run daily.
                     type: string
@@ -359,10 +368,9 @@ spec:
                         - none
                         type: string
                       path:
-                        description: 'This is the path relative to the ingress path
-                          Default: /predict'
+                        default: ""
+                        description: This is the path relative to the ingress path
                         maxLength: 256
-                        minLength: 1
                         type: string
                       port:
                         description: 'Service port specify the predictor port. Default:
@@ -378,6 +386,7 @@ spec:
                         description: StorageConnection name to the streaming provider
                         type: string
                       inputKey:
+                        default: ""
                         description: the streaming topic (input or output)
                         type: string
                     type: object
@@ -389,6 +398,7 @@ spec:
                         description: connection to the database provider
                         type: string
                       datasourceName:
+                        default: ""
                         description: Options, this is the datasource containing the
                           table schema
                         type: string
@@ -397,6 +407,7 @@ spec:
                         format: int32
                         type: integer
                       tableName:
+                        default: ""
                         description: The table name. Optional Default to the predictor
                           name
                         type: string
@@ -517,6 +528,7 @@ spec:
                     description: Active indicate if the cache is active
                     type: boolean
                   serviceName:
+                    default: ""
                     description: the name of the cache service
                     type: string
                 type: object
@@ -7107,6 +7119,7 @@ spec:
                 - streaming
                 type: string
               workloadClassName:
+                default: ""
                 description: A reference to the workload class for this predictor
                   deployment
                 type: string
