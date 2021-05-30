@@ -19,5 +19,5 @@ spec:
   servingSiteName: default-serving-site
   labName: default-lab
   task: binary-classification  
-  defaultWorkloadClassName: model-workload-class  
+  defaultWorkloadClassName: nano-cpu-250m-mem-256mi  
   owner: admin
