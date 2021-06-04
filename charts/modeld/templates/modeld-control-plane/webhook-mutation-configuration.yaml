@@ -604,6 +604,84 @@ webhooks:
         path: /mutate-infra-modeld-io-v1alpha1-lab
       caBundle: CERT
 
+  - name: alert.infra.modeld.io
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+        - v1beta1
+        - v1alpha1
+    rules:
+        - apiGroups:
+            - "infra.modeld.io"
+          apiVersions:
+            - v1alpha1
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - alerts
+    clientConfig:
+        service:
+          namespace: modeld-system
+          name: modeld-control-plane-webhook
+          path: /mutate-infra-modeld-io-v1alpha1-alert
+        caBundle: CERT
+
+
+  - name: taskcard.infra.modeld.io
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+        - v1beta1
+        - v1alpha1
+    rules:
+        - apiGroups:
+            - "infra.modeld.io"
+          apiVersions:
+            - v1alpha1
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - taskcards
+    clientConfig:
+        service:
+          namespace: modeld-system
+          name: modeld-control-plane-webhook
+          path: /mutate-infra-modeld-io-v1alpha1-taskcard
+        caBundle: CERT
+
+  - name: commit.infra.modeld.io
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+        - v1beta1
+        - v1alpha1
+    rules:
+        - apiGroups:
+            - "infra.modeld.io"
+          apiVersions:
+            - v1alpha1
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - commits
+    clientConfig:
+        service:
+          namespace: modeld-system
+          name: modeld-control-plane-webhook
+          path: /mutate-infra-modeld-io-v1alpha1-commit
+        caBundle: CERT
+
+
+
   - name: notifier.infra.modeld.io
     failurePolicy: Fail
     sideEffects: None

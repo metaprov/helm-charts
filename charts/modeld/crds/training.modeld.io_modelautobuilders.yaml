@@ -255,6 +255,36 @@ spec:
                     default: no-one
                     description: The account name of the owner of this dataset
                     type: string
+                  sample:
+                    description: Sample spec defines how many rows to use for analysis
+                      for datasets from this datasource.
+                    properties:
+                      enabled:
+                        default: false
+                        description: Enabled specify if the sample is enabled
+                        type: boolean
+                      percent:
+                        default: 100
+                        description: Pct is the percent of rows to use for analysis.
+                        format: int32
+                        minimum: 0
+                        type: integer
+                      rows:
+                        default: 500
+                        description: Rows is the number of rows. Default is 500
+                        format: int32
+                        minimum: 0
+                        type: integer
+                      string:
+                        default: ""
+                        description: Filter formula. Valid only if the sample is a
+                          filter.
+                        type: string
+                      type:
+                        default: random
+                        description: Type is the sampling type Default is random
+                        type: string
+                    type: object
                   schema:
                     description: The data source schema
                     properties:
@@ -299,6 +329,10 @@ spec:
                               description: Description is a description of the feature
                               maxLength: 63
                               type: string
+                            driftThreshold:
+                              description: Drift treshold is the treshold for drift
+                                detection.
+                              type: number
                             enum:
                               description: Enum
                               items:
@@ -443,6 +477,10 @@ spec:
                               description: Sigma is the standard deviation of the
                                 distribution
                               type: number
+                            skewThreshold:
+                              description: Skew treshold is the treshold for skew
+                                detection.
+                              type: number
                             timeColumn:
                               default: false
                               description: TimeColumn is true if this column is used
@@ -507,6 +545,89 @@ spec:
                             - quarter
                             - year
                             type: string
+                        type: object
+                      validationSpec:
+                        description: Validation spec define the validation to perform
+                          on new datasets
+                        properties:
+                          columnAssertions:
+                            description: MultiColumnAssertions defines assertions
+                              for combined columns from the dataset
+                            items:
+                              properties:
+                                max:
+                                  type: number
+                                min:
+                                  type: number
+                                strictMax:
+                                  type: boolean
+                                strictMin:
+                                  type: boolean
+                                type:
+                                  type: string
+                                valueSet:
+                                  items:
+                                    type: string
+                                  type: array
+                              type: object
+                            type: array
+                          datasetAssertions:
+                            description: DatasetAssertions contains assertions for
+                              datasets
+                            items:
+                              properties:
+                                max:
+                                  type: number
+                                min:
+                                  type: number
+                                strictMax:
+                                  type: boolean
+                                strictMin:
+                                  type: boolean
+                                type:
+                                  type: string
+                                valueSet:
+                                  items:
+                                    type: string
+                                  type: array
+                              type: object
+                            type: array
+                          multiColumnAssertions:
+                            description: MultiColumnAssertions defines assertions
+                              for combined columns from the dataset
+                            items:
+                              properties:
+                                max:
+                                  format: int32
+                                  type: integer
+                                min:
+                                  format: int32
+                                  type: integer
+                                strictMax:
+                                  type: boolean
+                                strictMin:
+                                  type: boolean
+                                type:
+                                  type: string
+                                valueSet:
+                                  items:
+                                    type: string
+                                  type: array
+                              type: object
+                            type: array
+                          multiDatasetAssertions:
+                            description: MultiDatasetAssertions contains assertions
+                              for multi datasets
+                            items:
+                              properties:
+                                leftDataset:
+                                  type: string
+                                rightDataset:
+                                  type: string
+                                type:
+                                  type: string
+                              type: object
+                            type: array
                         type: object
                     type: object
                   stream:

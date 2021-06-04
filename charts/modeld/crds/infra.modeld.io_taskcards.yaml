@@ -6,32 +6,47 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.5.0
   creationTimestamp: null
-  name: conversations.team.modeld.io
+  name: taskcards.infra.modeld.io
 spec:
-  group: team.modeld.io
+  group: infra.modeld.io
   names:
     categories:
-    - team
+    - infra
     - modeld
-    kind: Conversation
-    listKind: ConversationList
-    plural: conversations
-    shortNames:
-    - cv
-    singular: conversation
+    kind: TaskCard
+    listKind: TaskCardList
+    plural: taskcards
+    singular: taskcard
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=="Ready")].status
-      name: Ready
+    - jsonPath: .status.phase
+      name: Status
       type: string
+    - jsonPath: .spec.level
+      name: Level
+      type: string
+    - jsonPath: .spec.subject
+      name: Subject
+      type: string
+    - jsonPath: .spec.entityRef.name
+      name: Entity Namespace
+      type: string
+    - jsonPath: .spec.entityRef.namespace
+      name: Entity Name
+      type: string
+    - jsonPath: .spec.notifierName
+      name: Notifier
+      type: string
+    - jsonPath: .status.at
+      name: At
+      type: date
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Conversation represents a comment about any conversation
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -46,10 +61,14 @@ spec:
           metadata:
             type: object
           spec:
-            description: ConversationSpec defines the desired state of a Conversation
+            description: TaskCardSpec defines the desired state of TaskCard
             properties:
+              description:
+                default: ""
+                description: User provided description
+                type: string
               entityRef:
-                description: The target of the conversation
+                description: The subject entity
                 properties:
                   apiVersion:
                     description: API version of the referent.
@@ -84,88 +103,29 @@ spec:
                     description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                     type: string
                 type: object
-              messages:
-                description: Messages are the messages of the conversation.
-                items:
-                  description: Commnet represents a single comment in the conversation
-                  properties:
-                    authorRef:
-                      description: AuthorRef is a reference to the author of the comment
-                      properties:
-                        apiVersion:
-                          description: API version of the referent.
-                          type: string
-                        fieldPath:
-                          description: 'If referring to a piece of an object instead
-                            of an entire object, this string should contain a valid
-                            JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                            For example, if the object reference is to a container
-                            within a pod, this would take on a value like: "spec.containers{name}"
-                            (where "name" refers to the name of the container that
-                            triggered the event) or if no container name is specified
-                            "spec.containers[2]" (container with index 2 in this pod).
-                            This syntax is chosen only to have some well-defined way
-                            of referencing a part of an object. TODO: this design
-                            is not final and this field is subject to change in the
-                            future.'
-                          type: string
-                        kind:
-                          description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                          type: string
-                        name:
-                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        namespace:
-                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
-                          type: string
-                        resourceVersion:
-                          description: 'Specific resourceVersion to which this reference
-                            is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
-                          type: string
-                        uid:
-                          description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
-                          type: string
-                      type: object
-                    content:
-                      default: ""
-                      description: Content is the content of the comment
-                      type: string
-                    id:
-                      description: ID is the comment ID. Used when replying to a comment.
-                      type: string
-                    postedAt:
-                      description: PostedAt is the time when the comment was posted
-                      format: date-time
-                      type: string
-                    replyTo:
-                      default: ""
-                      description: If this comment is a reply to an id
-                      type: string
-                    sent:
-                      default: false
-                      description: Sent indicate if the comment was sent to the notifier.
-                      type: boolean
-                  type: object
-                type: array
               notifierName:
-                default: default-slack-notifier
-                description: The notifier is used for alerts about new msgs in the
-                  conversation
+                default: ""
+                description: NotifierName is the name of the notifier used to fire
+                  the alert.
                 type: string
               owner:
                 default: no-one
-                description: The owner account name
                 type: string
-            required:
-            - entityRef
-            - messages
+              subject:
+                default: ""
+                type: string
             type: object
           status:
-            description: ConversationStatus is the current status of the conversation
+            description: TaskCardStatus is the observed state of a TaskCard
             properties:
+              at:
+                description: The time when the alert was fired
+                format: date-time
+                type: string
               conditions:
                 items:
-                  description: ConversationCondition describes the state of the conversation
+                  description: TaskCardCondition describes the state of the license
+                    at a certain point.
                   properties:
                     lastTransitionTime:
                       description: Last time the condition transitioned from one status
@@ -180,9 +140,10 @@ spec:
                       description: The reason for the condition's last transition.
                       type: string
                     status:
+                      description: Status of the condition, one of True, False, AutoScaler.
                       type: string
                     type:
-                      description: / BucketName conditions
+                      description: Type of account condition.
                       type: string
                   required:
                   - status
@@ -194,6 +155,9 @@ spec:
                   on
                 format: int64
                 type: integer
+              phase:
+                description: Phase is the phase of the model
+                type: string
             type: object
         required:
         - spec
