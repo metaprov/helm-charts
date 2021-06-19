@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.5.0
+    controller-gen.kubebuilder.io/version: v0.6.0
   creationTimestamp: null
   name: taskcards.infra.modeld.io
 spec:
@@ -22,9 +22,6 @@ spec:
   - additionalPrinterColumns:
     - jsonPath: .status.phase
       name: Status
-      type: string
-    - jsonPath: .spec.level
-      name: Level
       type: string
     - jsonPath: .spec.subject
       name: Subject
@@ -63,12 +60,16 @@ spec:
           spec:
             description: TaskCardSpec defines the desired state of TaskCard
             properties:
-              description:
-                default: ""
-                description: User provided description
+              assignedTo:
+                default: no-one
+                description: Assigned to is the user name assigned to this task
+                type: string
+              dueDate:
+                description: Flagged donete that task was flagged
+                format: date-time
                 type: string
               entityRef:
-                description: The subject entity
+                description: The modeld entity that the task refer to.
                 properties:
                   apiVersion:
                     description: API version of the referent.
@@ -103,25 +104,26 @@ spec:
                     description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                     type: string
                 type: object
+              flagged:
+                default: false
+                description: Flagged donete that task was flagged
+                type: boolean
               notifierName:
                 default: ""
                 description: NotifierName is the name of the notifier used to fire
                   the alert.
                 type: string
-              owner:
-                default: no-one
+              reminder:
+                description: Reminder is the time to send a reminder
+                format: date-time
                 type: string
-              subject:
+              task:
                 default: ""
                 type: string
             type: object
           status:
             description: TaskCardStatus is the observed state of a TaskCard
             properties:
-              at:
-                description: The time when the alert was fired
-                format: date-time
-                type: string
               conditions:
                 items:
                   description: TaskCardCondition describes the state of the license

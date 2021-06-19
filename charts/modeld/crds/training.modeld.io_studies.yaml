@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.5.0
+    controller-gen.kubebuilder.io/version: v0.6.0
   creationTimestamp: null
   name: studies.training.modeld.io
 spec:
@@ -215,6 +215,11 @@ spec:
                     description: Optional notifier to use when the forecast is complete.
                     type: string
                 type: object
+              id:
+                description: ID is the id of the study within the data product Note
+                  that multiplie models can have the same version
+                format: int64
+                type: integer
               labRef:
                 description: LabRef is a reference to the lab where the trainers for
                   this study run. If no value is provided, the lab is taken from the
@@ -275,12 +280,6 @@ spec:
                 description: Set to true if you want the system to create a docker
                   model image, at the end of training.
                 type: boolean
-              modelVersion:
-                default: ""
-                description: ModelVersion is the semver version of the resulting model.
-                  Note that multiplie models can have the same version
-                maxLength: 63
-                type: string
               objective:
                 description: Objective is the objective defined how the study controller
                   will compare model performance.
@@ -353,6 +352,20 @@ spec:
                         description: The date time imputer.
                         type: string
                     type: object
+                  balancer:
+                    description: Balancer is used for imbalanced datasets to fix the
+                      imbalance.
+                    enum:
+                    - adasyn
+                    - baseline-smote
+                    - kmean-smote
+                    - random-over-sampler
+                    - smote
+                    - smotenc
+                    - svmsmote
+                    - none
+                    - auto
+                    type: string
                   categorical:
                     description: One or more categorical pipelines.
                     properties:
@@ -426,14 +439,20 @@ spec:
                         - constant
                         type: string
                     type: object
-                  featureSelector:
+                  featureEngineering:
                     description: FeaturePipeline selector
                     enum:
+                    - rfe
                     - select-percentile
                     - select-kbest
                     - select-fpr
                     - select-fdr
-                    - variance-treshold
+                    - variance-threshold
+                    - pca
+                    - polynomial-features
+                    - rbf-sampler
+                    - fast-ica
+                    - nystroem
                     - none
                     - auto
                     type: string
@@ -493,15 +512,6 @@ spec:
                         - auto
                         type: string
                     type: object
-                  reducer:
-                    description: Dim reducer
-                    enum:
-                    - pca
-                    - kernel-pca
-                    - fast-ica
-                    - none
-                    - auto
-                    type: string
                   text:
                     description: Text specify the column transformation for text columns
                     properties:
@@ -649,6 +659,92 @@ spec:
                     default: 0
                     description: The minimum score by which the search would stop
                     type: number
+                  pruner:
+                    description: The pruner to use during model search.
+                    properties:
+                      intervalTrials:
+                        default: 1
+                        description: Interval in number of steps between the pruning
+                          checks
+                        format: int32
+                        type: integer
+                      lower:
+                        description: A minimum value which determines whether pruner
+                          prunes or not. Used only for treshold pruner
+                        format: int32
+                        type: integer
+                      minTrials:
+                        default: 1
+                        description: Minimum number of reported trials.
+                        format: int32
+                        type: integer
+                      precentialTrials:
+                        default: 25
+                        description: Keep specific precent of trials. Used only with
+                          precential pruner
+                        format: int32
+                        maximum: 100
+                        minimum: 0
+                        type: integer
+                      shOptions:
+                        description: SHOptions is the desired options for successive
+                          halving search. All other models are saved into an archive.
+                        properties:
+                          eliminationRate:
+                            default: 3
+                            description: The rate of elimination during SH search,
+                              such that only 1/rate of models are promoted to the
+                              next half
+                            format: int32
+                            minimum: 0
+                            type: integer
+                          maxBudget:
+                            default: 81
+                            description: The maximum budget allocated to each model
+                              during SH search. The default max budget is 81
+                            format: int32
+                            minimum: 0
+                            type: integer
+                          modality:
+                            default: epochs
+                            description: The modality type. The default modality is
+                              based on the type of models For deep models - we use
+                              epocs. For classical models - we use data
+                            enum:
+                            - data
+                            - epochs
+                            type: string
+                        type: object
+                      startupTrials:
+                        default: 5
+                        description: Pruning is disabled until the given number of
+                          trials finish in the same study.
+                        format: int32
+                        type: integer
+                      type:
+                        default: median
+                        description: The pruner to use during model search.
+                        enum:
+                        - none
+                        - patient
+                        - median
+                        - precentile
+                        - sh
+                        - hyperband
+                        - treshold
+                        type: string
+                      upper:
+                        description: A maximum value which determines whether pruner
+                          prunes or not. Used only for treshold pruner
+                        format: int32
+                        type: integer
+                      wramupTrials:
+                        default: 0
+                        description: ' Pruning is disabled until the trial exceeds
+                          the given number of step'
+                        format: int32
+                        type: integer
+                    type: object
                   resources:
                     description: Define the general size of the resources needed for
                       each trainer.
@@ -712,39 +808,28 @@ spec:
                     maximum: 2400
                     minimum: 0
                     type: integer
-                  shOptions:
-                    description: SHOptions is the desired options for successive halving
-                      search. All other models are saved into an archive.
-                    properties:
-                      eliminationRate:
-                        default: 3
-                        description: The rate of elimination during SH search, such
-                          that only 1/rate of models are promoted to the next half
-                        format: int32
-                        minimum: 0
-                        type: integer
-                      maxBudget:
-                        default: 81
-                        description: The maximum budget allocated to each model during
-                          SH search. The default max budget is 81
-                        format: int32
-                        minimum: 0
-                        type: integer
-                      modality:
-                        default: epochs
-                        description: The modality type. The default modality is based
-                          on the type of models For deep models - we use epocs. For
-                          classical models - we use data
-                        enum:
-                        - data
-                        - epochs
-                        type: string
-                    type: object
+                  sampler:
+                    default: random
+                    description: Type specify the hyper parameter optimization search
+                      method. The only supported value is random
+                    enum:
+                    - random
+                    - grid
+                    - bayesian
+                    - tpe
+                    - manual
+                    - auto
+                    type: string
                   stackingEnsemble:
                     default: true
                     description: StackingEnsemble If true, create a stacking ensemble
                       of the top 3 models.
                     type: boolean
+                  startAt:
+                    description: Set the start time, by default this is set to the
+                      start time of the study
+                    format: date-time
+                    type: string
                   test:
                     default: 1
                     description: Test indicate the desired number of models that should
@@ -760,18 +845,6 @@ spec:
                     maximum: 50
                     minimum: 0
                     type: integer
-                  type:
-                    default: random
-                    description: Type specify the hyper parameter optimization search
-                      method. The only supported value is random
-                    enum:
-                    - random
-                    - grid
-                    - bayesian
-                    - sh
-                    - manual
-                    - auto
-                    type: string
                   votingEnsemble:
                     default: false
                     description: VotingEnsample - If true, create a voting ensemble
@@ -1194,6 +1267,10 @@ spec:
               freeTrainers:
                 description: Free trainers
                 format: int32
+                type: integer
+              lastModelID:
+                description: the last model id generated for this study
+                format: int64
                 type: integer
               models:
                 description: Total models created for the study

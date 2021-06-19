@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.5.0
+    controller-gen.kubebuilder.io/version: v0.6.0
   creationTimestamp: null
   name: datasets.data.modeld.io
 spec:
@@ -221,23 +221,13 @@ spec:
                   - type
                   type: object
                 type: array
-              dataProblems:
-                description: List of data problems, as reported by the validation
-                  process
-                items:
-                  properties:
-                    column:
-                      type: string
-                    error:
-                      type: string
-                  required:
-                  - column
-                  - error
-                  type: object
-                type: array
               imbalanced:
                 description: Based on the actual data, treat this dataset as imbalanced.
                 type: boolean
+              lastStudyTime:
+                description: Last time a study was done on the dataset.
+                format: date-time
+                type: string
               observedGeneration:
                 description: ObservedGeneration is the Last generation that was acted
                   on
@@ -398,6 +388,26 @@ spec:
                     format: int32
                     type: integer
                 type: object
+              validationResults:
+                description: List of data problems, as reported by the validation
+                  process
+                items:
+                  properties:
+                    column:
+                      type: string
+                    error:
+                      type: string
+                    passed:
+                      type: boolean
+                    type:
+                      type: string
+                  required:
+                  - column
+                  - error
+                  - passed
+                  - type
+                  type: object
+                type: array
             type: object
         required:
         - metadata

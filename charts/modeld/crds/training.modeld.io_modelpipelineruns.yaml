@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.5.0
+    controller-gen.kubebuilder.io/version: v0.6.0
   creationTimestamp: null
   name: modelpipelineruns.training.modeld.io
 spec:
@@ -119,29 +119,31 @@ spec:
                     description: Results is the results of running the test datasets
                       against the new model
                     items:
-                      description: Model Test Result holds the results for a single
-                        metric on a single dataset
                       properties:
-                        datasetName:
-                          description: The name of the dataset
-                          type: string
-                        duration:
-                          description: Duration is the time that it took to run the
-                            test
-                          type: string
-                        error:
-                          description: Error is a name of any error that occurred
-                            during the test.
-                          type: string
-                        expected:
-                          description: Expected is the expected value for this expecation
-                            as defined by the test
+                        actualValue:
+                          description: Actual value is the actual value
                           type: number
-                        op:
-                          description: The operation
+                        at:
+                          description: At is the time the validation was performed.
+                          format: date-time
                           type: string
-                        result:
-                          description: Metric is the name of the metric measured
+                        column:
+                          description: Column is the name of the feature.
+                          type: string
+                        datasetName:
+                          description: DatasetName is the name of the dataset used
+                            to perform the validation
+                          type: string
+                        durationInSec:
+                          description: The amount of time it took to compute this
+                            result
+                          format: int32
+                          type: integer
+                        error:
+                          description: Error is a string.
+                          type: string
+                        metric:
+                          description: Metric is the measurment
                           enum:
                           - accuracy
                           - average-precision
@@ -185,9 +187,25 @@ spec:
                           - smape
                           - mdape
                           type: string
-                        value:
-                          description: Value is the value of the metric
-                          type: number
+                        modelName:
+                          description: ModelName is the name of the model under test
+                          type: string
+                        passed:
+                          description: Passed indicate if the result passed.
+                          type: boolean
+                        type:
+                          type: string
+                      required:
+                      - actualValue
+                      - at
+                      - column
+                      - datasetName
+                      - durationInSec
+                      - error
+                      - metric
+                      - modelName
+                      - passed
+                      - type
                       type: object
                     type: array
                   startTime:
@@ -255,29 +273,31 @@ spec:
                     description: Results is the results of running the test datasets
                       against the new model
                     items:
-                      description: Model Test Result holds the results for a single
-                        metric on a single dataset
                       properties:
-                        datasetName:
-                          description: The name of the dataset
-                          type: string
-                        duration:
-                          description: Duration is the time that it took to run the
-                            test
-                          type: string
-                        error:
-                          description: Error is a name of any error that occurred
-                            during the test.
-                          type: string
-                        expected:
-                          description: Expected is the expected value for this expecation
-                            as defined by the test
+                        actualValue:
+                          description: Actual value is the actual value
                           type: number
-                        op:
-                          description: The operation
+                        at:
+                          description: At is the time the validation was performed.
+                          format: date-time
                           type: string
-                        result:
-                          description: Metric is the name of the metric measured
+                        column:
+                          description: Column is the name of the feature.
+                          type: string
+                        datasetName:
+                          description: DatasetName is the name of the dataset used
+                            to perform the validation
+                          type: string
+                        durationInSec:
+                          description: The amount of time it took to compute this
+                            result
+                          format: int32
+                          type: integer
+                        error:
+                          description: Error is a string.
+                          type: string
+                        metric:
+                          description: Metric is the measurment
                           enum:
                           - accuracy
                           - average-precision
@@ -321,9 +341,25 @@ spec:
                           - smape
                           - mdape
                           type: string
-                        value:
-                          description: Value is the value of the metric
-                          type: number
+                        modelName:
+                          description: ModelName is the name of the model under test
+                          type: string
+                        passed:
+                          description: Passed indicate if the result passed.
+                          type: boolean
+                        type:
+                          type: string
+                      required:
+                      - actualValue
+                      - at
+                      - column
+                      - datasetName
+                      - durationInSec
+                      - error
+                      - metric
+                      - modelName
+                      - passed
+                      - type
                       type: object
                     type: array
                   startTime:
@@ -363,29 +399,31 @@ spec:
                     description: Results is the results of running the test datasets
                       against the new model
                     items:
-                      description: Model Test Result holds the results for a single
-                        metric on a single dataset
                       properties:
-                        datasetName:
-                          description: The name of the dataset
-                          type: string
-                        duration:
-                          description: Duration is the time that it took to run the
-                            test
-                          type: string
-                        error:
-                          description: Error is a name of any error that occurred
-                            during the test.
-                          type: string
-                        expected:
-                          description: Expected is the expected value for this expecation
-                            as defined by the test
+                        actualValue:
+                          description: Actual value is the actual value
                           type: number
-                        op:
-                          description: The operation
+                        at:
+                          description: At is the time the validation was performed.
+                          format: date-time
                           type: string
-                        result:
-                          description: Metric is the name of the metric measured
+                        column:
+                          description: Column is the name of the feature.
+                          type: string
+                        datasetName:
+                          description: DatasetName is the name of the dataset used
+                            to perform the validation
+                          type: string
+                        durationInSec:
+                          description: The amount of time it took to compute this
+                            result
+                          format: int32
+                          type: integer
+                        error:
+                          description: Error is a string.
+                          type: string
+                        metric:
+                          description: Metric is the measurment
                           enum:
                           - accuracy
                           - average-precision
@@ -429,9 +467,25 @@ spec:
                           - smape
                           - mdape
                           type: string
-                        value:
-                          description: Value is the value of the metric
-                          type: number
+                        modelName:
+                          description: ModelName is the name of the model under test
+                          type: string
+                        passed:
+                          description: Passed indicate if the result passed.
+                          type: boolean
+                        type:
+                          type: string
+                      required:
+                      - actualValue
+                      - at
+                      - column
+                      - datasetName
+                      - durationInSec
+                      - error
+                      - metric
+                      - modelName
+                      - passed
+                      - type
                       type: object
                     type: array
                   startTime:
@@ -472,29 +526,31 @@ spec:
                     description: Results is the results of running the test datasets
                       against the new model
                     items:
-                      description: Model Test Result holds the results for a single
-                        metric on a single dataset
                       properties:
-                        datasetName:
-                          description: The name of the dataset
-                          type: string
-                        duration:
-                          description: Duration is the time that it took to run the
-                            test
-                          type: string
-                        error:
-                          description: Error is a name of any error that occurred
-                            during the test.
-                          type: string
-                        expected:
-                          description: Expected is the expected value for this expecation
-                            as defined by the test
+                        actualValue:
+                          description: Actual value is the actual value
                           type: number
-                        op:
-                          description: The operation
+                        at:
+                          description: At is the time the validation was performed.
+                          format: date-time
                           type: string
-                        result:
-                          description: Metric is the name of the metric measured
+                        column:
+                          description: Column is the name of the feature.
+                          type: string
+                        datasetName:
+                          description: DatasetName is the name of the dataset used
+                            to perform the validation
+                          type: string
+                        durationInSec:
+                          description: The amount of time it took to compute this
+                            result
+                          format: int32
+                          type: integer
+                        error:
+                          description: Error is a string.
+                          type: string
+                        metric:
+                          description: Metric is the measurment
                           enum:
                           - accuracy
                           - average-precision
@@ -538,9 +594,25 @@ spec:
                           - smape
                           - mdape
                           type: string
-                        value:
-                          description: Value is the value of the metric
-                          type: number
+                        modelName:
+                          description: ModelName is the name of the model under test
+                          type: string
+                        passed:
+                          description: Passed indicate if the result passed.
+                          type: boolean
+                        type:
+                          type: string
+                      required:
+                      - actualValue
+                      - at
+                      - column
+                      - datasetName
+                      - durationInSec
+                      - error
+                      - metric
+                      - modelName
+                      - passed
+                      - type
                       type: object
                     type: array
                   startTime:
@@ -579,29 +651,31 @@ spec:
                     description: Results is the results of running the test datasets
                       against the new model
                     items:
-                      description: Model Test Result holds the results for a single
-                        metric on a single dataset
                       properties:
-                        datasetName:
-                          description: The name of the dataset
-                          type: string
-                        duration:
-                          description: Duration is the time that it took to run the
-                            test
-                          type: string
-                        error:
-                          description: Error is a name of any error that occurred
-                            during the test.
-                          type: string
-                        expected:
-                          description: Expected is the expected value for this expecation
-                            as defined by the test
+                        actualValue:
+                          description: Actual value is the actual value
                           type: number
-                        op:
-                          description: The operation
+                        at:
+                          description: At is the time the validation was performed.
+                          format: date-time
                           type: string
-                        result:
-                          description: Metric is the name of the metric measured
+                        column:
+                          description: Column is the name of the feature.
+                          type: string
+                        datasetName:
+                          description: DatasetName is the name of the dataset used
+                            to perform the validation
+                          type: string
+                        durationInSec:
+                          description: The amount of time it took to compute this
+                            result
+                          format: int32
+                          type: integer
+                        error:
+                          description: Error is a string.
+                          type: string
+                        metric:
+                          description: Metric is the measurment
                           enum:
                           - accuracy
                           - average-precision
@@ -645,9 +719,25 @@ spec:
                           - smape
                           - mdape
                           type: string
-                        value:
-                          description: Value is the value of the metric
-                          type: number
+                        modelName:
+                          description: ModelName is the name of the model under test
+                          type: string
+                        passed:
+                          description: Passed indicate if the result passed.
+                          type: boolean
+                        type:
+                          type: string
+                      required:
+                      - actualValue
+                      - at
+                      - column
+                      - datasetName
+                      - durationInSec
+                      - error
+                      - metric
+                      - modelName
+                      - passed
+                      - type
                       type: object
                     type: array
                   startTime:
@@ -691,29 +781,31 @@ spec:
                     description: Results is the results of running the test datasets
                       against the new model
                     items:
-                      description: Model Test Result holds the results for a single
-                        metric on a single dataset
                       properties:
-                        datasetName:
-                          description: The name of the dataset
-                          type: string
-                        duration:
-                          description: Duration is the time that it took to run the
-                            test
-                          type: string
-                        error:
-                          description: Error is a name of any error that occurred
-                            during the test.
-                          type: string
-                        expected:
-                          description: Expected is the expected value for this expecation
-                            as defined by the test
+                        actualValue:
+                          description: Actual value is the actual value
                           type: number
-                        op:
-                          description: The operation
+                        at:
+                          description: At is the time the validation was performed.
+                          format: date-time
                           type: string
-                        result:
-                          description: Metric is the name of the metric measured
+                        column:
+                          description: Column is the name of the feature.
+                          type: string
+                        datasetName:
+                          description: DatasetName is the name of the dataset used
+                            to perform the validation
+                          type: string
+                        durationInSec:
+                          description: The amount of time it took to compute this
+                            result
+                          format: int32
+                          type: integer
+                        error:
+                          description: Error is a string.
+                          type: string
+                        metric:
+                          description: Metric is the measurment
                           enum:
                           - accuracy
                           - average-precision
@@ -757,9 +849,25 @@ spec:
                           - smape
                           - mdape
                           type: string
-                        value:
-                          description: Value is the value of the metric
-                          type: number
+                        modelName:
+                          description: ModelName is the name of the model under test
+                          type: string
+                        passed:
+                          description: Passed indicate if the result passed.
+                          type: boolean
+                        type:
+                          type: string
+                      required:
+                      - actualValue
+                      - at
+                      - column
+                      - datasetName
+                      - durationInSec
+                      - error
+                      - metric
+                      - modelName
+                      - passed
+                      - type
                       type: object
                     type: array
                   startTime:
@@ -804,29 +912,31 @@ spec:
                     description: Results is the results of running the test datasets
                       against the new model
                     items:
-                      description: Model Test Result holds the results for a single
-                        metric on a single dataset
                       properties:
-                        datasetName:
-                          description: The name of the dataset
-                          type: string
-                        duration:
-                          description: Duration is the time that it took to run the
-                            test
-                          type: string
-                        error:
-                          description: Error is a name of any error that occurred
-                            during the test.
-                          type: string
-                        expected:
-                          description: Expected is the expected value for this expecation
-                            as defined by the test
+                        actualValue:
+                          description: Actual value is the actual value
                           type: number
-                        op:
-                          description: The operation
+                        at:
+                          description: At is the time the validation was performed.
+                          format: date-time
                           type: string
-                        result:
-                          description: Metric is the name of the metric measured
+                        column:
+                          description: Column is the name of the feature.
+                          type: string
+                        datasetName:
+                          description: DatasetName is the name of the dataset used
+                            to perform the validation
+                          type: string
+                        durationInSec:
+                          description: The amount of time it took to compute this
+                            result
+                          format: int32
+                          type: integer
+                        error:
+                          description: Error is a string.
+                          type: string
+                        metric:
+                          description: Metric is the measurment
                           enum:
                           - accuracy
                           - average-precision
@@ -870,9 +980,25 @@ spec:
                           - smape
                           - mdape
                           type: string
-                        value:
-                          description: Value is the value of the metric
-                          type: number
+                        modelName:
+                          description: ModelName is the name of the model under test
+                          type: string
+                        passed:
+                          description: Passed indicate if the result passed.
+                          type: boolean
+                        type:
+                          type: string
+                      required:
+                      - actualValue
+                      - at
+                      - column
+                      - datasetName
+                      - durationInSec
+                      - error
+                      - metric
+                      - modelName
+                      - passed
+                      - type
                       type: object
                     type: array
                   startTime:
@@ -908,29 +1034,31 @@ spec:
                     description: Results is the results of running the test datasets
                       against the new model
                     items:
-                      description: Model Test Result holds the results for a single
-                        metric on a single dataset
                       properties:
-                        datasetName:
-                          description: The name of the dataset
-                          type: string
-                        duration:
-                          description: Duration is the time that it took to run the
-                            test
-                          type: string
-                        error:
-                          description: Error is a name of any error that occurred
-                            during the test.
-                          type: string
-                        expected:
-                          description: Expected is the expected value for this expecation
-                            as defined by the test
+                        actualValue:
+                          description: Actual value is the actual value
                           type: number
-                        op:
-                          description: The operation
+                        at:
+                          description: At is the time the validation was performed.
+                          format: date-time
                           type: string
-                        result:
-                          description: Metric is the name of the metric measured
+                        column:
+                          description: Column is the name of the feature.
+                          type: string
+                        datasetName:
+                          description: DatasetName is the name of the dataset used
+                            to perform the validation
+                          type: string
+                        durationInSec:
+                          description: The amount of time it took to compute this
+                            result
+                          format: int32
+                          type: integer
+                        error:
+                          description: Error is a string.
+                          type: string
+                        metric:
+                          description: Metric is the measurment
                           enum:
                           - accuracy
                           - average-precision
@@ -974,9 +1102,25 @@ spec:
                           - smape
                           - mdape
                           type: string
-                        value:
-                          description: Value is the value of the metric
-                          type: number
+                        modelName:
+                          description: ModelName is the name of the model under test
+                          type: string
+                        passed:
+                          description: Passed indicate if the result passed.
+                          type: boolean
+                        type:
+                          type: string
+                      required:
+                      - actualValue
+                      - at
+                      - column
+                      - datasetName
+                      - durationInSec
+                      - error
+                      - metric
+                      - modelName
+                      - passed
+                      - type
                       type: object
                     type: array
                   startTime:

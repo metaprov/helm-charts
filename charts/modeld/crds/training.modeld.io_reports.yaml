@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.5.0
+    controller-gen.kubebuilder.io/version: v0.6.0
   creationTimestamp: null
   name: reports.training.modeld.io
 spec:
@@ -71,10 +71,6 @@ spec:
                   report.
                 format: int64
                 type: integer
-              description:
-                description: NotifierRef is areference to the notifier that is used
-                  to send the report
-                type: string
               entityRef:
                 description: EntityRef specify the entity being report. Currently
                   entities can be dataset,model or study
@@ -135,6 +131,10 @@ spec:
                 - bucketName
                 - path
                 type: object
+              notifierName:
+                description: NotifierName is a reference to the notifier that is used
+                  to send the report
+                type: string
               owner:
                 default: no-one
                 description: The owner account name
