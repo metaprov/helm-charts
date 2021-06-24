@@ -103,6 +103,10 @@ spec:
                 properties:
                   compiler:
                     description: Set one or more targets
+                    enum:
+                    - tvm
+                    - onyx
+                    - xla
                     type: string
                   enable:
                     description: Enable set the enable to
@@ -110,6 +114,17 @@ spec:
                   targets:
                     description: Set one or more targets for the compiler
                     items:
+                      enum:
+                      - amd-epyc-2
+                      - arma-53
+                      - arma-72
+                      - intel-cascade-lake
+                      - intel-broadwell
+                      - intel-skylake
+                      - tesla-v100
+                      - tesla-k80
+                      - t4
+                      - raspberry-pi8-modeld-b
                       type: string
                     type: array
                 type: object
@@ -216,8 +231,11 @@ spec:
                     type: string
                 type: object
               id:
+                default: -1
                 description: ID is the id of the study within the data product Note
-                  that multiplie models can have the same version
+                  that multiplie models can have the same version Default is -1 -
+                  not assigned, the id is assigned as part of the study ingestion
+                  and it stored in the data product status.
                 format: int64
                 type: integer
               labRef:
@@ -262,13 +280,17 @@ spec:
                   is the data product bucket.
                 properties:
                   bucketName:
+                    default: ""
+                    description: Bucketname is the name of the bucket
+                    type: string
+                  datasourceName:
+                    default: ""
+                    description: Datasource name is a pointer to a data source for
+                      cases that the data location is not a simple bucket but a database
                     type: string
                   path:
                     description: Path to the full data file (e.g. csv file).
                     type: string
-                required:
-                - bucketName
-                - path
                 type: object
               modelImagePushed:
                 default: false
@@ -861,7 +883,8 @@ spec:
                   seed:
                     default: 42
                     description: 'The seed to use for the estimator Default: 42'
-                    type: number
+                    format: int32
+                    type: integer
                   splitColumn:
                     description: The name of the column used to split
                     type: string
@@ -951,6 +974,11 @@ spec:
                     default: kfold
                     description: The  type of cross validation. if we have a validation
                       set, we do not do cv.
+                    enum:
+                    - none
+                    - kfold
+                    - loocv
+                    - stratified
                     type: string
                   earlyStop:
                     default: false
@@ -1137,13 +1165,15 @@ spec:
                         type: string
                     type: object
                   priority:
-                    default: 5
+                    default: medium
                     description: Priority specify the priority of the model in the
                       training queue.
-                    format: int32
-                    maximum: 10
-                    minimum: 1
-                    type: integer
+                    enum:
+                    - low
+                    - medium
+                    - high
+                    - urgent
+                    type: string
                   retry:
                     default: 5
                     description: Retry attempt is the number of training retry for
@@ -1300,13 +1330,17 @@ spec:
                   used to test this model
                 properties:
                   bucketName:
+                    default: ""
+                    description: Bucketname is the name of the bucket
+                    type: string
+                  datasourceName:
+                    default: ""
+                    description: Datasource name is a pointer to a data source for
+                      cases that the data location is not a simple bucket but a database
                     type: string
                   path:
                     description: Path to the full data file (e.g. csv file).
                     type: string
-                required:
-                - bucketName
-                - path
                 type: object
               testedModels:
                 description: Tested models
@@ -1329,13 +1363,17 @@ spec:
                 description: TrainDatasetLocation is the location of the train dataset
                 properties:
                   bucketName:
+                    default: ""
+                    description: Bucketname is the name of the bucket
+                    type: string
+                  datasourceName:
+                    default: ""
+                    description: Datasource name is a pointer to a data source for
+                      cases that the data location is not a simple bucket but a database
                     type: string
                   path:
                     description: Path to the full data file (e.g. csv file).
                     type: string
-                required:
-                - bucketName
-                - path
                 type: object
               trainedModels:
                 description: models that were successful during training
@@ -1362,13 +1400,17 @@ spec:
                   used for validation
                 properties:
                   bucketName:
+                    default: ""
+                    description: Bucketname is the name of the bucket
+                    type: string
+                  datasourceName:
+                    default: ""
+                    description: Datasource name is a pointer to a data source for
+                      cases that the data location is not a simple bucket but a database
                     type: string
                   path:
                     description: Path to the full data file (e.g. csv file).
                     type: string
-                required:
-                - bucketName
-                - path
                 type: object
               waitingToTestModels:
                 description: models waiting testing

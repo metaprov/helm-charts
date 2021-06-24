@@ -1,15 +1,15 @@
 apiVersion: catalog.modeld.io/v1alpha1
 kind: WorkloadClass
 metadata:
-  name: general-nano
+  name: mid-cpu-250m-mem-1gi
   namespace: modeld-catalog
 spec:
   dataImage: quay.io/metaprov/modeld-data-plane:latest
   controlImage: quay.io/metaprov/modeld-workload:latest
   trainerImage: quay.io/metaprov/modeld-trainer:latest
   publisherImage: quay.io/metaprov/modeld-publisher:latest
-  vcpu: 0.5
-  mem: 128Mi
+  vcpu: 0.25
+  mem:  1Gi
   podTemplate:
       metadata:
         labels:
@@ -35,11 +35,11 @@ spec:
                  name: profiling
             resources:
               requests:
-                memory: "64Mi"
+                memory: "1Gi"
                 cpu: "250m"
               limits:
-                memory: "128Mi"
-                cpu: "500m"
+                memory: "1Gi"
+                cpu: "250m"
             volumeMounts:
                - name: data
                  mountPath: /home/modeld/data

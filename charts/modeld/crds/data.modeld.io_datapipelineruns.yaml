@@ -65,13 +65,17 @@ spec:
                   the run
                 properties:
                   bucketName:
+                    default: ""
+                    description: Bucketname is the name of the bucket
+                    type: string
+                  datasourceName:
+                    default: ""
+                    description: Datasource name is a pointer to a data source for
+                      cases that the data location is not a simple bucket but a database
                     type: string
                   path:
                     description: Path to the full data file (e.g. csv file).
                     type: string
-                required:
-                - bucketName
-                - path
                 type: object
               datapipelineName:
                 default: ""
@@ -81,6 +85,15 @@ spec:
                 default: no-one
                 description: The owner of the run, set to the owner of the pipeline
                 pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
+                type: string
+              priority:
+                default: medium
+                description: The priority of this data pipeline. The defualt is medium.
+                enum:
+                - low
+                - medium
+                - high
+                - urgent
                 type: string
               versionName:
                 default: ""
@@ -136,13 +149,17 @@ spec:
                 description: the resulting dataset from the flow
                 properties:
                   bucketName:
+                    default: ""
+                    description: Bucketname is the name of the bucket
+                    type: string
+                  datasourceName:
+                    default: ""
+                    description: Datasource name is a pointer to a data source for
+                      cases that the data location is not a simple bucket but a database
                     type: string
                   path:
                     description: Path to the full data file (e.g. csv file).
                     type: string
-                required:
-                - bucketName
-                - path
                 type: object
               phase:
                 description: the phase of the run

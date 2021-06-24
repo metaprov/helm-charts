@@ -65,6 +65,15 @@ spec:
                 default: no-one
                 description: The owner account name
                 type: string
+              priority:
+                default: medium
+                description: The priority of this data pipeline. The defualt is medium.
+                enum:
+                - low
+                - medium
+                - high
+                - urgent
+                type: string
               schedule:
                 description: Schedule is the cron schedule Schedule for running the
                   pipeline
@@ -97,13 +106,18 @@ spec:
                           using a dataset
                         properties:
                           bucketName:
+                            default: ""
+                            description: Bucketname is the name of the bucket
+                            type: string
+                          datasourceName:
+                            default: ""
+                            description: Datasource name is a pointer to a data source
+                              for cases that the data location is not a simple bucket
+                              but a database
                             type: string
                           path:
                             description: Path to the full data file (e.g. csv file).
                             type: string
-                        required:
-                        - bucketName
-                        - path
                         type: object
                       labeled:
                         default: false
@@ -114,13 +128,18 @@ spec:
                         description: Output is the location of the output file.
                         properties:
                           bucketName:
+                            default: ""
+                            description: Bucketname is the name of the bucket
+                            type: string
+                          datasourceName:
+                            default: ""
+                            description: Datasource name is a pointer to a data source
+                              for cases that the data location is not a simple bucket
+                              but a database
                             type: string
                           path:
                             description: Path to the full data file (e.g. csv file).
                             type: string
-                        required:
-                        - bucketName
-                        - path
                         type: object
                       owner:
                         default: no-one
@@ -131,6 +150,16 @@ spec:
                         description: PredictorName refer to the predictor which would
                           predict the dataset of this prediction.
                         maxLength: 63
+                        type: string
+                      priority:
+                        default: medium
+                        description: The priority of this prediction. The defualt
+                          is medium.
+                        enum:
+                        - low
+                        - medium
+                        - high
+                        - urgent
                         type: string
                       tests:
                         description: Tests is the list of metrics that we need to
@@ -184,6 +213,10 @@ spec:
                         type: array
                       updateStrategy:
                         description: Update strategy
+                        enum:
+                        - upsert
+                        - insert
+                        - update
                         type: string
                       versionName:
                         default: ""

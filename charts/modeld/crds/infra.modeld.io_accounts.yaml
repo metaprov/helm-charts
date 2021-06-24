@@ -67,6 +67,29 @@ spec:
                 default: false
                 description: User is admin. Admin have full control on other accounts.
                 type: boolean
+              avatar:
+                description: The avatar location
+                properties:
+                  bucketName:
+                    default: ""
+                    description: Bucketname is the name of the bucket holding the
+                      bucket name
+                    type: string
+                  path:
+                    default: ""
+                    description: Path to the full data file (e.g. csv file).
+                    type: string
+                type: object
+              clearenceLevel:
+                default: unclassified
+                description: The clearence level of this account. The clearence level
+                  override user premissions.
+                enum:
+                - unclassified
+                - confidential
+                - secret
+                - top-secret
+                type: string
               email:
                 default: ""
                 description: Email specify the email of the user

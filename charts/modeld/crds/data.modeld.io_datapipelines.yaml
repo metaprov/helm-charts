@@ -66,6 +66,10 @@ spec:
                 properties:
                   compiler:
                     description: Set one or more targets
+                    enum:
+                    - tvm
+                    - onyx
+                    - xla
                     type: string
                   enable:
                     description: Enable set the enable to
@@ -73,6 +77,17 @@ spec:
                   targets:
                     description: Set one or more targets for the compiler
                     items:
+                      enum:
+                      - amd-epyc-2
+                      - arma-53
+                      - arma-72
+                      - intel-cascade-lake
+                      - intel-broadwell
+                      - intel-skylake
+                      - tesla-v100
+                      - tesla-k80
+                      - t4
+                      - raspberry-pi8-modeld-b
                       type: string
                     type: array
                 type: object
@@ -84,8 +99,12 @@ spec:
                 description: The output definition
                 properties:
                   action:
-                    default: create
+                    default: upsert
                     description: Action define how the new data will be created
+                    enum:
+                    - upsert
+                    - insert
+                    - update
                     type: string
                   datasetName:
                     default: ""
@@ -112,19 +131,33 @@ spec:
                     description: Location of the generated data
                     properties:
                       bucketName:
+                        default: ""
+                        description: Bucketname is the name of the bucket
+                        type: string
+                      datasourceName:
+                        default: ""
+                        description: Datasource name is a pointer to a data source
+                          for cases that the data location is not a simple bucket
+                          but a database
                         type: string
                       path:
                         description: Path to the full data file (e.g. csv file).
                         type: string
-                    required:
-                    - bucketName
-                    - path
                     type: object
                 type: object
               owner:
                 default: no-one
                 description: Owner of this data pipeline
                 pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
+                type: string
+              priority:
+                default: medium
+                description: The priority of this data pipeline. The defualt is medium.
+                enum:
+                - low
+                - medium
+                - high
+                - urgent
                 type: string
               recipes:
                 description: RecipeOrder defines the list of recipes and the order

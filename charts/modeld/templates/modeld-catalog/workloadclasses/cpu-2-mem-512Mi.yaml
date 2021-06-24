@@ -1,0 +1,57 @@
+apiVersion: catalog.modeld.io/v1alpha1
+kind: WorkloadClass
+metadata:
+  name: cpu-2-mem-512mi
+  namespace: modeld-catalog
+spec:
+  dataImage: quay.io/metaprov/modeld-data-plane:latest
+  controlImage: quay.io/metaprov/modeld-workload:latest
+  trainerImage: quay.io/metaprov/modeld-trainer:latest
+  publisherImage: quay.io/metaprov/modeld-publisher:latest
+  vcpu: 2
+  mem:  512Mi
+  podTemplate:
+      metadata:
+        labels:
+          app.kubernetes.io/name: modeld-trainer
+      spec:
+        restartPolicy: Never
+        containers:
+          - name: control
+            ports:
+                - containerPort: 8080
+            volumeMounts:
+                - name: data
+                  mountPath: /home/modeld/data
+          - name: data
+            image: quay.io/metaprov/modeld-data-plane:latest
+            imagePullPolicy: IfNotPresent
+            ports:
+               - containerPort: 8070
+                 name: http
+               - containerPort: 9090
+                 name: metrics
+               - containerPort: 8008
+                 name: profiling
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "2"
+              limits:
+                memory: "512Mi"
+                cpu: "2"
+            volumeMounts:
+               - name: data
+                 mountPath: /home/modeld/data
+          - name: cloud-proxy
+            image: quay.io/metaprov/modeld-cloud-proxy:latest
+            imagePullPolicy: IfNotPresent
+            ports:
+              - name: http
+                containerPort: 8090
+            volumeMounts:
+              - name: data
+                mountPath: /home/modeld/data
+        volumes:
+          - name: data
+            emptyDir: {}

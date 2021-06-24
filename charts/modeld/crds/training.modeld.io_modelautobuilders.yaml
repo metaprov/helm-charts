@@ -164,6 +164,7 @@ spec:
                     - image
                     - text
                     - video
+                    - audio
                     type: string
                   description:
                     default: ""
@@ -195,6 +196,10 @@ spec:
                         default: utf-8
                         description: Encoding for Unicode (e.g., 'utf-8' for UTF-8
                           encoded text).
+                        enum:
+                        - utf-8
+                        - latin-1
+                        - utf-16
                         type: string
                       escapeChar:
                         description: the char used to escape the delimiter when quoting
@@ -283,6 +288,11 @@ spec:
                       type:
                         default: random
                         description: Type is the sampling type Default is random
+                        enum:
+                        - header
+                        - random
+                        - filter
+                        - anomaly
                         type: string
                     type: object
                   schema:
@@ -458,15 +468,21 @@ spec:
                               default: ""
                               description: Pattern Default is empty
                               type: string
+                            personalData:
+                              default: false
+                              type: boolean
+                            phi:
+                              default: false
+                              description: Personally Health information
+                              type: boolean
+                            pii:
+                              default: false
+                              description: Personally Identifiable information
+                              type: boolean
                             pk:
                               default: false
                               description: PrimaryKey denotes if this column is part
                                 of the file key.
-                              type: boolean
-                            preservePrivacy:
-                              default: false
-                              description: PreservePrivacy is true if the column content
-                                should not be exposed due to privacy concerns
                               type: boolean
                             protected:
                               default: false
@@ -562,6 +578,10 @@ spec:
                               properties:
                                 column:
                                   type: string
+                                generated:
+                                  description: Generated indicate weather this validation
+                                    rule was automatically generated
+                                  type: boolean
                                 max:
                                   type: number
                                 min:
@@ -583,6 +603,10 @@ spec:
                               datasets
                             items:
                               properties:
+                                generated:
+                                  description: Generated indicate weather this validation
+                                    rule was automatically generated
+                                  type: boolean
                                 max:
                                   type: number
                                 min:
@@ -608,6 +632,10 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                                generated:
+                                  description: Generated indicate weather this validation
+                                    rule was automatically generated
+                                  type: boolean
                                 max:
                                   type: number
                                 min:
@@ -633,6 +661,10 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                                generated:
+                                  description: Generated indicate weather this validation
+                                    rule was automatically generated
+                                  type: boolean
                                 type:
                                   type: string
                               type: object
@@ -804,13 +836,17 @@ spec:
                 description: Location is the location of the data in the cloud
                 properties:
                   bucketName:
+                    default: ""
+                    description: Bucketname is the name of the bucket
+                    type: string
+                  datasourceName:
+                    default: ""
+                    description: Datasource name is a pointer to a data source for
+                      cases that the data location is not a simple bucket but a database
                     type: string
                   path:
                     description: Path to the full data file (e.g. csv file).
                     type: string
-                required:
-                - bucketName
-                - path
                 type: object
               maxModels:
                 default: 10

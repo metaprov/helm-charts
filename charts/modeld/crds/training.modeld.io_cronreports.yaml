@@ -6,19 +6,19 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.6.0
   creationTimestamp: null
-  name: cronpredictions.training.modeld.io
+  name: cronreports.training.modeld.io
 spec:
   group: training.modeld.io
   names:
     categories:
-    - inference
+    - training
     - modeld
     kind: CronReport
     listKind: CronReportList
-    plural: cronpredictions
+    plural: cronreports
     shortNames:
     - cpred
-    singular: cronprediction
+    singular: cronreport
   scope: Namespaced
   versions:
   - additionalPrinterColumns:

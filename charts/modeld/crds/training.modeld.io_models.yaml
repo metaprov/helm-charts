@@ -105,6 +105,10 @@ spec:
                 properties:
                   compiler:
                     description: Set one or more targets
+                    enum:
+                    - tvm
+                    - onyx
+                    - xla
                     type: string
                   enable:
                     description: Enable set the enable to
@@ -112,6 +116,17 @@ spec:
                   targets:
                     description: Set one or more targets for the compiler
                     items:
+                      enum:
+                      - amd-epyc-2
+                      - arma-53
+                      - arma-72
+                      - intel-cascade-lake
+                      - intel-broadwell
+                      - intel-skylake
+                      - tesla-v100
+                      - tesla-k80
+                      - t4
+                      - raspberry-pi8-modeld-b
                       type: string
                     type: array
                 type: object
@@ -379,13 +394,17 @@ spec:
                   reports and estimators).
                 properties:
                   bucketName:
+                    default: ""
+                    description: Bucketname is the name of the bucket
+                    type: string
+                  datasourceName:
+                    default: ""
+                    description: Datasource name is a pointer to a data source for
+                      cases that the data location is not a simple bucket but a database
                     type: string
                   path:
                     description: Path to the full data file (e.g. csv file).
                     type: string
-                required:
-                - bucketName
-                - path
                 type: object
               modelVersion:
                 description: ModelVersion composed of studyid-modelid.
@@ -758,6 +777,11 @@ spec:
                     default: kfold
                     description: The  type of cross validation. if we have a validation
                       set, we do not do cv.
+                    enum:
+                    - none
+                    - kfold
+                    - loocv
+                    - stratified
                     type: string
                   earlyStop:
                     default: false
@@ -944,13 +968,15 @@ spec:
                         type: string
                     type: object
                   priority:
-                    default: 5
+                    default: medium
                     description: Priority specify the priority of the model in the
                       training queue.
-                    format: int32
-                    maximum: 10
-                    minimum: 1
-                    type: integer
+                    enum:
+                    - low
+                    - medium
+                    - high
+                    - urgent
+                    type: string
                   retry:
                     default: 5
                     description: Retry attempt is the number of training retry for
@@ -1071,6 +1097,10 @@ spec:
               cost:
                 description: Cost is the cost of training the model
                 type: number
+              cpu:
+                description: CPU is the avg cpu consumed during training.
+                format: int32
+                type: integer
               cvScore:
                 description: CVScrore is the score using on the training set.
                 type: number
@@ -1102,6 +1132,10 @@ spec:
                 description: ManifestUri is the URI of the manifest in the product
                   bucket.
                 type: string
+              mem:
+                description: Mem is the avg memory consumed during training.
+                format: int32
+                type: integer
               misclassUri:
                 description: MisclassUri is a reference to the mis-classification
                   file which were produce during processing
@@ -1159,13 +1193,17 @@ spec:
                   used to test this model
                 properties:
                   bucketName:
+                    default: ""
+                    description: Bucketname is the name of the bucket
+                    type: string
+                  datasourceName:
+                    default: ""
+                    description: Datasource name is a pointer to a data source for
+                      cases that the data location is not a simple bucket but a database
                     type: string
                   path:
                     description: Path to the full data file (e.g. csv file).
                     type: string
-                required:
-                - bucketName
-                - path
                 type: object
               testResult:
                 description: TestResult is the results of training the model (pipeline)
@@ -1245,13 +1283,17 @@ spec:
                 description: TrainDatasetLocation is the location of the train dataset
                 properties:
                   bucketName:
+                    default: ""
+                    description: Bucketname is the name of the bucket
+                    type: string
+                  datasourceName:
+                    default: ""
+                    description: Datasource name is a pointer to a data source for
+                      cases that the data location is not a simple bucket but a database
                     type: string
                   path:
                     description: Path to the full data file (e.g. csv file).
                     type: string
-                required:
-                - bucketName
-                - path
                 type: object
               trainResult:
                 description: TrainResult is the results of training the model (pipeline)
@@ -1326,13 +1368,17 @@ spec:
                   used for validation
                 properties:
                   bucketName:
+                    default: ""
+                    description: Bucketname is the name of the bucket
+                    type: string
+                  datasourceName:
+                    default: ""
+                    description: Datasource name is a pointer to a data source for
+                      cases that the data location is not a simple bucket but a database
                     type: string
                   path:
                     description: Path to the full data file (e.g. csv file).
                     type: string
-                required:
-                - bucketName
-                - path
                 type: object
               weightsUri:
                 description: WeightsUri is the URI of the model binary file.
