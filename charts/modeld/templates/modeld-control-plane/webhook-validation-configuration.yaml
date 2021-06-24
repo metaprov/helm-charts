@@ -1065,3 +1065,27 @@ webhooks:
         path: /validate-training-modeld-io-v1alpha1-report
       caBundle: CERT
 
+  - name: cronreport.training.modeld.io
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+        - v1beta1
+        - v1alpha1
+    rules:
+        - apiGroups:
+            - "training.modeld.io"
+          apiVersions:
+            - v1alpha1
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - cronreports
+    clientConfig:
+        service:
+          namespace: modeld-system
+          name: modeld-control-plane-webhook
+          path: /validate-training-modeld-io-v1alpha1-cronreport
+        caBundle: CERT
