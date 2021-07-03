@@ -206,8 +206,6 @@ spec:
             description: DatasetStatus defines the observed state of Dataset
             properties:
               conditions:
-                description: Represents the latest available observations of a dataset
-                  state.
                 items:
                   description: DatasetCondition describes the state of a dataset at
                     a certain point.
@@ -238,6 +236,10 @@ spec:
               imbalanced:
                 description: Based on the actual data, treat this dataset as imbalanced.
                 type: boolean
+              lastError:
+                default: ""
+                description: Last error
+                type: string
               lastStudyTime:
                 description: Last time a study was done on the dataset.
                 format: date-time

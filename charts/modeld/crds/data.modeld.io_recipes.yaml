@@ -223,8 +223,6 @@ spec:
             description: RecipeStatus defines the observed state of Recipe
             properties:
               conditions:
-                description: Represents the latest available observations of a dataset
-                  state.
                 items:
                   description: RecipeCondition describes the state of a dataset at
                     a certain point.

@@ -583,8 +583,10 @@ spec:
                                     rule was automatically generated
                                   type: boolean
                                 max:
+                                  format: float
                                   type: number
                                 min:
+                                  format: float
                                   type: number
                                 strictMax:
                                   type: boolean
@@ -608,8 +610,10 @@ spec:
                                     rule was automatically generated
                                   type: boolean
                                 max:
+                                  format: float
                                   type: number
                                 min:
+                                  format: float
                                   type: number
                                 strictMax:
                                   type: boolean
@@ -637,8 +641,10 @@ spec:
                                     rule was automatically generated
                                   type: boolean
                                 max:
+                                  format: float
                                   type: number
                                 min:
+                                  format: float
                                   type: number
                                 strictMax:
                                   type: boolean
@@ -983,10 +989,6 @@ spec:
                 description: number of columns, used mainly to show the columns
                 format: int32
                 type: integer
-              completionTime:
-                description: CompletionTime is the time that this prediction job finished
-                format: date-time
-                type: string
               conditions:
                 items:
                   description: ModelAutobuilderCondition describes the state of a
@@ -1020,6 +1022,10 @@ spec:
                 type: string
               datasetName:
                 description: the generated dataset name (if generated)
+                type: string
+              endTime:
+                description: CompletionTime is the time that this prediction job finished
+                format: date-time
                 type: string
               estimator:
                 description: The best estimator, taken from the best model
@@ -1057,6 +1063,10 @@ spec:
                 type: string
               imageRepoName:
                 description: the name of the image repository
+                type: string
+              lastError:
+                default: ""
+                description: Last error
                 type: string
               models:
                 description: Total models created for the study

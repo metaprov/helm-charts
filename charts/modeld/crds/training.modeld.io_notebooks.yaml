@@ -162,8 +162,6 @@ spec:
             description: NotebookStatus is the observed state of the notebook resource
             properties:
               conditions:
-                description: Represents the latest available observations of a notebook
-                  state.
                 items:
                   description: NotebookCondition describes the state of a notebook
                     at a certain point.

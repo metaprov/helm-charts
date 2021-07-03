@@ -100,6 +100,11 @@ spec:
                 description: Email account creation event to user (using the user
                   email)
                 type: boolean
+              favorites:
+                description: List of favorite data product
+                items:
+                  type: string
+                type: array
               firstName:
                 default: ""
                 description: First FileName is the user first name
@@ -258,8 +263,6 @@ spec:
             description: AccountStatus defines the actual state of the api object
             properties:
               conditions:
-                description: Represents the latest available observations of a account
-                  state.
                 items:
                   description: AccountCondition describes the state of a account at
                     a certain point.

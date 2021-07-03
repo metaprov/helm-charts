@@ -101,13 +101,7 @@ spec:
             description: NotebookRunStatus define that observed state of NotebookRun
               resource
             properties:
-              completionTime:
-                description: CompletionTime is the time that this prediction job finished
-                format: date-time
-                type: string
               conditions:
-                description: Represents the latest available observations of a notebook
-                  run state.
                 items:
                   description: NotebookRunCondition describes the state of a notebook
                     run.
@@ -135,6 +129,14 @@ spec:
                   - type
                   type: object
                 type: array
+              endTime:
+                description: EndTime is the time that this prediction job finished
+                format: date-time
+                type: string
+              lastError:
+                default: ""
+                description: Last error
+                type: string
               observedGeneration:
                 description: ObservedGeneration is the Last generation that was acted
                   on
