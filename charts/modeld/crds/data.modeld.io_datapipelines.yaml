@@ -65,7 +65,8 @@ spec:
                 description: This is the default compiler spec
                 properties:
                   compiler:
-                    description: Set one or more targets
+                    default: none
+                    description: Set one or more targets Enable set the enable to
                     enum:
                     - tvm
                     - onyx
@@ -73,6 +74,7 @@ spec:
                     - none
                     type: string
                   enable:
+                    default: false
                     description: Enable set the enable to
                     type: boolean
                   targets:
@@ -151,6 +153,10 @@ spec:
                 description: Owner of this data pipeline
                 pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
                 type: string
+              paused:
+                default: false
+                description: Set to true to pause the cron prediction
+                type: boolean
               priority:
                 default: medium
                 description: The priority of this data pipeline. The defualt is medium.
