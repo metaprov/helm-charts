@@ -10,10 +10,7 @@ rules:
   - apiGroups:
       - catalog.modeld.io
     resources:
-      - algorithms
-      - mlframeworks
-      - workloadclasses
-      - userclasses
+      - "*"
     verbs:
       - "*"
   - apiGroups:
