@@ -61,6 +61,17 @@ rules:
       - update
       - patch
       - delete
+  - apiGroups: ["team.modeld.io"]
+    resources:
+      - "*"
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
   - apiGroups: ["apiextensions.k8s.io"]
     resources:
       - customresourcedefinitions
