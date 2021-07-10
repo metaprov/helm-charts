@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/part-of: modeld
   name: modeld-control-plane
 rules:
-  - apiGroups: ["catalog.modeld.io"] #
+  - apiGroups: ["catalog.modeld.io"] 
     resources:
       - "*"
     verbs:
