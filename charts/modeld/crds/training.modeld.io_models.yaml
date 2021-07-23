@@ -533,7 +533,7 @@ spec:
                         type: string
                       imputer:
                         default: auto
-                        description: Categorical varaible imputer
+                        description: Categorical variable imputer
                         enum:
                         - remove-rows-with-missing-values
                         - mean
@@ -720,6 +720,10 @@ spec:
                 default: false
                 description: Pushed indicate if the model image should be pushed into
                   the remote docker registry.
+                type: boolean
+              released:
+                default: false
+                description: Indicates that the model should be released to production
                 type: boolean
               reported:
                 default: false
@@ -986,12 +990,6 @@ spec:
                     - high
                     - urgent
                     type: string
-                  retry:
-                    default: 5
-                    description: Retry attempt is the number of training retry for
-                      this model,
-                    format: int32
-                    type: integer
                   seed:
                     default: 42
                     description: Used as the random state for an estimator if needed
@@ -1101,10 +1099,6 @@ spec:
               cost:
                 description: Cost is the cost of training the model
                 type: number
-              cpu:
-                description: CPU is the avg cpu consumed during training.
-                format: int32
-                type: integer
               cv:
                 description: CV results is the results of performing cross validation
                   on the training set during search.
@@ -1198,6 +1192,9 @@ spec:
                 default: ""
                 description: Last error
                 type: string
+              latency:
+                description: Prediction Latency
+                type: number
               logsUri:
                 description: LogsUri is the URI of the log file
                 type: string
@@ -1205,10 +1202,6 @@ spec:
                 description: ManifestUri is the URI of the manifest in the product
                   bucket.
                 type: string
-              mem:
-                description: Mem is the avg memory consumed during training.
-                format: int32
-                type: integer
               misclassUri:
                 description: MisclassUri is a reference to the mis-classification
                   file which were produce during processing
@@ -1220,6 +1213,9 @@ spec:
                 type: integer
               phase:
                 description: Phase is the phase of the model
+                type: string
+              predictorName:
+                description: If the model is released, this is the name of the predictor
                 type: string
               profileUri:
                 description: ProfileUri is a reference to the visualization uri which
@@ -1238,6 +1234,10 @@ spec:
               pythonVersion:
                 description: Python version is the result of python vewrsion call.
                 type: string
+              releasedAt:
+                description: Released at the time when the model was released
+                format: date-time
+                type: string
               reportName:
                 description: ReportName is a reference to the model report
                 type: string
@@ -1255,6 +1255,10 @@ spec:
                     format: int32
                     type: integer
                 type: object
+              sizeInBytes:
+                description: Size is the maximum model size
+                format: int32
+                type: integer
               startTime:
                 description: StartTime represents time when the model is first handled
                   by the model controller
@@ -1448,6 +1452,9 @@ spec:
                 description: TrainStartTime represents time when the model started
                   training.
                 format: date-time
+                type: string
+              url:
+                description: The URL to the released version
                 type: string
               validationDataset:
                 description: ValidationDatasetLocation is the location of the dataset
