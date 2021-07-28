@@ -6,44 +6,32 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.6.0
   creationTimestamp: null
-  name: taskcards.infra.modeld.io
+  name: reviews.team.modeld.io
 spec:
-  group: infra.modeld.io
+  group: team.modeld.io
   names:
     categories:
-    - infra
+    - team
     - modeld
-    kind: TaskCard
-    listKind: TaskCardList
-    plural: taskcards
-    singular: taskcard
+    kind: Review
+    listKind: ReviewList
+    plural: reviews
+    shortNames:
+    - cv
+    singular: review
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.phase
-      name: Status
+    - jsonPath: .status.conditions[?(@.type=="Ready")].status
+      name: Ready
       type: string
-    - jsonPath: .spec.subject
-      name: Subject
-      type: string
-    - jsonPath: .spec.entityRef.name
-      name: Entity Namespace
-      type: string
-    - jsonPath: .spec.entityRef.namespace
-      name: Entity Name
-      type: string
-    - jsonPath: .spec.notifierName
-      name: Notifier
-      type: string
-    - jsonPath: .status.at
-      name: At
-      type: date
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
     name: v1alpha1
     schema:
       openAPIV3Schema:
+        description: Review represents a comment about any review
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -58,18 +46,10 @@ spec:
           metadata:
             type: object
           spec:
-            description: TaskCardSpec defines the desired state of TaskCard
+            description: ReviewSpec defines the desired state of a Review
             properties:
-              assignedTo:
-                default: no-one
-                description: Assigned to is the user name assigned to this task
-                type: string
-              dueDate:
-                description: Flagged donete that task was flagged
-                format: date-time
-                type: string
               entityRef:
-                description: The modeld entity that the task refer to.
+                description: The target of the review
                 properties:
                   apiVersion:
                     description: API version of the referent.
@@ -104,30 +84,88 @@ spec:
                     description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                     type: string
                 type: object
-              flagged:
-                default: false
-                description: Flagged donete that task was flagged
-                type: boolean
+              messages:
+                description: Messages are the messages of the review.
+                items:
+                  description: Commnet represents a single comment in the review
+                  properties:
+                    authorRef:
+                      description: AuthorRef is a reference to the author of the comment
+                      properties:
+                        apiVersion:
+                          description: API version of the referent.
+                          type: string
+                        fieldPath:
+                          description: 'If referring to a piece of an object instead
+                            of an entire object, this string should contain a valid
+                            JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                            For example, if the object reference is to a container
+                            within a pod, this would take on a value like: "spec.containers{name}"
+                            (where "name" refers to the name of the container that
+                            triggered the event) or if no container name is specified
+                            "spec.containers[2]" (container with index 2 in this pod).
+                            This syntax is chosen only to have some well-defined way
+                            of referencing a part of an object. TODO: this design
+                            is not final and this field is subject to change in the
+                            future.'
+                          type: string
+                        kind:
+                          description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                          type: string
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        namespace:
+                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                          type: string
+                        resourceVersion:
+                          description: 'Specific resourceVersion to which this reference
+                            is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                          type: string
+                        uid:
+                          description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                          type: string
+                      type: object
+                    content:
+                      default: ""
+                      description: Content is the content of the comment
+                      type: string
+                    id:
+                      description: ID is the comment ID. Used when replying to a comment.
+                      type: string
+                    postedAt:
+                      description: PostedAt is the time when the comment was posted
+                      format: date-time
+                      type: string
+                    replyTo:
+                      default: ""
+                      description: If this comment is a reply to an id
+                      type: string
+                    sent:
+                      default: false
+                      description: Sent indicate if the comment was sent to the notifier.
+                      type: boolean
+                  type: object
+                type: array
               notifierName:
-                default: ""
-                description: NotifierName is the name of the notifier used to fire
-                  the alert.
+                default: default-slack-notifier
+                description: The notifier is used for alerts about new msgs in the
+                  review
                 type: string
-              reminder:
-                description: Reminder is the time to send a reminder
-                format: date-time
+              owner:
+                default: no-one
+                description: The owner account name
                 type: string
-              task:
-                default: ""
-                type: string
+            required:
+            - entityRef
+            - messages
             type: object
           status:
-            description: TaskCardStatus is the observed state of a TaskCard
+            description: ReviewStatus is the current status of the review
             properties:
               conditions:
                 items:
-                  description: TaskCardCondition describes the state of the license
-                    at a certain point.
+                  description: ReviewCondition describes the state of the review
                   properties:
                     lastTransitionTime:
                       description: Last time the condition transitioned from one status
@@ -142,24 +180,24 @@ spec:
                       description: The reason for the condition's last transition.
                       type: string
                     status:
-                      description: Status of the condition, one of True, False, AutoScaler.
                       type: string
                     type:
-                      description: Type of account condition.
+                      description: / BucketName conditions
                       type: string
                   required:
                   - status
                   - type
                   type: object
                 type: array
+              lastUpdated:
+                description: Last time the object was updated
+                format: date-time
+                type: string
               observedGeneration:
                 description: ObservedGeneration is the Last generation that was acted
                   on
                 format: int64
                 type: integer
-              phase:
-                description: Phase is the phase of the model
-                type: string
             type: object
         required:
         - spec
