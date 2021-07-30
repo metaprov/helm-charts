@@ -6,20 +6,19 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.6.0
   creationTimestamp: null
-  name: notebooks.training.modeld.io
+  name: reviews.team.modeld.io
 spec:
-  group: training.modeld.io
+  group: team.modeld.io
   names:
     categories:
-    - training
+    - team
     - modeld
-    - all
-    kind: Notebook
-    listKind: NotebookList
-    plural: notebooks
+    kind: Review
+    listKind: ReviewList
+    plural: reviews
     shortNames:
-    - nb
-    singular: notebook
+    - cv
+    singular: review
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -32,8 +31,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Notebook represent a notebook object which specify a single notebook
-          execution
+        description: Review represents a comment about any review
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -48,71 +46,10 @@ spec:
           metadata:
             type: object
           spec:
-            description: NotebookSpec is the desired state of the notebook resource.
+            description: ReviewSpec defines the desired state of a Review
             properties:
-              activeDeadlineSeconds:
-                default: 600
-                description: ActiveDeadlineSeconds is the deadline of a job for this
-                  notebook.
-                format: int64
-                minimum: 0
-                type: integer
-              debPackages:
-                description: DebPackages is a list of deb package to install
-                type: string
-              description:
-                default: ""
-                description: User provided description
-                maxLength: 512
-                type: string
-              imageName:
-                default: ""
-                description: A reference to the container image repository for this
-                  notebook.
-                type: string
-              location:
-                description: Location is the location of the notebook file
-                properties:
-                  bucketName:
-                    default: ""
-                    description: Bucketname is the name of the bucket
-                    type: string
-                  datasourceName:
-                    default: ""
-                    description: Datasource name is a pointer to a data source for
-                      cases that the data location is not a simple bucket but a database
-                    type: string
-                  path:
-                    description: Path to the full data file (e.g. csv file).
-                    type: string
-                type: object
-              owner:
-                default: no-one
-                description: The owner account name
-                type: string
-              paused:
-                default: false
-                description: Set to true to pause the notebook
-                type: boolean
-              priority:
-                default: medium
-                description: The priority of this notebook run. The default is medium.
-                enum:
-                - low
-                - medium
-                - high
-                - urgent
-                type: string
-              requirements:
-                default: ""
-                description: Requirements python file
-                type: string
-              schedule:
-                description: Schedule for running the pipeline
-                type: string
-              schemaRef:
-                description: SchemaName relate a notebook to a schema. The schema
-                  object will be accessible from the notebook
+              entityRef:
+                description: The target of the review
                 properties:
                   apiVersion:
                     description: API version of the referent.
@@ -147,28 +84,88 @@ spec:
                     description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                     type: string
                 type: object
-              vars:
-                description: vars to pass to the notebook
+              messages:
+                description: Messages are the messages of the review.
                 items:
-                  type: string
+                  description: Commnet represents a single comment in the review
+                  properties:
+                    authorRef:
+                      description: AuthorRef is a reference to the author of the comment
+                      properties:
+                        apiVersion:
+                          description: API version of the referent.
+                          type: string
+                        fieldPath:
+                          description: 'If referring to a piece of an object instead
+                            of an entire object, this string should contain a valid
+                            JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                            For example, if the object reference is to a container
+                            within a pod, this would take on a value like: "spec.containers{name}"
+                            (where "name" refers to the name of the container that
+                            triggered the event) or if no container name is specified
+                            "spec.containers[2]" (container with index 2 in this pod).
+                            This syntax is chosen only to have some well-defined way
+                            of referencing a part of an object. TODO: this design
+                            is not final and this field is subject to change in the
+                            future.'
+                          type: string
+                        kind:
+                          description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                          type: string
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        namespace:
+                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                          type: string
+                        resourceVersion:
+                          description: 'Specific resourceVersion to which this reference
+                            is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                          type: string
+                        uid:
+                          description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                          type: string
+                      type: object
+                    content:
+                      default: ""
+                      description: Content is the content of the comment
+                      type: string
+                    id:
+                      description: ID is the comment ID. Used when replying to a comment.
+                      type: string
+                    postedAt:
+                      description: PostedAt is the time when the comment was posted
+                      format: date-time
+                      type: string
+                    replyTo:
+                      default: ""
+                      description: If this comment is a reply to an id
+                      type: string
+                    sent:
+                      default: false
+                      description: Sent indicate if the comment was sent to the notifier.
+                      type: boolean
+                  type: object
                 type: array
-              versionName:
-                default: latest
-                description: The version of the notebook
+              notifierName:
+                default: default-slack-notifier
+                description: The notifier is used for alerts about new msgs in the
+                  review
                 type: string
-              workloadClassName:
-                default: nano-cpu-250m-mem-256mi
-                description: WorkloadClassName is the name of the workload class used
-                  to run this pipeline.
+              owner:
+                default: no-one
+                description: The owner account name
                 type: string
+            required:
+            - entityRef
+            - messages
             type: object
           status:
-            description: NotebookStatus is the observed state of the notebook resource
+            description: ReviewStatus is the current status of the review
             properties:
               conditions:
                 items:
-                  description: NotebookCondition describes the state of a notebook
-                    at a certain point.
+                  description: ReviewCondition describes the state of the review
                   properties:
                     lastTransitionTime:
                       description: Last time the condition transitioned from one status
@@ -183,21 +180,17 @@ spec:
                       description: The reason for the condition's last transition.
                       type: string
                     status:
-                      description: Status of the condition, one of True, False, Unknown.
                       type: string
                     type:
-                      description: Type of account condition.
+                      description: / BucketName conditions
                       type: string
                   required:
                   - status
                   - type
                   type: object
                 type: array
-              image:
-                description: Image is the name of the image after publication
-                type: string
-              lastRun:
-                description: Last run is the last time a run was created
+              lastUpdated:
+                description: Last time the object was updated
                 format: date-time
                 type: string
               observedGeneration:
@@ -205,9 +198,6 @@ spec:
                   on
                 format: int64
                 type: integer
-              uri:
-                description: The URI of the notebook in the bucket.
-                type: string
             type: object
         required:
         - spec

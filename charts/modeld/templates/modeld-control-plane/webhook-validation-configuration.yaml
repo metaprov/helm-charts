@@ -6,31 +6,6 @@ metadata:
   annotations:
     cert-manager.io/inject-ca-from: modeld-system/serving-cert
 webhooks:
-  - name: corpus.data.modeld.io
-    failurePolicy: Fail
-    sideEffects: None
-    timeoutSeconds: 5
-    admissionReviewVersions:
-      - v1beta1
-      - v1alpha1
-    rules:
-      - apiGroups:
-          - "data.modeld.io"
-        apiVersions:
-          - v1alpha1
-          - v1beta1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - corpuses
-    clientConfig:
-      service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /validate-data-modeld-io-v1alpha1-corpus
-      caBundle: CERT
-
   - name: dataproduct.data.modeld.io
     failurePolicy: Fail
     sideEffects: None
@@ -602,31 +577,6 @@ webhooks:
         path: /validate-infra-modeld-io-v1alpha1-alert
       caBundle: CERT
 
-  - name: taskcard.infra.modeld.io
-    failurePolicy: Fail
-    sideEffects: None
-    timeoutSeconds: 5
-    admissionReviewVersions:
-      - v1beta1
-      - v1alpha1
-    rules:
-      - apiGroups:
-          - "infra.modeld.io"
-        apiVersions:
-          - v1alpha1
-          - v1beta1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - taskcards
-    clientConfig:
-      service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /validate-infra-modeld-io-v1alpha1-taskcard
-      caBundle: CERT
-
   - name: commit.infra.modeld.io
     failurePolicy: Fail
     sideEffects: None
@@ -812,32 +762,6 @@ webhooks:
         path: /validate-training-modeld-io-v1alpha1-model
       caBundle: CERT
 
-  - name: forecast.training.modeld.io
-    sideEffects: None
-    timeoutSeconds: 5
-    failurePolicy: Fail
-    admissionReviewVersions:
-      - v1beta1
-      - v1alpha1
-    rules:
-      - apiGroups:
-          - "training.modeld.io"
-        apiVersions:
-          - v1alpha1
-          - v1beta1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - forecasts
-    clientConfig:
-      service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /validate-training-modeld-io-v1alpha1-forecast
-      caBundle: CERT
-
-
   - name: notebook.training.modeld.io
     failurePolicy: Fail
     sideEffects: None
@@ -938,32 +862,6 @@ webhooks:
         path: /validate-training-modeld-io-v1alpha1-modelpipelinerun
       caBundle: CERT
 
-  - name: pipelinetrigger.training.modeld.io
-    failurePolicy: Fail
-    sideEffects: None
-    timeoutSeconds: 5
-    admissionReviewVersions:
-      - v1beta1
-      - v1alpha1
-    rules:
-      - apiGroups:
-          - "training.modeld.io"
-        apiVersions:
-          - v1alpha1
-          - v1beta1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - pipelinetrigger
-    clientConfig:
-      service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /validate-training-modeld-io-v1alpha1-pipelinetrigger
-      caBundle: CERT
-
-
   - name: study.training.modeld.io
     failurePolicy: Fail
     sideEffects: None
@@ -987,57 +885,6 @@ webhooks:
         namespace: modeld-system
         name: modeld-control-plane-webhook
         path: /validate-training-modeld-io-v1alpha1-study
-      caBundle: CERT
-
-  - name: trainer.training.modeld.io
-    failurePolicy: Fail
-    sideEffects: None
-    timeoutSeconds: 5
-    admissionReviewVersions:
-      - v1beta1
-      - v1alpha1
-    rules:
-      - apiGroups:
-          - "training.modeld.io"
-        apiVersions:
-          - v1alpha1
-          - v1beta1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - trainers
-    clientConfig:
-      service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /validate-training-modeld-io-v1alpha1-trainer
-      caBundle: CERT
-
-
-  - name: automlrun.training.modeld.io
-    failurePolicy: Fail
-    sideEffects: None
-    timeoutSeconds: 5
-    admissionReviewVersions:
-      - v1beta1
-      - v1alpha1
-    rules:
-      - apiGroups:
-          - "training.modeld.io"
-        apiVersions:
-          - v1alpha1
-          - v1beta1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - automlruns
-    clientConfig:
-      service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /validate-training-modeld-io-v1alpha1-automlrun
       caBundle: CERT
 
   - name: report.training.modeld.io
@@ -1089,3 +936,140 @@ webhooks:
           name: modeld-control-plane-webhook
           path: /validate-training-modeld-io-v1alpha1-cronreport
         caBundle: CERT
+
+  - name: modelautobuilder.training.modeld.io
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+        - v1beta1
+        - v1alpha1
+    rules:
+        - apiGroups:
+            - "training.modeld.io"
+          apiVersions:
+            - v1alpha1
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - modelautobuilders
+    clientConfig:
+        service:
+          namespace: modeld-system
+          name: modeld-control-plane-webhook
+          path: /validate-training-modeld-io-v1alpha1-modelautobuilder
+        caBundle: CERT
+
+
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: team-validating-webhook-configuration
+  namespace: modeld-system
+  annotations:
+    cert-manager.io/inject-ca-from: modeld-system/serving-cert
+webhooks:
+  - name: todo.team.modeld.io
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "team.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - todos
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-team-modeld-io-v1alpha1-todo
+      caBundle: CERT
+
+  - name: review.training.modeld.io
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "training.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - reviews
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-team-modeld-io-v1alpha1-review
+      caBundle: CERT
+
+  - name: postmortem.training.modeld.io
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "team.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - postmortems
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-team-modeld-io-v1alpha1-postmortem
+      caBundle: CERT
+
+  - name: runbook.training.modeld.io
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "team.modeld.io"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - runbooks
+    clientConfig:
+      service:
+        namespace: modeld-system
+        name: modeld-control-plane-webhook
+        path: /validate-team-modeld-io-v1alpha1-runbook
+      caBundle: CERT
+
+  

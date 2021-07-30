@@ -6,25 +6,34 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.6.0
   creationTimestamp: null
-  name: notebooks.training.modeld.io
+  name: attachments.infra.modeld.io
 spec:
-  group: training.modeld.io
+  group: infra.modeld.io
   names:
     categories:
-    - training
+    - infra
     - modeld
-    - all
-    kind: Notebook
-    listKind: NotebookList
-    plural: notebooks
-    shortNames:
-    - nb
-    singular: notebook
+    kind: Attachment
+    listKind: AttachmentList
+    plural: attachments
+    singular: attachment
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=="Ready")].status
-      name: Ready
+    - jsonPath: .status.phase
+      name: Status
+      type: string
+    - jsonPath: .spec.entityRef.name
+      name: Entity Namespace
+      type: string
+    - jsonPath: .spec.entityRef.namespace
+      name: Entity Name
+      type: string
+    - jsonPath: .spec.bucketName
+      name: Bucket
+      type: string
+    - jsonPath: .spec.path
+      name: Path
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
@@ -32,8 +41,6 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Notebook represent a notebook object which specify a single notebook
-          execution
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -48,71 +55,17 @@ spec:
           metadata:
             type: object
           spec:
-            description: NotebookSpec is the desired state of the notebook resource.
+            description: AttachmentSpec defines the desired state of Attachment
             properties:
-              activeDeadlineSeconds:
-                default: 600
-                description: ActiveDeadlineSeconds is the deadline of a job for this
-                  notebook.
-                format: int64
-                minimum: 0
-                type: integer
-              debPackages:
-                description: DebPackages is a list of deb package to install
+              bucketName:
+                default: ""
+                description: Bucketname is the name of the bucket
                 type: string
               description:
                 default: ""
-                description: User provided description
-                maxLength: 512
                 type: string
-              imageName:
-                default: ""
-                description: A reference to the container image repository for this
-                  notebook.
-                type: string
-              location:
-                description: Location is the location of the notebook file
-                properties:
-                  bucketName:
-                    default: ""
-                    description: Bucketname is the name of the bucket
-                    type: string
-                  datasourceName:
-                    default: ""
-                    description: Datasource name is a pointer to a data source for
-                      cases that the data location is not a simple bucket but a database
-                    type: string
-                  path:
-                    description: Path to the full data file (e.g. csv file).
-                    type: string
-                type: object
-              owner:
-                default: no-one
-                description: The owner account name
-                type: string
-              paused:
-                default: false
-                description: Set to true to pause the notebook
-                type: boolean
-              priority:
-                default: medium
-                description: The priority of this notebook run. The default is medium.
-                enum:
-                - low
-                - medium
-                - high
-                - urgent
-                type: string
-              requirements:
-                default: ""
-                description: Requirements python file
-                type: string
-              schedule:
-                description: Schedule for running the pipeline
-                type: string
-              schemaRef:
-                description: SchemaName relate a notebook to a schema. The schema
-                  object will be accessible from the notebook
+              entityRef:
+                description: Entity ref
                 properties:
                   apiVersion:
                     description: API version of the referent.
@@ -147,27 +100,23 @@ spec:
                     description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                     type: string
                 type: object
-              vars:
-                description: vars to pass to the notebook
-                items:
-                  type: string
-                type: array
-              versionName:
-                default: latest
-                description: The version of the notebook
+              owner:
+                default: no-one
                 type: string
-              workloadClassName:
-                default: nano-cpu-250m-mem-256mi
-                description: WorkloadClassName is the name of the workload class used
-                  to run this pipeline.
+              path:
+                description: Path to the full data file (e.g. csv file).
                 type: string
             type: object
           status:
-            description: NotebookStatus is the observed state of the notebook resource
+            description: AttachmentStatus is the observed state of a Attachment
             properties:
+              at:
+                description: The time when the alert was fired
+                format: date-time
+                type: string
               conditions:
                 items:
-                  description: NotebookCondition describes the state of a notebook
+                  description: AttachmentCondition describes the state of the license
                     at a certain point.
                   properties:
                     lastTransitionTime:
@@ -183,7 +132,7 @@ spec:
                       description: The reason for the condition's last transition.
                       type: string
                     status:
-                      description: Status of the condition, one of True, False, Unknown.
+                      description: Status of the condition, one of True, False, AutoScaler.
                       type: string
                     type:
                       description: Type of account condition.
@@ -193,20 +142,13 @@ spec:
                   - type
                   type: object
                 type: array
-              image:
-                description: Image is the name of the image after publication
-                type: string
-              lastRun:
-                description: Last run is the last time a run was created
-                format: date-time
-                type: string
               observedGeneration:
                 description: ObservedGeneration is the Last generation that was acted
                   on
                 format: int64
                 type: integer
-              uri:
-                description: The URI of the notebook in the bucket.
+              phase:
+                description: Phase is the phase of the model
                 type: string
             type: object
         required:
