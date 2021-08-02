@@ -87,7 +87,7 @@ Kubernetes: `>= 1.15.0`
 | frontend.ports.targetPort | int | `8080` |  |
 | frontend.replicaCount | int | `1` |  |
 | frontend.service.type | string | `"ClusterIP"` |  |
-| global.cachePath | string | `"/home/modeld/data"` |  |
+| global.cachePath | string | `"/var/opt/modeld/data"` |  |
 | global.debug | bool | `false` |  |
 | global.ha.enabled | bool | `false` |  |
 | global.ha.replicaCount | int | `3` |  |
@@ -112,6 +112,6 @@ Kubernetes: `>= 1.15.0`
 | minikube.enabled | bool | `true` |  |
 | namespace | string | `"modeld-system"` |  |
 | podSecurityPolicy.enabled | bool | `false` |  |
-| presistence.cachePath | string | `"/home/modeld/data"` |  |
+| presistence.cachePath | string | `"/var/opt/modeld/data"` |  |
 | rbac.create | bool | `true` |  |
 

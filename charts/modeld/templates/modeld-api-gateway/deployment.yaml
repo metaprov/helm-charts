@@ -34,7 +34,7 @@ spec:
               name: metrics          
           volumeMounts:
             - name: data
-              mountPath: /home/modeld/data
+              mountPath: /var/opt/modeld/data
           resources:
               limits:
                 cpu: "{{.Values.apigateway.resources.limits.cpu}}"
@@ -72,7 +72,7 @@ spec:
             - name: CLOUDS_PORT
               value: "8090"
             - name: CACHE_PATH
-              value: "/home/modeld/data"
+              value: "/var/opt/modeld/data"
             - name: DS_HOST
               value: modeld-data-plane
             - name: DS_PORT
@@ -86,7 +86,7 @@ spec:
               name: http
           volumeMounts:
               - name: data
-                mountPath: /home/modeld/data
+                mountPath: /var/opt/modeld/data
           resources:
             limits:
               cpu: "{{.Values.clouds.resources.limits.cpu}}"
@@ -118,7 +118,7 @@ spec:
              - name: ENV
                value: "dev"
              - name: CACHE_PATH
-               value: "/home/modeld/data"
+               value: "/var/opt/modeld/data"
       volumes:
        - name : data
          emptyDir: {}

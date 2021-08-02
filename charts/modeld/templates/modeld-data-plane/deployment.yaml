@@ -42,7 +42,7 @@ spec:
     
           volumeMounts:
             - name: data
-              mountPath: /home/modeld/data
+              mountPath: /var/opt/modeld/data
           env:
             - name: CACHE_PATH
               valueFrom:
@@ -63,7 +63,7 @@ spec:
               name: profiling
           volumeMounts:
             - name: data
-              mountPath: /home/modeld/data
+              mountPath: /var/opt/modeld/data
           resources:
             limits:
               cpu: "{{.Values.clouds.resources.limits.cpu}}"

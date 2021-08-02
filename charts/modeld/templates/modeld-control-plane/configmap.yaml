@@ -8,6 +8,6 @@ data:
   db-port: "5432"
   db-name: "modeld"
   db-username: "postgres"
-  cache-path: "/home/modeld/data"
+  cache-path: "/var/opt/modeld/data"
   metric-addr: ":9090"
 

@@ -27,7 +27,7 @@ spec:
           imagePullPolicy: {{ .Values.datadock.image.pullPolicy }}
           volumeMounts:
             - name: data
-              mountPath: /home/modeld/data
+              mountPath: /var/opt/modeld/data
           resources:
             limits:
               cpu: "{{.Values.datadock.resources.limits.cpu}}"
@@ -65,7 +65,7 @@ spec:
               name: http
           volumeMounts:
             - name: data
-              mountPath: /home/modeld/data
+              mountPath: /var/opt/modeld/data
           resources:
             limits:
               cpu: "{{.Values.clouds.resources.limits.cpu}}"

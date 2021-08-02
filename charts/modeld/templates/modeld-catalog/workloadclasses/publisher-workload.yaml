@@ -24,7 +24,7 @@ spec:
                 - containerPort: 8080
             volumeMounts:
                 - name: data
-                  mountPath: /home/modeld/data:z
+                  mountPath: /var/opt/modeld/data:z
           - name: publisher
             image: quay.io/metaprov/modeld-publisher:latest
             securityContext:
@@ -37,7 +37,7 @@ spec:
                name: metrics
             volumeMounts:
              - name: data
-               mountPath: /home/modeld/data:z
+               mountPath: /var/opt/modeld/data:z
              - name: docker-sock-volume
                mountPath: /var/run/docker.sock
             resources:
@@ -57,7 +57,7 @@ spec:
                   - name: ENV
                     value: "dev"
                   - name: CACHE_PATH
-                    value: "/home/modeld/data"
+                    value: "/var/opt/modeld/data"
                   - name: CLOUDS_HOST
                     value: "127.0.0.1"
                   - name: CLOUDS_PORT
@@ -71,7 +71,7 @@ spec:
                  containerPort: 8090
             volumeMounts:
                 - name: data
-                  mountPath: /home/modeld/data:z
+                  mountPath: /var/opt/modeld/data:z
         volumes:
           - name: data
             emptyDir: {}

@@ -28,7 +28,7 @@ spec:
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
           volumeMounts:
             - name: data
-              mountPath: /home/modeld/data
+              mountPath: /var/opt/modeld/data
             - name: webhook-server-cert
               mountPath: /tmp/k8s-webhook-server/serving-certs
               readOnly: true
@@ -70,7 +70,7 @@ spec:
               name: http            
           volumeMounts:
             - name: data
-              mountPath: /home/modeld/data
+              mountPath: /var/opt/modeld/data
           resources:
             limits:
               cpu: "{{.Values.clouds.resources.limits.cpu}}"

@@ -22,7 +22,7 @@ spec:
                 - containerPort: 8080
             volumeMounts:
                 - name: data
-                  mountPath: /home/modeld/data
+                  mountPath: /var/opt/modeld/data
           - name: data
             image: quay.io/metaprov/modeld-data-plane:latest
             imagePullPolicy: IfNotPresent
@@ -42,7 +42,7 @@ spec:
                 cpu: "125m"
             volumeMounts:
                - name: data
-                 mountPath: /home/modeld/data
+                 mountPath: /var/opt/modeld/data
           - name: cloud-proxy
             image: quay.io/metaprov/modeld-cloud-proxy:latest
             imagePullPolicy: IfNotPresent
@@ -51,7 +51,7 @@ spec:
                 containerPort: 8090
             volumeMounts:
               - name: data
-                mountPath: /home/modeld/data
+                mountPath: /var/opt/modeld/data
         volumes:
           - name: data
             emptyDir: {}
