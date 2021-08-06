@@ -15,10 +15,7 @@ apiVersion: infra.modeld.io/v1alpha1
 kind: Account
 metadata:
   name: no-one
-  namespace: default-tenant
-  labels:
-      environment: production
-      app: nginx
+  namespace: default-tenant 
 spec:
   tenantRef:
     name: default-tenant
