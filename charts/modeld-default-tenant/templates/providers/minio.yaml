@@ -6,6 +6,7 @@ metadata:
   namespace: default-tenant
   labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
 spec:
+  owner: admin
   provider: minio
   tenantRef:
     name: default-tenant
@@ -48,6 +49,7 @@ metadata:
   name: default-minio-bucket
   namespace: default-tenant
 spec:
+  owner: admin
   tenantRef:
     namespace: modeld-system
     name : default-tenant

@@ -4,6 +4,7 @@ metadata:
   name: default-serving-site
   namespace: default-tenant
 spec:
+  owner: admin
   fdqn: {{ .Values.servingsite.fdqn }}
   tenantRef:
     name: default-tenant

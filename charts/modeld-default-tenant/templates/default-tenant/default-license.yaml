@@ -4,8 +4,23 @@ metadata:
   name: default-license
   namespace: default-tenant
 spec:
+  owner: admin
   tenantRef:
     name: default-teant
     namespace: modeld-system
   secretName: default-license-secret
+  owner: admin
+  email: ""
+  maxProducts: 5
+  maxTrainers: 1
+  maxServers:  3
+  maxUsers: 1
+  maxDataPlanes: 1
+  forecast: true
+  nlp: false
+  vision: false
+  chatbot: false
+  productName: "modeld.io free"
+  priceName: "lite"
+  notifierName:  default-email-notifier
   

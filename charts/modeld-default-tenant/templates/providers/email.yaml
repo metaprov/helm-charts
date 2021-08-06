@@ -26,6 +26,7 @@ metadata:
   namespace: default-tenant
   labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
 spec:
+  owner: admin
   provider: smtp
   tenantRef:
     name: default-tenant

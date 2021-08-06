@@ -4,6 +4,7 @@ metadata:
   name: default-email-notifier
   namespace: default-tenant
 spec:
+  owner: admin
   tenantRef:
     name: default-tenant
     namespace: modeld-system

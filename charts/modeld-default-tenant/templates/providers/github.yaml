@@ -6,6 +6,7 @@ metadata:
   namespace: default-tenant
   labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
 spec:
+  owner: admin
   provider: github
   tenantRef:
     name: default-tenant

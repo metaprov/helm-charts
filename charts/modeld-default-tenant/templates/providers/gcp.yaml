@@ -6,6 +6,7 @@ metadata:
   namespace: default-tenant
   labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
 spec:
+  owner: admin
   provider: gcp
   tenantRef:
     name: default-tenant
@@ -35,6 +36,7 @@ metadata:
   name: default-gcp-bucket
   namespace: default-tenant
 spec:
+  owner: admin
   tenantRef:
     namespace: modeld-system
     name : default-tenant

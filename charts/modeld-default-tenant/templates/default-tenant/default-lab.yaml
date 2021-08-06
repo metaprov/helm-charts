@@ -4,6 +4,7 @@ metadata:
   name: default-lab
   namespace: default-tenant
 spec:
+  owner: admin
   tenantRef:
     name: default-tenant
     namespace: modeld-system
