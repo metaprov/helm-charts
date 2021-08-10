@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: default-snowflake-secret
+  namespace: default-tenant
+  labels:
+    app.kubernetes.io/name: default-snowflake-connection
+    app.kubernetes.io/part-of: modeld
+    app.kubernetes.io/component: infra
+type: Opaque
+stringData:
+  username: 'snowflake'
+  password: 'snowflake123'
+---
+
+apiVersion: infra.modeld.io/v1alpha1
+kind: Connection
+metadata:
+  name: default-snowflake-connection
+  namespace: default-tenant  
+spec:
+  owner: admin
+  provider: snowflake
+  category: database
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+  secretName : default-snowflake-secret
+  snowflake:
+    host: ''
+    port: 3000
+    username: ''
+    password: ''
+    database: ''
+    schema: ''
+    warehouse: ''
+    url: ''   

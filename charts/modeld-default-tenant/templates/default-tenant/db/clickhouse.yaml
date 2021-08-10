@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: default-clickhouse-secret
+  namespace: default-tenant
+  labels:
+    app.kubernetes.io/name: default-clickhouse-connection
+    app.kubernetes.io/part-of: modeld
+    app.kubernetes.io/component: infra
+type: Opaque
+stringData:
+  username: ''
+  password: ''
+---
+
+apiVersion: infra.modeld.io/v1alpha1
+kind: Connection
+metadata:
+  name: default-clickhouse-connection
+  namespace: default-tenant 
+spec:
+  owner: admin
+  category: database
+  provider: clickhouse
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+  secretName : default-clickhouse-secret
+  clickhouse:
+    host: ''
+    port: 3000
+    username: ''
+    password: ''
+    database: ''    
+    url: ''

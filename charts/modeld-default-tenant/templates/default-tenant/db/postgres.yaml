@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: default-postgres-secret
+  namespace: default-tenant
+type: Opaque
+stringData:
+  username: ''
+  password: ''    
+---
+
+apiVersion: infra.modeld.io/v1alpha1
+kind: Connection
+metadata:
+  name: default-postgres-connection
+  namespace: default-tenant  
+spec:
+  owner: admin
+  provider: postgres
+  category: database
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+  secretName : default-postgres-secret
+  postgres:
+    host: ''
+    port: 3000
+    username: ''
+    password: ''
+    database: ''    
+    url: ''   
