@@ -37,7 +37,7 @@ rules:
       - "*"
     verbs:
       - "*"
-- apiGroups:
+  - apiGroups:
       - team.modeld.io
     resources:
       - "*"
