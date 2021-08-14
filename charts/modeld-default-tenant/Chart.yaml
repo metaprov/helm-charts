@@ -1,6 +1,18 @@
 apiVersion: v2
 name: modeld-default-tenant
 description: A Helm chart for default tenant
+version: 0.3.602
+appVersion: 0.3.602
+icon: https://raw.githubusercontent.com/metaprov/modeldapi/main/static/imgs/logo/svg/symbol_horizontal_light.svg
+keywords:
+    - machine learning
+    - automl
+    - model
+    - ai
+home: https://www.modeld.io
+sources:
+    - https://github.com/metaprov/modeldapi    
 type: application
-version: v0.3.602
-appVersion: v0.3.602
+maintainers:
+    - name: Metaprov Inc
+      email: info@metaprov.com
