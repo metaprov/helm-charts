@@ -2,5 +2,5 @@ apiVersion: v2
 name: modeld-default-tenant
 description: A Helm chart for default tenant
 type: application
-version: 0.3.602
-appVersion: 0.3.602
+version: v0.3.602
+appVersion: v0.3.602

@@ -1,6 +1,7 @@
 apiVersion: v2
 name: modeld
-version: 0.3.602
+version: v0.3.602
+appVersion: v0.3.602
 kubeVersion: ">= 1.15.0"
 description: Machine Learning Operators
 type: application
@@ -11,7 +12,6 @@ keywords:
   - ai
   - machine learning
 home: https://modeld.io
-appVersion: v0.3.602
 sources:
   - https://github.com/metaprov/modeld
 maintainers:
