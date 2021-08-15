@@ -14,10 +14,10 @@ spec:
     name: modeld/iris-product
     registryConnectionName: default-dockerhub-connection
   dataLocation:
-    bucketName: default-digitalocean-bucket
+    bucketName: default-minio-bucket
     path: modeld/live/dataproducts/iris
   servingSiteName: default-serving-site
   labName: default-lab
   task: binary-classification  
-  defaultWorkloadClassName: nano-cpu-250m-mem-256mi  
+  defaultWorkloadClassName: cpu-1-mem-1gi 
   owner: admin
