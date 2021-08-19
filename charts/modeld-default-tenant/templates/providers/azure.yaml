@@ -36,16 +36,4 @@ data:
   accountName: {{ .Values.azure.secret.storageAccountName | b64enc | quote }}
   {{ else }}
   accountName: {{ required "azure storage account name is required!" .Values.azure.secret.storageAccountName }}
----
-apiVersion: infra.modeld.io/v1alpha1
-kind: VirtualBucket
-metadata:
-  name: default-azure-bucket
-  namespace: default-tenant
-spec:
-  owner: admin
-  tenantRef:
-    namespace: modeld-system
-    name : default-tenant
-  connectionName: default-azure-connection
 {{ end }}

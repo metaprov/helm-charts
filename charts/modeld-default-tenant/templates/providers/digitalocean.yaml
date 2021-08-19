@@ -48,16 +48,4 @@ spec:
     secretKey: '[hidden]'
     defaultRegion: 'nyc3'
 
----
-apiVersion: infra.modeld.io/v1alpha1
-kind: VirtualBucket
-metadata:
-  name: default-digitalocean-bucket
-  namespace: default-tenant
-spec:
-  owner: admin
-  tenantRef:
-    namespace: modeld-system
-    name : default-tenant
-  connectionName: default-digitalocean-connection
 {{ end }}
