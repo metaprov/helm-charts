@@ -25,7 +25,7 @@ spec:
                   mountPath: /var/opt/modeld/data
           - name: data
             image: quay.io/metaprov/modeld-data-plane:latest
-            imagePullPolicy: IfNotPresent
+            imagePullPolicy: Always
             ports:
                - containerPort: 8070
                  name: http
@@ -45,7 +45,7 @@ spec:
                  mountPath: /var/opt/modeld/data
           - name: cloud-proxy
             image: quay.io/metaprov/modeld-cloud-proxy:latest
-            imagePullPolicy: IfNotPresent
+            imagePullPolicy: Always
             ports:
               - name: http
                 containerPort: 8090

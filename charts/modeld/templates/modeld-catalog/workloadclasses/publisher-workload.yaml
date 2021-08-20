@@ -19,7 +19,7 @@ spec:
         containers:
           - name: control
             image: quay.io/metaprov/modeld-workload:latest
-            imagePullPolicy: IfNotPresent
+            imagePullPolicy: Always
             ports:
                 - containerPort: 8080
             volumeMounts:
@@ -29,7 +29,7 @@ spec:
             image: quay.io/metaprov/modeld-publisher:latest
             securityContext:
                privileged: false
-            imagePullPolicy: IfNotPresent
+            imagePullPolicy: Always
             ports:
              - containerPort: 8050
                name: http
@@ -65,7 +65,7 @@ spec:
 
           - name: storage
             image: quay.io/metaprov/modeld-cloud-proxy:latest
-            imagePullPolicy: IfNotPresent
+            imagePullPolicy: Always
             ports:
                - name: http
                  containerPort: 8090
