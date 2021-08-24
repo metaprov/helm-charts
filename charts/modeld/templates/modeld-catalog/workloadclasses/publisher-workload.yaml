@@ -13,7 +13,7 @@ spec:
         restartPolicy: Never
         containers:
           - name: control
-            image: quay.io/metaprov/modeld-workload:v0.3.629
+            image: quay.io/metaprov/modeld-workload:v0.3.633
             imagePullPolicy: IfNotPresent
             ports:
                 - containerPort: 8080
@@ -21,7 +21,7 @@ spec:
                 - name: data
                   mountPath: /var/opt/modeld/data
           - name: publisher
-            image: quay.io/metaprov/modeld-publisher:v0.3.629
+            image: quay.io/metaprov/modeld-publisher:v0.3.633
             imagePullPolicy: IfNotPresent
             ports:
              - containerPort: 8050
