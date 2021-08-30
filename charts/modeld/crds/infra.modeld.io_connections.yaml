@@ -190,6 +190,12 @@ spec:
                     default: ""
                     type: string
                 type: object
+              box:
+                properties:
+                  token:
+                    default: ""
+                    type: string
+                type: object
               cassandra:
                 description: CassandraSpec defines the connection to cassandra
                 properties:
@@ -300,6 +306,54 @@ spec:
                     default: ""
                     type: string
                 type: object
+              db2:
+                properties:
+                  host:
+                    default: ""
+                    type: string
+                  keyspace:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 9042
+                    format: int32
+                    minimum: 0
+                    type: integer
+                  url:
+                    default: ""
+                    description: URL override the other settings
+                    type: string
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              dermio:
+                properties:
+                  host:
+                    default: ""
+                    type: string
+                  keyspace:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 9042
+                    format: int32
+                    minimum: 0
+                    type: integer
+                  url:
+                    default: ""
+                    description: URL override the other settings
+                    type: string
+                  username:
+                    default: ""
+                    type: string
+                type: object
               digitalocean:
                 properties:
                   accessKey:
@@ -321,6 +375,62 @@ spec:
                   token:
                     default: ""
                     description: Token for digital ocean
+                    type: string
+                type: object
+              drill:
+                description: ApacheDruid
+                properties:
+                  host:
+                    default: ""
+                    type: string
+                  keyspace:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 9042
+                    format: int32
+                    minimum: 0
+                    type: integer
+                  url:
+                    default: ""
+                    description: URL override the other settings
+                    type: string
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              dropbox:
+                properties:
+                  token:
+                    default: ""
+                    type: string
+                type: object
+              druid:
+                description: ApacheDruid defines the connection to cassandra
+                properties:
+                  host:
+                    default: ""
+                    type: string
+                  keyspace:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 9042
+                    format: int32
+                    minimum: 0
+                    type: integer
+                  url:
+                    default: ""
+                    description: URL override the other settings
+                    type: string
+                  username:
+                    default: ""
                     type: string
                 type: object
               elasticsearch:
@@ -362,6 +472,30 @@ spec:
                     default: ""
                     description: URL Override the other
                     type: string
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              facebook:
+                description: Social media
+                properties:
+                  token:
+                    default: ""
+                    type: string
+                type: object
+              ftp:
+                properties:
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 21
+                    format: int32
+                    minimum: 0
+                    type: integer
                   username:
                     default: ""
                     type: string
@@ -417,6 +551,18 @@ spec:
                     description: URL Override the other
                     type: string
                   username:
+                    default: ""
+                    type: string
+                type: object
+              gsheets:
+                properties:
+                  dataToPull:
+                    default: ""
+                    type: string
+                  id:
+                    default: ""
+                    type: string
+                  scopes:
                     default: ""
                     type: string
                 type: object
@@ -518,6 +664,29 @@ spec:
                     minimum: 0
                     type: integer
                   url:
+                    description: URL Override the other
+                    type: string
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              kafka:
+                properties:
+                  channel:
+                    default: ""
+                    type: string
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    format: int32
+                    minimum: 0
+                    type: integer
+                  url:
+                    default: ""
                     description: URL Override the other
                     type: string
                   username:
@@ -630,6 +799,26 @@ spec:
                     type: integer
                   url:
                     default: ""
+                    type: string
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              neo4j:
+                properties:
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    format: int32
+                    minimum: 0
+                    type: integer
+                  url:
+                    default: ""
+                    description: URL Override the other
                     type: string
                   username:
                     default: ""
@@ -794,6 +983,24 @@ spec:
                     default: ""
                     type: string
                 type: object
+              rabbitmq:
+                description: Message broker
+                properties:
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 21
+                    format: int32
+                    minimum: 0
+                    type: integer
+                  username:
+                    default: ""
+                    type: string
+                type: object
               redshift:
                 properties:
                   database:
@@ -822,6 +1029,43 @@ spec:
                 description: SecretName is a reference to a secret which holds the
                   connection credentials
                 type: string
+              sftp:
+                properties:
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    default: 21
+                    format: int32
+                    minimum: 0
+                    type: integer
+                  username:
+                    default: ""
+                    type: string
+                type: object
+              singlestore:
+                properties:
+                  host:
+                    default: ""
+                    type: string
+                  password:
+                    default: ""
+                    type: string
+                  port:
+                    format: int32
+                    minimum: 0
+                    type: integer
+                  url:
+                    default: ""
+                    description: URL Override the other
+                    type: string
+                  username:
+                    default: ""
+                    type: string
+                type: object
               slack:
                 properties:
                   channel:
@@ -1013,6 +1257,12 @@ spec:
                     description: URL Override the other
                     type: string
                   username:
+                    default: ""
+                    type: string
+                type: object
+              twitter:
+                properties:
+                  token:
                     default: ""
                     type: string
                 type: object
