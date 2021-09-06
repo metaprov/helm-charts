@@ -1,4 +1,4 @@
-apiVersion: data.modela.io/v1alpha1
+apiVersion: data.modela.ai/v1alpha1
 kind: DataProduct
 metadata:
   namespace: default-tenant

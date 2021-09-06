@@ -64,7 +64,7 @@ A Helm chart for default tenant
 | minio.secret.host | string | `"minio-service.default."` |  |
 | minio.secret.secretkey | string | `"minio-secret-key"` |  |
 | servingsite.create | bool | `true` |  |
-| servingsite.fdqn | string | `"serving.modela.io"` |  |
+| servingsite.fdqn | string | `"serving.modela.ai"` |  |
 | servingsite.name | string | `"default-servingsite"` |  |
 | slack.create | bool | `true` |  |
 | slack.name | string | `"default-slack"` |  |

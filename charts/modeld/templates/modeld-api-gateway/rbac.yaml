@@ -8,37 +8,37 @@ metadata:
   namespace: modela-system
 rules:
   - apiGroups:
-      - catalog.modela.io
+      - catalog.modela.ai
     resources:
       - "*"
     verbs:
       - "*"
   - apiGroups:
-      - data.modela.io
+      - data.modela.ai
     resources:
       - "*"
     verbs:
       - "*"
   - apiGroups:
-      - inference.modela.io
+      - inference.modela.ai
     resources:
       - "*"
     verbs:
       - "*"
   - apiGroups:
-    - infra.modela.io
+    - infra.modela.ai
     resources:
       - "*"
     verbs:
       - "*"
   - apiGroups:
-      - training.modela.io
+      - training.modela.ai
     resources:
       - "*"
     verbs:
       - "*"
   - apiGroups:
-      - team.modela.io
+      - team.modela.ai
     resources:
       - "*"
     verbs:

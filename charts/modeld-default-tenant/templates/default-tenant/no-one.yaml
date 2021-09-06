@@ -11,7 +11,7 @@ stringData:
   password: '$2a$14$d154O63mraxngBiKDbiUc.fZskDLOH9j1VZ9LCl9l3/4dIre/lRny'
 ---
 
-apiVersion: infra.modela.io/v1alpha1
+apiVersion: infra.modela.ai/v1alpha1
 kind: Account
 metadata:
   name: no-one

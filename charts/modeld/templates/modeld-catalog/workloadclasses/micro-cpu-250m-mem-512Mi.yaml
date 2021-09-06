@@ -1,4 +1,4 @@
-apiVersion: catalog.modela.io/v1alpha1
+apiVersion: catalog.modela.ai/v1alpha1
 kind: WorkloadClass
 metadata:
   name: micro-cpu-250m-mem-512mi

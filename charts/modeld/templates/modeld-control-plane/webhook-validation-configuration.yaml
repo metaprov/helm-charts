@@ -6,7 +6,7 @@ metadata:
   annotations:
     cert-manager.io/inject-ca-from: modela-system/serving-cert
 webhooks:
-  - name: dataproduct.data.modela.io
+  - name: dataproduct.data.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -15,7 +15,7 @@ webhooks:
         - v1alpha1
     rules:
         - apiGroups:
-            - "data.modela.io"
+            - "data.modela.ai"
           apiVersions:
             - v1alpha1
             - v1beta1
@@ -31,7 +31,7 @@ webhooks:
           path: /validate-data-modela-io-v1alpha1-dataproduct
         caBundle: CERT
 
-  - name: dataproductversion.data.modela.io
+  - name: dataproductversion.data.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -40,7 +40,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -56,7 +56,7 @@ webhooks:
         path: /validate-data-modela-io-v1alpha1-dataproductversion
       caBundle: CERT
 
-  - name: datasource.data.modela.io
+  - name: datasource.data.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -65,7 +65,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -81,7 +81,7 @@ webhooks:
         path: /validate-data-modela-io-v1alpha1-datasource
       caBundle: CERT
 
-  - name: datapipeline.data.modela.io
+  - name: datapipeline.data.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -90,7 +90,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -106,7 +106,7 @@ webhooks:
         path: /validate-data-modela-io-v1alpha1-datapipeline
       caBundle: CERT
 
-  - name: datapipelineruns.data.modela.io
+  - name: datapipelineruns.data.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -115,7 +115,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -131,7 +131,7 @@ webhooks:
         path: /validate-data-modela-io-v1alpha1-datapipelinerun
       caBundle: CERT
 
-  - name: entity.data.modela.io
+  - name: entity.data.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -140,7 +140,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -156,7 +156,7 @@ webhooks:
         path: /validate-data-modela-io-v1alpha1-entity
       caBundle: CERT
 
-  - name: feature.data.modela.io
+  - name: feature.data.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -165,7 +165,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -181,7 +181,7 @@ webhooks:
         path: /validate-data-modela-io-v1alpha1-feature
       caBundle: CERT
 
-  - name: featurepipeline.data.modela.io
+  - name: featurepipeline.data.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -190,7 +190,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -206,7 +206,7 @@ webhooks:
         path: /validate-data-modela-io-v1alpha1-featurepipeline
       caBundle: CERT
 
-  - name: featurepipelinerun.data.modela.io
+  - name: featurepipelinerun.data.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -215,7 +215,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -231,7 +231,7 @@ webhooks:
         path: /validate-data-modela-io-v1alpha1-featurepipelinerun
       caBundle: CERT
 
-  - name: featureset.data.modela.io
+  - name: featureset.data.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -240,7 +240,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -256,7 +256,7 @@ webhooks:
         path: /validate-data-modela-io-v1alpha1-featureset
       caBundle: CERT
 
-  - name: labelingpipeline.data.modela.io
+  - name: labelingpipeline.data.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -265,7 +265,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -281,7 +281,7 @@ webhooks:
         path: /validate-data-modela-io-v1alpha1-labelingpipeline
       caBundle: CERT
 
-  - name: labelingpipelinerun.data.modela.io
+  - name: labelingpipelinerun.data.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -290,7 +290,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -307,7 +307,7 @@ webhooks:
       caBundle: CERT
 
 
-  - name: recipe.data.modela.io
+  - name: recipe.data.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -316,7 +316,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -332,7 +332,7 @@ webhooks:
         path: /validate-data-modela-io-v1alpha1-recipe
       caBundle: CERT
 
-  - name: reciperun.data.modela.io
+  - name: reciperun.data.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -341,7 +341,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modela.io"
+          - "data.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -367,7 +367,7 @@ metadata:
   annotations:
     cert-manager.io/inject-ca-from: modela-system/serving-cert
 webhooks:
-  - name: prediction.inference.modela.io
+  - name: prediction.inference.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -376,7 +376,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "inference.modela.io"
+          - "inference.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -392,7 +392,7 @@ webhooks:
         path: /validate-inference-modela-io-v1alpha1-prediction
       caBundle: CERT
 
-  - name: cronprediction.inference.modela.io
+  - name: cronprediction.inference.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -401,7 +401,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "inference.modela.io"
+          - "inference.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -418,7 +418,7 @@ webhooks:
       caBundle: CERT
 
 
-  - name: predictor.inference.modela.io
+  - name: predictor.inference.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -427,7 +427,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "inference.modela.io"
+          - "inference.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -443,7 +443,7 @@ webhooks:
         path: /validate-inference-modela-io-v1alpha1-predictor
       caBundle: CERT
 
-  - name: curtain.inference.modela.io
+  - name: curtain.inference.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -452,7 +452,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "inference.modela.io"
+          - "inference.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -477,7 +477,7 @@ metadata:
   annotations:
     cert-manager.io/inject-ca-from: modela-system/serving-cert
 webhooks:
-  - name: account.infra.modela.io
+  - name: account.infra.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -486,7 +486,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modela.io"
+          - "infra.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -502,7 +502,7 @@ webhooks:
         path: /validate-infra-modela-io-v1alpha1-account
       caBundle: CERT
 
-  - name: connection.infra.modela.io
+  - name: connection.infra.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -511,7 +511,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modela.io"
+          - "infra.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -527,7 +527,7 @@ webhooks:
         path: /validate-infra-modela-io-v1alpha1-connection
       caBundle: CERT
 
-  - name: lab.infra.modela.io
+  - name: lab.infra.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -536,7 +536,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modela.io"
+          - "infra.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -552,7 +552,7 @@ webhooks:
         path: /validate-infra-modela-io-v1alpha1-lab
       caBundle: CERT
 
-  - name: alert.infra.modela.io
+  - name: alert.infra.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -561,7 +561,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modela.io"
+          - "infra.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -577,7 +577,7 @@ webhooks:
         path: /validate-infra-modela-io-v1alpha1-alert
       caBundle: CERT
 
-  - name: commit.infra.modela.io
+  - name: commit.infra.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -586,7 +586,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modela.io"
+          - "infra.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -602,7 +602,7 @@ webhooks:
         path: /validate-infra-modela-io-v1alpha1-commit
       caBundle: CERT
 
-  - name: notifier.infra.modela.io
+  - name: notifier.infra.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -611,7 +611,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modela.io"
+          - "infra.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -627,7 +627,7 @@ webhooks:
         path: /validate-infra-modela-io-v1alpha1-notifier
       caBundle: CERT
 
-  - name: license.infra.modela.io
+  - name: license.infra.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -636,7 +636,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modela.io"
+          - "infra.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -653,7 +653,7 @@ webhooks:
       caBundle: CERT
 
 
-  - name: servingsite.infra.modela.io
+  - name: servingsite.infra.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -662,7 +662,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modela.io"
+          - "infra.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -678,7 +678,7 @@ webhooks:
         path: /validate-infra-modela-io-v1alpha1-servingsite
       caBundle: CERT
 
-  - name: tenant.infra.modela.io
+  - name: tenant.infra.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -687,7 +687,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modela.io"
+          - "infra.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -703,7 +703,7 @@ webhooks:
         path: /validate-infra-modela-io-v1alpha1-tenant
       caBundle: CERT
 
-  - name: virtualbucket.infra.modela.io
+  - name: virtualbucket.infra.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -712,7 +712,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modela.io"
+          - "infra.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -737,7 +737,7 @@ metadata:
   annotations:
     cert-manager.io/inject-ca-from: modela-system/serving-cert
 webhooks:
-  - name: model.training.modela.io
+  - name: model.training.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -746,7 +746,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modela.io"
+          - "training.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -762,7 +762,7 @@ webhooks:
         path: /validate-training-modela-io-v1alpha1-model
       caBundle: CERT
 
-  - name: notebook.training.modela.io
+  - name: notebook.training.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -771,7 +771,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modela.io"
+          - "training.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -787,7 +787,7 @@ webhooks:
         path: /validate-training-modela-io-v1alpha1-notebook
       caBundle: CERT
 
-  - name: notebookrun.training.modela.io
+  - name: notebookrun.training.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -796,7 +796,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modela.io"
+          - "training.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -812,7 +812,7 @@ webhooks:
         path: /validate-training-modela-io-v1alpha1-notebookrun
       caBundle: CERT
 
-  - name: modelpipeline.training.modela.io
+  - name: modelpipeline.training.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -821,7 +821,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modela.io"
+          - "training.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -837,7 +837,7 @@ webhooks:
         path: /validate-training-modela-io-v1alpha1-modelpipeline
       caBundle: CERT
 
-  - name: modelpipelinerun.training.modela.io
+  - name: modelpipelinerun.training.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -846,7 +846,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modela.io"
+          - "training.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -862,7 +862,7 @@ webhooks:
         path: /validate-training-modela-io-v1alpha1-modelpipelinerun
       caBundle: CERT
 
-  - name: study.training.modela.io
+  - name: study.training.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -871,7 +871,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modela.io"
+          - "training.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -887,7 +887,7 @@ webhooks:
         path: /validate-training-modela-io-v1alpha1-study
       caBundle: CERT
 
-  - name: report.training.modela.io
+  - name: report.training.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -896,7 +896,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modela.io"
+          - "training.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -912,7 +912,7 @@ webhooks:
         path: /validate-training-modela-io-v1alpha1-report
       caBundle: CERT
 
-  - name: cronreport.training.modela.io
+  - name: cronreport.training.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -921,7 +921,7 @@ webhooks:
         - v1alpha1
     rules:
         - apiGroups:
-            - "training.modela.io"
+            - "training.modela.ai"
           apiVersions:
             - v1alpha1
             - v1beta1
@@ -937,7 +937,7 @@ webhooks:
           path: /validate-training-modela-io-v1alpha1-cronreport
         caBundle: CERT
 
-  - name: modelautobuilder.training.modela.io
+  - name: modelautobuilder.training.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -946,7 +946,7 @@ webhooks:
         - v1alpha1
     rules:
         - apiGroups:
-            - "training.modela.io"
+            - "training.modela.ai"
           apiVersions:
             - v1alpha1
             - v1beta1
@@ -972,7 +972,7 @@ metadata:
   annotations:
     cert-manager.io/inject-ca-from: modela-system/serving-cert
 webhooks:
-  - name: todo.team.modela.io
+  - name: todo.team.modela.ai
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -981,7 +981,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "team.modela.io"
+          - "team.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -997,7 +997,7 @@ webhooks:
         path: /validate-team-modela-io-v1alpha1-todo
       caBundle: CERT
 
-  - name: review.training.modela.io
+  - name: review.training.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -1006,7 +1006,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modela.io"
+          - "training.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -1022,7 +1022,7 @@ webhooks:
         path: /validate-team-modela-io-v1alpha1-review
       caBundle: CERT
 
-  - name: postmortem.training.modela.io
+  - name: postmortem.training.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -1031,7 +1031,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "team.modela.io"
+          - "team.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -1047,7 +1047,7 @@ webhooks:
         path: /validate-team-modela-io-v1alpha1-postmortem
       caBundle: CERT
 
-  - name: runbook.training.modela.io
+  - name: runbook.training.modela.ai
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -1056,7 +1056,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "team.modela.io"
+          - "team.modela.ai"
         apiVersions:
           - v1alpha1
           - v1beta1

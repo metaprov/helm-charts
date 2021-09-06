@@ -1,4 +1,4 @@
-apiVersion: infra.modela.io/v1alpha1
+apiVersion: infra.modela.ai/v1alpha1
 kind: Notifier
 metadata:
   name: default-slack-notifier

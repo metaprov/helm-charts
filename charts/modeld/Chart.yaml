@@ -11,11 +11,11 @@ keywords:
   - golang
   - ai
   - machine learning
-home: https://modela.io
+home: https://modela.ai
 sources:
   - https://github.com/metaprov/modela
 maintainers:
   - name: metaprov
-    email: support@modela.io
+    email: support@modela.ai
  
 

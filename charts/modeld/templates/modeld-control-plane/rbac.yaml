@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/part-of: modela
   name: modela-control-plane
 rules:
-  - apiGroups: ["catalog.modela.io"] 
+  - apiGroups: ["catalog.modela.ai"] 
     resources:
       - "*"
     verbs:
@@ -17,7 +17,7 @@ rules:
       - update
       - patch
       - delete
-  - apiGroups: ["data.modela.io"]
+  - apiGroups: ["data.modela.ai"]
     resources:
       - "*"
     verbs:
@@ -28,7 +28,7 @@ rules:
       - update
       - patch
       - delete
-  - apiGroups: ["inference.modela.io"]
+  - apiGroups: ["inference.modela.ai"]
     resources:
       - "*"
     verbs:
@@ -39,7 +39,7 @@ rules:
        - update
        - patch
        - delete
-  - apiGroups: ["infra.modela.io"]
+  - apiGroups: ["infra.modela.ai"]
     resources:
         - "*"
     verbs:
@@ -50,7 +50,7 @@ rules:
       - update
       - patch
       - delete
-  - apiGroups: ["training.modela.io"]
+  - apiGroups: ["training.modela.ai"]
     resources:
       - "*"
     verbs:
@@ -61,7 +61,7 @@ rules:
       - update
       - patch
       - delete
-  - apiGroups: ["team.modela.io"]
+  - apiGroups: ["team.modela.ai"]
     resources:
       - "*"
     verbs:

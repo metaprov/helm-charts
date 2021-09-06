@@ -1,4 +1,4 @@
-apiVersion: catalog.modela.io/v1alpha1
+apiVersion: catalog.modela.ai/v1alpha1
 kind: MLFramework
 metadata:
   name: lightgbm
@@ -12,7 +12,7 @@ spec:
   lang: "python"
 
 ---
-apiVersion: catalog.modela.io/v1alpha1
+apiVersion: catalog.modela.ai/v1alpha1
 kind: MLFramework
 metadata:
   name: scikit-learn
@@ -24,7 +24,7 @@ spec:
   lang: "python"
 
 ---
-apiVersion: catalog.modela.io/v1alpha1
+apiVersion: catalog.modela.ai/v1alpha1
 kind: MLFramework
 metadata:
   name: xgboost
@@ -37,7 +37,7 @@ spec:
 
 
 ---
-apiVersion: catalog.modela.io/v1alpha1
+apiVersion: catalog.modela.ai/v1alpha1
 kind: MLFramework
 metadata:
   name: prophet

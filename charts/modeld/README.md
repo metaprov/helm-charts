@@ -4,13 +4,13 @@
 
 Machine Learning Operators
 
-**Homepage:** <https://modela.io>
+**Homepage:** <https://modela.ai>
 
 ## Maintainers
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| metaprov | support@modela.io | https://groups.google.com/forum/#!forum/modela-discuss |
+| metaprov | support@modela.ai | https://groups.google.com/forum/#!forum/modela-discuss |
 
 ## Source Code
 

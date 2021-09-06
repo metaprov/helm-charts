@@ -26,7 +26,7 @@ data:
   {{- end }}
 ---
 
-apiVersion: infra.modela.io/v1alpha1
+apiVersion: infra.modela.ai/v1alpha1
 kind: Connection
 metadata:
   name: default-aws-connection
@@ -45,7 +45,7 @@ spec:
     accessKey: '[hidden]'
     secretKey: '[hidden]'
 ---
-apiVersion: infra.modela.io/v1alpha1
+apiVersion: infra.modela.ai/v1alpha1
 kind: VirtualBucket
 metadata:
   name: default-aws-bucket

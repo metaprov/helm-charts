@@ -1,4 +1,4 @@
-apiVersion: infra.modela.io/v1alpha1
+apiVersion: infra.modela.ai/v1alpha1
 kind: License
 metadata:
   name: default-license
@@ -20,7 +20,7 @@ spec:
   nlp: false
   vision: false
   chatbot: false
-  productName: "modela.io free"
+  productName: "modela.ai free"
   priceName: "lite"
   notifierName:  default-email-notifier
   

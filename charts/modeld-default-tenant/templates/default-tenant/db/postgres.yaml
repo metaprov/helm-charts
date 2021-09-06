@@ -9,7 +9,7 @@ stringData:
   password: ''    
 ---
 
-apiVersion: infra.modela.io/v1alpha1
+apiVersion: infra.modela.ai/v1alpha1
 kind: Connection
 metadata:
   name: default-postgres-connection
