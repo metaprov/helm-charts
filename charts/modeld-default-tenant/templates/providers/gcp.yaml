@@ -1,17 +1,17 @@
 {{ if .Values.gcp.create }}
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: Connection
 metadata:
   name: default-gcp-connections
   namespace: default-tenant
-  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+  labels: {{- include "modela.common.metaLabels" . | nindent 4 }}
 spec:
   owner: admin
   provider: gcp
   tenantRef:
     name: default-tenant
-    namespace: modeld-system
-  secretName : modeld-gcp-secret
+    namespace: modela-system
+  secretName : modela-gcp-secret
   category: cloud
   gcpstorage:
     keyFile: ''
@@ -22,7 +22,7 @@ kind: Secret
 metadata:
   name: default-gcp-secret
   namespace: default-tenant
-  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+  labels: {{- include "modela.common.metaLabels" . | nindent 4 }}
 type: Opaque
 stringData:
   az: {{ .Values.gcp.secret.az }}
@@ -30,7 +30,7 @@ stringData:
   secretKey: {{ .Values.gcp.secret.secretKey }}
   keyfile: {{ .Values.gcp.secret.keyfile }}
 ---
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: VirtualBucket
 metadata:
   name: default-gcp-bucket
@@ -38,7 +38,7 @@ metadata:
 spec:
   owner: admin
   tenantRef:
-    namespace: modeld-system
+    namespace: modela-system
     name : default-tenant
   connectionName: default-gcp-connection
 

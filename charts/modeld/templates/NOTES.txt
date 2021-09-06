@@ -1,7 +1,7 @@
 ***********************************************************************
- Welcome to modeld
+ Welcome to modela
  Chart version: {{ .Chart.Version }}
- modeld version: {{ .Chart.AppVersion }}
+ modela version: {{ .Chart.AppVersion }}
 ***********************************************************************
 
 Installed components:

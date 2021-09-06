@@ -2,11 +2,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/name: modeld-control-plane
-    app.kubernetes.io/part-of: modeld
-  name: modeld-control-plane
+    app.kubernetes.io/name: modela-control-plane
+    app.kubernetes.io/part-of: modela
+  name: modela-control-plane
 rules:
-  - apiGroups: ["catalog.modeld.io"] 
+  - apiGroups: ["catalog.modela.io"] 
     resources:
       - "*"
     verbs:
@@ -17,7 +17,7 @@ rules:
       - update
       - patch
       - delete
-  - apiGroups: ["data.modeld.io"]
+  - apiGroups: ["data.modela.io"]
     resources:
       - "*"
     verbs:
@@ -28,7 +28,7 @@ rules:
       - update
       - patch
       - delete
-  - apiGroups: ["inference.modeld.io"]
+  - apiGroups: ["inference.modela.io"]
     resources:
       - "*"
     verbs:
@@ -39,7 +39,7 @@ rules:
        - update
        - patch
        - delete
-  - apiGroups: ["infra.modeld.io"]
+  - apiGroups: ["infra.modela.io"]
     resources:
         - "*"
     verbs:
@@ -50,7 +50,7 @@ rules:
       - update
       - patch
       - delete
-  - apiGroups: ["training.modeld.io"]
+  - apiGroups: ["training.modela.io"]
     resources:
       - "*"
     verbs:
@@ -61,7 +61,7 @@ rules:
       - update
       - patch
       - delete
-  - apiGroups: ["team.modeld.io"]
+  - apiGroups: ["team.modela.io"]
     resources:
       - "*"
     verbs:
@@ -126,24 +126,24 @@ kind: ClusterRoleBinding
 metadata:
   labels:
     app.kubernetes.io/name: modled-control-plane
-    app.kubernetes.io/part-of: modeld
-  name: modeld-control-plane
+    app.kubernetes.io/part-of: modela
+  name: modela-control-plane
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: modeld-control-plane
+  name: modela-control-plane
 subjects:
   - kind: User
     apiGroup: rbac.authorization.k8s.io
-    name: system:serviceaccount:modeld-system:modeld-control-plane
-    namespace: modeld-system
+    name: system:serviceaccount:modela-system:modela-control-plane
+    namespace: modela-system
 ---
 
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app.kubernetes.io/name: modeld-control-plane
-    app.kubernetes.io/part-of: modeld
-  name: modeld-control-plane
-  namespace: modeld-system
+    app.kubernetes.io/name: modela-control-plane
+    app.kubernetes.io/part-of: modela
+  name: modela-control-plane
+  namespace: modela-system

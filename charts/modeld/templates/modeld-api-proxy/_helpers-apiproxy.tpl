@@ -1,37 +1,37 @@
 {{/*
-modeld-apiproxy fullname
+modela-apiproxy fullname
 */}}
-{{- define "modeld.apiproxyFullname" -}}
-modeld-apiproxy
+{{- define "modela.apiproxyFullname" -}}
+modela-apiproxy
 {{- end }}
 
 {{/*
-modeld-apiproxy common labels
+modela-apiproxy common labels
 */}}
-{{- define "modeld.apiproxyLabels" -}}
-{{ include "modeld.labels" . }}
-app.kubernetes.io/component: modeld-apiproxy
+{{- define "modela.apiproxyLabels" -}}
+{{ include "modela.labels" . }}
+app.kubernetes.io/component: modela-apiproxy
 {{- end }}
 
 {{/*
-modeld-apiproxy selector labels
+modela-apiproxy selector labels
 */}}
-{{- define "modeld.apiproxySelectorLabels" -}}
-{{ include "modeld.selectorLabels" . }}
-app.kubernetes.io/component: modeld-apiproxy
+{{- define "modela.apiproxySelectorLabels" -}}
+{{ include "modela.selectorLabels" . }}
+app.kubernetes.io/component: modela-apiproxy
 {{- end }}
 
 {{/*
-modeld-apiproxy image
+modela-apiproxy image
 */}}
-{{- define "modeld.apiproxyImage" -}}
-modeld-api-proxy
+{{- define "modela.apiproxyImage" -}}
+modela-api-proxy
 {{- end }}
 
 {{/*
-modeld-apiproxy priority class name
+modela-apiproxy priority class name
 */}}
-{{- define "modeld.apiproxyPriorityClassName" -}}
+{{- define "modela.apiproxyPriorityClassName" -}}
 {{- $pcn := coalesce .Values.global.priorityClassName .Values.apiproxy.priorityClassName -}}
 {{- if $pcn }}
 priorityClassName: {{ $pcn }}

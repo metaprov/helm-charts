@@ -2,10 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/name: modeld-api-gateway-metrics
-    app.kubernetes.io/part-of: modeld
-  name: modeld-api-gateway-metrics
-  namespace: modeld-system
+    app.kubernetes.io/name: modela-api-gateway-metrics
+    app.kubernetes.io/part-of: modela
+  name: modela-api-gateway-metrics
+  namespace: modela-system
 spec:
   ports:
     - name: metrics
@@ -13,4 +13,4 @@ spec:
       port: 9091
       targetPort: 9091
   selector:
-    app.kubernetes.io/name: modeld-api-gateway
+    app.kubernetes.io/name: modela-api-gateway

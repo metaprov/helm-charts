@@ -5,7 +5,7 @@ metadata:
   namespace: default-tenant
   labels:
     app.kubernetes.io/name: default-clickhouse-connection
-    app.kubernetes.io/part-of: modeld
+    app.kubernetes.io/part-of: modela
     app.kubernetes.io/component: infra
 type: Opaque
 stringData:
@@ -13,7 +13,7 @@ stringData:
   password: ''
 ---
 
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: Connection
 metadata:
   name: default-clickhouse-connection
@@ -24,7 +24,7 @@ spec:
   provider: clickhouse
   tenantRef:
     name: default-tenant
-    namespace: modeld-system
+    namespace: modela-system
   secretName : default-clickhouse-secret
   clickhouse:
     host: ''

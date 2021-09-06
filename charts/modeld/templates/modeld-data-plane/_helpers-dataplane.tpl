@@ -1,38 +1,38 @@
 {{/*
-modeld-dataplane fullname
+modela-dataplane fullname
 */}}
-{{- define "modeld.dataplaneFullname" -}}
-modeld-dataplane
+{{- define "modela.dataplaneFullname" -}}
+modela-dataplane
 {{- end }}
 
 {{/*
-modeld-dataplane common labels
+modela-dataplane common labels
 */}}
-{{- define "modeld.dataplaneLabels" -}}
-{{ include "modeld.labels" . }}
-app.kubernetes.io/component: modeld-dataplane
+{{- define "modela.dataplaneLabels" -}}
+{{ include "modela.labels" . }}
+app.kubernetes.io/component: modela-dataplane
 {{- end }}
 
 {{/*
-modeld-dataplane selector labels
+modela-dataplane selector labels
 */}}
-{{- define "modeld.dataplaneSelectorLabels" -}}
-{{ include "modeld.selectorLabels" . }}
-app.kubernetes.io/component: modeld-dataplane
+{{- define "modela.dataplaneSelectorLabels" -}}
+{{ include "modela.selectorLabels" . }}
+app.kubernetes.io/component: modela-dataplane
 {{- end }}
 
 {{/*
-modeld-dataplane image
+modela-dataplane image
 */}}
-{{- define "modeld.dataplaneImage" -}}
-{{- $dict := dict "modeld" .Values.modeld.image "service" .Values.dataplane.image "global" .Values.global.image "defaultVersion" .Chart.AppVersion -}}
-modeld-dataplane
+{{- define "modela.dataplaneImage" -}}
+{{- $dict := dict "modela" .Values.modela.image "service" .Values.dataplane.image "global" .Values.global.image "defaultVersion" .Chart.AppVersion -}}
+modela-dataplane
 {{- end }}
 
 {{/*
-modeld-dataplane priority class name
+modela-dataplane priority class name
 */}}
-{{- define "modeld.dataplanePriorityClassName" -}}
+{{- define "modela.dataplanePriorityClassName" -}}
 {{- $pcn := coalesce .Values.global.priorityClassName .Values.dataplane.priorityClassName -}}
 {{- if $pcn }}
 priorityClassName: {{ $pcn }}

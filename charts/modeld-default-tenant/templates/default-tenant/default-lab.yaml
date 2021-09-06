@@ -1,4 +1,4 @@
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: Lab
 metadata:
   name: default-lab
@@ -7,5 +7,5 @@ spec:
   owner: admin
   tenantRef:
     name: default-tenant
-    namespace: modeld-system
+    namespace: modela-system
 

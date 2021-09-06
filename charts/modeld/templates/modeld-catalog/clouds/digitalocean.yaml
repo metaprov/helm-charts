@@ -1,8 +1,8 @@
-apiVersion: catalog.modeld.io/v1alpha1
+apiVersion: catalog.modela.io/v1alpha1
 kind: Cloud
 metadata:
   name: digitalocean
-  namespace: modeld-catalog
+  namespace: modela-catalog
 spec:
   defaultRegionName: default-digitalocean-region
   defaultMachineClassName: default-digitalocean-machineclass

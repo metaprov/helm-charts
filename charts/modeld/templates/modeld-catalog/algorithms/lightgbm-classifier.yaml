@@ -1,8 +1,8 @@
-apiVersion: catalog.modeld.io/v1alpha1
+apiVersion: catalog.modela.io/v1alpha1
 kind: Algorithm
 metadata:
   name: lightgbm-classifer
-  namespace: modeld-catalog
+  namespace: modela-catalog
 spec:
   frameworkName: lightgbm
   task: binary-classification

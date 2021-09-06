@@ -4,7 +4,7 @@ kind: Secret
 metadata:
   name: default-email-secret
   namespace: default-tenant
-  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+  labels: {{- include "modela.common.metaLabels" . | nindent 4 }}
 type: Opaque
 stringData:
   {{- if .Values.email.secret.username }}
@@ -19,18 +19,18 @@ stringData:
   password: {{ required "email secret required!" .Values.email.secret.password }}
   {{- end }}
 ---
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: Connection
 metadata:
   name: default-email-connection
   namespace: default-tenant
-  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+  labels: {{- include "modela.common.metaLabels" . | nindent 4 }}
 spec:
   owner: admin
   provider: smtp
   tenantRef:
     name: default-tenant
-    namespace: modeld-system
+    namespace: modela-system
   secretName : default-email-secret
   category: general
   smtp:

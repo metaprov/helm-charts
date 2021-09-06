@@ -1,38 +1,38 @@
 {{/*
-modeld-datadock fullname
+modela-datadock fullname
 */}}
-{{- define "modeld.datadockFullname" -}}
-modeld-datadock
+{{- define "modela.datadockFullname" -}}
+modela-datadock
 {{- end }}
 
 {{/*
-modeld-datadock common labels
+modela-datadock common labels
 */}}
-{{- define "modeld.datadockLabels" -}}
-{{ include "modeld.labels" . }}
-app.kubernetes.io/component: modeld-datadock
+{{- define "modela.datadockLabels" -}}
+{{ include "modela.labels" . }}
+app.kubernetes.io/component: modela-datadock
 {{- end }}
 
 {{/*
-modeld-datadock selector labels
+modela-datadock selector labels
 */}}
-{{- define "modeld.datadockSelectorLabels" -}}
-{{ include "modeld.selectorLabels" . }}
-app.kubernetes.io/component: modeld-datadock
+{{- define "modela.datadockSelectorLabels" -}}
+{{ include "modela.selectorLabels" . }}
+app.kubernetes.io/component: modela-datadock
 {{- end }}
 
 {{/*
-modeld-datadock image
+modela-datadock image
 */}}
-{{- define "modeld.datadockImage" -}}
-{{- $dict := dict "modeld" .Values.modeld.image "service" .Values.datadock.image "global" .Values.global.image "defaultVersion" .Chart.AppVersion -}}
-modeld-datadock
+{{- define "modela.datadockImage" -}}
+{{- $dict := dict "modela" .Values.modela.image "service" .Values.datadock.image "global" .Values.global.image "defaultVersion" .Chart.AppVersion -}}
+modela-datadock
 {{- end }}
 
 {{/*
-modeld-datadock priority class name
+modela-datadock priority class name
 */}}
-{{- define "modeld.datadockPriorityClassName" -}}
+{{- define "modela.datadockPriorityClassName" -}}
 {{- $pcn := coalesce .Values.global.priorityClassName .Values.datadock.priorityClassName -}}
 {{- if $pcn }}
 priorityClassName: {{ $pcn }}

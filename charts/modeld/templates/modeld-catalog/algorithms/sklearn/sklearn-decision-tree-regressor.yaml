@@ -1,10 +1,10 @@
-apiVersion: catalog.modeld.io/v1alpha1
+apiVersion: catalog.modela.io/v1alpha1
 kind: Algorithm
 metadata:
   name: decision-tree-regressor
-  namespace: modeld-catalog
+  namespace: modela-catalog
   labels:
-    app.kubernetes.io/part-of: modeld
+    app.kubernetes.io/part-of: modela
 spec:
   task: regression
   frameworkName: scikit-learn

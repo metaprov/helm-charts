@@ -1,2 +1,2 @@
 # helm-charts
-charts for modeld.io
+charts for modela.io

@@ -1,8 +1,8 @@
-apiVersion: catalog.modeld.io/v1alpha1
+apiVersion: catalog.modela.io/v1alpha1
 kind: UserRoleClass
 metadata:
   name: data-engineer
-  namespace: modeld-catalog
+  namespace: modela-catalog
 spec:
   rules:
     - apiGroups: [""] # "" indicates the core API group

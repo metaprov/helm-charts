@@ -2,10 +2,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   labels:
-    app.kubernetes.io/name: modeld-api-proxy
-    app.kubernetes.io/part-of: modeld
-  name: modeld-api-proxy
-  namespace: modeld-system
+    app.kubernetes.io/name: modela-api-proxy
+    app.kubernetes.io/part-of: modela
+  name: modela-api-proxy
+  namespace: modela-system
 rules:
   - apiGroups:
       - ""
@@ -22,25 +22,25 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app.kubernetes.io/name: modeld-api-proxy
-    app.kubernetes.io/part-of: modeld
-  name: modeld-api-proxy
-  namespace: modeld-system
+    app.kubernetes.io/name: modela-api-proxy
+    app.kubernetes.io/part-of: modela
+  name: modela-api-proxy
+  namespace: modela-system
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   labels:
-    app.kubernetes.io/name: modeld-api-proxy
-    app.kubernetes.io/part-of: modeld
-  name: modeld-api-proxy
-  namespace: modeld-system
+    app.kubernetes.io/name: modela-api-proxy
+    app.kubernetes.io/part-of: modela
+  name: modela-api-proxy
+  namespace: modela-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: modeld-api-proxy
+  name: modela-api-proxy
 subjects:
   - kind: User
     apiGroup: rbac.authorization.k8s.io
-    name: system:serviceaccount:modeld-system:modeld-api-proxy
+    name: system:serviceaccount:modela-system:modela-api-proxy

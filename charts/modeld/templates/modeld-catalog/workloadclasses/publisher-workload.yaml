@@ -1,27 +1,27 @@
-apiVersion: catalog.modeld.io/v1alpha1
+apiVersion: catalog.modela.io/v1alpha1
 kind: WorkloadClass
 metadata:
   name: publisher-workload-class
-  namespace: modeld-catalog
+  namespace: modela-catalog
 spec:
-  dataImage: quay.io/metaprov/modeld-data-plane:latest
-  controlImage: quay.io/metaprov/modeld-workload:v0.3.633
-  trainerImage: quay.io/metaprov/modeld-trainer:latest
-  publisherImage: quay.io/metaprov/modeld-publisher:v0.3.633
+  dataImage: quay.io/metaprov/modela-data-plane:latest
+  controlImage: quay.io/metaprov/modela-workload:v0.3.633
+  trainerImage: quay.io/metaprov/modela-trainer:latest
+  publisherImage: quay.io/metaprov/modela-publisher:v0.3.633
   podTemplate:
       spec:
         restartPolicy: Never
         containers:
           - name: control
-            image: quay.io/metaprov/modeld-workload:v0.3.633
+            image: quay.io/metaprov/modela-workload:v0.3.633
             imagePullPolicy: IfNotPresent
             ports:
                 - containerPort: 8080
             volumeMounts:
                 - name: data
-                  mountPath: /var/opt/modeld/data
+                  mountPath: /var/opt/modela/data
           - name: publisher
-            image: quay.io/metaprov/modeld-publisher:v0.3.633
+            image: quay.io/metaprov/modela-publisher:v0.3.633
             imagePullPolicy: IfNotPresent
             ports:
              - containerPort: 8050
@@ -30,7 +30,7 @@ spec:
                name: metrics
             volumeMounts:
              - name: data
-               mountPath: /var/opt/modeld/data
+               mountPath: /var/opt/modela/data
             resources:
                   limits:
                     cpu: 500m
@@ -48,21 +48,21 @@ spec:
                   - name: ENV
                     value: "dev"
                   - name: CACHE_PATH
-                    value: "/var/opt/modeld/data"
+                    value: "/var/opt/modela/data"
                   - name: CLOUDS_HOST
                     value: "127.0.0.1"
                   - name: CLOUDS_PORT
                     value: "8090"
 
           - name: storage
-            image: quay.io/metaprov/modeld-cloud-proxy:latest
+            image: quay.io/metaprov/modela-cloud-proxy:latest
             imagePullPolicy: IfNotPresent
             ports:
                - name: http
                  containerPort: 8090
             volumeMounts:
                 - name: data
-                  mountPath: /var/opt/modeld/data
+                  mountPath: /var/opt/modela/data
         volumes:
           - name: data
             emptyDir: {}

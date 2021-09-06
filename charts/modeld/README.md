@@ -1,20 +1,20 @@
-# modeld
+# modela
 
 ![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
 
 Machine Learning Operators
 
-**Homepage:** <https://modeld.io>
+**Homepage:** <https://modela.io>
 
 ## Maintainers
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| metaprov | support@modeld.io | https://groups.google.com/forum/#!forum/modeld-discuss |
+| metaprov | support@modela.io | https://groups.google.com/forum/#!forum/modela-discuss |
 
 ## Source Code
 
-* <https://github.com/metaprov/modeld>
+* <https://github.com/metaprov/modela>
 
 ## Requirements
 
@@ -26,24 +26,24 @@ Kubernetes: `>= 1.15.0`
 |-----|------|---------|-------------|
 | apigateway.http.port | int | `8080` |  |
 | apigateway.image.registry | string | `"quay.io"` |  |
-| apigateway.image.repository | string | `"metaprov/modeld-api-gateway"` |  |
+| apigateway.image.repository | string | `"metaprov/modela-api-gateway"` |  |
 | apigateway.image.tag | string | `"latest"` |  |
-| apigateway.name | string | `"modeld-apiproxy"` |  |
+| apigateway.name | string | `"modela-apiproxy"` |  |
 | apigateway.ports.port | int | `8080` |  |
 | apigateway.ports.protocol | string | `"TCP"` |  |
 | apigateway.ports.targetPort | int | `8080` |  |
 | apigateway.service.type | string | `"NodePort"` |  |
-| apigateway.serviceAccount | string | `"modeld-apigateway"` |  |
+| apigateway.serviceAccount | string | `"modela-apigateway"` |  |
 | apiproxy.http.port | int | `8080` |  |
 | apiproxy.image.registry | string | `"quay.io"` |  |
-| apiproxy.image.repository | string | `"metaprov/modeld-api-proxy"` |  |
+| apiproxy.image.repository | string | `"metaprov/modela-api-proxy"` |  |
 | apiproxy.image.tag | string | `"latest"` |  |
-| apiproxy.name | string | `"modeld-apiproxy"` |  |
+| apiproxy.name | string | `"modela-apiproxy"` |  |
 | apiproxy.ports.port | int | `8080` |  |
 | apiproxy.ports.protocol | string | `"TCP"` |  |
 | apiproxy.ports.targetPort | int | `8080` |  |
 | apiproxy.service.type | string | `"NodePort"` |  |
-| apiproxy.serviceAccount | string | `"modeld-apiproxy"` |  |
+| apiproxy.serviceAccount | string | `"modela-apiproxy"` |  |
 | clouds.http.port | int | `8090` |  |
 | clouds.image.registry | string | `"quay.io"` |  |
 | clouds.image.repository | string | `"metaprov/clouds"` |  |
@@ -51,35 +51,35 @@ Kubernetes: `>= 1.15.0`
 | clouds.name | string | `"clouds"` |  |
 | controlplane.http.port | int | `8080` |  |
 | controlplane.image.registry | string | `"quay.io"` |  |
-| controlplane.image.repository | string | `"metaprov/modeld-control-plane"` |  |
+| controlplane.image.repository | string | `"metaprov/modela-control-plane"` |  |
 | controlplane.image.tag | string | `"latest"` |  |
-| controlplane.name | string | `"modeld-controlplane"` |  |
+| controlplane.name | string | `"modela-controlplane"` |  |
 | controlplane.ports.port | int | `8080` |  |
 | controlplane.ports.protocol | string | `"TCP"` |  |
 | controlplane.ports.targetPort | int | `8080` |  |
-| controlplane.serviceAccount | string | `"modeld-controlplane"` |  |
+| controlplane.serviceAccount | string | `"modela-controlplane"` |  |
 | datadock.http.port | int | `8095` |  |
 | datadock.image.registry | string | `"quay.io"` |  |
-| datadock.image.repository | string | `"metaprov/modeld-datadock"` |  |
+| datadock.image.repository | string | `"metaprov/modela-datadock"` |  |
 | datadock.image.tag | string | `"latest"` |  |
-| datadock.name | string | `"modeld-datadock"` |  |
+| datadock.name | string | `"modela-datadock"` |  |
 | datadock.ports.port | int | `8080` |  |
 | datadock.ports.protocol | string | `"TCP"` |  |
 | datadock.ports.targetPort | int | `8080` |  |
 | datadock.service.type | string | `"NodePort"` |  |
-| datadock.serviceAccount | string | `"modeld-datadock"` |  |
+| datadock.serviceAccount | string | `"modela-datadock"` |  |
 | dataplane.http.port | int | `8080` |  |
 | dataplane.image.registry | string | `"quay.io"` |  |
-| dataplane.image.repository | string | `"metaprov/modeld-data-plane"` |  |
+| dataplane.image.repository | string | `"metaprov/modela-data-plane"` |  |
 | dataplane.image.tag | string | `"latest"` |  |
 | dataplane.name | string | `"model-dataplane"` |  |
 | dataplane.ports.port | int | `8080` |  |
 | dataplane.ports.protocol | string | `"TCP"` |  |
 | dataplane.ports.targetPort | int | `8080` |  |
-| dataplane.serviceAccount | string | `"modeld-dataplane"` |  |
+| dataplane.serviceAccount | string | `"modela-dataplane"` |  |
 | deployment.updateStrategy.type | string | `"Recreate"` |  |
 | frontend.fullnameOverride | string | `""` |  |
-| frontend.image.name | string | `"modeld-frontend"` |  |
+| frontend.image.name | string | `"modela-frontend"` |  |
 | frontend.logLevel | string | `"info"` |  |
 | frontend.nameOverride | string | `""` |  |
 | frontend.ports.port | int | `8080` |  |
@@ -87,7 +87,7 @@ Kubernetes: `>= 1.15.0`
 | frontend.ports.targetPort | int | `8080` |  |
 | frontend.replicaCount | int | `1` |  |
 | frontend.service.type | string | `"ClusterIP"` |  |
-| global.cachePath | string | `"/var/opt/modeld/data"` |  |
+| global.cachePath | string | `"/var/opt/modela/data"` |  |
 | global.debug | bool | `false` |  |
 | global.ha.enabled | bool | `false` |  |
 | global.ha.replicaCount | int | `3` |  |
@@ -106,12 +106,12 @@ Kubernetes: `>= 1.15.0`
 | imagePullSecrets | string | `nil` |  |
 | ingress.certManager | bool | `false` |  |
 | ingress.enabled | bool | `true` |  |
-| ingress.host | string | `"modeld.info"` |  |
-| ingress.name | string | `"modeld-ingress"` |  |
+| ingress.host | string | `"modela.info"` |  |
+| ingress.name | string | `"modela-ingress"` |  |
 | ingress.tls | bool | `false` |  |
 | minikube.enabled | bool | `true` |  |
-| namespace | string | `"modeld-system"` |  |
+| namespace | string | `"modela-system"` |  |
 | podSecurityPolicy.enabled | bool | `false` |  |
-| presistence.cachePath | string | `"/var/opt/modeld/data"` |  |
+| presistence.cachePath | string | `"/var/opt/modela/data"` |  |
 | rbac.create | bool | `true` |  |
 

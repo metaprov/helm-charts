@@ -1,13 +1,13 @@
-apiVersion: catalog.modeld.io/v1alpha1
+apiVersion: catalog.modela.io/v1alpha1
 kind: PublicDataset
 metadata:
   name: housing
-  namespace: modeld-catalog
+  namespace: modela-catalog
 spec:
-  url: https://github.com/metaprov/modeldapi/tree/main/datasets/housing
+  url: https://github.com/metaprov/modelaapi/tree/main/datasets/housing
   description: This dataset contains information collected by the U.S Census Service concerning housing in the area of Boston Mass
   task: regression
-  dataUrl: https://raw.githubusercontent.com/metaprov/modeldapi/main/datasets/housing/housing.csv
+  dataUrl: https://raw.githubusercontent.com/metaprov/modelaapi/main/datasets/housing/housing.csv
   citation: ""
   rows: 506
   columns: 14

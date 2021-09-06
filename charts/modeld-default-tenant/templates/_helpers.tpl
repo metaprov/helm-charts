@@ -2,114 +2,114 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "modeld.name" -}}
+{{- define "modela.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "modeld.chart" -}}
+{{- define "modela.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Create unified labels for modeld components
+Create unified labels for modela components
 */}}
-{{- define "modeld.common.matchLabels" -}}
-app: {{ template "modeld.name" . }}
+{{- define "modela.common.matchLabels" -}}
+app: {{ template "modela.name" . }}
 release: {{ .Release.Name }}
 {{- end -}}
 
-{{- define "modeld.common.metaLabels" -}}
-helm.sh/chart: {{ template "modeld.chart" . }}
+{{- define "modela.common.metaLabels" -}}
+helm.sh/chart: {{ template "modela.chart" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion }}
 {{- end -}}
 
-{{- define "modeld.apiproxy.labels" -}}
-{{ include "modeld.apiproxy.matchLabels" . }}
-{{ include "modeld.common.metaLabels" . }}
+{{- define "modela.apiproxy.labels" -}}
+{{ include "modela.apiproxy.matchLabels" . }}
+{{ include "modela.common.metaLabels" . }}
 {{- end -}}
 
 
-{{- define "modeld.apiproxy.matchLabels" -}}
+{{- define "modela.apiproxy.matchLabels" -}}
 app.kubernetes.io/component: {{ .Values.apiproxy.name | quote }}
-{{ include "modeld.common.matchLabels" . }}
+{{ include "modela.common.matchLabels" . }}
 {{- end -}}
 
-{{- define "modeld.issuer.labels" -}}
-{{ include "modeld.issuer.matchLabels" . }}
-{{ include "modeld.common.metaLabels" . }}
+{{- define "modela.issuer.labels" -}}
+{{ include "modela.issuer.matchLabels" . }}
+{{ include "modela.common.metaLabels" . }}
 {{- end -}}
 
 
-{{- define "modeld.issuer.matchLabels" -}}
+{{- define "modela.issuer.matchLabels" -}}
 app.kubernetes.io/component: {{ .Values.issuer.name | quote }}
-{{ include "modeld.common.matchLabels" . }}
+{{ include "modela.common.matchLabels" . }}
 {{- end -}}
 
 
 
-{{- define "modeld.apigateway.labels" -}}
-{{ include "modeld.apigateway.matchLabels" . }}
-{{ include "modeld.common.metaLabels" . }}
+{{- define "modela.apigateway.labels" -}}
+{{ include "modela.apigateway.matchLabels" . }}
+{{ include "modela.common.metaLabels" . }}
 {{- end -}}
 
-{{- define "modeld.apigateway.matchLabels" -}}
+{{- define "modela.apigateway.matchLabels" -}}
 app.kubernetes.io/component: {{ .Values.apigateway.name | quote }}
-{{ include "modeld.common.matchLabels" . }}
+{{ include "modela.common.matchLabels" . }}
 {{- end -}}
 
-{{- define "modeld.controlplane.labels" -}}
-{{ include "modeld.controlplane.matchLabels" . }}
-{{ include "modeld.common.metaLabels" . }}
+{{- define "modela.controlplane.labels" -}}
+{{ include "modela.controlplane.matchLabels" . }}
+{{ include "modela.common.metaLabels" . }}
 {{- end -}}
 
-{{- define "modeld.controlplane.matchLabels" -}}
+{{- define "modela.controlplane.matchLabels" -}}
 app.kubernetes.io/component: {{ .Values.controlplane.name | quote }}
-{{ include "modeld.common.matchLabels" . }}
+{{ include "modela.common.matchLabels" . }}
 {{- end -}}
 
-{{- define "modeld.dataplane.labels" -}}
-{{ include "modeld.dataplane.matchLabels" . }}
-{{ include "modeld.common.metaLabels" . }}
+{{- define "modela.dataplane.labels" -}}
+{{ include "modela.dataplane.matchLabels" . }}
+{{ include "modela.common.metaLabels" . }}
 {{- end -}}
 
-{{- define "modeld.dataplane.matchLabels" -}}
+{{- define "modela.dataplane.matchLabels" -}}
 app.kubernetes.io/component: {{ .Values.dataplane.name | quote }}
-{{ include "modeld.common.matchLabels" . }}
+{{ include "modela.common.matchLabels" . }}
 {{- end -}}
 
-{{- define "modeld.datadock.labels" -}}
-{{ include "modeld.datadock.matchLabels" . }}
-{{ include "modeld.common.metaLabels" . }}
+{{- define "modela.datadock.labels" -}}
+{{ include "modela.datadock.matchLabels" . }}
+{{ include "modela.common.metaLabels" . }}
 {{- end -}}
 
-{{- define "modeld.datadock.matchLabels" -}}
+{{- define "modela.datadock.matchLabels" -}}
 app.kubernetes.io/component: {{ .Values.datadock.name | quote }}
-{{ include "modeld.common.matchLabels" . }}
+{{ include "modela.common.matchLabels" . }}
 {{- end -}}
 
-{{- define "modeld.frontend.labels" -}}
-{{ include "modeld.frontend.matchLabels" . }}
-{{ include "modeld.common.metaLabels" . }}
+{{- define "modela.frontend.labels" -}}
+{{ include "modela.frontend.matchLabels" . }}
+{{ include "modela.common.metaLabels" . }}
 {{- end -}}
 
-{{- define "modeld.frontend.matchLabels" -}}
+{{- define "modela.frontend.matchLabels" -}}
 app.kubernetes.io/component: {{ .Values.frontend.name | quote }}
-{{ include "modeld.common.matchLabels" . }}
+{{ include "modela.common.matchLabels" . }}
 {{- end -}}
 
-{{- define "modeld.publisher.labels" -}}
-{{ include "modeld.publisher.matchLabels" . }}
-{{ include "modeld.common.metaLabels" . }}
+{{- define "modela.publisher.labels" -}}
+{{ include "modela.publisher.matchLabels" . }}
+{{ include "modela.common.metaLabels" . }}
 {{- end -}}
 
-{{- define "modeld.publisher.matchLabels" -}}
+{{- define "modela.publisher.matchLabels" -}}
 app.kubernetes.io/component: {{ .Values.publisher.name | quote }}
-{{ include "modeld.common.matchLabels" . }}
+{{ include "modela.common.matchLabels" . }}
 {{- end -}}
 
 
@@ -117,7 +117,7 @@ app.kubernetes.io/component: {{ .Values.publisher.name | quote }}
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "modeld.fullname" -}}
+{{- define "modela.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -135,7 +135,7 @@ Create a fully qualified apiproxy name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 
-{{- define "modeld.apiproxy.fullname" -}}
+{{- define "modela.apiproxy.fullname" -}}
 {{- if .Values.apiproxy.fullnameOverride -}}
 {{- .Values.apiproxy.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -154,7 +154,7 @@ Create a fully qualified apigateway name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 
-{{- define "modeld.ingress.fullname" -}}
+{{- define "modela.ingress.fullname" -}}
 {{- if .Values.apigateway.fullnameOverride -}}
 {{- .Values.apigateway.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -176,7 +176,7 @@ Create a fully qualified apigateway name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 
-{{- define "modeld.apigateway.fullname" -}}
+{{- define "modela.apigateway.fullname" -}}
 {{- if .Values.apigateway.fullnameOverride -}}
 {{- .Values.apigateway.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -190,7 +190,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 
-{{- define "modeld.issuer.fullname" -}}
+{{- define "modela.issuer.fullname" -}}
 {{- if .Values.issuer.fullnameOverride -}}
 {{- .Values.issuer.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -204,7 +204,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 
-{{- define "modeld.aws.fullname" -}}
+{{- define "modela.aws.fullname" -}}
 {{- if .Values.aws.fullnameOverride -}}
 {{- .Values.aws.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -217,7 +217,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 
-{{- define "modeld.servingcert.fullname" -}}
+{{- define "modela.servingcert.fullname" -}}
 {{- if .Values.servingcert.fullnameOverride -}}
 {{- .Values.servingcert.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -238,7 +238,7 @@ Create a fully qualified controlplane name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 
-{{- define "modeld.controlplane.fullname" -}}
+{{- define "modela.controlplane.fullname" -}}
 {{- if .Values.controlplane.fullnameOverride -}}
 {{- .Values.controlplane.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -253,7 +253,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 
 
-{{- define "modeld.dataplane.fullname" -}}
+{{- define "modela.dataplane.fullname" -}}
 {{- if .Values.dataplane.fullnameOverride -}}
 {{- .Values.dataplane.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -266,7 +266,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 
-{{- define "modeld.datadock.fullname" -}}
+{{- define "modela.datadock.fullname" -}}
 {{- if .Values.datadock.fullnameOverride -}}
 {{- .Values.datadock.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -279,7 +279,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 
-{{- define "modeld.frontend.fullname" -}}
+{{- define "modela.frontend.fullname" -}}
 {{- if .Values.frontend.fullnameOverride -}}
 {{- .Values.frontend.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -299,7 +299,7 @@ Create a fully qualified publisher name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 
-{{- define "modeld.publisher.fullname" -}}
+{{- define "modela.publisher.fullname" -}}
 {{- if .Values.publisher.fullnameOverride -}}
 {{- .Values.publisher.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -316,14 +316,14 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/*
 Create the name of the service account to use for the apiproxy component
 */}}
-{{- define "modeld.serviceAccountName" -}}
+{{- define "modela.serviceAccountName" -}}
     {{- printf "%s-service-account" .Release.Name  | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use for the apiproxy component
 */}}
-{{- define "modeld.defaultTenantName" -}}
+{{- define "modela.defaultTenantName" -}}
     {{- printf "%s-default-tenant" .Release.Name  | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 

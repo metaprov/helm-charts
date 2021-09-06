@@ -9,7 +9,7 @@ stringData:
   password: ''
 ---
 
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: Connection
 metadata:
   name: default-exasol-connection
@@ -20,7 +20,7 @@ spec:
   provider: exasol
   tenantRef:
     name: default-tenant
-    namespace: modeld-system
+    namespace: modela-system
   secretName : default-exasol-secret
   exasol:
     host: ''

@@ -1,4 +1,4 @@
-apiVersion: data.modeld.io/v1alpha1
+apiVersion: data.modela.io/v1alpha1
 kind: DataProduct
 metadata:
   namespace: default-tenant
@@ -9,13 +9,13 @@ spec:
     url: ""
   tenantRef:
     name: default-tenant
-    namespace: modeld-system
+    namespace: modela-system
   imageLocation:
-    name: modeld/iris-product
+    name: modela/iris-product
     registryConnectionName: default-dockerhub-connection
   dataLocation:
     bucketName: default-minio-bucket
-    path: modeld/live/dataproducts/iris
+    path: modela/live/dataproducts/iris
   servingSiteName: default-serving-site
   labName: default-lab
   task: binary-classification  

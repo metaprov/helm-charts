@@ -4,7 +4,7 @@ kind: Secret
 metadata:
   name: default-digitalocean-secret
   namespace: default-tenant
-  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+  labels: {{- include "modela.common.metaLabels" . | nindent 4 }}
 type: Opaque
 data:
   {{- if .Values.digitalocean.secret.token }}
@@ -28,18 +28,18 @@ data:
   az: {{ required "digitalocean region is required!" .Values.digitalocean.secret.region }}
   {{- end }}
 ---
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: Connection
 metadata:
   name: default-digitalocean-connection
   namespace: default-tenant
-  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+  labels: {{- include "modela.common.metaLabels" . | nindent 4 }}
 spec:
   owner: admin
   provider: digitalocean
   tenantRef:
     name: default-tenant
-    namespace: modeld-system
+    namespace: modela-system
   secretName: default-digitalocean-secret
   category: cloud
   digitalocean:

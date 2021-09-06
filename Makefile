@@ -1,5 +1,5 @@
 #!make
-HELM_GCS_BUCKET := modeld-charts
+HELM_GCS_BUCKET := modela-charts
 TARGETS         := darwin/amd64 linux/amd64 windows/amd64
 SHELL           := bash -o pipefail
 REGISTRY        ?= quay.io/metaprov
@@ -12,10 +12,10 @@ HELM            := helm
 VERSION         ?= $(base_version)-$(shell git rev-parse --short=7 HEAD)
 KUBECONFIG      ?= ~/.kube/config
 FIND            :=find . -type f -not -path "*/vendor/*" -not -path "*/build/*" -not -path "*/.git/*" -not -path "*/site-packages/*" -not -path "*/fixture/*" -not -path "*/css/*" -not -path "*/node_modules/*" -not -path "*/.eggs/*"
-PACKAGE         :=github.com/metaprov/modeld
+PACKAGE         :=github.com/metaprov/modela
 CURRENT_DIR     :=$(shell pwd)
 REPO_ROOT       :=${CURRENT_DIR}
-CLI_NAME        :=modeldctl
+CLI_NAME        :=modelactl
 VERSION         :=$(shell cat ${CURRENT_DIR}/VERSION)
 BUILD_DATE      :=$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
 GIT_COMMIT      :=$(shell git rev-parse HEAD)
@@ -70,25 +70,25 @@ endif
 	rm -rf $(TOOLCHAIN_DIR)/temp-charttesting/
 
 update-chart-deps: build/toolchain/bin/helm
-	(cd $(REPOSITORY_ROOT)/charts/modeld; $(HELM) repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com; $(HELM) dependency update)
+	(cd $(REPOSITORY_ROOT)/charts/modela; $(HELM) repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com; $(HELM) dependency update)
 
 lint-chart: build/toolchain/bin/helm build/toolchain/bin/ct
-	(cd $(REPOSITORY_ROOT)/charts/modeld; $(HELM) lint $(MODELD_HELM_NAME))
-	$(CHART_TESTING) lint --all --chart-yaml-schema $(TOOLCHAIN_BIN)/etc/chart_schema.yaml --lint-conf $(TOOLCHAIN_BIN)/etc/lintconf.yaml --chart-dirs $(REPOSITORY_ROOT)/charts/modeld
-	$(CHART_TESTING) lint --all --chart-yaml-schema $(TOOLCHAIN_BIN)/etc/chart_schema.yaml --lint-conf $(TOOLCHAIN_BIN)/etc/lintconf.yaml --chart-dirs $(REPOSITORY_ROOT)/charts/modeld-default-tenant
-	$(CHART_TESTING) lint-and-install --all --chart-yaml-schema $(TOOLCHAIN_BIN)/etc/chart_schema.yaml --lint-conf $(TOOLCHAIN_BIN)/etc/lintconf.yaml --chart-dirs $(REPOSITORY_ROOT)/charts/modeld
-	$(CHART_TESTING) lint-and-install --all --chart-yaml-schema $(TOOLCHAIN_BIN)/etc/chart_schema.yaml --lint-conf $(TOOLCHAIN_BIN)/etc/lintconf.yaml --chart-dirs $(REPOSITORY_ROOT)/charts/modeld-default-tenant
+	(cd $(REPOSITORY_ROOT)/charts/modela; $(HELM) lint $(MODELA_HELM_NAME))
+	$(CHART_TESTING) lint --all --chart-yaml-schema $(TOOLCHAIN_BIN)/etc/chart_schema.yaml --lint-conf $(TOOLCHAIN_BIN)/etc/lintconf.yaml --chart-dirs $(REPOSITORY_ROOT)/charts/modela
+	$(CHART_TESTING) lint --all --chart-yaml-schema $(TOOLCHAIN_BIN)/etc/chart_schema.yaml --lint-conf $(TOOLCHAIN_BIN)/etc/lintconf.yaml --chart-dirs $(REPOSITORY_ROOT)/charts/modela-default-tenant
+	$(CHART_TESTING) lint-and-install --all --chart-yaml-schema $(TOOLCHAIN_BIN)/etc/chart_schema.yaml --lint-conf $(TOOLCHAIN_BIN)/etc/lintconf.yaml --chart-dirs $(REPOSITORY_ROOT)/charts/modela
+	$(CHART_TESTING) lint-and-install --all --chart-yaml-schema $(TOOLCHAIN_BIN)/etc/chart_schema.yaml --lint-conf $(TOOLCHAIN_BIN)/etc/lintconf.yaml --chart-dirs $(REPOSITORY_ROOT)/charts/modela-default-tenant
 
-build/chart/modeld-$(BASE_VERSION).tgz: build/toolchain/bin/helm lint-chart
+build/chart/modela-$(BASE_VERSION).tgz: build/toolchain/bin/helm lint-chart
 	mkdir -p $(BUILD_DIR)/chart/
-	$(HELM) package -d $(BUILD_DIR)/chart/ --version $(BASE_VERSION) $(REPOSITORY_ROOT)/charts/modeld
+	$(HELM) package -d $(BUILD_DIR)/chart/ --version $(BASE_VERSION) $(REPOSITORY_ROOT)/charts/modela
 
-build/chart/modeld-default-tenant-$(BASE_VERSION).tgz: build/toolchain/bin/helm lint-chart
+build/chart/modela-default-tenant-$(BASE_VERSION).tgz: build/toolchain/bin/helm lint-chart
 	mkdir -p $(BUILD_DIR)/chart/
-	$(HELM) package -d $(BUILD_DIR)/chart/ --version $(BASE_VERSION) $(REPOSITORY_ROOT)/charts/modeld-default-tenant
+	$(HELM) package -d $(BUILD_DIR)/chart/ --version $(BASE_VERSION) $(REPOSITORY_ROOT)/charts/modela-default-tenant
 
 
-build/chart/index.yaml: build/toolchain/bin/helm build/chart/modeld-$(BASE_VERSION).tgz build/toolchain/bin/helm build/chart/modeld-default-tenant-$(BASE_VERSION).tgz
+build/chart/index.yaml: build/toolchain/bin/helm build/chart/modela-$(BASE_VERSION).tgz build/toolchain/bin/helm build/chart/modela-default-tenant-$(BASE_VERSION).tgz
 	mkdir -p $(BUILD_DIR)/chart-index/
 	$(HELM) repo index --merge $(BUILD_DIR)/chart-index/index.yaml $(BUILD_DIR)/chart/
 
@@ -99,7 +99,7 @@ build/chart/: build/chart/index.yaml build/chart/index.yaml.$(YEAR_MONTH_DAY)
 
 
 add-gcloud-repo:
-	build/toolchain/bin/helm repo add modeld https://storage.googleapis.com/modeld-charts/chart/index.yaml
+	build/toolchain/bin/helm repo add modela https://storage.googleapis.com/modela-charts/chart/index.yaml
 
 install-helm-gcs:
 	helm plugin install https://github.com/hayorov/helm-gcs.git
@@ -109,13 +109,13 @@ init-helm-bucket:
 
 # Add your repository to Helm
 add-helm-repo:
-	helm repo remove modeld
-	helm repo add modeld gs://$(HELM_GCS_BUCKET)
+	helm repo remove modela
+	helm repo add modela gs://$(HELM_GCS_BUCKET)
 
 # Push a chart to your repository
-push-helm-chart: build/chart/modeld-$(BASE_VERSION).tgz build/chart/modeld-default-tenant-$(BASE_VERSION).tgz
-	helm gcs push --force build/chart/modeld-$(BASE_VERSION).tgz modeld
-	helm gcs push --force build/chart/modeld-default-tenant-$(BASE_VERSION).tgz modeld
+push-helm-chart: build/chart/modela-$(BASE_VERSION).tgz build/chart/modela-default-tenant-$(BASE_VERSION).tgz
+	helm gcs push --force build/chart/modela-$(BASE_VERSION).tgz modela
+	helm gcs push --force build/chart/modela-default-tenant-$(BASE_VERSION).tgz modela
 
 
 # Update Helm cachehel
@@ -123,13 +123,13 @@ update-helm-cache:
 	helm repo update
 
 fetch-helm-chart:
-	helm fetch modeld/modeld
+	helm fetch modela/modela
 
 remove-helm-chart:
-	helm gcs rm chart modeld
+	helm gcs rm chart modela
 
 add-latest-helm-repo:
-	helm repo add modeld-release https://modeld-charts.storage.googleapis.com/
+	helm repo add modela-release https://modela-charts.storage.googleapis.com/
 
-helm-install-modeld:
-	helm install modeld1 modeld-release/modeld
+helm-install-modela:
+	helm install modela1 modela-release/modela

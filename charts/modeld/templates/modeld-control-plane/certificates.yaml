@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: selfsigned-issuer
-  namespace: modeld-system
+  namespace: modela-system
 spec:
   selfSigned: {}
 ---
@@ -10,15 +10,15 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: serving-cert
-  namespace: modeld-system
+  namespace: modela-system
 spec:
   isCA: true
   commonName: osm-system
   secretName: osm-ca
   dnsNames:
-    - modeld-control-plane-webhook.svc.cluster.local
-    - modeld-control-plane-webhook.modeld-system.svc
-    - modeld-control-plane-webhook
+    - modela-control-plane-webhook.svc.cluster.local
+    - modela-control-plane-webhook.modela-system.svc
+    - modela-control-plane-webhook
   issuerRef:
     kind: Issuer
     name: selfsigned-issuer

@@ -2,43 +2,43 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/name: modeld-api-gateway
-    app.kubernetes.io/part-of: modeld
-  name: modeld-api-gateway
-  namespace: modeld-system
+    app.kubernetes.io/name: modela-api-gateway
+    app.kubernetes.io/part-of: modela
+  name: modela-api-gateway
+  namespace: modela-system
 rules:
   - apiGroups:
-      - catalog.modeld.io
+      - catalog.modela.io
     resources:
       - "*"
     verbs:
       - "*"
   - apiGroups:
-      - data.modeld.io
+      - data.modela.io
     resources:
       - "*"
     verbs:
       - "*"
   - apiGroups:
-      - inference.modeld.io
+      - inference.modela.io
     resources:
       - "*"
     verbs:
       - "*"
   - apiGroups:
-    - infra.modeld.io
+    - infra.modela.io
     resources:
       - "*"
     verbs:
       - "*"
   - apiGroups:
-      - training.modeld.io
+      - training.modela.io
     resources:
       - "*"
     verbs:
       - "*"
   - apiGroups:
-      - team.modeld.io
+      - team.modela.io
     resources:
       - "*"
     verbs:
@@ -72,24 +72,24 @@ kind: ClusterRoleBinding
 metadata:
   labels:
       app.kubernetes.io/name: modled-api-gateway
-      app.kubernetes.io/part-of: modeld
-  name: modeld-api-gateway
-  namespace: modeld-system
+      app.kubernetes.io/part-of: modela
+  name: modela-api-gateway
+  namespace: modela-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: modeld-api-gateway
+  name: modela-api-gateway
 subjects:
   - kind: ServiceAccount
-    name: modeld-api-gateway
-    namespace: modeld-system
+    name: modela-api-gateway
+    namespace: modela-system
 ---
 
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app.kubernetes.io/name: modeld-api-gateway
-    app.kubernetes.io/part-of: modeld
-  name: modeld-api-gateway
-  namespace: modeld-system
+    app.kubernetes.io/name: modela-api-gateway
+    app.kubernetes.io/part-of: modela
+  name: modela-api-gateway
+  namespace: modela-system

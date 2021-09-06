@@ -1,9 +1,9 @@
-namespace: modeld-system
+namespace: modela-system
 
 
-modeld:
+modela:
   debug: false
-  cachePath: "/var/opt/modeld/data"
+  cachePath: "/var/opt/modela/data"
   logAsJson: false
   imagePullSecrets: ""
   podAnnotations: { }
@@ -56,7 +56,7 @@ apigateway:
   replicaCount: 1
   image:
     registry: quay.io
-    repository: metaprov/modeld-api-gateway
+    repository: metaprov/modela-api-gateway
     tag: latest
     pullPolicy: Always
   resources:
@@ -71,7 +71,7 @@ apiproxy:
   replicaCount: 1
   image:
     registry: quay.io
-    repository: metaprov/modeld-api-proxy
+    repository: metaprov/modela-api-proxy
     tag: latest
     pullPolicy: Always
   resources:
@@ -86,7 +86,7 @@ dbproxy:
   replicaCount: 1
   image:
     registry: quay.io
-    repository: metaprov/modeld-database-proxy
+    repository: metaprov/modela-database-proxy
     tag: latest
     pullPolicy: Always    
   resources:
@@ -102,7 +102,7 @@ controlplane:
   replicaCount: 1
   image:
     registry: quay.io
-    repository: metaprov/modeld-control-plane
+    repository: metaprov/modela-control-plane
     tag: latest
     pullPolicy: Always
   resources:
@@ -117,7 +117,7 @@ datadock:
   replicaCount: 1
   image:
     registry: quay.io
-    repository: metaprov/modeld-data-dock
+    repository: metaprov/modela-data-dock
     tag: latest
     pullPolicy: Always
   resources:
@@ -132,7 +132,7 @@ dataplane:
   replicaCount: 1
   image:
     registry: quay.io
-    repository: metaprov/modeld-data-plane
+    repository: metaprov/modela-data-plane
     tag: latest
     pullPolicy: Always
   resources:
@@ -148,7 +148,7 @@ frontend:
   image:
     registry: quay.io
     tag: latest
-    repository: metaprov/modeld-frontend
+    repository: metaprov/modela-frontend
     pullPolicy: Always
   resources:
     limits:
@@ -164,7 +164,7 @@ clouds:
   image:
     registry: quay.io
     tag: latest
-    repository: metaprov/modeld-cloud-proxy
+    repository: metaprov/modela-cloud-proxy
     pullPolicy: Always
   resources:
     limits:
@@ -175,8 +175,8 @@ clouds:
       memory: "128Mi"
 
 ingress:
-  name : modeld-ingress
-  host: modeld.info
+  name : modela-ingress
+  host: modela.info
   enabled: true
   certManager: false
   tls: false

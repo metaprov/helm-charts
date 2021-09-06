@@ -4,7 +4,7 @@ kind: Secret
 metadata:
   name: default-aws-secret
   namespace: default-tenant
-  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+  labels: {{- include "modela.common.metaLabels" . | nindent 4 }}
 type: Opaque
 data:
   {{- if .Values.aws.secret.az }}
@@ -26,18 +26,18 @@ data:
   {{- end }}
 ---
 
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: Connection
 metadata:
   name: default-aws-connection
   namespace: default-tenant
-  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+  labels: {{- include "modela.common.metaLabels" . | nindent 4 }}
 spec:
   owner: admin
   provider: aws
   tenantRef:
     name: default-tenant
-    namespace: modeld-system
+    namespace: modela-system
   secretName : default-aws-secret
   category: cloud
   aws:
@@ -45,7 +45,7 @@ spec:
     accessKey: '[hidden]'
     secretKey: '[hidden]'
 ---
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: VirtualBucket
 metadata:
   name: default-aws-bucket
@@ -53,7 +53,7 @@ metadata:
 spec:
   owner: admin
   tenantRef:
-    namespace: modeld-system
+    namespace: modela-system
     name : default-tenant
   connectionName: default-aws-connection
 {{ end }}

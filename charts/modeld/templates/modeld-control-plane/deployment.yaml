@@ -2,33 +2,33 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: modeld-control-plane
-    app.kubernetes.io/part-of: modeld
-  name: modeld-control-plane
-  namespace: modeld-system
+    app.kubernetes.io/name: modela-control-plane
+    app.kubernetes.io/part-of: modela
+  name: modela-control-plane
+  namespace: modela-system
 spec:
   replicas: {{ .Values.controlplane.replicaCount }}
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/name: modeld-control-plane
+      app.kubernetes.io/name: modela-control-plane
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: modeld-control-plane
+        app.kubernetes.io/name: modela-control-plane
       annotations:
         prometheus.io/scrape: 'true'
         prometheus.io/port: '9091'
     spec:
-      serviceAccountName: modeld-control-plane
+      serviceAccountName: modela-control-plane
       containers:
         - name: main
           image: "{{ .Values.controlplane.image.registry }}/{{ .Values.controlplane.image.repository }}:{{ .Values.controlplane.image.tag }}"
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
           volumeMounts:
             - name: data
-              mountPath: /var/opt/modeld/data
+              mountPath: /var/opt/modela/data
             - name: webhook-server-cert
               mountPath: /tmp/k8s-webhook-server/serving-certs
               readOnly: true
@@ -70,7 +70,7 @@ spec:
               name: http            
           volumeMounts:
             - name: data
-              mountPath: /var/opt/modeld/data
+              mountPath: /var/opt/modela/data
           resources:
             limits:
               cpu: "{{.Values.clouds.resources.limits.cpu}}"
@@ -133,7 +133,7 @@ spec:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: modeld-postgresql
+                  name: modela-postgresql
                   key: postgresql-password
 
       volumes:

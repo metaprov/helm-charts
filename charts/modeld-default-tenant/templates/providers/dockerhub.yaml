@@ -4,7 +4,7 @@ kind: Secret
 metadata:
   name: default-dockerhub-secret
   namespace: default-tenant
-  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+  labels: {{- include "modela.common.metaLabels" . | nindent 4 }}
 type: Opaque
 data:
   {{- if .Values.digitalocean.secret.token }}
@@ -24,18 +24,18 @@ data:
   {{- end }}
 
 ---
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: Connection
 metadata:
   name: default-dockerhub-connection
   namespace: default-tenant
-  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+  labels: {{- include "modela.common.metaLabels" . | nindent 4 }}
 spec:
   owner: admin
   provider: docker-hub
   tenantRef:
     name: default-tenant
-    namespace: modeld-system
+    namespace: modela-system
   secretName : default-dockerhub-secret
   category: docker-image-registry
   imageRegistry:

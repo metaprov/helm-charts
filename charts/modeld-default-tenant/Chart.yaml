@@ -1,17 +1,17 @@
 apiVersion: v2
-name: modeld-default-tenant
+name: modela-default-tenant
 description: A Helm chart for default tenant
 version: 0.3.653
 appVersion: 0.3.653
-icon: https://raw.githubusercontent.com/metaprov/modeldapi/main/static/imgs/logo/svg/symbol_horizontal_light.svg
+icon: https://raw.githubusercontent.com/metaprov/modelaapi/main/static/imgs/logo/svg/symbol_horizontal_light.svg
 keywords:
     - machine learning
     - automl
     - model
     - ai
-home: https://www.modeld.io
+home: https://www.modela.io
 sources:
-    - https://github.com/metaprov/modeldapi    
+    - https://github.com/metaprov/modelaapi    
 type: application
 maintainers:
     - name: Metaprov Inc

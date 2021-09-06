@@ -3,9 +3,9 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: control-plane-metrics
-    app.kubernetes.io/part-of: modeld
+    app.kubernetes.io/part-of: modela
   name: control-plane-metrics
-  namespace: modeld-system
+  namespace: modela-system
 spec:
   ports:
     - name: metrics
@@ -13,4 +13,4 @@ spec:
       port: 9091
       targetPort: 9091
   selector:
-    app.kubernetes.io/name: modeld-control-plane
+    app.kubernetes.io/name: modela-control-plane

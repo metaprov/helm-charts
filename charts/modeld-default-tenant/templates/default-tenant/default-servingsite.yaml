@@ -1,4 +1,4 @@
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: ServingSite
 metadata:
   name: default-serving-site
@@ -8,4 +8,4 @@ spec:
   fdqn: {{ .Values.servingsite.fdqn }}
   tenantRef:
     name: default-tenant
-    namespace: modeld-system
+    namespace: modela-system

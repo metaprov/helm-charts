@@ -1,38 +1,38 @@
 {{/*
-modeld-frontend fullname
+modela-frontend fullname
 */}}
-{{- define "modeld.frontendFullname" -}}
-modeld-frontend
+{{- define "modela.frontendFullname" -}}
+modela-frontend
 {{- end }}
 
 {{/*
-modeld-frontend common labels
+modela-frontend common labels
 */}}
-{{- define "modeld.frontendLabels" -}}
-{{ include "modeld.labels" . }}
-app.kubernetes.io/component: modeld-frontend
+{{- define "modela.frontendLabels" -}}
+{{ include "modela.labels" . }}
+app.kubernetes.io/component: modela-frontend
 {{- end }}
 
 {{/*
-modeld-frontend selector labels
+modela-frontend selector labels
 */}}
-{{- define "modeld.frontendSelectorLabels" -}}
-{{ include "modeld.selectorLabels" . }}
-app.kubernetes.io/component: modeld-frontend
+{{- define "modela.frontendSelectorLabels" -}}
+{{ include "modela.selectorLabels" . }}
+app.kubernetes.io/component: modela-frontend
 {{- end }}
 
 {{/*
-modeld-frontend image
+modela-frontend image
 */}}
-{{- define "modeld.frontendImage" -}}
-{{- $dict := dict "modeld" .Values.modeld.image "service" .Values.frontend.image "global" .Values.global.image "defaultVersion" .Chart.AppVersion -}}
-modeld-frontend
+{{- define "modela.frontendImage" -}}
+{{- $dict := dict "modela" .Values.modela.image "service" .Values.frontend.image "global" .Values.global.image "defaultVersion" .Chart.AppVersion -}}
+modela-frontend
 {{- end }}
 
 {{/*
-modeld-frontend priority class name
+modela-frontend priority class name
 */}}
-{{- define "modeld.frontendPriorityClassName" -}}
+{{- define "modela.frontendPriorityClassName" -}}
 {{- $pcn := coalesce .Values.global.priorityClassName .Values.frontend.priorityClassName -}}
 {{- if $pcn }}
 priorityClassName: {{ $pcn }}

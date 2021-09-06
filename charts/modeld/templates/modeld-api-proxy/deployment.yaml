@@ -2,25 +2,25 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: modeld-api-proxy
-  name: modeld-api-proxy
-  namespace: modeld-system
+    app.kubernetes.io/name: modela-api-proxy
+  name: modela-api-proxy
+  namespace: modela-system
 spec:
   replicas: {{ .Values.apiproxy.replicaCount }}
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/name: modeld-api-proxy
+      app.kubernetes.io/name: modela-api-proxy
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: modeld-api-proxy
+        app.kubernetes.io/name: modela-api-proxy
         app.kubernetes.io/component: api-proxy
-        app.kubernetes.io/part-of: "modeld"
+        app.kubernetes.io/part-of: "modela"
         app.kubernetes.io/managed-by: "helm"
     spec:
-      serviceAccountName: modeld-api-proxy
+      serviceAccountName: modela-api-proxy
       containers:
         - name: main
           image: "{{ .Values.apiproxy.image.registry }}/{{ .Values.apiproxy.image.repository }}:{{ .Values.apiproxy.image.tag }}"

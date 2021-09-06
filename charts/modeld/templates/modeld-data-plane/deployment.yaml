@@ -2,21 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: modeld-data-plane
-    app.kubernetes.io/part-of: modeld
-  name: modeld-data-plane
-  namespace: modeld-system
+    app.kubernetes.io/name: modela-data-plane
+    app.kubernetes.io/part-of: modela
+  name: modela-data-plane
+  namespace: modela-system
 spec:
   replicas: {{ .Values.dataplane.replicaCount }}
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/name: modeld-data-plane
+      app.kubernetes.io/name: modela-data-plane
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: modeld-data-plane
+        app.kubernetes.io/name: modela-data-plane
       annotations:
         prometheus.io/scrape: 'true'
         prometheus.io/port: '9091'  
@@ -42,7 +42,7 @@ spec:
     
           volumeMounts:
             - name: data
-              mountPath: /var/opt/modeld/data
+              mountPath: /var/opt/modela/data
           env:
             - name: CACHE_PATH
               valueFrom:
@@ -63,7 +63,7 @@ spec:
               name: profiling
           volumeMounts:
             - name: data
-              mountPath: /var/opt/modeld/data
+              mountPath: /var/opt/modela/data
           resources:
             limits:
               cpu: "{{.Values.clouds.resources.limits.cpu}}"

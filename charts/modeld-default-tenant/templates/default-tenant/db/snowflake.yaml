@@ -5,7 +5,7 @@ metadata:
   namespace: default-tenant
   labels:
     app.kubernetes.io/name: default-snowflake-connection
-    app.kubernetes.io/part-of: modeld
+    app.kubernetes.io/part-of: modela
     app.kubernetes.io/component: infra
 type: Opaque
 stringData:
@@ -13,7 +13,7 @@ stringData:
   password: 'snowflake123'
 ---
 
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: Connection
 metadata:
   name: default-snowflake-connection
@@ -24,7 +24,7 @@ spec:
   category: database
   tenantRef:
     name: default-tenant
-    namespace: modeld-system
+    namespace: modela-system
   secretName : default-snowflake-secret
   snowflake:
     host: ''

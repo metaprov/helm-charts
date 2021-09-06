@@ -5,7 +5,7 @@ metadata:
   namespace: default-tenant
   labels:
     app.kubernetes.io/name: default-bigquery-secret
-    app.kubernetes.io/part-of: modeld
+    app.kubernetes.io/part-of: modela
     app.kubernetes.io/component: infra
 type: Opaque
 stringData:
@@ -13,7 +13,7 @@ stringData:
   password: ''
 ---
 
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: Connection
 metadata:
   name: default-bigquery-connection
@@ -24,7 +24,7 @@ spec:
   category: database
   tenantRef:
     name: default-bigquery-secret
-    namespace: modeld-system
+    namespace: modela-system
   secretName : default-bigquery-secret
   bigquery:
     host: ''

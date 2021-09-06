@@ -1,12 +1,12 @@
 apiVersion: networking.k8s.io/v1 
 kind: Ingress
 metadata:
-  name: modeld-ingress
-  namespace: modeld-system
+  name: modela-ingress
+  namespace: modela-system
   labels:
     app.kubernetes.io/name: {{ .Release.Name }}
-    app.kubernetes.io/component: modeld-ingress
-    app.kubernetes.io/part-of: "modeld"
+    app.kubernetes.io/component: modela-ingress
+    app.kubernetes.io/part-of: "modela"
     app.kubernetes.io/managed-by: "helm"
   annotations:
     nginx.ingress.kubernetes.io/enable-cors: "true"
@@ -22,7 +22,7 @@ metadata:
     nginx.ingress.kubernetes.io/cors-allow-headers: "x-user-agent,x-grpc-web,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization"
 spec:
     rules:
-      - host: modeld.info
+      - host: modela.info
         http:
           paths:
             - path: /
@@ -36,17 +36,17 @@ spec:
             - path: /upload
               backend:
                 service:
-                  name: modeld-datadock
+                  name: modela-datadock
                   port: 
                     number: 8095
               pathType: ImplementationSpecific      
-      - host: api.modeld.info
+      - host: api.modela.info
         http:
           paths:
             - path: /
               backend:
                 service:
-                  name: modeld-api-proxy
+                  name: modela-api-proxy
                   port: 
                     number: 8080
               pathType: ImplementationSpecific      

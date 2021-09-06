@@ -1,16 +1,16 @@
 {{ if .Values.minio.create }}
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: Connection
 metadata:
   name: default-minio
   namespace: default-tenant
-  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+  labels: {{- include "modela.common.metaLabels" . | nindent 4 }}
 spec:
   owner: admin
   provider: minio
   tenantRef:
     name: default-tenant
-    namespace: modeld-system
+    namespace: modela-system
   secretName : default-minio-secret
   minio:
     accessKey: '[hidden]'
@@ -22,7 +22,7 @@ kind: Secret
 metadata:
   name: default-minio-secret
   namespace: default-tenant
-  labels: {{- include "modeld.common.metaLabels" . | nindent 4 }}
+  labels: {{- include "modela.common.metaLabels" . | nindent 4 }}
 type: Opaque
 data:
   {{- if .Values.minio.secret.accesskey }}
@@ -43,7 +43,7 @@ data:
   host : {{ required "minio host is required!" .Values.minio.secret.host }}
   {{- end }}
 ---
-apiVersion: infra.modeld.io/v1alpha1
+apiVersion: infra.modela.io/v1alpha1
 kind: VirtualBucket
 metadata:
   name: default-minio-bucket
@@ -51,7 +51,7 @@ metadata:
 spec:
   owner: admin
   tenantRef:
-    namespace: modeld-system
+    namespace: modela-system
     name : default-tenant
   connectionName: default-minio
 

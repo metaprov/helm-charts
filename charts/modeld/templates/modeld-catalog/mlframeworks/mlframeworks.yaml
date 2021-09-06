@@ -1,10 +1,10 @@
-apiVersion: catalog.modeld.io/v1alpha1
+apiVersion: catalog.modela.io/v1alpha1
 kind: MLFramework
 metadata:
   name: lightgbm
-  namespace: modeld-catalog
+  namespace: modela-catalog
   labels:
-    app.kubernetes.io/part-of: modeld
+    app.kubernetes.io/part-of: modela
 spec:
   url: "https://lightgbm.readthedocs.io/en/latest/"
   description: "lightgbm"
@@ -12,11 +12,11 @@ spec:
   lang: "python"
 
 ---
-apiVersion: catalog.modeld.io/v1alpha1
+apiVersion: catalog.modela.io/v1alpha1
 kind: MLFramework
 metadata:
   name: scikit-learn
-  namespace: modeld-catalog
+  namespace: modela-catalog
 spec:
   url: "https://scikit-learn.org/stable/"
   description: "scikit-learn description"
@@ -24,11 +24,11 @@ spec:
   lang: "python"
 
 ---
-apiVersion: catalog.modeld.io/v1alpha1
+apiVersion: catalog.modela.io/v1alpha1
 kind: MLFramework
 metadata:
   name: xgboost
-  namespace: modeld-catalog
+  namespace: modela-catalog
 spec:
   url: "https://xgboost.readthedocs.io/en/latest/"
   description: "xgboost description"
@@ -37,11 +37,11 @@ spec:
 
 
 ---
-apiVersion: catalog.modeld.io/v1alpha1
+apiVersion: catalog.modela.io/v1alpha1
 kind: MLFramework
 metadata:
   name: prophet
-  namespace: modeld-catalog
+  namespace: modela-catalog
 spec:
   url: "https://github.com/facebook/prophet"
   description: "Prophet: Automatic Forecasting Procedure"

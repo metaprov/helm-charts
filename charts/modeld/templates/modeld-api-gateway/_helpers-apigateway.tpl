@@ -1,37 +1,37 @@
 {{/*
-modeld-apiGateway fullname
+modela-apiGateway fullname
 */}}
-{{- define "modeld.apigatewayFullname" -}}
- modeld-apigateway
+{{- define "modela.apigatewayFullname" -}}
+ modela-apigateway
 {{- end }}
 
 {{/*
-modeld-apiGateway common labels
+modela-apiGateway common labels
 */}}
-{{- define "modeld.apigatewayLabels" -}}
-{{ include "modeld.labels" . }}
-app.kubernetes.io/component: modeld-apigateway
+{{- define "modela.apigatewayLabels" -}}
+{{ include "modela.labels" . }}
+app.kubernetes.io/component: modela-apigateway
 {{- end }}
 
 {{/*
-modeld-apiGateway selector labels
+modela-apiGateway selector labels
 */}}
-{{- define "modeld.apigatewaySelectorLabels" -}}
-{{ include "modeld.selectorLabels" . }}
-app.kubernetes.io/component: modeld-apigateway
+{{- define "modela.apigatewaySelectorLabels" -}}
+{{ include "modela.selectorLabels" . }}
+app.kubernetes.io/component: modela-apigateway
 {{- end }}
 
 {{/*
-modeld-apigateway image
+modela-apigateway image
 */}}
-{{- define "modeld.apigatewayImage" -}}
-modeld-apigateway
+{{- define "modela.apigatewayImage" -}}
+modela-apigateway
 {{- end }}
 
 {{/*
-modeld-apigateway priority class name
+modela-apigateway priority class name
 */}}
-{{- define "modeld.apigatewayPriorityClassName" -}}
+{{- define "modela.apigatewayPriorityClassName" -}}
 {{- $pcn := coalesce .Values.global.priorityClassName .Values.apigateway.priorityClassName -}}
 {{- if $pcn }}
 priorityClassName: {{ $pcn }}

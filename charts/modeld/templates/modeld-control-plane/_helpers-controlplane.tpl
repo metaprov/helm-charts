@@ -1,37 +1,37 @@
 {{/*
-modeld-controlplane fullname
+modela-controlplane fullname
 */}}
-{{- define "modeld.controlplaneFullname" -}}
-modeld-controlplane
+{{- define "modela.controlplaneFullname" -}}
+modela-controlplane
 {{- end }}
 
 {{/*
-modeld-controlplane common labels
+modela-controlplane common labels
 */}}
-{{- define "modeld.controlplaneLabels" -}}
-{{ include "modeld.labels" . }}
-app.kubernetes.io/component: modeld-controlplane
+{{- define "modela.controlplaneLabels" -}}
+{{ include "modela.labels" . }}
+app.kubernetes.io/component: modela-controlplane
 {{- end }}
 
 {{/*
-modeld-controlplane selector labels
+modela-controlplane selector labels
 */}}
-{{- define "modeld.controlplaneSelectorLabels" -}}
-{{ include "modeld.selectorLabels" . }}
-app.kubernetes.io/component: modeld-controlplane
+{{- define "modela.controlplaneSelectorLabels" -}}
+{{ include "modela.selectorLabels" . }}
+app.kubernetes.io/component: modela-controlplane
 {{- end }}
 
 {{/*
-modeld-controlplane image
+modela-controlplane image
 */}}
-{{- define "modeld.controlplaneImage" -}}
-modeld-controlplane
+{{- define "modela.controlplaneImage" -}}
+modela-controlplane
 {{- end }}
 
 {{/*
-modeld-controlplane priority class name
+modela-controlplane priority class name
 */}}
-{{- define "modeld.controlplanePriorityClassName" -}}
+{{- define "modela.controlplanePriorityClassName" -}}
 {{- $pcn := coalesce .Values.global.priorityClassName .Values.controlplane.priorityClassName -}}
 {{- if $pcn }}
 priorityClassName: {{ $pcn }}

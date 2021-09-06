@@ -2,12 +2,12 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: data-mutating-webhook-configuration
-  namespace: modeld-system
+  namespace: modela-system
   annotations:
-    cert-manager.io/inject-ca-from: modeld-system/serving-cert
+    cert-manager.io/inject-ca-from: modela-system/serving-cert
 webhooks:
 
-  - name: dataproduct.data.modeld.io
+  - name: dataproduct.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -16,7 +16,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modeld.io"
+          - "data.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -27,12 +27,12 @@ webhooks:
           - dataproducts
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-data-modeld-io-v1alpha1-dataproduct
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-data-modela-io-v1alpha1-dataproduct
       caBundle: CERT
 
-  - name: dataproductversion.data.modeld.io
+  - name: dataproductversion.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -41,7 +41,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modeld.io"
+          - "data.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -52,13 +52,13 @@ webhooks:
           - dataproductversions
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-data-modeld-io-v1alpha1-dataproductversion
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-data-modela-io-v1alpha1-dataproductversion
       caBundle: CERT
 
 
-  - name: dataset.data.modeld.io
+  - name: dataset.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -67,7 +67,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modeld.io"
+          - "data.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -78,13 +78,13 @@ webhooks:
           - datasets
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-data-modeld-io-v1alpha1-dataset
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-data-modela-io-v1alpha1-dataset
       caBundle: CERT
 
 
-  - name: datasource.data.modeld.io
+  - name: datasource.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -93,7 +93,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modeld.io"
+          - "data.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -104,12 +104,12 @@ webhooks:
           - datasources
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-data-modeld-io-v1alpha1-datasource
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-data-modela-io-v1alpha1-datasource
       caBundle: CERT
 
-  - name: datapipeline.data.modeld.io
+  - name: datapipeline.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -118,7 +118,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modeld.io"
+          - "data.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -129,12 +129,12 @@ webhooks:
           - datapipelines
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-data-modeld-io-v1alpha1-datapipeline
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-data-modela-io-v1alpha1-datapipeline
       caBundle: CERT
 
-  - name: datapipelinerun.data.modeld.io
+  - name: datapipelinerun.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -143,7 +143,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modeld.io"
+          - "data.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -154,12 +154,12 @@ webhooks:
           - datapipelineruns
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-data-modeld-io-v1alpha1-datapipelinerun
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-data-modela-io-v1alpha1-datapipelinerun
       caBundle: CERT
 
-  - name: entity.data.modeld.io
+  - name: entity.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -168,7 +168,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modeld.io"
+          - "data.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -179,12 +179,12 @@ webhooks:
           - entities
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-data-modeld-io-v1alpha1-entity
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-data-modela-io-v1alpha1-entity
       caBundle: CERT
 
-  - name: feature.data.modeld.io
+  - name: feature.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -193,7 +193,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modeld.io"
+          - "data.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -204,12 +204,12 @@ webhooks:
           - features
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-data-modeld-io-v1alpha1-feature
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-data-modela-io-v1alpha1-feature
       caBundle: CERT
 
-  - name: featurepipeline.data.modeld.io
+  - name: featurepipeline.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -218,7 +218,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "data.modeld.io"
+          - "data.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -229,12 +229,12 @@ webhooks:
           - featurepipelines
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-data-modeld-io-v1alpha1-featurepipeline
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-data-modela-io-v1alpha1-featurepipeline
       caBundle: CERT
 
-  - name: featurepipelinerun.data.modeld.io
+  - name: featurepipelinerun.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -243,7 +243,7 @@ webhooks:
         - v1alpha1
     rules:
         - apiGroups:
-            - "data.modeld.io"
+            - "data.modela.io"
           apiVersions:
             - v1alpha1
             - v1beta1
@@ -254,12 +254,12 @@ webhooks:
             - featurepipelineruns
     clientConfig:
         service:
-          namespace: modeld-system
-          name: modeld-control-plane-webhook
-          path: /mutate-data-modeld-io-v1alpha1-featurepipelinerun
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-data-modela-io-v1alpha1-featurepipelinerun
         caBundle: CERT
 
-  - name: featureset.data.modeld.io
+  - name: featureset.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -268,7 +268,7 @@ webhooks:
         - v1alpha1
     rules:
         - apiGroups:
-            - "data.modeld.io"
+            - "data.modela.io"
           apiVersions:
             - v1alpha1
             - v1beta1
@@ -279,12 +279,12 @@ webhooks:
             - featuresets
     clientConfig:
         service:
-          namespace: modeld-system
-          name: modeld-control-plane-webhook
-          path: /mutate-data-modeld-io-v1alpha1-featureset
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-data-modela-io-v1alpha1-featureset
         caBundle: CERT
 
-  - name: labelingpipeline.data.modeld.io
+  - name: labelingpipeline.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -293,7 +293,7 @@ webhooks:
         - v1alpha1
     rules:
         - apiGroups:
-            - "data.modeld.io"
+            - "data.modela.io"
           apiVersions:
             - v1alpha1
             - v1beta1
@@ -304,12 +304,12 @@ webhooks:
             - labelingpipelines
     clientConfig:
         service:
-          namespace: modeld-system
-          name: modeld-control-plane-webhook
-          path: /mutate-data-modeld-io-v1alpha1-labelingpipeline
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-data-modela-io-v1alpha1-labelingpipeline
         caBundle: CERT
 
-  - name: labelingpipelinerun.data.modeld.io
+  - name: labelingpipelinerun.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -318,7 +318,7 @@ webhooks:
         - v1alpha1
     rules:
         - apiGroups:
-            - "data.modeld.io"
+            - "data.modela.io"
           apiVersions:
             - v1alpha1
             - v1beta1
@@ -329,13 +329,13 @@ webhooks:
             - labelingpipelineruns
     clientConfig:
         service:
-          namespace: modeld-system
-          name: modeld-control-plane-webhook
-          path: /mutate-data-modeld-io-v1alpha1-labelingpipelinerun
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-data-modela-io-v1alpha1-labelingpipelinerun
         caBundle: CERT
 
 
-  - name: recipe.data.modeld.io
+  - name: recipe.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -344,7 +344,7 @@ webhooks:
         - v1alpha1
     rules:
         - apiGroups:
-            - "data.modeld.io"
+            - "data.modela.io"
           apiVersions:
             - v1alpha1
             - v1beta1
@@ -355,12 +355,12 @@ webhooks:
             - recipes
     clientConfig:
         service:
-          namespace: modeld-system
-          name: modeld-control-plane-webhook
-          path: /mutate-data-modeld-io-v1alpha1-recipe
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-data-modela-io-v1alpha1-recipe
         caBundle: CERT
 
-  - name: reciperun.data.modeld.io
+  - name: reciperun.data.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -369,7 +369,7 @@ webhooks:
         - v1alpha1
     rules:
         - apiGroups:
-            - "data.modeld.io"
+            - "data.modela.io"
           apiVersions:
             - v1alpha1
             - v1beta1
@@ -380,9 +380,9 @@ webhooks:
             - reciperuns
     clientConfig:
         service:
-          namespace: modeld-system
-          name: modeld-control-plane-webhook
-          path: /mutate-data-modeld-io-v1alpha1-reciperun
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-data-modela-io-v1alpha1-reciperun
         caBundle: CERT
 
 ---
@@ -390,11 +390,11 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: inference-mutating-webhook-configuration
-  namespace: modeld-system
+  namespace: modela-system
   annotations:
-    cert-manager.io/inject-ca-from: modeld-system/serving-cert
+    cert-manager.io/inject-ca-from: modela-system/serving-cert
 webhooks:
-  - name: prediction.inference.modeld.io
+  - name: prediction.inference.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -403,7 +403,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "inference.modeld.io"
+          - "inference.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -414,12 +414,12 @@ webhooks:
           - predictions
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-inference-modeld-io-v1alpha1-prediction
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-inference-modela-io-v1alpha1-prediction
       caBundle: CERT
 
-  - name: cronprediction.inference.modeld.io
+  - name: cronprediction.inference.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -428,7 +428,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "inference.modeld.io"
+          - "inference.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -439,12 +439,12 @@ webhooks:
           - cronpredictions
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-inference-modeld-io-v1alpha1-cronprediction
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-inference-modela-io-v1alpha1-cronprediction
       caBundle: CERT
 
-  - name: predictor.inference.modeld.io
+  - name: predictor.inference.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -453,7 +453,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "inference.modeld.io"
+          - "inference.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -464,12 +464,12 @@ webhooks:
           - predictors
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-inference-modeld-io-v1alpha1-predictor
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-inference-modela-io-v1alpha1-predictor
       caBundle: CERT
 
-  - name: curtain.inference.modeld.io
+  - name: curtain.inference.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -478,7 +478,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "inference.modeld.io"
+          - "inference.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -489,9 +489,9 @@ webhooks:
           - curtains
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-inference-modeld-io-v1alpha1-curtain
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-inference-modela-io-v1alpha1-curtain
       caBundle: CERT
 
 ---
@@ -499,11 +499,11 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: infra-mutating-webhook-configuration
-  namespace: modeld-system
+  namespace: modela-system
   annotations:
-    cert-manager.io/inject-ca-from: modeld-system/serving-cert
+    cert-manager.io/inject-ca-from: modela-system/serving-cert
 webhooks:
-  - name: account.infra.modeld.io
+  - name: account.infra.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -512,7 +512,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modeld.io"
+          - "infra.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -523,12 +523,12 @@ webhooks:
           - accounts
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-infra-modeld-io-v1alpha1-account
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-infra-modela-io-v1alpha1-account
       caBundle: CERT
 
-  - name: connection.infra.modeld.io
+  - name: connection.infra.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -537,7 +537,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modeld.io"
+          - "infra.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -548,12 +548,12 @@ webhooks:
           - connections
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-infra-modeld-io-v1alpha1-connection
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-infra-modela-io-v1alpha1-connection
       caBundle: CERT
 
-  - name: license.infra.modeld.io
+  - name: license.infra.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -562,7 +562,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modeld.io"
+          - "infra.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -573,13 +573,13 @@ webhooks:
           - licenses
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-infra-modeld-io-v1alpha1-license
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-infra-modela-io-v1alpha1-license
       caBundle: CERT
 
 
-  - name: lab.infra.modeld.io
+  - name: lab.infra.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -588,7 +588,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modeld.io"
+          - "infra.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -599,12 +599,12 @@ webhooks:
           - labs
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-infra-modeld-io-v1alpha1-lab
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-infra-modela-io-v1alpha1-lab
       caBundle: CERT
 
-  - name: alert.infra.modeld.io
+  - name: alert.infra.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -613,7 +613,7 @@ webhooks:
         - v1alpha1
     rules:
         - apiGroups:
-            - "infra.modeld.io"
+            - "infra.modela.io"
           apiVersions:
             - v1alpha1
             - v1beta1
@@ -624,13 +624,13 @@ webhooks:
             - alerts
     clientConfig:
         service:
-          namespace: modeld-system
-          name: modeld-control-plane-webhook
-          path: /mutate-infra-modeld-io-v1alpha1-alert
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-infra-modela-io-v1alpha1-alert
         caBundle: CERT
 
 
-  - name: todo.infra.modeld.io
+  - name: todo.infra.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -639,7 +639,7 @@ webhooks:
         - v1alpha1
     rules:
         - apiGroups:
-            - "infra.modeld.io"
+            - "infra.modela.io"
           apiVersions:
             - v1alpha1
             - v1beta1
@@ -650,12 +650,12 @@ webhooks:
             - todos
     clientConfig:
         service:
-          namespace: modeld-system
-          name: modeld-control-plane-webhook
-          path: /mutate-infra-modeld-io-v1alpha1-todo
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-infra-modela-io-v1alpha1-todo
         caBundle: CERT
 
-  - name: commit.infra.modeld.io
+  - name: commit.infra.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -664,7 +664,7 @@ webhooks:
         - v1alpha1
     rules:
         - apiGroups:
-            - "infra.modeld.io"
+            - "infra.modela.io"
           apiVersions:
             - v1alpha1
             - v1beta1
@@ -675,12 +675,12 @@ webhooks:
             - commits
     clientConfig:
         service:
-          namespace: modeld-system
-          name: modeld-control-plane-webhook
-          path: /mutate-infra-modeld-io-v1alpha1-commit
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-infra-modela-io-v1alpha1-commit
         caBundle: CERT
 
-  - name: notifier.infra.modeld.io
+  - name: notifier.infra.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -689,7 +689,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modeld.io"
+          - "infra.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -700,12 +700,12 @@ webhooks:
           - notifiers
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-infra-modeld-io-v1alpha1-notifier
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-infra-modela-io-v1alpha1-notifier
       caBundle: CERT
 
-  - name: servingsite.infra.modeld.io
+  - name: servingsite.infra.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -714,7 +714,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modeld.io"
+          - "infra.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -725,12 +725,12 @@ webhooks:
           - servingsites
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-infra-modeld-io-v1alpha1-servingsite
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-infra-modela-io-v1alpha1-servingsite
       caBundle: CERT
 
-  - name: tenant.infra.modeld.io
+  - name: tenant.infra.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -739,7 +739,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modeld.io"
+          - "infra.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -750,12 +750,12 @@ webhooks:
           - tenants
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-infra-modeld-io-v1alpha1-tenant
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-infra-modela-io-v1alpha1-tenant
       caBundle: CERT
 
-  - name: virtualbucket.infra.modeld.io
+  - name: virtualbucket.infra.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -764,7 +764,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "infra.modeld.io"
+          - "infra.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -775,9 +775,9 @@ webhooks:
           - virtualbuckets
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-infra-modeld-io-v1alpha1-virtualbucket
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-infra-modela-io-v1alpha1-virtualbucket
       caBundle: CERT
 
 
@@ -786,11 +786,11 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: training-mutating-webhook-configuration
-  namespace: modeld-system
+  namespace: modela-system
   annotations:
-    cert-manager.io/inject-ca-from: modeld-system/serving-cert
+    cert-manager.io/inject-ca-from: modela-system/serving-cert
 webhooks:
-  - name: model.training.modeld.io
+  - name: model.training.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -799,7 +799,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modeld.io"
+          - "training.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -810,12 +810,12 @@ webhooks:
           - models
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-training-modeld-io-v1alpha1-model
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-training-modela-io-v1alpha1-model
       caBundle: CERT
 
-  - name: notebook.training.modeld.io
+  - name: notebook.training.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -824,7 +824,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modeld.io"
+          - "training.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -835,12 +835,12 @@ webhooks:
           - notebooks
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-training-modeld-io-v1alpha1-notebook
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-training-modela-io-v1alpha1-notebook
       caBundle: CERT
 
-  - name: notebookrun.training.modeld.io
+  - name: notebookrun.training.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -849,7 +849,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modeld.io"
+          - "training.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -860,12 +860,12 @@ webhooks:
           - notebookruns
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-training-modeld-io-v1alpha1-notebookrun
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-training-modela-io-v1alpha1-notebookrun
       caBundle: CERT
 
-  - name: modelpipeline.training.modeld.io
+  - name: modelpipeline.training.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -874,7 +874,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modeld.io"
+          - "training.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -885,12 +885,12 @@ webhooks:
           - modelpipelines
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-training-modeld-io-v1alpha1-modelpipeline
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-training-modela-io-v1alpha1-modelpipeline
       caBundle: CERT
 
-  - name: modelpipelinerun.training.modeld.io
+  - name: modelpipelinerun.training.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -899,7 +899,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modeld.io"
+          - "training.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -910,12 +910,12 @@ webhooks:
           - modelpipelineruns
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-training-modeld-io-v1alpha1-modelpipelinerun
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-training-modela-io-v1alpha1-modelpipelinerun
       caBundle: CERT
 
-  - name: study.training.modeld.io
+  - name: study.training.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -924,7 +924,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modeld.io"
+          - "training.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -935,12 +935,12 @@ webhooks:
           - studies
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-training-modeld-io-v1alpha1-study
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-training-modela-io-v1alpha1-study
       caBundle: CERT
 
-  - name: report.training.modeld.io
+  - name: report.training.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -949,7 +949,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modeld.io"
+          - "training.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -960,12 +960,12 @@ webhooks:
           - reports
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-training-modeld-io-v1alpha1-report
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-training-modela-io-v1alpha1-report
       caBundle: CERT
 
-  - name: cronreport.training.modeld.io
+  - name: cronreport.training.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -974,7 +974,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modeld.io"
+          - "training.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -985,9 +985,9 @@ webhooks:
           - cronreports
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /mutate-training-modeld-io-v1alpha1-cronreport
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /mutate-training-modela-io-v1alpha1-cronreport
       caBundle: CERT
 
 
@@ -996,11 +996,11 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: team-mutating-webhook-configuration
-  namespace: modeld-system
+  namespace: modela-system
   annotations:
-    cert-manager.io/inject-ca-from: modeld-system/serving-cert
+    cert-manager.io/inject-ca-from: modela-system/serving-cert
 webhooks:
-  - name: todo.team.modeld.io
+  - name: todo.team.modela.io
     sideEffects: None
     timeoutSeconds: 5
     failurePolicy: Fail
@@ -1009,7 +1009,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "team.modeld.io"
+          - "team.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -1020,12 +1020,12 @@ webhooks:
           - todos
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /validate-team-modeld-io-v1alpha1-todo
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /validate-team-modela-io-v1alpha1-todo
       caBundle: CERT
 
-  - name: review.training.modeld.io
+  - name: review.training.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -1034,7 +1034,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "training.modeld.io"
+          - "training.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -1045,12 +1045,12 @@ webhooks:
           - reviews
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /validate-team-modeld-io-v1alpha1-review
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /validate-team-modela-io-v1alpha1-review
       caBundle: CERT
 
-  - name: postmortem.training.modeld.io
+  - name: postmortem.training.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -1059,7 +1059,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "team.modeld.io"
+          - "team.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -1070,12 +1070,12 @@ webhooks:
           - postmortems
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /validate-team-modeld-io-v1alpha1-postmortem
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /validate-team-modela-io-v1alpha1-postmortem
       caBundle: CERT
 
-  - name: runbook.training.modeld.io
+  - name: runbook.training.modela.io
     failurePolicy: Fail
     sideEffects: None
     timeoutSeconds: 5
@@ -1084,7 +1084,7 @@ webhooks:
       - v1alpha1
     rules:
       - apiGroups:
-          - "team.modeld.io"
+          - "team.modela.io"
         apiVersions:
           - v1alpha1
           - v1beta1
@@ -1095,9 +1095,9 @@ webhooks:
           - runbooks
     clientConfig:
       service:
-        namespace: modeld-system
-        name: modeld-control-plane-webhook
-        path: /validate-team-modeld-io-v1alpha1-runbook
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /validate-team-modela-io-v1alpha1-runbook
       caBundle: CERT
 
   

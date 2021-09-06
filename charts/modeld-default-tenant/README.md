@@ -1,4 +1,4 @@
-# modeld_default_tenant
+# modela_default_tenant
 
 ![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
@@ -64,7 +64,7 @@ A Helm chart for default tenant
 | minio.secret.host | string | `"minio-service.default."` |  |
 | minio.secret.secretkey | string | `"minio-secret-key"` |  |
 | servingsite.create | bool | `true` |  |
-| servingsite.fdqn | string | `"serving.modeld.io"` |  |
+| servingsite.fdqn | string | `"serving.modela.io"` |  |
 | servingsite.name | string | `"default-servingsite"` |  |
 | slack.create | bool | `true` |  |
 | slack.name | string | `"default-slack"` |  |

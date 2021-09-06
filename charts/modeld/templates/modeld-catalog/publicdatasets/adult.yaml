@@ -1,13 +1,13 @@
-apiVersion: catalog.modeld.io/v1alpha1
+apiVersion: catalog.modela.io/v1alpha1
 kind: PublicDataset
 metadata:
   name: adult
-  namespace: modeld-catalog
+  namespace: modela-catalog
 spec:
-  url: https://github.com/metaprov/modeldapi/tree/main/datasets/adult
+  url: https://github.com/metaprov/modelaapi/tree/main/datasets/adult
   description: Predict whether income exceeds $50K/yr
   task: binary-classification
-  dataUrl: https://raw.githubusercontent.com/metaprov/modeldapi/main/datasets/adult/adult.csv
+  dataUrl: https://raw.githubusercontent.com/metaprov/modelaapi/main/datasets/adult/adult.csv
   citation: "1994 Census database"
   rows: 48842
   columns: 14
