@@ -29,7 +29,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-data-modela-io-v1alpha1-dataproduct
+        path: /mutate-data-modela-ai-v1alpha1-dataproduct
       caBundle: CERT
 
   - name: dataproductversion.data.modela.ai
@@ -54,7 +54,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-data-modela-io-v1alpha1-dataproductversion
+        path: /mutate-data-modela-ai-v1alpha1-dataproductversion
       caBundle: CERT
 
 
@@ -80,7 +80,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-data-modela-io-v1alpha1-dataset
+        path: /mutate-data-modela-ai-v1alpha1-dataset
       caBundle: CERT
 
 
@@ -106,7 +106,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-data-modela-io-v1alpha1-datasource
+        path: /mutate-data-modela-ai-v1alpha1-datasource
       caBundle: CERT
 
   - name: datapipeline.data.modela.ai
@@ -131,7 +131,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-data-modela-io-v1alpha1-datapipeline
+        path: /mutate-data-modela-ai-v1alpha1-datapipeline
       caBundle: CERT
 
   - name: datapipelinerun.data.modela.ai
@@ -156,7 +156,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-data-modela-io-v1alpha1-datapipelinerun
+        path: /mutate-data-modela-ai-v1alpha1-datapipelinerun
       caBundle: CERT
 
   - name: entity.data.modela.ai
@@ -181,7 +181,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-data-modela-io-v1alpha1-entity
+        path: /mutate-data-modela-ai-v1alpha1-entity
       caBundle: CERT
 
   - name: feature.data.modela.ai
@@ -206,7 +206,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-data-modela-io-v1alpha1-feature
+        path: /mutate-data-modela-ai-v1alpha1-feature
       caBundle: CERT
 
   - name: featurepipeline.data.modela.ai
@@ -231,7 +231,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-data-modela-io-v1alpha1-featurepipeline
+        path: /mutate-data-modela-ai-v1alpha1-featurepipeline
       caBundle: CERT
 
   - name: featurepipelinerun.data.modela.ai
@@ -256,7 +256,7 @@ webhooks:
         service:
           namespace: modela-system
           name: modela-control-plane-webhook
-          path: /mutate-data-modela-io-v1alpha1-featurepipelinerun
+          path: /mutate-data-modela-ai-v1alpha1-featurepipelinerun
         caBundle: CERT
 
   - name: featureset.data.modela.ai
@@ -281,7 +281,7 @@ webhooks:
         service:
           namespace: modela-system
           name: modela-control-plane-webhook
-          path: /mutate-data-modela-io-v1alpha1-featureset
+          path: /mutate-data-modela-ai-v1alpha1-featureset
         caBundle: CERT
 
   - name: labelingpipeline.data.modela.ai
@@ -306,7 +306,7 @@ webhooks:
         service:
           namespace: modela-system
           name: modela-control-plane-webhook
-          path: /mutate-data-modela-io-v1alpha1-labelingpipeline
+          path: /mutate-data-modela-ai-v1alpha1-labelingpipeline
         caBundle: CERT
 
   - name: labelingpipelinerun.data.modela.ai
@@ -331,7 +331,7 @@ webhooks:
         service:
           namespace: modela-system
           name: modela-control-plane-webhook
-          path: /mutate-data-modela-io-v1alpha1-labelingpipelinerun
+          path: /mutate-data-modela-ai-v1alpha1-labelingpipelinerun
         caBundle: CERT
 
 
@@ -357,7 +357,7 @@ webhooks:
         service:
           namespace: modela-system
           name: modela-control-plane-webhook
-          path: /mutate-data-modela-io-v1alpha1-recipe
+          path: /mutate-data-modela-ai-v1alpha1-recipe
         caBundle: CERT
 
   - name: reciperun.data.modela.ai
@@ -382,7 +382,7 @@ webhooks:
         service:
           namespace: modela-system
           name: modela-control-plane-webhook
-          path: /mutate-data-modela-io-v1alpha1-reciperun
+          path: /mutate-data-modela-ai-v1alpha1-reciperun
         caBundle: CERT
 
 ---
@@ -416,7 +416,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-inference-modela-io-v1alpha1-prediction
+        path: /mutate-inference-modela-ai-v1alpha1-prediction
       caBundle: CERT
 
   - name: cronprediction.inference.modela.ai
@@ -441,7 +441,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-inference-modela-io-v1alpha1-cronprediction
+        path: /mutate-inference-modela-ai-v1alpha1-cronprediction
       caBundle: CERT
 
   - name: predictor.inference.modela.ai
@@ -466,7 +466,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-inference-modela-io-v1alpha1-predictor
+        path: /mutate-inference-modela-ai-v1alpha1-predictor
       caBundle: CERT
 
   - name: curtain.inference.modela.ai
@@ -491,7 +491,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-inference-modela-io-v1alpha1-curtain
+        path: /mutate-inference-modela-ai-v1alpha1-curtain
       caBundle: CERT
 
 ---
@@ -525,7 +525,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-infra-modela-io-v1alpha1-account
+        path: /mutate-infra-modela-ai-v1alpha1-account
       caBundle: CERT
 
   - name: connection.infra.modela.ai
@@ -550,7 +550,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-infra-modela-io-v1alpha1-connection
+        path: /mutate-infra-modela-ai-v1alpha1-connection
       caBundle: CERT
 
   - name: license.infra.modela.ai
@@ -575,7 +575,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-infra-modela-io-v1alpha1-license
+        path: /mutate-infra-modela-ai-v1alpha1-license
       caBundle: CERT
 
 
@@ -601,7 +601,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-infra-modela-io-v1alpha1-lab
+        path: /mutate-infra-modela-ai-v1alpha1-lab
       caBundle: CERT
 
   - name: alert.infra.modela.ai
@@ -626,35 +626,10 @@ webhooks:
         service:
           namespace: modela-system
           name: modela-control-plane-webhook
-          path: /mutate-infra-modela-io-v1alpha1-alert
+          path: /mutate-infra-modela-ai-v1alpha1-alert
         caBundle: CERT
 
-
-  - name: todo.infra.modela.ai
-    failurePolicy: Fail
-    sideEffects: None
-    timeoutSeconds: 5
-    admissionReviewVersions:
-        - v1beta1
-        - v1alpha1
-    rules:
-        - apiGroups:
-            - "infra.modela.ai"
-          apiVersions:
-            - v1alpha1
-            - v1beta1
-          operations:
-            - CREATE
-            - UPDATE
-          resources:
-            - todos
-    clientConfig:
-        service:
-          namespace: modela-system
-          name: modela-control-plane-webhook
-          path: /mutate-infra-modela-io-v1alpha1-todo
-        caBundle: CERT
-
+  
   - name: commit.infra.modela.ai
     failurePolicy: Fail
     sideEffects: None
@@ -677,7 +652,7 @@ webhooks:
         service:
           namespace: modela-system
           name: modela-control-plane-webhook
-          path: /mutate-infra-modela-io-v1alpha1-commit
+          path: /mutate-infra-modela-ai-v1alpha1-commit
         caBundle: CERT
 
   - name: notifier.infra.modela.ai
@@ -702,7 +677,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-infra-modela-io-v1alpha1-notifier
+        path: /mutate-infra-modela-ai-v1alpha1-notifier
       caBundle: CERT
 
   - name: servingsite.infra.modela.ai
@@ -727,7 +702,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-infra-modela-io-v1alpha1-servingsite
+        path: /mutate-infra-modela-ai-v1alpha1-servingsite
       caBundle: CERT
 
   - name: tenant.infra.modela.ai
@@ -752,7 +727,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-infra-modela-io-v1alpha1-tenant
+        path: /mutate-infra-modela-ai-v1alpha1-tenant
       caBundle: CERT
 
   - name: virtualbucket.infra.modela.ai
@@ -777,7 +752,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-infra-modela-io-v1alpha1-virtualbucket
+        path: /mutate-infra-modela-ai-v1alpha1-virtualbucket
       caBundle: CERT
 
 
@@ -812,7 +787,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-training-modela-io-v1alpha1-model
+        path: /mutate-training-modela-ai-v1alpha1-model
       caBundle: CERT
 
   - name: notebook.training.modela.ai
@@ -837,7 +812,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-training-modela-io-v1alpha1-notebook
+        path: /mutate-training-modela-ai-v1alpha1-notebook
       caBundle: CERT
 
   - name: notebookrun.training.modela.ai
@@ -862,7 +837,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-training-modela-io-v1alpha1-notebookrun
+        path: /mutate-training-modela-ai-v1alpha1-notebookrun
       caBundle: CERT
 
   - name: modelpipeline.training.modela.ai
@@ -887,7 +862,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-training-modela-io-v1alpha1-modelpipeline
+        path: /mutate-training-modela-ai-v1alpha1-modelpipeline
       caBundle: CERT
 
   - name: modelpipelinerun.training.modela.ai
@@ -912,7 +887,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-training-modela-io-v1alpha1-modelpipelinerun
+        path: /mutate-training-modela-ai-v1alpha1-modelpipelinerun
       caBundle: CERT
 
   - name: study.training.modela.ai
@@ -937,7 +912,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-training-modela-io-v1alpha1-study
+        path: /mutate-training-modela-ai-v1alpha1-study
       caBundle: CERT
 
   - name: report.training.modela.ai
@@ -962,7 +937,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-training-modela-io-v1alpha1-report
+        path: /mutate-training-modela-ai-v1alpha1-report
       caBundle: CERT
 
   - name: cronreport.training.modela.ai
@@ -987,7 +962,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /mutate-training-modela-io-v1alpha1-cronreport
+        path: /mutate-training-modela-ai-v1alpha1-cronreport
       caBundle: CERT
 
 
@@ -1022,7 +997,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /validate-team-modela-io-v1alpha1-todo
+        path: /validate-team-modela-ai-v1alpha1-todo
       caBundle: CERT
 
   - name: review.training.modela.ai
@@ -1047,7 +1022,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /validate-team-modela-io-v1alpha1-review
+        path: /validate-team-modela-ai-v1alpha1-review
       caBundle: CERT
 
   - name: postmortem.training.modela.ai
@@ -1072,7 +1047,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /validate-team-modela-io-v1alpha1-postmortem
+        path: /validate-team-modela-ai-v1alpha1-postmortem
       caBundle: CERT
 
   - name: runbook.training.modela.ai
@@ -1097,7 +1072,7 @@ webhooks:
       service:
         namespace: modela-system
         name: modela-control-plane-webhook
-        path: /validate-team-modela-io-v1alpha1-runbook
+        path: /validate-team-modela-ai-v1alpha1-runbook
       caBundle: CERT
 
   
