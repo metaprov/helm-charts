@@ -128,6 +128,38 @@ spec:
                     description: data location type is the type of the data location
                     type: string
                 type: object
+              notification:
+                description: Specification for notification for events that occur
+                  during processing
+                properties:
+                  errorTTL:
+                    default: 3600
+                    description: TTL for error msgs. In seconds
+                    format: int32
+                    type: integer
+                  notifierName:
+                    default: ""
+                    description: The name of the notifier.
+                    type: string
+                  onError:
+                    default: true
+                    description: Fire when error occur
+                    type: boolean
+                  onSuccess:
+                    default: false
+                    description: Fire when success occur.
+                    type: boolean
+                  selector:
+                    additionalProperties:
+                      type: string
+                    description: Select the target notifiers by a label.
+                    type: object
+                  successTTL:
+                    default: 3600
+                    description: TTL for success msgs. In seconds
+                    format: int32
+                    type: integer
+                type: object
               origin:
                 description: Define the data location. The operator will copy the
                   data from this location into the live location. The datafiles are
@@ -229,6 +261,9 @@ spec:
                 description: If syntactic is true, indicates how many rows to generate
                 format: int32
                 type: integer
+              task:
+                description: DatasetType is the type of dataset
+                type: string
               type:
                 default: tabular
                 description: DatasetType is the type of dataset
@@ -291,6 +326,10 @@ spec:
               lastError:
                 default: ""
                 description: Last error
+                type: string
+              lastNotificationTime:
+                description: Notification sent
+                format: date-time
                 type: string
               lastStudyTime:
                 description: Last time a study was done on the dataset.
@@ -413,6 +452,10 @@ spec:
                           description: The number of missing values
                           format: int32
                           type: integer
+                        mode:
+                          description: Mode for categorical values, is the most common
+                            value
+                          type: string
                         mostFreqValuesRatio:
                           description: The ratio between most freq value to total
                           type: number
@@ -452,6 +495,32 @@ spec:
                           description: Is this the target attribute, the value is
                             derived from the schema
                           type: boolean
+                        type:
+                          description: Type is the name of the column
+                          enum:
+                          - boolean
+                          - color
+                          - currency
+                          - date
+                          - datetime
+                          - guid
+                          - hyperlink
+                          - image
+                          - media
+                          - categorical
+                          - number
+                          - text
+                          - json
+                          - path
+                          - file
+                          - time
+                          - record
+                          - embedding
+                          - number-list
+                          - categorical-list
+                          - text-list
+                          - useless
+                          type: string
                         zeros:
                           description: Zeros is the numbers of zeros in the feature
                           type: number
