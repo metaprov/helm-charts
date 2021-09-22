@@ -44,7 +44,7 @@ spec:
                - name: data
                  mountPath: /var/opt/modela/data
           - name: cloud-proxy
-            image: quay.io/metaprov/modela-cloud-proxy:latest
+            image: quay.io/metaprov/modela-cloud-proxy:{{ .Chart.AppVersion }}
             imagePullPolicy: Always
             ports:
               - name: http
