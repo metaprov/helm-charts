@@ -4,10 +4,10 @@ metadata:
   name: nano-cpu-250m-mem-256mi
   namespace: modela-catalog
 spec:
-  dataImage: quay.io/metaprov/modela-data-plane:latest
-  controlImage: quay.io/metaprov/modela-workload:latest
-  trainerImage: quay.io/metaprov/modela-trainer:latest
-  publisherImage: quay.io/metaprov/modela-publisher:latest
+  dataImage: quay.io/metaprov/modela-data-plane:{{ .Chart.AppVersion }}
+  controlImage: quay.io/metaprov/modela-workload:{{ .Chart.AppVersion }}
+  trainerImage: quay.io/metaprov/modela-trainer:{{ .Chart.AppVersion }}
+  publisherImage: quay.io/metaprov/modela-publisher:{{ .Chart.AppVersion }}
   vcpu: 0.25
   mem:  256Mi
   podTemplate:
@@ -24,7 +24,7 @@ spec:
                 - name: data
                   mountPath: /var/opt/modela/data
           - name: data
-            image: quay.io/metaprov/modela-data-plane:latest
+            image: quay.io/metaprov/modela-data-plane:{{ .Chart.AppVersion }}
             imagePullPolicy: Always
             ports:
                - containerPort: 8070
@@ -44,7 +44,7 @@ spec:
                - name: data
                  mountPath: /var/opt/modela/data
           - name: cloud-proxy
-            image: quay.io/metaprov/modela-cloud-proxy:latest
+            image: quay.io/metaprov/modela-cloud-proxy:{{ .Chart.AppVersion }}
             imagePullPolicy: Always
             ports:
               - name: http

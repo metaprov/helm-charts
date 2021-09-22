@@ -4,16 +4,16 @@ metadata:
   name: publisher-workload-class
   namespace: modela-catalog
 spec:
-  dataImage: quay.io/metaprov/modela-data-plane:latest
-  controlImage: quay.io/metaprov/modela-workload:v0.3.633
-  trainerImage: quay.io/metaprov/modela-trainer:latest
-  publisherImage: quay.io/metaprov/modela-publisher:v0.3.633
+  dataImage: quay.io/metaprov/modela-data-plane:{{ .Chart.AppVersion }}
+  controlImage: quay.io/metaprov/modela-workload:{{ .Chart.AppVersion }}
+  trainerImage: quay.io/metaprov/modela-trainer:{{ .Chart.AppVersion }}
+  publisherImage: quay.io/metaprov/modela-publisher:{{ .Chart.AppVersion }}
   podTemplate:
       spec:
         restartPolicy: Never
         containers:
           - name: control
-            image: quay.io/metaprov/modela-workload:v0.3.633
+            image: quay.io/metaprov/modela-workload:{{ .Chart.AppVersion }}
             imagePullPolicy: IfNotPresent
             ports:
                 - containerPort: 8080
@@ -21,7 +21,7 @@ spec:
                 - name: data
                   mountPath: /var/opt/modela/data
           - name: publisher
-            image: quay.io/metaprov/modela-publisher:v0.3.633
+            image: quay.io/metaprov/modela-publisher:{{ .Chart.AppVersion }}
             imagePullPolicy: IfNotPresent
             ports:
              - containerPort: 8050
@@ -55,7 +55,7 @@ spec:
                     value: "8090"
 
           - name: storage
-            image: quay.io/metaprov/modela-cloud-proxy:latest
+            image: quay.io/metaprov/modela-cloud-proxy:{{ .Chart.AppVersion }}
             imagePullPolicy: IfNotPresent
             ports:
                - name: http

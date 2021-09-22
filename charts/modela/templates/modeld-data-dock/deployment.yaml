@@ -23,7 +23,7 @@ spec:
         serviceAccountName: modela-data-dock
         containers:
         - name: main
-          image: "{{ .Values.datadock.image.registry }}/{{ .Values.datadock.image.repository }}:{{ .Values.datadock.image.tag }}"
+          image: "{{ .Values.datadock.image.registry }}/{{ .Values.datadock.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.datadock.image.pullPolicy }}
           volumeMounts:
             - name: data
@@ -58,7 +58,7 @@ spec:
                     key: cache-path
 
         - name: cloud-proxy
-          image: "{{ .Values.clouds.image.registry }}/{{ .Values.clouds.image.repository }}:{{ .Values.clouds.image.tag }}"
+          image: "{{ .Values.clouds.image.registry }}/{{ .Values.clouds.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090
