@@ -102,6 +102,9 @@ spec:
                 default: false
                 description: Archived is true when the model should be archived
                 type: boolean
+              baseline:
+                description: Indicate that this model is a baseline
+                type: boolean
               chatbot:
                 description: Dnn is a specification of the DNN estimator specification.
                   Not supported for this release.
@@ -1192,23 +1195,6 @@ spec:
               cvScore:
                 description: CVScrore is the score using on the training set.
                 type: number
-              dataSignature:
-                description: Sha 256 of the data sig
-                properties:
-                  testSig:
-                    default: ""
-                    description: the location of the training data, if different from
-                      the data.
-                    type: string
-                  trainSig:
-                    default: ""
-                    description: path to the training set
-                    type: string
-                  validationSig:
-                    default: ""
-                    description: Pointer to the validation
-                    type: string
-                type: object
               endTime:
                 description: CompletionTime represent the time that the model is marked
                   as ready
@@ -1216,6 +1202,9 @@ spec:
                 type: string
               forecastUri:
                 description: ForecastUri is the uri of the forecast
+                type: string
+              imageHash:
+                description: Sha 256 of the model tar file
                 type: string
               imageName:
                 description: ImageName is the image name of the model
@@ -1254,9 +1243,6 @@ spec:
                 description: MisclassUri is a reference to the mis-classification
                   file which were produce during processing
                 type: string
-              modelSignature:
-                description: Sha 256 of the model tar file
-                type: string
               observedGeneration:
                 description: ObservedGeneration is the Last generation that was acted
                   on
@@ -1284,7 +1270,7 @@ spec:
                 description: Python packages is the result of running pip freeze
                 type: object
               pythonVersion:
-                description: Python version is the result of python vewrsion call.
+                description: Python version is the result of python version call.
                 type: string
               releasedAt:
                 description: Released at the time when the model was released
@@ -1321,6 +1307,9 @@ spec:
                 type: string
               tarUri:
                 description: TarUri is a reference to the model tar file.
+                type: string
+              tarfileHash:
+                description: Sha 256 of the model tar file
                 type: string
               test:
                 description: TestResult is the results of training the model (pipeline)
@@ -1533,6 +1522,22 @@ spec:
                   type:
                     default: object
                     description: data location type is the type of the data location
+                    type: string
+                type: object
+              trainingDataHash:
+                description: Sha 256 of the data sig
+                properties:
+                  testingHash:
+                    default: ""
+                    description: Testing hash is a sha 256 of the testing data.
+                    type: string
+                  trainingHash:
+                    default: ""
+                    description: Training
+                    type: string
+                  validationHash:
+                    default: ""
+                    description: Pointer to the validation
                     type: string
                 type: object
               trainingEndTime:
