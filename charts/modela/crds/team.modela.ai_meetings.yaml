@@ -6,35 +6,35 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
-  name: notifiers.infra.modela.ai
+  name: meetings.team.modela.ai
 spec:
-  group: infra.modela.ai
+  group: team.modela.ai
   names:
     categories:
     - infra
     - modela
-    kind: Notifier
-    listKind: NotifierList
-    plural: notifiers
-    singular: notifier
+    kind: Meeting
+    listKind: MeetingList
+    plural: meetings
+    singular: meeting
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=="Ready")].status
-      name: Ready
+    - jsonPath: .status.phase
+      name: Status
       type: string
-    - jsonPath: .spec.owner
-      name: Owner
+    - jsonPath: .spec.description
+      name: Description
       type: string
-    - jsonPath: .spec.connectionName
-      name: Connection
+    - jsonPath: .spec.entityRef.name
+      name: Entity Namespace
       type: string
-    - jsonPath: .spec.from
-      name: From
+    - jsonPath: .spec.entityRef.namespace
+      name: Entity Name
       type: string
-    - jsonPath: .spec.to
-      name: To
-      type: string
+    - jsonPath: .status.at
+      name: At
+      type: date
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -55,25 +55,18 @@ spec:
           metadata:
             type: object
           spec:
-            description: NotifierSpec defines the desired state of Notifier
+            description: MeetingSpec defines the desired state of Meeting
             properties:
-              connectionName:
+              agenda:
                 default: ""
+                description: Agenda of the meeting
                 type: string
               description:
                 default: ""
-                description: User provided description
+                description: Description of the meeting
                 type: string
-              from:
-                default: ""
-                description: The sender address. For example, from email.
-                type: string
-              owner:
-                default: no-one
-                description: The owner account name
-                type: string
-              tenantRef:
-                description: The tenant that own the notifier Default to default tenant.
+              entityRef:
+                description: The modela entity that the meeting is about
                 properties:
                   apiVersion:
                     description: API version of the referent.
@@ -108,20 +101,34 @@ spec:
                     description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                     type: string
                 type: object
-              to:
+              flagged:
+                default: false
+                description: Flagged denote if the meeting is flagged
+                type: boolean
+              notifierName:
                 default: ""
-                description: Address within the provider to send the notifiaction
-                  to.
+                description: NotifierName is the name of the notifier used to fire
+                  the alert.
                 type: string
-            required:
-            - connectionName
+              participants:
+                description: Assigned to is the user name assigned to this task
+                items:
+                  type: string
+                type: array
+              reminder:
+                description: Reminder is the time to send a reminder
+                format: date-time
+                type: string
             type: object
           status:
-            description: NotifierStatus is the observed state of a Notifier
+            description: MeetingStatus is the observed state of a Meeting
             properties:
+              actionItems:
+                description: the meeting action items
+                type: string
               conditions:
                 items:
-                  description: NotifierCondition describes the state of the license
+                  description: MeetingCondition describes the state of the license
                     at a certain point.
                   properties:
                     lastTransitionTime:
@@ -147,18 +154,17 @@ spec:
                   - type
                   type: object
                 type: array
-              lastUpdated:
-                description: Last time the object was updated
-                format: date-time
+              notes:
+                description: The meeting notes.
                 type: string
               observedGeneration:
                 description: ObservedGeneration is the Last generation that was acted
                   on
                 format: int64
                 type: integer
-              provider:
-                description: provider is the name of the notifier provider. The name
-                  is derived from the connection
+              phase:
+                default: Pending
+                description: Phase is the phase of the meeting
                 type: string
             type: object
         required:

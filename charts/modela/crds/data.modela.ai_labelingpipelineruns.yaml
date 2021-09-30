@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.6.0
+    controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   name: labelingpipelineruns.data.modela.ai
 spec:
@@ -75,6 +75,11 @@ spec:
                 default: no-one
                 description: The owner of the LabelingPipelineRunSpec
                 type: string
+              ttl:
+                default: 0
+                description: TTL.
+                format: int32
+                type: integer
               versionName:
                 description: The product version for the pipeline
                 type: string
@@ -134,6 +139,16 @@ spec:
               startTime:
                 description: The Start time of the run
                 format: date-time
+                type: string
+              triggeredBy:
+                description: What triggered the run
+                enum:
+                - on-demand
+                - on-schedule
+                - on-new-data
+                - on-github-event
+                - on-concept-drift
+                - on-pref-degradation
                 type: string
             required:
             - endTime

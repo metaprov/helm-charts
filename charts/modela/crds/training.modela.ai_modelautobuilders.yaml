@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.6.0
+    controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   name: modelautobuilders.training.modela.ai
 spec:
@@ -110,6 +110,97 @@ spec:
                 description: The spec of the data source, if none, the runner will
                   infer the schema, and will create a new schema with
                 properties:
+                  csvfile:
+                    description: FlatFile access specification
+                    properties:
+                      columnDelimiter:
+                        description: Refers to the character used to separate fields.
+                          Default to comma
+                        enum:
+                        - crlf
+                        - cr
+                        - lf
+                        - semicolon
+                        - colon
+                        - comma
+                        - tab
+                        - space
+                        - pipe
+                        type: string
+                      commentChars:
+                        description: CommentCharacter(s) to split comments off the
+                          end of lines.
+                        type: string
+                      compression:
+                        default: none
+                        description: The compression type, if the file is compressed
+                        type: string
+                      encoding:
+                        default: utf-8
+                        description: Encoding for Unicode (e.g., 'utf-8' for UTF-8
+                          encoded text).
+                        enum:
+                        - utf-8
+                        - latin-1
+                        - utf-16
+                        type: string
+                      escapeChar:
+                        description: the char used to escape the delimiter when quoting
+                        type: string
+                      hasIndexColumn:
+                        default: false
+                        description: If true, the file contain an index column
+                        type: boolean
+                      header:
+                        default: true
+                        description: Check if there is an header
+                        type: boolean
+                      indexColumn:
+                        default: 0
+                        description: If has index column.
+                        format: int32
+                        type: integer
+                      maxRows:
+                        description: The maximum number of rows to read.
+                        format: int32
+                        minimum: 0
+                        type: integer
+                      nullValues:
+                        default: ""
+                        description: NullValue is a sequence of values to replace
+                          with NA.
+                        type: string
+                      quote:
+                        description: The quote char.
+                        enum:
+                        - double-quote
+                        - single-quote
+                        type: string
+                      rowDelimiter:
+                        description: The row delimiter
+                        enum:
+                        - crlf
+                        - cr
+                        - lf
+                        - semicolon
+                        - colon
+                        - comma
+                        - tab
+                        - space
+                        - pipe
+                        type: string
+                      skipRows:
+                        default: 0
+                        description: The number of rows to skip
+                        format: int32
+                        minimum: 0
+                        type: integer
+                      strict:
+                        default: true
+                        description: If true, the import will fail if there is an
+                          error
+                        type: boolean
+                    type: object
                   datasetType:
                     default: tabular
                     description: Type is the dataset type
@@ -170,87 +261,22 @@ spec:
                         description: Use sheet with name
                         type: string
                     type: object
-                  flatfile:
-                    description: FlatFile access specification
-                    properties:
-                      commentChars:
-                        description: CommentCharacter(s) to split comments off the
-                          end of lines.
-                        type: string
-                      delimiter:
-                        description: Refers to the character used to separate fields.
-                          Default to comma
-                        enum:
-                        - crlf
-                        - cr
-                        - lf
-                        - semicolon
-                        - colon
-                        - comma
-                        - tab
-                        - space
-                        - pipe
-                        type: string
-                      encoding:
-                        default: utf-8
-                        description: Encoding for Unicode (e.g., 'utf-8' for UTF-8
-                          encoded text).
-                        enum:
-                        - utf-8
-                        - latin-1
-                        - utf-16
-                        type: string
-                      escapeChar:
-                        description: the char used to escape the delimiter when quoting
-                        type: string
-                      fileType:
-                        default: csv
-                        description: 'The text file type Default: csv'
-                        enum:
-                        - csv
-                        - tsv
-                        - excel
-                        - fwf
-                        - hdf
-                        - html
-                        - json
-                        - pickle
-                        - sas
-                        - stata
-                        - feather
-                        type: string
-                      header:
-                        default: true
-                        description: Check if there is an header
-                        type: boolean
-                      maxRows:
-                        description: The maximum number of rows to read.
-                        format: int32
-                        minimum: 0
-                        type: integer
-                      nullValues:
-                        default: ""
-                        description: NullValue is a sequence of values to replace
-                          with NA.
-                        type: string
-                      quote:
-                        description: The quote char.
-                        enum:
-                        - double-quote
-                        - single-quote
-                        type: string
-                      skipRows:
-                        default: 0
-                        description: The number of rows to skip
-                        format: int32
-                        minimum: 0
-                        type: integer
-                      strict:
-                        default: true
-                        description: If true, the import will fail if there is an
-                          error
-                        type: boolean
-                    type: object
+                  fileType:
+                    default: csv
+                    description: 'The text file type Default: csv'
+                    enum:
+                    - csv
+                    - tsv
+                    - excel
+                    - fwf
+                    - hdf
+                    - html
+                    - json
+                    - pickle
+                    - sas
+                    - stata
+                    - feather
+                    type: string
                   owner:
                     default: no-one
                     description: The account name of the owner of this dataset
