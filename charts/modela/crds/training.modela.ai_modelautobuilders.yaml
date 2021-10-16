@@ -114,8 +114,8 @@ spec:
                     description: FlatFile access specification
                     properties:
                       columnDelimiter:
+                        default: comma
                         description: Refers to the character used to separate fields.
-                          Default to comma
                         enum:
                         - crlf
                         - cr
@@ -128,6 +128,7 @@ spec:
                         - pipe
                         type: string
                       commentChars:
+                        default: '#'
                         description: CommentCharacter(s) to split comments off the
                           end of lines.
                         type: string
@@ -145,7 +146,13 @@ spec:
                         - utf-16
                         type: string
                       escapeChar:
+                        default: none
                         description: the char used to escape the delimiter when quoting
+                        enum:
+                        - single-quote
+                        - double-quote
+                        - tilda
+                        - none
                         type: string
                       hasIndexColumn:
                         default: false
@@ -171,12 +178,14 @@ spec:
                           with NA.
                         type: string
                       quote:
+                        default: double-quote
                         description: The quote char.
                         enum:
                         - double-quote
                         - single-quote
                         type: string
                       rowDelimiter:
+                        default: crlf
                         description: The row delimiter
                         enum:
                         - crlf
@@ -554,6 +563,23 @@ spec:
                           - name
                           type: object
                         type: array
+                      recommendationSchema:
+                        description: Recommendation schema. Used for recommendation
+                          task
+                        properties:
+                          itemIDColumn:
+                            default: item_id
+                            description: The name of the item id column in the dataset
+                            type: string
+                          ratingColumn:
+                            default: rating
+                            description: The rating column name
+                            type: string
+                          userIDColumn:
+                            default: user_id
+                            description: The name of the user id column in the dataset
+                            type: string
+                        type: object
                       timeSeriesSchema:
                         description: Time series schema. Set time series specific
                           parameters.
@@ -620,6 +646,9 @@ spec:
                                   type: boolean
                                 type:
                                   type: string
+                                value:
+                                  description: For validation that need a single value
+                                  type: number
                                 valueSet:
                                   items:
                                     type: string
@@ -647,6 +676,9 @@ spec:
                                   type: boolean
                                 type:
                                   type: string
+                                value:
+                                  format: float
+                                  type: number
                                 valueSet:
                                   items:
                                     type: string
@@ -678,6 +710,9 @@ spec:
                                   type: boolean
                                 type:
                                   type: string
+                                value:
+                                  description: For validation that need a single value
+                                  type: number
                                 valueSet:
                                   items:
                                     type: string
@@ -709,6 +744,9 @@ spec:
                                   type: boolean
                                 type:
                                   type: string
+                                value:
+                                  description: For validation that need a single value
+                                  type: number
                                 valueSet:
                                   items:
                                     type: string
@@ -878,6 +916,7 @@ spec:
                 - msle
                 - median-absolute-error
                 - r2
+                - adj-r2
                 - adjusted-mutual-info-score
                 - adjusted-rand-score
                 - completeness-score
@@ -891,6 +930,11 @@ spec:
                 - mape
                 - smape
                 - mdape
+                - adjr2
+                - mcc
+                - tpr
+                - fpr
+                - tnr
                 type: string
               owner:
                 default: no-one

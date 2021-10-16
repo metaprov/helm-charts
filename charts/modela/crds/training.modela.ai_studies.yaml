@@ -407,6 +407,7 @@ spec:
                 - msle
                 - median-absolute-error
                 - r2
+                - adj-r2
                 - adjusted-mutual-info-score
                 - adjusted-rand-score
                 - completeness-score
@@ -420,6 +421,11 @@ spec:
                 - mape
                 - smape
                 - mdape
+                - adjr2
+                - mcc
+                - tpr
+                - fpr
+                - tnr
                 type: string
               objective2:
                 description: Objective2 is the second objective to consider during
@@ -453,6 +459,7 @@ spec:
                 - msle
                 - median-absolute-error
                 - r2
+                - adj-r2
                 - adjusted-mutual-info-score
                 - adjusted-rand-score
                 - completeness-score
@@ -466,6 +473,11 @@ spec:
                 - mape
                 - smape
                 - mdape
+                - adjr2
+                - mcc
+                - tpr
+                - fpr
+                - tnr
                 type: string
               owner:
                 default: no-one
@@ -772,10 +784,19 @@ spec:
                       - catboost-classifier
                       - stacking-ensemble
                       - none
+                      - arima
+                      - auto-arima
+                      - vrima
+                      - exponential-smoothing
+                      - fast-fourier-transform
+                      - nbeats
+                      - theata-method
+                      - als
+                      - bayesian-personalized-ranking
                       type: string
                     type: array
                   baselines:
-                    description: Baselines holds the name of the base line algroithms
+                    description: Baselines holds the name of the base line algorithms
                       to try
                     items:
                       enum:
@@ -826,6 +847,15 @@ spec:
                       - catboost-classifier
                       - stacking-ensemble
                       - none
+                      - arima
+                      - auto-arima
+                      - vrima
+                      - exponential-smoothing
+                      - fast-fourier-transform
+                      - nbeats
+                      - theata-method
+                      - als
+                      - bayesian-personalized-ranking
                       type: string
                     type: array
                   filter:
@@ -865,6 +895,10 @@ spec:
                     default: 0
                     description: The minimum score by which the search would stop
                     type: number
+                  modelTested:
+                    default: true
+                    description: Indicate the all models should be tests
+                    type: boolean
                   pruner:
                     description: The pruner to use during model search.
                     properties:
@@ -1104,6 +1138,36 @@ spec:
                     minimum: 0
                     type: integer
                 type: object
+              studyFeatureFilter:
+                description: Feature filter is applied to the data for this study.
+                  The filter specifies how to filter the original dataset.
+                properties:
+                  highCorr:
+                    default: false
+                    description: High correlation specify to filter features with
+                      high correlation.
+                    type: boolean
+                  lowVar:
+                    default: false
+                    description: Lowvar specify the filter to remove low variance
+                      features
+                    type: boolean
+                  names:
+                    description: List of feature names to consider when training.
+                    items:
+                      type: string
+                    type: array
+                  onError:
+                    default: false
+                    description: Is the feature filter enbled
+                    type: boolean
+                  topN:
+                    default: 0
+                    description: Select the Top N is the number of feature to select
+                      by importance. If 0, all the features are selected.
+                    format: int32
+                    type: integer
+                type: object
               task:
                 description: Task specify the machine learning task (e.g classification).
                   This must match the task of the data product.
@@ -1207,6 +1271,7 @@ spec:
                       - msle
                       - median-absolute-error
                       - r2
+                      - adj-r2
                       - adjusted-mutual-info-score
                       - adjusted-rand-score
                       - completeness-score
@@ -1220,8 +1285,43 @@ spec:
                       - mape
                       - smape
                       - mdape
+                      - adjr2
+                      - mcc
+                      - tpr
+                      - fpr
+                      - tnr
                       type: string
                     type: array
+                  featureFilter:
+                    description: Feature filter specified what features to use from
+                      the original dataset.
+                    properties:
+                      highCorr:
+                        default: false
+                        description: High correlation specify to filter features with
+                          high correlation.
+                        type: boolean
+                      lowVar:
+                        default: false
+                        description: Lowvar specify the filter to remove low variance
+                          features
+                        type: boolean
+                      names:
+                        description: List of feature names to consider when training.
+                        items:
+                          type: string
+                        type: array
+                      onError:
+                        default: false
+                        description: Is the feature filter enbled
+                        type: boolean
+                      topN:
+                        default: 0
+                        description: Select the Top N is the number of feature to
+                          select by importance. If 0, all the features are selected.
+                        format: int32
+                        type: integer
+                    type: object
                   folds:
                     default: 5
                     description: The number of folds during cross validation.
@@ -1371,6 +1471,45 @@ spec:
                     - high
                     - urgent
                     type: string
+                  sample:
+                    description: Set the precent of dataset to use during training.
+                    properties:
+                      column:
+                        default: ""
+                        description: Column is used for stratified sampling.
+                        type: string
+                      enabled:
+                        default: false
+                        description: Enabled specify if the sample is enabled
+                        type: boolean
+                      filter:
+                        default: ""
+                        description: Filter formula. Valid only if the sample is a
+                          filter.
+                        type: string
+                      percent:
+                        default: 100
+                        description: Pct is the percent of rows to use for analysis.
+                        format: int32
+                        minimum: 0
+                        type: integer
+                      rows:
+                        default: 500
+                        description: Rows is the number of rows. Default is 500
+                        format: int32
+                        minimum: 0
+                        type: integer
+                      type:
+                        default: random
+                        description: Type is the sampling type Default is random
+                        enum:
+                        - header
+                        - random
+                        - filter
+                        - anomaly
+                        - stratified
+                        type: string
+                    type: object
                   seed:
                     default: 42
                     description: Used as the random state for an estimator if needed
@@ -1495,6 +1634,15 @@ spec:
                 - catboost-classifier
                 - stacking-ensemble
                 - none
+                - arima
+                - auto-arima
+                - vrima
+                - exponential-smoothing
+                - fast-fourier-transform
+                - nbeats
+                - theata-method
+                - als
+                - bayesian-personalized-ranking
                 type: string
               bestModel:
                 description: The Best model name.
