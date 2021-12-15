@@ -105,6 +105,10 @@ spec:
                 description: User provided description
                 maxLength: 512
                 type: string
+              displayName:
+                default: ""
+                description: The display name
+                type: string
               labeled:
                 default: true
                 description: Labeled indicates if this dataset is labeled or not.
@@ -338,6 +342,10 @@ spec:
                   - type
                   type: object
                 type: array
+              derivedFromDataset:
+                description: If this dataset is derived, the name of the dataset that
+                  this is derived from.
+                type: string
               hash:
                 default: ""
                 description: Sha256 signature of the dataset file.
@@ -357,6 +365,21 @@ spec:
                 description: Last time a study was done on the dataset.
                 format: date-time
                 type: string
+              lastUpdated:
+                description: Last time the object was updated
+                format: date-time
+                type: string
+              logs:
+                description: Holds the location of log paths
+                properties:
+                  bucketName:
+                    type: string
+                  paths:
+                    description: Paths is the log paths
+                    items:
+                      type: string
+                    type: array
+                type: object
               observedGeneration:
                 description: ObservedGeneration is the Last generation that was acted
                   on
@@ -398,30 +421,65 @@ spec:
                       description: Hold the statistical parameters about a single
                         attribute
                       properties:
-                        Unique:
-                          description: Count of unique values.
-                          format: int32
-                          type: integer
                         completeness:
                           description: Completeness is the ratio between non null
                             to null
                           type: number
-                        distinctValueCount:
-                          description: The ratio between distinct count to total count
-                          type: number
-                        highCorr:
+                        constant:
                           description: This column has high correlation with another
                             feature and should be dropped. The value is set during
                             the profile process.
                           type: boolean
-                        highCred:
+                        count:
+                          description: Number of rows
+                          type: number
+                        datatype:
+                          description: DataType is the name of the column
+                          enum:
+                          - boolean
+                          - datetime
+                          - number
+                          - categorical
+                          - ordinal
+                          - text
+                          - json
+                          - number-list
+                          - categorical-list
+                          - text-list
+                          type: string
+                        distinct:
+                          description: Count of unique values.
+                          format: int32
+                          type: integer
+                        distinctValueCount:
+                          description: The ratio between distinct count to total count
+                          type: number
+                        duplicate:
+                          description: This column is duplicate of other column The
+                            value is set during the profile process.
+                          type: boolean
+                        highCardinality:
                           description: This column has high cardinality and should
                             use high cred encoder The value is set during the profile
                             process.
                           type: boolean
-                        ignored:
+                        highCorrWithOtherFeatures:
+                          description: This column has high correlation with another
+                            feature and should be dropped. The value is set during
+                            the profile process.
+                          type: boolean
+                        highMissingPct:
+                          description: This column has high amount of missing pct,
+                            and should be removed from consideration. The value is
+                            set during the profile process.
+                          type: boolean
+                        id:
+                          description: This is updated from the data source. If true,
+                            the column is an id column
+                          type: boolean
+                        ignore:
                           description: Should this column be ignored, as specified
-                            by the user. This value is derived from the schema
+                            by the user This value is derived from the datasource
                           type: boolean
                         importance:
                           description: The feature importance
@@ -433,8 +491,20 @@ spec:
                           description: The number of invalid values
                           format: int32
                           type: integer
+                        iqr:
+                          description: Skewness is the standard deviation value of
+                            the attribute
+                          type: number
                         kurtosis:
                           description: Kurtosis is the standard deviation value of
+                            the attribute
+                          type: number
+                        lowCorrWithTarget:
+                          description: Indicate that this feature is not corrolated
+                            with target and should be dropped
+                          type: boolean
+                        mad:
+                          description: Skewness is the standard deviation value of
                             the attribute
                           type: number
                         max:
@@ -464,6 +534,10 @@ spec:
                           description: Is this column is nullable. This value is derived
                             from the schema.
                           type: boolean
+                        outliers:
+                          description: Outliers count
+                          format: int32
+                          type: integer
                         p25:
                           description: Pct25 is the 25 precent point
                           type: number
@@ -473,7 +547,15 @@ spec:
                         p75:
                           description: Pct75 is the 75% point
                           type: number
-                        skew:
+                        percentMissing:
+                          description: Precent missing
+                          type: number
+                        reserved:
+                          description: The column is reserved and must be part of
+                            the features set for the task. The value is derived from
+                            the data source.
+                          type: boolean
+                        skewed:
                           description: Mark that this column is skewed and would require
                             a power transform If skewness is less than -1 or greater
                             than 1, the distribution is highly skewed. If skewness
@@ -489,43 +571,24 @@ spec:
                           description: StdDev is the standard deviation value of the
                             attribute
                           type: number
+                        sum:
+                          description: Skewness is the standard deviation value of
+                            the attribute
+                          type: number
                         target:
                           description: Is this the target attribute, the value is
-                            derived from the schema
+                            derived from the data source
                           type: boolean
-                        type:
-                          description: Type is the name of the column
-                          enum:
-                          - boolean
-                          - color
-                          - currency
-                          - date
-                          - datetime
-                          - guid
-                          - hyperlink
-                          - image
-                          - media
-                          - categorical
-                          - number
-                          - text
-                          - json
-                          - path
-                          - file
-                          - time
-                          - record
-                          - embedding
-                          - number-list
-                          - categorical-list
-                          - text-list
-                          - useless
-                          type: string
+                        variance:
+                          description: Variance
+                          type: number
                         zeros:
                           description: Zeros is the numbers of zeros in the feature
                           type: number
                       type: object
                     type: array
-                  correlations:
-                    description: Holds the correlation stats
+                  correlationsWithTarget:
+                    description: Holds the top correlation with target
                     items:
                       description: Feature corr is used to record a correlation between
                         two features.
@@ -555,6 +618,29 @@ spec:
                     description: number of rows in the dataset
                     format: int32
                     type: integer
+                  topCorrelations:
+                    description: Holds the top feature correlation
+                    items:
+                      description: Feature corr is used to record a correlation between
+                        two features.
+                      properties:
+                        feature1:
+                          description: The first feature name
+                          type: string
+                        feature2:
+                          description: The second feature name
+                          type: string
+                        method:
+                          description: How the value was calculated
+                          type: string
+                        value:
+                          description: The corr value
+                          type: number
+                      required:
+                      - feature1
+                      - feature2
+                      type: object
+                    type: array
                 type: object
               validationResults:
                 description: List of data problems, as reported by the validation
@@ -576,6 +662,8 @@ spec:
                   - type
                   type: object
                 type: array
+            required:
+            - logs
             type: object
         required:
         - metadata

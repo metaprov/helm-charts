@@ -243,8 +243,6 @@ spec:
                 description: Tests is the list of metrics that we need to measure
                   if we are running a labeled prediction
                 items:
-                  description: Metric is the machine learning metric used to evaluate
-                    a model performance.
                   enum:
                   - accuracy
                   - average-precision
@@ -295,6 +293,16 @@ spec:
                   - tnr
                   - rmsle
                   - matthews-corr-coef
+                  - p50-latency
+                  - p95-latency
+                  - p99-latency
+                  - cpu
+                  - mem
+                  - req-per-sec
+                  - maze
+                  - gpu
+                  - gpu-mem
+                  - none
                   type: string
                 type: array
               ttl:
@@ -345,6 +353,21 @@ spec:
                 description: EndTime is the end time of the prediction.
                 format: date-time
                 type: string
+              lastUpdated:
+                description: Last time the object was updated
+                format: date-time
+                type: string
+              logs:
+                description: Holds the location of log paths
+                properties:
+                  bucketName:
+                    type: string
+                  paths:
+                    description: Paths is the log paths
+                    items:
+                      type: string
+                    type: array
+                type: object
               observedGeneration:
                 description: ObservedGeneration is the Last generation that was acted
                   on
@@ -412,6 +435,16 @@ spec:
                       - tnr
                       - rmsle
                       - matthews-corr-coef
+                      - p50-latency
+                      - p95-latency
+                      - p99-latency
+                      - cpu
+                      - mem
+                      - req-per-sec
+                      - maze
+                      - gpu
+                      - gpu-mem
+                      - none
                       type: string
                     value:
                       description: The value for this model

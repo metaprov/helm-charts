@@ -6,24 +6,28 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
-  name: labelingpipelines.data.modela.ai
+  name: webrequests.data.modela.ai
 spec:
   group: data.modela.ai
   names:
     categories:
     - data
     - modela
-    kind: LabelingPipeline
-    listKind: LabelingPipelineList
-    plural: labelingpipelines
-    shortNames:
-    - lp
-    singular: labelingpipeline
+    kind: WebRequest
+    listKind: WebRequestList
+    plural: webrequests
+    singular: webrequest
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
     - jsonPath: .status.conditions[?(@.type=="Ready")].status
       name: Ready
+      type: string
+    - jsonPath: .spec.owner
+      name: Owner
+      type: string
+    - jsonPath: .spec.versionName
+      name: Version
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
@@ -31,8 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: LabelingPipeline represents the ETL flow from the data sources
-          to a processed dataset, ready for training.
+        description: WebRequest represent a single sqlquery in the sqlquery store.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -47,42 +50,18 @@ spec:
           metadata:
             type: object
           spec:
-            description: LabelingPipelineSpec defines the desired state of a LabelingPipeline
+            description: WebRequestSpec contain the desired state of a WebRequest
             properties:
-              activeDeadlineSeconds:
-                default: 600
-                description: ActiveDeadlineSeconds is the deadline setup on jobs for
-                  this labeling pipeline.
-                format: int64
-                type: integer
-              datasetSelector:
-                additionalProperties:
-                  type: string
-                description: DatasetSelector is used to select unlabeled dataset for
-                  labeling
-                type: object
               description:
                 default: ""
-                description: User provided description
-                type: string
-              outputLabelset:
-                description: The output file of the pipeline
+                description: Description of the cron api call
                 type: string
               owner:
                 default: no-one
-                description: The owner account name
+                description: The sqlquery owner
                 type: string
-              paused:
-                default: false
-                description: Paused request the labeling pipeline to suspend
-                type: boolean
-              recipeNames:
-                description: The recipe for this pipeline.
-                items:
-                  type: string
-                type: array
               schedule:
-                description: Schedule for running the pipeline
+                description: Schedule for running the sql query
                 properties:
                   cron:
                     description: Cron string of the schedule.
@@ -129,28 +108,77 @@ spec:
                     - cron
                     type: string
                 type: object
-              ttl:
-                default: 0
-                description: TTL.
-                format: int32
-                type: integer
+              template:
+                description: The sql template to create.
+                properties:
+                  connectionName:
+                    default: ""
+                    description: The name of the connection to the data source.
+                    type: string
+                  description:
+                    default: ""
+                    description: Comments is a description of the webrequest
+                    maxLength: 512
+                    type: string
+                  headers:
+                    additionalProperties:
+                      type: string
+                    description: The Http headers to use
+                    type: object
+                  materialized:
+                    default: false
+                    description: If true save the query results
+                    type: boolean
+                  owner:
+                    default: no-one
+                    description: The webrequest owner
+                    type: string
+                  parameters:
+                    additionalProperties:
+                      type: string
+                    description: URL Parameters
+                    type: object
+                  reported:
+                    default: false
+                    description: If true generate a report each time the web request
+                      is executed
+                    type: boolean
+                  text:
+                    default: ""
+                    description: Type name of the column key, this column is the key
+                      column in the entity.
+                    type: string
+                  timeout:
+                    default: 3600
+                    description: The WebRequest statement timeout
+                    format: int32
+                    type: integer
+                  verb:
+                    default: ""
+                    description: HTTP Verb to use
+                    type: string
+                  versionName:
+                    default: ""
+                    description: The product version for the webrequest.
+                    type: string
+                  workloadClassName:
+                    default: default-prediction-workload-class
+                    description: A reference to the workload class that is used for
+                      training
+                    type: string
+                type: object
               versionName:
-                description: The product of the rejoiner
-                type: string
-              workloadClassName:
-                default: default-workload-class
-                description: WorkloadClassName is the name of the workload class used
-                  to run this pipeline.
+                default: ""
+                description: The product version for the sqlquery.
                 type: string
             type: object
           status:
-            description: LabelingPipelineStatus is the observed state of the LabelingPipeline
-              object.
+            description: WebRequestStatus defines the observed state of WebRequest
             properties:
               conditions:
                 items:
-                  description: LabelingPipelineCondition describes the state of a
-                    wrangler at a certain point.
+                  description: WebRequestCondition describes the state of a deployment
+                    at a certain point.
                   properties:
                     lastTransitionTime:
                       description: Last time the condition transitioned from one status
@@ -165,7 +193,7 @@ spec:
                       description: The reason for the condition's last transition.
                       type: string
                     status:
-                      description: Status of the condition, one of True, False, Unknown.
+                      description: Status of the condition, one of True, False, AutoScaler.
                       type: string
                     type:
                       description: Type of account condition.
@@ -176,7 +204,7 @@ spec:
                   type: object
                 type: array
               lastRun:
-                description: Last run is the last time a run was created
+                description: Last Time the query run
                 format: date-time
                 type: string
               lastUpdated:

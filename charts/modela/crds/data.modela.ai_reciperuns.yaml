@@ -162,6 +162,21 @@ spec:
                 default: ""
                 description: Last error
                 type: string
+              lastUpdated:
+                description: Last time the object was updated
+                format: date-time
+                type: string
+              logs:
+                description: Holds the location of log paths
+                properties:
+                  bucketName:
+                    type: string
+                  paths:
+                    description: Paths is the log paths
+                    items:
+                      type: string
+                    type: array
+                type: object
               observedGeneration:
                 description: ObservedGeneration is the Last generation that was acted
                   on

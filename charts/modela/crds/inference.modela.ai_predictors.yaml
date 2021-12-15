@@ -89,6 +89,8 @@ spec:
                     default: 8080
                     description: App port. default port is 8080.
                     format: int32
+                    maximum: 65535
+                    minimum: 1
                     type: integer
                 type: object
               artifactsFolder:
@@ -96,6 +98,13 @@ spec:
                 description: The key in the bucket for storing all the predictor artifacts.
                 maxLength: 512
                 type: string
+              auth:
+                description: specify the predictor authentication
+                properties:
+                  enabled:
+                    description: If true auth is enabled.
+                    type: boolean
+                type: object
               autoScaling:
                 description: AutoScaling defines the auto scaling policy
                 properties:
@@ -334,8 +343,6 @@ spec:
                         maxPrecent:
                           type: number
                         metric:
-                          description: Metric is the machine learning metric used
-                            to evaluate a model performance.
                           enum:
                           - accuracy
                           - average-precision
@@ -386,6 +393,16 @@ spec:
                           - tnr
                           - rmsle
                           - matthews-corr-coef
+                          - p50-latency
+                          - p95-latency
+                          - p99-latency
+                          - cpu
+                          - mem
+                          - req-per-sec
+                          - maze
+                          - gpu
+                          - gpu-mem
+                          - none
                           type: string
                         min:
                           type: number
@@ -411,11 +428,13 @@ spec:
                 maxLength: 256
                 type: string
               port:
+                default: 8080
                 description: 'set of input channel, the predictor will watch those
                   channels for predictions Service port specify the predictor port.
                   Default: 8080'
                 format: int32
-                minimum: 0
+                maximum: 65535
+                minimum: 1
                 type: integer
               predictionTreshold:
                 description: The prediction treshold
@@ -7768,8 +7787,6 @@ spec:
                 description: The predictor app status
                 properties:
                   enabled:
-                    description: Retried at is the time that the model was retired
-                      from production.
                     type: boolean
                 type: object
               conditions:
@@ -7800,6 +7817,9 @@ spec:
                   - type
                   type: object
                 type: array
+              endPoint:
+                description: the end point url of the predictor
+                type: string
               health:
                 description: The Health of the predictor
                 properties:
@@ -8042,6 +8062,16 @@ spec:
                           - tnr
                           - rmsle
                           - matthews-corr-coef
+                          - p50-latency
+                          - p95-latency
+                          - p99-latency
+                          - cpu
+                          - mem
+                          - req-per-sec
+                          - maze
+                          - gpu
+                          - gpu-mem
+                          - none
                           type: string
                         modelName:
                           description: ModelName is the name of the model under test

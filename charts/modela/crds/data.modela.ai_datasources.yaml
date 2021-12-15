@@ -243,6 +243,28 @@ spec:
                 default: no-one
                 description: The account name of the owner of this dataset
                 type: string
+              relationships:
+                description: List of relationships to other data sources
+                items:
+                  properties:
+                    arity:
+                      description: The relationship arity
+                      enum:
+                      - one-to-one
+                      - one-to-many
+                      - many-to-many
+                      type: string
+                    columns:
+                      description: Local columns the holds the fk.
+                      type: string
+                    name:
+                      description: The name of the relationship
+                      type: string
+                    relatesTo:
+                      description: The name of the other datasource object
+                      type: string
+                  type: object
+                type: array
               sample:
                 description: Sample spec defines how many rows to use for analysis
                   for datasets from this datasource.
@@ -299,38 +321,34 @@ spec:
                             required
                           enum:
                           - boolean
-                          - color
-                          - currency
-                          - date
                           - datetime
-                          - guid
-                          - hyperlink
-                          - image
-                          - media
-                          - categorical
                           - number
+                          - categorical
+                          - ordinal
                           - text
                           - json
-                          - path
-                          - file
-                          - time
-                          - record
-                          - embedding
                           - number-list
                           - categorical-list
                           - text-list
-                          - useless
                           type: string
                         description:
                           default: ""
                           description: Description is a description of the feature
                           maxLength: 63
                           type: string
+                        displayName:
+                          default: ""
+                          description: Display Name specify the name of the feature
+                            that should be used in reports. If empty, use the raw
+                            name
+                          maxLength: 63
+                          type: string
                         driftThreshold:
                           description: Drift treshold is the treshold for drift detection.
                           type: number
                         enum:
-                          description: Enum
+                          description: Enum contain the unique values for categorical
+                            feature.
                           items:
                             type: string
                           type: array
@@ -349,14 +367,17 @@ spec:
                           default: ""
                           description: External Docs
                           type: string
-                        featureName:
-                          default: ""
-                          description: FileName specify the name of the feature, if
-                            this attribute comes from a feature
-                          maxLength: 63
-                          type: string
+                        fk:
+                          default: false
+                          description: FK denotes if this column is part of a foreign  key
+                            to another table.
+                          type: boolean
+                        fold:
+                          default: false
+                          description: If True than this columns holds folds values
+                          type: boolean
                         format:
-                          description: DataFormat is the domain of the column. A domain
+                          description: DataDomain is the domain of the column. A domain
                             constrain the set of values.
                           enum:
                           - url
@@ -367,7 +388,7 @@ spec:
                           - interval
                           - nominal
                           - email
-                          - creditCard
+                          - creditcard
                           - uuid
                           - uuid5
                           - uuid
@@ -380,18 +401,42 @@ spec:
                           - ssn
                           - alpha
                           - alphanumeric
-                          - none
                           - unknown
+                          - color
+                          - currency
+                          - date
+                          - guid
+                          - hyperlink
+                          - image
+                          - media
+                          - file
+                          - embedding
+                          - record
+                          - useless
+                          - none
                           type: string
+                        formula:
+                          description: The formula used to generate  this column
+                          type: string
+                        generated:
+                          description: If true this feature is generate
+                          type: boolean
+                        id:
+                          description: This is updated from the data source. If true,
+                            the column is an id column
+                          type: boolean
                         ignore:
                           default: false
                           description: Ignore specify if the attribute should be ignored
                             when building the model default is false
                           type: boolean
-                        label:
+                        imputation:
+                          default: auto
+                          description: The recommended imputer for a column.
+                          type: string
+                        index:
                           default: false
-                          description: Label should be true if this attribute is the
-                            predictable target Default is false
+                          description: If True than this is an index column
                           type: boolean
                         log:
                           default: false
@@ -441,7 +486,7 @@ spec:
                           minimum: 0
                           type: integer
                         name:
-                          description: FileName specify the name of the attribute
+                          description: Name is the name of the raw feature.
                           maxLength: 63
                           minLength: 1
                           type: string
@@ -449,6 +494,11 @@ spec:
                           default: false
                           description: Nullable indicates if a column can contain
                             string Default is false
+                          type: boolean
+                        ordinal:
+                          default: false
+                          description: For categorical feature , set to true if this
+                            is an ordinal feature.
                           type: boolean
                         pattern:
                           default: ""
@@ -468,7 +518,7 @@ spec:
                         pk:
                           default: false
                           description: PrimaryKey denotes if this column is part of
-                            the file key.
+                            the table primary key
                           type: boolean
                         protected:
                           default: false
@@ -479,6 +529,15 @@ spec:
                           default: false
                           description: Required
                           type: boolean
+                        reserved:
+                          default: false
+                          description: If True indicate that this feature should always
+                            be used in training
+                          type: boolean
+                        scaling:
+                          default: auto
+                          description: The recommended scaler for a column.
+                          type: string
                         sigma:
                           default: 0
                           description: Sigma is the standard deviation of the distribution
@@ -486,25 +545,24 @@ spec:
                         skewThreshold:
                           description: Skew treshold is the treshold for skew detection.
                           type: number
+                        target:
+                          default: false
+                          description: Label should be true if this attribute is the
+                            predictable target Default is false
+                          type: boolean
                         timeColumn:
                           default: false
                           description: TimeColumn is true if this column is used as
-                            the time axis in time series foreacst Default is false.
+                            the time axis in time series forecast Default is false.
                           type: boolean
-                        title:
-                          default: ""
-                          description: Title
-                          maxLength: 63
-                          type: string
-                        transformerHint:
-                          default: ""
-                          description: Preprocessor hint constrain the transformer
-                            Default is empty
-                          type: string
                         uniqueItems:
                           default: false
                           description: Enforce that all the items in the list are
                             unique
+                          type: boolean
+                        weight:
+                          default: false
+                          description: If True than this is a weight column
                           type: boolean
                       required:
                       - datatype

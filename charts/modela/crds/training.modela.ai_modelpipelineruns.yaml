@@ -223,6 +223,16 @@ spec:
                           - tnr
                           - rmsle
                           - matthews-corr-coef
+                          - p50-latency
+                          - p95-latency
+                          - p99-latency
+                          - cpu
+                          - mem
+                          - req-per-sec
+                          - maze
+                          - gpu
+                          - gpu-mem
+                          - none
                           type: string
                         modelName:
                           description: ModelName is the name of the model under test
@@ -386,6 +396,16 @@ spec:
                           - tnr
                           - rmsle
                           - matthews-corr-coef
+                          - p50-latency
+                          - p95-latency
+                          - p99-latency
+                          - cpu
+                          - mem
+                          - req-per-sec
+                          - maze
+                          - gpu
+                          - gpu-mem
+                          - none
                           type: string
                         modelName:
                           description: ModelName is the name of the model under test
@@ -521,6 +541,16 @@ spec:
                           - tnr
                           - rmsle
                           - matthews-corr-coef
+                          - p50-latency
+                          - p95-latency
+                          - p99-latency
+                          - cpu
+                          - mem
+                          - req-per-sec
+                          - maze
+                          - gpu
+                          - gpu-mem
+                          - none
                           type: string
                         modelName:
                           description: ModelName is the name of the model under test
@@ -657,6 +687,16 @@ spec:
                           - tnr
                           - rmsle
                           - matthews-corr-coef
+                          - p50-latency
+                          - p95-latency
+                          - p99-latency
+                          - cpu
+                          - mem
+                          - req-per-sec
+                          - maze
+                          - gpu
+                          - gpu-mem
+                          - none
                           type: string
                         modelName:
                           description: ModelName is the name of the model under test
@@ -687,6 +727,10 @@ spec:
               lastError:
                 default: ""
                 description: Last error
+                type: string
+              lastUpdated:
+                description: Last time the object was updated
+                format: date-time
                 type: string
               modelName:
                 description: The name of the best model
@@ -795,6 +839,16 @@ spec:
                           - tnr
                           - rmsle
                           - matthews-corr-coef
+                          - p50-latency
+                          - p95-latency
+                          - p99-latency
+                          - cpu
+                          - mem
+                          - req-per-sec
+                          - maze
+                          - gpu
+                          - gpu-mem
+                          - none
                           type: string
                         modelName:
                           description: ModelName is the name of the model under test
@@ -940,6 +994,16 @@ spec:
                           - tnr
                           - rmsle
                           - matthews-corr-coef
+                          - p50-latency
+                          - p95-latency
+                          - p99-latency
+                          - cpu
+                          - mem
+                          - req-per-sec
+                          - maze
+                          - gpu
+                          - gpu-mem
+                          - none
                           type: string
                         modelName:
                           description: ModelName is the name of the model under test
@@ -1080,6 +1144,16 @@ spec:
                           - tnr
                           - rmsle
                           - matthews-corr-coef
+                          - p50-latency
+                          - p95-latency
+                          - p99-latency
+                          - cpu
+                          - mem
+                          - req-per-sec
+                          - maze
+                          - gpu
+                          - gpu-mem
+                          - none
                           type: string
                         modelName:
                           description: ModelName is the name of the model under test
@@ -1221,6 +1295,16 @@ spec:
                           - tnr
                           - rmsle
                           - matthews-corr-coef
+                          - p50-latency
+                          - p95-latency
+                          - p99-latency
+                          - cpu
+                          - mem
+                          - req-per-sec
+                          - maze
+                          - gpu
+                          - gpu-mem
+                          - none
                           type: string
                         modelName:
                           description: ModelName is the name of the model under test

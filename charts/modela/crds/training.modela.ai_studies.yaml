@@ -103,6 +103,81 @@ spec:
                 format: int64
                 minimum: 0
                 type: integer
+              baseline:
+                description: Specification for the baseline phase
+                properties:
+                  all:
+                    default: false
+                    description: Indicate the all alg for the task
+                    type: boolean
+                  baselines:
+                    description: Baselines holds the name of the base line algorithms
+                      to try
+                    items:
+                      enum:
+                      - knn-regressor
+                      - ridge-regressor
+                      - lasso-regressor
+                      - ada-boost-regressor
+                      - decision-tree-regressor
+                      - extra-tree-regressor
+                      - linear-svr
+                      - svr
+                      - passive-agressive-regressor
+                      - sgd-regressor
+                      - gradient-boosting-regressor
+                      - random-forest-regressor
+                      - xgb-regressor
+                      - catboost-regressor
+                      - sgd-regressor
+                      - gradient-boosting-regressor
+                      - random-forest-regressor
+                      - xgb-regressor
+                      - catboost-regressor
+                      - lightgbm-regressor
+                      - elasticnet-regressor
+                      - dnn-regressor
+                      - elliptic-envelope
+                      - one-class-svm
+                      - isolation-forest
+                      - local-outlier-factor
+                      - prophet
+                      - knn-classifier
+                      - ada-boost-classifier
+                      - bernoulli-nb
+                      - decision-tree-classifier
+                      - extra-tree-classifier
+                      - linear-svc
+                      - svc
+                      - passive-aggressive-classifier
+                      - sgd-classifier
+                      - logistic-regression
+                      - gradient-boosting-classifier
+                      - random-forest-classifier
+                      - xgboost-classifier
+                      - ridge-classifier
+                      - quadratic-discriminant
+                      - linear-discriminant
+                      - lightgbm-classifier
+                      - catboost-classifier
+                      - stacking-ensemble
+                      - none
+                      - arima
+                      - auto-arima
+                      - vrima
+                      - exponential-smoothing
+                      - fast-fourier-transform
+                      - nbeats
+                      - theata-method
+                      - als
+                      - bayesian-personalized-ranking
+                      type: string
+                    type: array
+                  enabled:
+                    default: true
+                    description: Set to true for baseline
+                    type: boolean
+                type: object
               compilation:
                 description: This is the compiler spec for models. This spec will
                   act as a template for the models created by the study
@@ -138,7 +213,6 @@ spec:
                     type: array
                 type: object
               datasetName:
-                default: ""
                 description: DatasetName refer to the dataset object for which the
                   study is for.
                 type: string
@@ -147,100 +221,520 @@ spec:
                 description: Description is user provided description
                 maxLength: 512
                 type: string
+              ensembles:
+                description: Search defines the model search
+                properties:
+                  enabled:
+                    default: true
+                    type: boolean
+                  stackingEnsemble:
+                    default: true
+                    description: StackingEnsemble If true, create a stacking ensemble
+                      of the top 3 models.
+                    type: boolean
+                  top:
+                    default: 3
+                    description: how many models to use for ensemble.
+                    format: int32
+                    type: integer
+                  votingEnsemble:
+                    default: false
+                    description: VotingEnsample - If true, create a voting ensemble
+                      of the top 3 models.
+                    type: boolean
+                type: object
+              feSearch:
+                description: 'Specification for feature engineereing Default: all
+                  preprocessing is set to auto.'
+                properties:
+                  autoRemove:
+                    default: true
+                    description: If true, remove all the models that were used for
+                      feature engineering, once the feature engineering is done.
+                    type: boolean
+                  enabled:
+                    default: true
+                    description: If false, the study will not search for feature engineering.
+                    type: boolean
+                  estimator:
+                    description: Estimator is the algorithm to use when tunning the
+                      feature engineering pipeline
+                    enum:
+                    - knn-regressor
+                    - ridge-regressor
+                    - lasso-regressor
+                    - ada-boost-regressor
+                    - decision-tree-regressor
+                    - extra-tree-regressor
+                    - linear-svr
+                    - svr
+                    - passive-agressive-regressor
+                    - sgd-regressor
+                    - gradient-boosting-regressor
+                    - random-forest-regressor
+                    - xgb-regressor
+                    - catboost-regressor
+                    - sgd-regressor
+                    - gradient-boosting-regressor
+                    - random-forest-regressor
+                    - xgb-regressor
+                    - catboost-regressor
+                    - lightgbm-regressor
+                    - elasticnet-regressor
+                    - dnn-regressor
+                    - elliptic-envelope
+                    - one-class-svm
+                    - isolation-forest
+                    - local-outlier-factor
+                    - prophet
+                    - knn-classifier
+                    - ada-boost-classifier
+                    - bernoulli-nb
+                    - decision-tree-classifier
+                    - extra-tree-classifier
+                    - linear-svc
+                    - svc
+                    - passive-aggressive-classifier
+                    - sgd-classifier
+                    - logistic-regression
+                    - gradient-boosting-classifier
+                    - random-forest-classifier
+                    - xgboost-classifier
+                    - ridge-classifier
+                    - quadratic-discriminant
+                    - linear-discriminant
+                    - lightgbm-classifier
+                    - catboost-classifier
+                    - stacking-ensemble
+                    - none
+                    - arima
+                    - auto-arima
+                    - vrima
+                    - exponential-smoothing
+                    - fast-fourier-transform
+                    - nbeats
+                    - theata-method
+                    - als
+                    - bayesian-personalized-ranking
+                    type: string
+                  maxModels:
+                    default: 10
+                    description: Max models to create during the search for the best
+                      feature engineering.
+                    format: int32
+                    type: integer
+                  maxTime:
+                    default: 3600
+                    description: Max time in seconds for the best feature engineering
+                      pipeline
+                    format: int32
+                    type: integer
+                  maxTrainers:
+                    default: 1
+                    description: Number of parallel models
+                    format: int32
+                    type: integer
+                  samplePct:
+                    default: 100
+                    description: How much to sample from the dataset when performing
+                      the feature engineering search
+                    format: int32
+                    type: integer
+                type: object
               flagged:
                 description: Is this model flagged
                 type: boolean
-              hierarchy:
-                description: The group hierarchy
+              forecast:
+                description: Forecast template
                 properties:
-                  columns:
-                    description: The columns in the data frame that belongs to the
-                      hierarchy. By default, all the item level column is the last
-                      one. The default aggregate function is sum.
-                    items:
-                      type: string
-                    type: array
-                  groupLevels:
-                    description: The group level columns. For each group level column
-                      specify the horizon and the aggregate function
-                    items:
-                      properties:
-                        aggregate:
-                          description: The aggregate function used to roll up the
-                            lower level
-                          enum:
-                          - min
-                          - max
-                          - avg
-                          - median
-                          type: string
-                        distinc:
-                          description: The distinct values of the column for this
-                            level
-                          items:
-                            type: string
-                          type: array
-                        freq:
-                          description: The freq of the level
-                          enum:
-                          - second
-                          - minute
-                          - hour
-                          - day
-                          - week
-                          - month
-                          - quarter
-                          - year
-                          type: string
-                        horizon:
-                          description: The number of time periods to
-                          format: int32
-                          type: integer
-                        string:
-                          description: The name of the level - the column name
-                          type: string
-                      type: object
-                    type: array
-                  itemLevel:
-                    description: Item level column.
+                  hierarchy:
+                    description: for multi level forecast The group hierarchy
                     properties:
-                      aggregate:
-                        description: The aggregate function used to roll up the lower
-                          level
-                        enum:
-                        - min
-                        - max
-                        - avg
-                        - median
-                        type: string
-                      distinc:
-                        description: The distinct values of the column for this level
+                      columns:
+                        description: The columns in the data frame that belongs to
+                          the hierarchy. By default, all the item level column is
+                          the last one. The default aggregate function is sum.
                         items:
                           type: string
                         type: array
-                      freq:
-                        description: The freq of the level
-                        enum:
-                        - second
-                        - minute
-                        - hour
-                        - day
-                        - week
-                        - month
-                        - quarter
-                        - year
-                        type: string
-                      horizon:
-                        description: The number of time periods to
-                        format: int32
-                        type: integer
-                      string:
-                        description: The name of the level - the column name
+                      groupLevels:
+                        description: The group level columns. For each group level
+                          column specify the horizon and the aggregate function
+                        items:
+                          properties:
+                            aggregate:
+                              description: The aggregate function used to roll up
+                                the lower level
+                              enum:
+                              - min
+                              - max
+                              - avg
+                              - median
+                              type: string
+                            distinc:
+                              description: The distinct values of the column for this
+                                level
+                              items:
+                                type: string
+                              type: array
+                            freq:
+                              description: The freq of the level
+                              enum:
+                              - second
+                              - minute
+                              - hour
+                              - day
+                              - week
+                              - month
+                              - quarter
+                              - year
+                              type: string
+                            horizon:
+                              description: The number of time periods to
+                              format: int32
+                              type: integer
+                            string:
+                              description: The name of the level - the column name
+                              type: string
+                          type: object
+                        type: array
+                      itemLevel:
+                        description: Item level column.
+                        properties:
+                          aggregate:
+                            description: The aggregate function used to roll up the
+                              lower level
+                            enum:
+                            - min
+                            - max
+                            - avg
+                            - median
+                            type: string
+                          distinc:
+                            description: The distinct values of the column for this
+                              level
+                            items:
+                              type: string
+                            type: array
+                          freq:
+                            description: The freq of the level
+                            enum:
+                            - second
+                            - minute
+                            - hour
+                            - day
+                            - week
+                            - month
+                            - quarter
+                            - year
+                            type: string
+                          horizon:
+                            description: The number of time periods to
+                            format: int32
+                            type: integer
+                          string:
+                            description: The name of the level - the column name
+                            type: string
+                        type: object
+                      notifierName:
+                        description: Optional notifier to use when the forecast is
+                          complete.
                         type: string
                     type: object
-                  notifierName:
-                    description: Optional notifier to use when the forecast is complete.
-                    type: string
+                  template:
+                    description: Template to use for each model
+                    properties:
+                      backtest:
+                        description: The backtest specification, the system supports
+                          back testing with expanding windows.
+                        properties:
+                          forecastingWindowsSize:
+                            description: The number of data points to forecast on.
+                            format: int32
+                            minimum: 0
+                            type: integer
+                          sliding:
+                            description: If true, use sliding windows, else use expanding
+                              windows
+                            type: boolean
+                          slidingSteps:
+                            description: The number of data points between each windows
+                            format: int32
+                            minimum: 0
+                            type: integer
+                          trainingWindowsSize:
+                            description: The number of data points in each windows
+                              used for training.
+                            format: int32
+                            minimum: 0
+                            type: integer
+                        type: object
+                      confidenceIntervals:
+                        description: The confidence levels for the forecast, each
+                          level must be between 1-100.
+                        format: int32
+                        minimum: 0
+                        type: integer
+                      data:
+                        description: Required, the freq of the time series (daily,weekly)
+                        properties:
+                          changepoints:
+                            description: Set an holiday schedule for a country. Change
+                              point specification
+                            properties:
+                              "N":
+                                description: number of change points
+                                format: int32
+                                type: integer
+                              range:
+                                description: Change point range
+                                type: number
+                            type: object
+                          customSeasonalities:
+                            description: The list of additional regressors. The regresors
+                              are part of the time series data
+                            items:
+                              description: SeasonalitySpec defines the custom seasonality
+                              properties:
+                                fourierOrder:
+                                  format: int32
+                                  type: integer
+                                name:
+                                  description: The name of the custom seasonality
+                                  type: string
+                                period:
+                                  description: The name of the custom seasonality
+                                  type: number
+                              type: object
+                            type: array
+                          dailySeasonality:
+                            description: Define the seasonality for a period (yearly
+                              / monthly / daily)
+                            properties:
+                              enabled:
+                                default: true
+                                description: Is this seasonality enabled
+                                type: boolean
+                              mode:
+                                default: auto
+                                description: Predictor format represent the API implementation
+                                  of the model
+                                enum:
+                                - multipicative
+                                - additive
+                                - auto
+                                - none
+                                type: string
+                              periods:
+                                default: 0
+                                description: If enabled, the number of data points
+                                  in the interval
+                                format: int32
+                                type: integer
+                            type: object
+                          datetimeFormat:
+                            description: The format of the datetime column. Used default
+                            type: string
+                          forecast:
+                            description: The forecast periods
+                            properties:
+                              end:
+                                description: The windows end day
+                                format: int32
+                                type: integer
+                              interval:
+                                description: The period interval
+                                enum:
+                                - second
+                                - minute
+                                - hour
+                                - day
+                                - week
+                                - month
+                                - quarter
+                                - year
+                                type: string
+                              start:
+                                default: 0
+                                description: The window start day
+                                format: int32
+                                type: integer
+                            type: object
+                          groupColumn:
+                            description: Column name of the first level of grouping
+                            type: string
+                          growth:
+                            enum:
+                            - linear
+                            - logistic
+                            - flat
+                            type: string
+                          history:
+                            description: The historical periods
+                            properties:
+                              end:
+                                description: The windows end day
+                                format: int32
+                                type: integer
+                              interval:
+                                description: The period interval
+                                enum:
+                                - second
+                                - minute
+                                - hour
+                                - day
+                                - week
+                                - month
+                                - quarter
+                                - year
+                                type: string
+                              start:
+                                default: 0
+                                description: The window start day
+                                format: int32
+                                type: integer
+                            type: object
+                          holiday:
+                            description: The format of the datetime column. Used default
+                            properties:
+                              country:
+                                description: / The HolidayCountry unit
+                                enum:
+                                - US
+                                - BR
+                                - ID
+                                - IN
+                                - MY
+                                - VN
+                                - TH
+                                - PH
+                                - PK
+                                - BD
+                                - EG
+                                - CN
+                                - RU
+                                - KR
+                                - BY
+                                - AE
+                                - none
+                                type: string
+                              datasetName:
+                                description: For custom holiday use external dataset
+                                type: string
+                              holidayColumn:
+                                description: The name of the holiday column. If the
+                                  column is empty, no holiday Column name of the first
+                                  level of grouping
+                                type: string
+                            type: object
+                          intevalWidth:
+                            type: number
+                          regressors:
+                            description: The list of additional regressors. The regresors
+                              are part of the time series data
+                            items:
+                              properties:
+                                name:
+                                  description: The Name of the regressor
+                                  type: string
+                                priorScale:
+                                  default: 0
+                                  description: The Name of the regressor
+                                  type: number
+                                standardize:
+                                  default: false
+                                  description: The Name of the regressor
+                                  type: boolean
+                              type: object
+                            type: array
+                          subGroupColumn:
+                            description: Column name of the second level of grouping
+                            type: string
+                          subSubGroupColumn:
+                            description: Column name of the third level of grouping
+                            type: string
+                          targetColumn:
+                            description: The name of the column holding the value.
+                              By default this is the target column from the dataset.
+                            type: string
+                          timeColumn:
+                            description: 'General Forecast attributes: The name of
+                              the time column'
+                            type: string
+                          uncertaintySamples:
+                            format: int32
+                            type: integer
+                          weeklySeasonality:
+                            description: Define the seasonality for a period (yearly
+                              / monthly / daily)
+                            properties:
+                              enabled:
+                                default: true
+                                description: Is this seasonality enabled
+                                type: boolean
+                              mode:
+                                default: auto
+                                description: Predictor format represent the API implementation
+                                  of the model
+                                enum:
+                                - multipicative
+                                - additive
+                                - auto
+                                - none
+                                type: string
+                              periods:
+                                default: 0
+                                description: If enabled, the number of data points
+                                  in the interval
+                                format: int32
+                                type: integer
+                            type: object
+                          yearlySeasonality:
+                            description: Define the seasonality for a period (yearly
+                              / monthly / daily)
+                            properties:
+                              enabled:
+                                default: true
+                                description: Is this seasonality enabled
+                                type: boolean
+                              mode:
+                                default: auto
+                                description: Predictor format represent the API implementation
+                                  of the model
+                                enum:
+                                - multipicative
+                                - additive
+                                - auto
+                                - none
+                                type: string
+                              periods:
+                                default: 0
+                                description: If enabled, the number of data points
+                                  in the interval
+                                format: int32
+                                type: integer
+                            type: object
+                        type: object
+                      plot:
+                        description: If true generate the plots
+                        type: boolean
+                      plotChangePoints:
+                        type: boolean
+                      postProcessing:
+                        description: Post processing
+                        properties:
+                          connectionName:
+                            description: The name of the connection for a database
+                              the result of the forecast If null, the system will
+                              insert the forecast in the database.
+                            type: string
+                          forecast:
+                            description: Specify if we should generate a forecast
+                              using the model If true, the system will perform a forecast
+                              and update the forecast connection. Default it true
+                            type: boolean
+                        type: object
+                    type: object
                 type: object
               labRef:
                 description: LabRef is a reference to the lab where the trainers for
@@ -317,6 +811,11 @@ spec:
                     description: data location type is the type of the data location
                     type: string
                 type: object
+              modelBenchmarked:
+                default: true
+                description: Set to true if you want the system to push model image
+                  to remote docker registry
+                type: boolean
               modelImage:
                 description: Model Image specification.
                 properties:
@@ -375,114 +874,6 @@ spec:
                     format: int32
                     type: integer
                 type: object
-              objective:
-                description: Objective is the objective defined how the study controller
-                  will compare model performance.
-                enum:
-                - accuracy
-                - average-precision
-                - balanced-accuracy
-                - brier-score-loss
-                - f1
-                - f1-macro
-                - f1-micro
-                - f1-weighted
-                - log-loss
-                - precision
-                - precision-micro
-                - precision-macro
-                - precision-weighted
-                - recall
-                - recall-macro
-                - recall-micro
-                - recall-weighted
-                - auc
-                - fp
-                - fn
-                - tn
-                - tp
-                - explained_variance
-                - mae
-                - mse
-                - msle
-                - median-absolute-error
-                - r2
-                - adj-r2
-                - adjusted-mutual-info-score
-                - adjusted-rand-score
-                - completeness-score
-                - fowlkes-mallows-score
-                - homogeneity-score
-                - mutual-info-score
-                - normalized-mutual-info-score
-                - v-measure-score
-                - rmse
-                - unknown
-                - mape
-                - smape
-                - mdape
-                - adjr2
-                - mcc
-                - tpr
-                - fpr
-                - tnr
-                - rmsle
-                - matthews-corr-coef
-                type: string
-              objective2:
-                description: Objective2 is the second objective to consider during
-                  optimization.
-                enum:
-                - accuracy
-                - average-precision
-                - balanced-accuracy
-                - brier-score-loss
-                - f1
-                - f1-macro
-                - f1-micro
-                - f1-weighted
-                - log-loss
-                - precision
-                - precision-micro
-                - precision-macro
-                - precision-weighted
-                - recall
-                - recall-macro
-                - recall-micro
-                - recall-weighted
-                - auc
-                - fp
-                - fn
-                - tn
-                - tp
-                - explained_variance
-                - mae
-                - mse
-                - msle
-                - median-absolute-error
-                - r2
-                - adj-r2
-                - adjusted-mutual-info-score
-                - adjusted-rand-score
-                - completeness-score
-                - fowlkes-mallows-score
-                - homogeneity-score
-                - mutual-info-score
-                - normalized-mutual-info-score
-                - v-measure-score
-                - rmse
-                - unknown
-                - mape
-                - smape
-                - mdape
-                - adjr2
-                - mcc
-                - tpr
-                - fpr
-                - tnr
-                - rmsle
-                - matthews-corr-coef
-                type: string
               owner:
                 default: no-one
                 description: The owner account name
@@ -491,239 +882,6 @@ spec:
                 default: false
                 description: Paused is set when we want to pause the training
                 type: boolean
-              preprocessing:
-                description: 'Preprocessing is template for preprocessors for this
-                  study Default: all preprocessing is set to auto.'
-                properties:
-                  audio:
-                    description: Audio specify the pipeline for audio. Not supported
-                      in this release
-                    properties:
-                      columns:
-                        description: Name of the datetime columns
-                        items:
-                          type: string
-                        type: array
-                      featurizer:
-                        default: auto
-                        description: The date time imputer.
-                        type: string
-                    type: object
-                  balancer:
-                    description: Balancer is used for imbalanced datasets to fix the
-                      imbalance.
-                    enum:
-                    - adasyn
-                    - baseline-smote
-                    - kmean-smote
-                    - random-over-sampler
-                    - smote
-                    - smotenc
-                    - svmsmote
-                    - none
-                    - auto
-                    type: string
-                  categorical:
-                    description: One or more categorical pipelines.
-                    properties:
-                      columns:
-                        description: The columns for this pipeline. Use * to denotes
-                          all the columns. Must have at least on value.
-                        items:
-                          type: string
-                        type: array
-                      encoder:
-                        default: auto
-                        description: CatEncoder
-                        enum:
-                        - one-hot
-                        - count-freq
-                        - ordinal-encoder
-                        - mean
-                        - target
-                        - woe
-                        - rare-label
-                        - binary
-                        - label
-                        - none
-                        - auto
-                        type: string
-                      imputer:
-                        default: auto
-                        description: Categorical variable imputer
-                        enum:
-                        - remove-rows-with-missing-values
-                        - mean
-                        - median
-                        - mode
-                        - arbitrary-number
-                        - end-tail
-                        - random-sample
-                        - add-missing-indication
-                        - iterative
-                        - none
-                        - auto
-                        - constant
-                        type: string
-                    type: object
-                  datatime:
-                    description: DataTime specify the column transformation for datetime
-                      columns
-                    properties:
-                      columns:
-                        description: Name of the datetime columns
-                        items:
-                          type: string
-                        type: array
-                      expand:
-                        default: false
-                        type: boolean
-                      imputer:
-                        default: auto
-                        description: The date time imputer.
-                        enum:
-                        - remove-rows-with-missing-values
-                        - mean
-                        - median
-                        - mode
-                        - arbitrary-number
-                        - end-tail
-                        - random-sample
-                        - add-missing-indication
-                        - iterative
-                        - none
-                        - auto
-                        - constant
-                        type: string
-                    type: object
-                  featureEngineering:
-                    description: FeaturePipeline selector
-                    enum:
-                    - rfe
-                    - select-percentile
-                    - select-kbest
-                    - select-fpr
-                    - select-fdr
-                    - variance-threshold
-                    - pca
-                    - polynomial-features
-                    - rbf-sampler
-                    - fast-ica
-                    - nystroem
-                    - none
-                    - auto
-                    type: string
-                  image:
-                    description: Image specify the pipeline for images. Not supported
-                      in this release
-                    properties:
-                      columns:
-                        description: Name of the datetime columns
-                        items:
-                          type: string
-                        type: array
-                      featurizer:
-                        default: auto
-                        description: The date time imputer.
-                        type: string
-                    type: object
-                  imbalanced:
-                    description: Imbalance flag instruct the designer to create an
-                      imbalanced pipeline. Default is false
-                    type: boolean
-                  numeric:
-                    description: Numeric specify the column transformation for numeric
-                      columns
-                    properties:
-                      columns:
-                        items:
-                          type: string
-                        type: array
-                      imputer:
-                        default: auto
-                        description: Numerical var imputer
-                        enum:
-                        - remove-rows-with-missing-values
-                        - mean
-                        - median
-                        - mode
-                        - arbitrary-number
-                        - end-tail
-                        - random-sample
-                        - add-missing-indication
-                        - iterative
-                        - none
-                        - auto
-                        - constant
-                        type: string
-                      scaler:
-                        default: auto
-                        description: Numeric var scaler
-                        enum:
-                        - standard
-                        - max-abs
-                        - min-max
-                        - normalizer
-                        - robust
-                        - none
-                        - auto
-                        type: string
-                    type: object
-                  text:
-                    description: Text specify the column transformation for text columns
-                    properties:
-                      columns:
-                        description: The list of test columns
-                        items:
-                          type: string
-                        type: array
-                      embedding:
-                        description: If true, the controller will Add word embedding
-                          handling to the text pipeline.
-                        type: string
-                      encoder:
-                        default: auto
-                        description: The text encoder (e.g. tfidf)
-                        type: string
-                      lemma:
-                        default: true
-                        description: If true, the controller will Add lemma handling
-                          to the text pipeline.
-                        type: boolean
-                      pos:
-                        default: true
-                        description: If true, the controller will Add part of speech
-                          handling to the text pipeline.
-                        type: boolean
-                      stem:
-                        default: true
-                        description: If true, the controller will Add stemmer handling
-                          to the text pipeline.
-                        type: boolean
-                      stopwords:
-                        default: true
-                        description: If true, the controller will Add stop word handling
-                          to the text pipeline.
-                        type: boolean
-                      tokenizer:
-                        description: Text tokenizer
-                        type: string
-                    type: object
-                  video:
-                    description: Video specify the pipeline for video. Not supported
-                      in this release
-                    properties:
-                      columns:
-                        description: Name of the datetime columns
-                        items:
-                          type: string
-                        type: array
-                      featurizer:
-                        default: auto
-                        description: The date time imputer.
-                        type: string
-                    type: object
-                type: object
               profiled:
                 default: true
                 description: Profiled is set when we want to create model profile
@@ -733,145 +891,32 @@ spec:
                 default: true
                 description: Reported is set when we want to create model report
                 type: boolean
+              schedule:
+                description: Define when the schedule start
+                properties:
+                  enabled:
+                    default: true
+                    description: Indicate the all models should be tests
+                    type: boolean
+                  startAt:
+                    description: Set the start time, by default this is set to the
+                      start time of the study
+                    format: date-time
+                    type: string
+                type: object
               search:
                 description: Search defines the model search
                 properties:
-                  allowlist:
-                    description: AllowList contain the list of algorithms that should
-                      be tested as part of the search.
-                    items:
-                      enum:
-                      - knn-regressor
-                      - ridge-regressor
-                      - lasso-regressor
-                      - ada-boost-regressor
-                      - decision-tree-regressor
-                      - extra-tree-regressor
-                      - linear-svr
-                      - svr
-                      - passive-agressive-regressor
-                      - sgd-regressor
-                      - gradient-boosting-regressor
-                      - random-forest-regressor
-                      - xgb-regressor
-                      - catboost-regressor
-                      - sgd-regressor
-                      - gradient-boosting-regressor
-                      - random-forest-regressor
-                      - xgb-regressor
-                      - catboost-regressor
-                      - lightgbm-regressor
-                      - elasticnet-regressor
-                      - dnn-regressor
-                      - elliptic-envelope
-                      - one-class-svm
-                      - isolation-forest
-                      - local-outlier-factor
-                      - prophet
-                      - knn-classifier
-                      - ada-boost-classifier
-                      - bernoulli-nb
-                      - decision-tree-classifier
-                      - extra-tree-classifier
-                      - linear-svc
-                      - svc
-                      - passive-aggressive-classifier
-                      - sgd-classifier
-                      - logistic-regression
-                      - gradient-boosting-classifier
-                      - random-forest-classifier
-                      - xgboost-classifier
-                      - ridge-classifier
-                      - quadratic-discriminant
-                      - linear-discriminant
-                      - lightgbm-classifier
-                      - catboost-classifier
-                      - stacking-ensemble
-                      - none
-                      - arima
-                      - auto-arima
-                      - vrima
-                      - exponential-smoothing
-                      - fast-fourier-transform
-                      - nbeats
-                      - theata-method
-                      - als
-                      - bayesian-personalized-ranking
-                      type: string
-                    type: array
-                  baselines:
-                    description: Baselines holds the name of the base line algorithms
-                      to try
-                    items:
-                      enum:
-                      - knn-regressor
-                      - ridge-regressor
-                      - lasso-regressor
-                      - ada-boost-regressor
-                      - decision-tree-regressor
-                      - extra-tree-regressor
-                      - linear-svr
-                      - svr
-                      - passive-agressive-regressor
-                      - sgd-regressor
-                      - gradient-boosting-regressor
-                      - random-forest-regressor
-                      - xgb-regressor
-                      - catboost-regressor
-                      - sgd-regressor
-                      - gradient-boosting-regressor
-                      - random-forest-regressor
-                      - xgb-regressor
-                      - catboost-regressor
-                      - lightgbm-regressor
-                      - elasticnet-regressor
-                      - dnn-regressor
-                      - elliptic-envelope
-                      - one-class-svm
-                      - isolation-forest
-                      - local-outlier-factor
-                      - prophet
-                      - knn-classifier
-                      - ada-boost-classifier
-                      - bernoulli-nb
-                      - decision-tree-classifier
-                      - extra-tree-classifier
-                      - linear-svc
-                      - svc
-                      - passive-aggressive-classifier
-                      - sgd-classifier
-                      - logistic-regression
-                      - gradient-boosting-classifier
-                      - random-forest-classifier
-                      - xgboost-classifier
-                      - ridge-classifier
-                      - quadratic-discriminant
-                      - linear-discriminant
-                      - lightgbm-classifier
-                      - catboost-classifier
-                      - stacking-ensemble
-                      - none
-                      - arima
-                      - auto-arima
-                      - vrima
-                      - exponential-smoothing
-                      - fast-fourier-transform
-                      - nbeats
-                      - theata-method
-                      - als
-                      - bayesian-personalized-ranking
-                      type: string
-                    type: array
-                  filter:
-                    default: none
-                    description: set a general filter on the allowed algorithm
-                    enum:
-                    - quick
-                    - linear-only
-                    - tree
-                    - default-hp
-                    - none
-                    type: string
+                  earlyStopAfter:
+                    default: 0
+                    description: If larget than 0, stop the search if no change in
+                      best score occur.
+                    format: int32
+                    type: integer
+                  keepOnlyTopModel:
+                    default: true
+                    description: If true, keep only the top model from an algorithm
+                    type: boolean
                   maxCost:
                     default: 100
                     description: MaxCost specify what is the maximum cost incurred
@@ -899,10 +944,135 @@ spec:
                     default: 0
                     description: The minimum score by which the search would stop
                     type: number
-                  modelTested:
-                    default: true
-                    description: Indicate the all models should be tests
-                    type: boolean
+                  objective:
+                    description: Objective is the objective defined how the study
+                      controller will compare model performance.
+                    enum:
+                    - accuracy
+                    - average-precision
+                    - balanced-accuracy
+                    - brier-score-loss
+                    - f1
+                    - f1-macro
+                    - f1-micro
+                    - f1-weighted
+                    - log-loss
+                    - precision
+                    - precision-micro
+                    - precision-macro
+                    - precision-weighted
+                    - recall
+                    - recall-macro
+                    - recall-micro
+                    - recall-weighted
+                    - auc
+                    - fp
+                    - fn
+                    - tn
+                    - tp
+                    - explained_variance
+                    - mae
+                    - mse
+                    - msle
+                    - median-absolute-error
+                    - r2
+                    - adj-r2
+                    - adjusted-mutual-info-score
+                    - adjusted-rand-score
+                    - completeness-score
+                    - fowlkes-mallows-score
+                    - homogeneity-score
+                    - mutual-info-score
+                    - normalized-mutual-info-score
+                    - v-measure-score
+                    - rmse
+                    - unknown
+                    - mape
+                    - smape
+                    - mdape
+                    - adjr2
+                    - mcc
+                    - tpr
+                    - fpr
+                    - tnr
+                    - rmsle
+                    - matthews-corr-coef
+                    - p50-latency
+                    - p95-latency
+                    - p99-latency
+                    - cpu
+                    - mem
+                    - req-per-sec
+                    - maze
+                    - gpu
+                    - gpu-mem
+                    - none
+                    type: string
+                  objective2:
+                    default: none
+                    description: Objective2 is the second objective to consider during
+                      optimization.
+                    enum:
+                    - accuracy
+                    - average-precision
+                    - balanced-accuracy
+                    - brier-score-loss
+                    - f1
+                    - f1-macro
+                    - f1-micro
+                    - f1-weighted
+                    - log-loss
+                    - precision
+                    - precision-micro
+                    - precision-macro
+                    - precision-weighted
+                    - recall
+                    - recall-macro
+                    - recall-micro
+                    - recall-weighted
+                    - auc
+                    - fp
+                    - fn
+                    - tn
+                    - tp
+                    - explained_variance
+                    - mae
+                    - mse
+                    - msle
+                    - median-absolute-error
+                    - r2
+                    - adj-r2
+                    - adjusted-mutual-info-score
+                    - adjusted-rand-score
+                    - completeness-score
+                    - fowlkes-mallows-score
+                    - homogeneity-score
+                    - mutual-info-score
+                    - normalized-mutual-info-score
+                    - v-measure-score
+                    - rmse
+                    - unknown
+                    - mape
+                    - smape
+                    - mdape
+                    - adjr2
+                    - mcc
+                    - tpr
+                    - fpr
+                    - tnr
+                    - rmsle
+                    - matthews-corr-coef
+                    - p50-latency
+                    - p95-latency
+                    - p99-latency
+                    - cpu
+                    - mem
+                    - req-per-sec
+                    - maze
+                    - gpu
+                    - gpu-mem
+                    - none
+                    type: string
                   pruner:
                     description: The pruner to use during model search.
                     properties:
@@ -922,10 +1092,10 @@ spec:
                         description: Minimum number of reported trials.
                         format: int32
                         type: integer
-                      precentialTrials:
+                      percentile:
                         default: 25
                         description: Keep specific precent of trials. Used only with
-                          precential pruner
+                          percentile pruner
                         format: int32
                         maximum: 100
                         minimum: 0
@@ -982,58 +1152,12 @@ spec:
                           prunes or not. Used only for treshold pruner
                         format: int32
                         type: integer
-                      wramupTrials:
+                      warmupTrials:
                         default: 0
                         description: ' Pruning is disabled until the trial exceeds
                           the given number of step'
                         format: int32
                         type: integer
-                    type: object
-                  resources:
-                    description: Define the general size of the resources needed for
-                      each trainer.
-                    properties:
-                      cpu:
-                        default: M
-                        description: Cpu specify the cpu requirements will be compared
-                        enum:
-                        - XS
-                        - S
-                        - M
-                        - L
-                        - XL
-                        - XXL
-                        - XXXL
-                        - AutoScaler
-                        type: string
-                      gpu:
-                        default: M
-                        description: Gpu specify the desired gpu requirements.  will
-                          be compared
-                        enum:
-                        - XS
-                        - S
-                        - M
-                        - L
-                        - XL
-                        - XXL
-                        - XXXL
-                        - AutoScaler
-                        type: string
-                      mem:
-                        default: M
-                        description: Mem define the memory resource requirements will
-                          be compared
-                        enum:
-                        - XS
-                        - S
-                        - M
-                        - L
-                        - XL
-                        - XXL
-                        - XXXL
-                        - AutoScaler
-                        type: string
                     type: object
                   retainTop:
                     default: 10
@@ -1064,16 +1188,84 @@ spec:
                     - manual
                     - auto
                     type: string
-                  stackingEnsemble:
-                    default: true
-                    description: StackingEnsemble If true, create a stacking ensemble
-                      of the top 3 models.
-                    type: boolean
-                  startAt:
-                    description: Set the start time, by default this is set to the
-                      start time of the study
-                    format: date-time
-                    type: string
+                  searchSpace:
+                    description: Define the algorithm search space.
+                    properties:
+                      allowlist:
+                        description: AllowList contain the list of algorithms that
+                          should be tested as part of the search. Use this to filter
+                          specific algorithm
+                        items:
+                          enum:
+                          - knn-regressor
+                          - ridge-regressor
+                          - lasso-regressor
+                          - ada-boost-regressor
+                          - decision-tree-regressor
+                          - extra-tree-regressor
+                          - linear-svr
+                          - svr
+                          - passive-agressive-regressor
+                          - sgd-regressor
+                          - gradient-boosting-regressor
+                          - random-forest-regressor
+                          - xgb-regressor
+                          - catboost-regressor
+                          - sgd-regressor
+                          - gradient-boosting-regressor
+                          - random-forest-regressor
+                          - xgb-regressor
+                          - catboost-regressor
+                          - lightgbm-regressor
+                          - elasticnet-regressor
+                          - dnn-regressor
+                          - elliptic-envelope
+                          - one-class-svm
+                          - isolation-forest
+                          - local-outlier-factor
+                          - prophet
+                          - knn-classifier
+                          - ada-boost-classifier
+                          - bernoulli-nb
+                          - decision-tree-classifier
+                          - extra-tree-classifier
+                          - linear-svc
+                          - svc
+                          - passive-aggressive-classifier
+                          - sgd-classifier
+                          - logistic-regression
+                          - gradient-boosting-classifier
+                          - random-forest-classifier
+                          - xgboost-classifier
+                          - ridge-classifier
+                          - quadratic-discriminant
+                          - linear-discriminant
+                          - lightgbm-classifier
+                          - catboost-classifier
+                          - stacking-ensemble
+                          - none
+                          - arima
+                          - auto-arima
+                          - vrima
+                          - exponential-smoothing
+                          - fast-fourier-transform
+                          - nbeats
+                          - theata-method
+                          - als
+                          - bayesian-personalized-ranking
+                          type: string
+                        type: array
+                      filter:
+                        default: none
+                        description: set a general filter on the allowed algorithm
+                        enum:
+                        - quick
+                        - linear-only
+                        - tree
+                        - default-hp
+                        - none
+                        type: string
+                    type: object
                   test:
                     default: 1
                     description: Test indicate the desired number of models that should
@@ -1088,88 +1280,6 @@ spec:
                     format: int32
                     maximum: 50
                     minimum: 0
-                    type: integer
-                  votingEnsemble:
-                    default: false
-                    description: VotingEnsample - If true, create a voting ensemble
-                      of the top 3 models.
-                    type: boolean
-                type: object
-              split:
-                description: Split is reference to the split specification
-                properties:
-                  auto:
-                    default: true
-                    description: Indicate that this is an automatic split.
-                    type: boolean
-                  seed:
-                    default: 42
-                    description: 'The seed to use for the estimator Default: 42'
-                    format: int32
-                    type: integer
-                  splitColumn:
-                    description: The name of the column used to split
-                    type: string
-                  splitPolicy:
-                    default: stratified
-                    description: Indicate if the dataset split should be stratified.
-                    type: string
-                  test:
-                    default: 20
-                    description: Test is percent of dataset rows which would be used
-                      to compute the objective during
-                    format: int32
-                    maximum: 50
-                    minimum: 0
-                    type: integer
-                  train:
-                    default: 80
-                    description: Training is a percent number (0-100) which specify
-                      how much of the data will be used for training
-                    format: int32
-                    maximum: 100
-                    minimum: 1
-                    type: integer
-                  validation:
-                    default: 0
-                    description: Validation is percent of dataset rows which would
-                      be used to compute the objective during hyper parameter search
-                      phase. Only used if we do not do cross validation. default is
-                      10% of the data, if we do not have cross validation. default
-                      is 0% of the data, if we do cross validation.
-                    format: int32
-                    maximum: 50
-                    minimum: 0
-                    type: integer
-                type: object
-              studyFeatureFilter:
-                description: Feature filter is applied to the data for this study.
-                  The filter specifies how to filter the original dataset.
-                properties:
-                  features:
-                    description: List of feature names to consider when training.
-                    items:
-                      type: string
-                    type: array
-                  highCorr:
-                    default: false
-                    description: High correlation specify to filter features with
-                      high correlation.
-                    type: boolean
-                  lowVar:
-                    default: false
-                    description: Lowvar specify the filter to remove low variance
-                      features
-                    type: boolean
-                  onError:
-                    default: false
-                    description: Is the feature filter enbled
-                    type: boolean
-                  topN:
-                    default: 0
-                    description: Select the Top N is the number of feature to select
-                      by importance. If 0, all the features are selected.
-                    format: int32
                     type: integer
                 type: object
               task:
@@ -1206,7 +1316,7 @@ spec:
                 default: false
                 description: Set to true if this study is a template
                 type: boolean
-              training:
+              trainingTemplate:
                 description: Training template contain the desired training parameter
                   for the models.
                 properties:
@@ -1228,11 +1338,23 @@ spec:
                       set, we do not do cv.
                     enum:
                     - none
+                    - group-kfold
+                    - group-shuffle-split
                     - kfold
-                    - loocv
-                    - stratified
+                    - leave-one-group-out
+                    - leave-p-groups-out
+                    - leave-one-out
+                    - leave-p-out
+                    - predefined-split
+                    - repeated-kfold
+                    - repeated-stratified-k-fold
+                    - shuffle-split
+                    - stratified-k-fold
+                    - stratified-shuffle-split
+                    - stratified-group-k-fold
+                    - time-series-split
                     type: string
-                  dist:
+                  distributed:
                     default: false
                     description: Dist indicate the training should be be distributed
                     type: boolean
@@ -1244,8 +1366,6 @@ spec:
                   evalMetrics:
                     description: Evaluation metrics are the scores
                     items:
-                      description: Metric is the machine learning metric used to evaluate
-                        a model performance.
                       enum:
                       - accuracy
                       - average-precision
@@ -1296,168 +1416,23 @@ spec:
                       - tnr
                       - rmsle
                       - matthews-corr-coef
+                      - p50-latency
+                      - p95-latency
+                      - p99-latency
+                      - cpu
+                      - mem
+                      - req-per-sec
+                      - maze
+                      - gpu
+                      - gpu-mem
+                      - none
                       type: string
                     type: array
-                  featureFilter:
-                    description: Feature filter specified what features to use from
-                      the original dataset.
-                    properties:
-                      features:
-                        description: List of feature names to consider when training.
-                        items:
-                          type: string
-                        type: array
-                      highCorr:
-                        default: false
-                        description: High correlation specify to filter features with
-                          high correlation.
-                        type: boolean
-                      lowVar:
-                        default: false
-                        description: Lowvar specify the filter to remove low variance
-                          features
-                        type: boolean
-                      onError:
-                        default: false
-                        description: Is the feature filter enbled
-                        type: boolean
-                      topN:
-                        default: 0
-                        description: Select the Top N is the number of feature to
-                          select by importance. If 0, all the features are selected.
-                        format: int32
-                        type: integer
-                    type: object
                   folds:
                     default: 5
                     description: The number of folds during cross validation.
                     format: int32
                     type: integer
-                  forecast:
-                    description: 'Define the forecast period for time series studies.
-                      This is only used in time series models. Default: Empty'
-                    properties:
-                      backtest:
-                        description: The backtest specification, the system supports
-                          back testing with expanding windows.
-                        properties:
-                          initial:
-                            default: 80
-                            description: The initial number of data points, default
-                              to 80% of rows.
-                            format: int32
-                            minimum: 0
-                            type: integer
-                          windows:
-                            default: 3
-                            description: The number of backtesting windows. Default
-                              to 3. can be from 1 to 5.
-                            format: int32
-                            minimum: 0
-                            type: integer
-                        type: object
-                      confidenceIntervals:
-                        description: The confidence levels for the forecast, each
-                          level must be between 1-100.
-                        format: int32
-                        minimum: 0
-                        type: integer
-                      countryForHoliday:
-                        description: Set an holiday schedule for a country.
-                        enum:
-                        - US
-                        - BR
-                        - ID
-                        - IN
-                        - MY
-                        - VN
-                        - TH
-                        - PH
-                        - PK
-                        - BD
-                        - EG
-                        - CN
-                        - RU
-                        - KR
-                        - BY
-                        - AE
-                        - none
-                        type: string
-                      datetimeFormat:
-                        description: The format of the datetime column. Used default
-                        type: string
-                      dimensionValues:
-                        description: a set of value for each partition key
-                        items:
-                          description: DimensionValue specify the partition key values
-                            are used for the partition
-                          properties:
-                            key:
-                              description: Key is the partition key
-                              type: string
-                            value:
-                              description: Value if the partition value
-                              type: string
-                          type: object
-                        type: array
-                      dimensions:
-                        description: The list of the dimension columns. If non, the
-                          system will treat the whole time series as one.
-                        items:
-                          type: string
-                        type: array
-                      forecast:
-                        description: Specify if we should generate a forecast using
-                          the model If true, the system will perform a forecast and
-                          update the forecast connection. Default it true
-                        type: boolean
-                      forecastConnectionName:
-                        description: The name of the connection for a database the
-                          result of the forecast If null, the system will insert the
-                          forecast in the database.
-                        type: string
-                      freqSpec:
-                        description: Required, the freq of the time series (daily,weekly)
-                        properties:
-                          interval:
-                            default: 1
-                            description: Default to 1.
-                            format: int32
-                            minimum: 0
-                            type: integer
-                          unit:
-                            description: required
-                            enum:
-                            - second
-                            - minute
-                            - hour
-                            - day
-                            - week
-                            - month
-                            - quarter
-                            - year
-                            type: string
-                        type: object
-                      horizon:
-                        description: Horizon is the number of data points to predict
-                          in the future.
-                        format: int32
-                        minimum: 0
-                        type: integer
-                      repressors:
-                        description: List of other columns to take into consideration
-                          Default None
-                        items:
-                          type: string
-                        type: array
-                      targetColumn:
-                        description: The name of the column holding the value. By
-                          default this is the target column from the dataset.
-                        type: string
-                      timeColumn:
-                        description: The name of the time column
-                        type: string
-                    type: object
                   gpu:
                     default: false
                     description: Gpu indicate that training should be done on a gpu.
@@ -1564,6 +1539,41 @@ spec:
                         minimum: 0
                         type: integer
                     type: object
+                  split:
+                    description: Data Split define how to split the data into test
+                      and train.
+                    properties:
+                      splitColumn:
+                        description: The name of the column used to split
+                        type: string
+                      test:
+                        default: 20
+                        description: Test is percent of dataset rows which would be
+                          used to compute the objective during
+                        format: int32
+                        maximum: 100
+                        minimum: 0
+                        type: integer
+                      train:
+                        default: 80
+                        description: Training is a percent number (0-100) which specify
+                          how much of the data will be used for training
+                        format: int32
+                        maximum: 100
+                        minimum: 1
+                        type: integer
+                      validation:
+                        default: 0
+                        description: Validation is percent of dataset rows which would
+                          be used to compute the objective during hyper parameter
+                          search phase. Only used if we do not do cross validation.
+                          default is 10% of the data, if we do not have cross validation.
+                          default is 0% of the data, if we do cross validation.
+                        format: int32
+                        maximum: 50
+                        minimum: 0
+                        type: integer
+                    type: object
                   workloadClassName:
                     default: nano-cpu-250m-mem-256mi
                     description: WorkloadClassName is the name of the workload class
@@ -1588,6 +1598,34 @@ spec:
             description: StudyStatus defines the observed state of the Study
             properties:
               baseline:
+                description: Holds the result of the baseline phase training
+                properties:
+                  endTime:
+                    description: End of the phase.
+                    format: date-time
+                    type: string
+                  failed:
+                    description: models that failed
+                    format: int32
+                    type: integer
+                  startTime:
+                    description: Start of the training phase
+                    format: date-time
+                    type: string
+                  trained:
+                    description: models trained
+                    format: int32
+                    type: integer
+                  training:
+                    description: models in training
+                    format: int32
+                    type: integer
+                  waiting:
+                    description: models waiting for processing
+                    format: int32
+                    type: integer
+                type: object
+              baselineModel:
                 default: none
                 description: define a baseline model that will be the baseline for
                   the search. If not none, the base line is the first model to be
@@ -1650,6 +1688,263 @@ spec:
                 - als
                 - bayesian-personalized-ranking
                 type: string
+              bestFE:
+                description: The best feature engineering
+                properties:
+                  pipelines:
+                    description: List of processing pipelines
+                    items:
+                      description: FeatureEngineeringPipeline represent a single pipeline
+                        for data transformation. The pipeline includes the column
+                        names and the data type.
+                      properties:
+                        audio:
+                          description: Audio specify the pipeline for audio. Not supported
+                            in this release
+                          properties:
+                            featurizer:
+                              default: auto
+                              description: The date time imputer.
+                              type: string
+                          type: object
+                        columns:
+                          description: Columns is the name of the columns from the
+                            original file. All the columns must be from the same type
+                          items:
+                            type: string
+                          type: array
+                        custom:
+                          description: Specify custom columns. Custom Columns are
+                            specified by the user
+                          items:
+                            properties:
+                              datatype:
+                                description: The resulting data type
+                                enum:
+                                - boolean
+                                - datetime
+                                - number
+                                - categorical
+                                - ordinal
+                                - text
+                                - json
+                                - number-list
+                                - categorical-list
+                                - text-list
+                                type: string
+                              first:
+                                description: The name of the first original column
+                                type: string
+                              name:
+                                description: The name of the generated column
+                                type: string
+                              original:
+                                description: The expression to apply in order to generate
+                                  the new column
+                                type: string
+                              second:
+                                description: The name of the second original column,
+                                  if the expression is binary operator
+                                type: string
+                            type: object
+                          type: array
+                        datatype:
+                          description: The Data type for the feature engineering.
+                          enum:
+                          - boolean
+                          - datetime
+                          - number
+                          - categorical
+                          - ordinal
+                          - text
+                          - json
+                          - number-list
+                          - categorical-list
+                          - text-list
+                          type: string
+                        datetimeTransformation:
+                          default: none
+                          description: Specify how For datetime data type,
+                          type: string
+                        discretisation:
+                          default: none
+                          description: Convert numerical datatypes to categories.
+                            Valid only if the number data types.
+                          type: string
+                        drop:
+                          default: false
+                          description: If dropped, all the columns in this pipeline
+                            will be dropped.
+                          type: boolean
+                        encoding:
+                          default: none
+                          description: Encoder. Apply only to categorical variables
+                          type: string
+                        generated:
+                          description: Spec to generate one or more columns from existing
+                            columns in this pipeline
+                          items:
+                            properties:
+                              datatype:
+                                description: The resulting data type
+                                enum:
+                                - boolean
+                                - datetime
+                                - number
+                                - categorical
+                                - ordinal
+                                - text
+                                - json
+                                - number-list
+                                - categorical-list
+                                - text-list
+                                type: string
+                              first:
+                                description: The name of the first original column
+                                type: string
+                              name:
+                                description: The name of the generated column
+                                type: string
+                              original:
+                                description: The expression to apply in order to generate
+                                  the new column
+                                type: string
+                              second:
+                                description: The name of the second original column,
+                                  if the expression is binary operator
+                                type: string
+                            type: object
+                          type: array
+                        image:
+                          description: Image specify the pipeline for images. Not
+                            supported in this release
+                          properties:
+                            featurizer:
+                              default: auto
+                              description: The date time imputer.
+                              type: string
+                          type: object
+                        imputation:
+                          default: none
+                          description: imputer
+                          type: string
+                        name:
+                          description: The name of this feature engineering pipeline
+                          type: string
+                        outlierHandling:
+                          default: none
+                          description: Specify how to handle outliers. Apply only
+                            to numeric datatypes.
+                          type: string
+                        passtrough:
+                          default: false
+                          description: If true, all the features in this pipeline
+                            will passtrough, without processing.
+                          type: boolean
+                        scaling:
+                          default: none
+                          description: Numeric var scaler, valid only if the
+                          type: string
+                        text:
+                          description: Text specify the column transformation for
+                            text columns
+                          properties:
+                            embedding:
+                              description: If true, the controller will Add word embedding
+                                handling to the text pipeline.
+                              type: string
+                            encoder:
+                              default: auto
+                              description: The text encoder (e.g. tfidf)
+                              type: string
+                            lemma:
+                              default: true
+                              description: If true, the controller will Add lemma
+                                handling to the text pipeline.
+                              type: boolean
+                            maxSvdComponents:
+                              default: 0
+                              description: Max SVD Components to use
+                              format: int32
+                              type: integer
+                            pos:
+                              default: true
+                              description: If true, the controller will Add part of
+                                speech handling to the text pipeline.
+                              type: boolean
+                            stem:
+                              default: true
+                              description: If true, the controller will Add stemmer
+                                handling to the text pipeline.
+                              type: boolean
+                            stopwords:
+                              default: true
+                              description: If true, the controller will Add stop word
+                                handling to the text pipeline.
+                              type: boolean
+                            svd:
+                              default: true
+                              description: Use SVD
+                              type: boolean
+                            tokenizer:
+                              description: Text tokenizer
+                              type: string
+                          type: object
+                        variableTransformation:
+                          default: none
+                          description: For numerical data type.
+                          type: string
+                        video:
+                          description: Video specify the pipeline for video. Not supported
+                            in this release
+                          properties:
+                            featurizer:
+                              default: auto
+                              description: The date time imputer.
+                              type: string
+                          type: object
+                      type: object
+                    type: array
+                  selection:
+                    description: Spec for feature selection
+                    properties:
+                      corrTreshold:
+                        default: 95
+                        description: Remove Features with high correlations
+                        format: int32
+                        type: integer
+                      cumulativeImportancePrecent:
+                        default: 95
+                        description: The cummulative importance of all the importance
+                          feature to include
+                        format: int32
+                        type: integer
+                      lowVarTresholdPct:
+                        default: 5
+                        description: Lowvar specify the filter to remove low variance
+                          features
+                        format: int32
+                        type: integer
+                      pipeline:
+                        description: the Feature selection pipeline. Steps are applied
+                          in the order of the pipeline
+                        items:
+                          type: string
+                        type: array
+                      reserved:
+                        description: List of feature names to consider when training
+                          , even after filtering
+                        items:
+                          type: string
+                        type: array
+                      topN:
+                        default: 0
+                        description: Select the Top N is the number of feature to
+                          select by importance. If 0, all the features are selected.
+                        format: int32
+                        type: integer
+                    type: object
+                type: object
               bestModel:
                 description: The Best model name.
                 type: string
@@ -1686,14 +1981,62 @@ spec:
                 description: The study end time.
                 format: date-time
                 type: string
-              failedTestingModels:
-                description: models failed testing.
-                format: int32
-                type: integer
-              failedTrainingModels:
-                description: models that failed during training.
-                format: int32
-                type: integer
+              ensemble:
+                description: Holds the result of the ensemble phase
+                properties:
+                  endTime:
+                    description: End of the phase.
+                    format: date-time
+                    type: string
+                  failed:
+                    description: models that failed
+                    format: int32
+                    type: integer
+                  startTime:
+                    description: Start of the training phase
+                    format: date-time
+                    type: string
+                  trained:
+                    description: models trained
+                    format: int32
+                    type: integer
+                  training:
+                    description: models in training
+                    format: int32
+                    type: integer
+                  waiting:
+                    description: models waiting for processing
+                    format: int32
+                    type: integer
+                type: object
+              featureEngineering:
+                description: Holds the result of the feature engineering process
+                properties:
+                  endTime:
+                    description: End of the phase.
+                    format: date-time
+                    type: string
+                  failed:
+                    description: models that failed
+                    format: int32
+                    type: integer
+                  startTime:
+                    description: Start of the training phase
+                    format: date-time
+                    type: string
+                  trained:
+                    description: models trained
+                    format: int32
+                    type: integer
+                  training:
+                    description: models in training
+                    format: int32
+                    type: integer
+                  waiting:
+                    description: models waiting for processing
+                    format: int32
+                    type: integer
+                type: object
               lastError:
                 default: ""
                 description: Last error
@@ -1702,6 +2045,21 @@ spec:
                 description: the last model id generated for this study
                 format: int64
                 type: integer
+              lastUpdated:
+                description: Last time the object was updated
+                format: date-time
+                type: string
+              logs:
+                description: Holds the location of log paths
+                properties:
+                  bucketName:
+                    type: string
+                  paths:
+                    description: Paths is the log paths
+                    items:
+                      type: string
+                    type: array
+                type: object
               models:
                 description: Total models created for the study
                 format: int32
@@ -1727,10 +2085,66 @@ spec:
               reportName:
                 description: The study report name
                 type: string
+              search:
+                description: Holds the result of the search phase training
+                properties:
+                  endTime:
+                    description: End of the phase.
+                    format: date-time
+                    type: string
+                  failed:
+                    description: models that failed
+                    format: int32
+                    type: integer
+                  startTime:
+                    description: Start of the training phase
+                    format: date-time
+                    type: string
+                  trained:
+                    description: models trained
+                    format: int32
+                    type: integer
+                  training:
+                    description: models in training
+                    format: int32
+                    type: integer
+                  waiting:
+                    description: models waiting for processing
+                    format: int32
+                    type: integer
+                type: object
               startTime:
                 description: Study start time
                 format: date-time
                 type: string
+              test:
+                description: Holds the result of the test phase
+                properties:
+                  endTime:
+                    description: End of the phase.
+                    format: date-time
+                    type: string
+                  failed:
+                    description: models that failed
+                    format: int32
+                    type: integer
+                  startTime:
+                    description: Start of the training phase
+                    format: date-time
+                    type: string
+                  trained:
+                    description: models trained
+                    format: int32
+                    type: integer
+                  training:
+                    description: models in training
+                    format: int32
+                    type: integer
+                  waiting:
+                    description: models waiting for processing
+                    format: int32
+                    type: integer
+                type: object
               testDataset:
                 description: TestDatasetLocation is the location of the test dataset
                   used to test this model
@@ -1769,27 +2183,10 @@ spec:
                     description: data location type is the type of the data location
                     type: string
                 type: object
-              testedModels:
-                description: Tested models
-                format: int32
-                type: integer
-              testingEndTime:
-                description: Represents time when the study reached a successful complete
-                  or failure phase. It is not guaranteed to
-                format: date-time
-                type: string
-              testingModels:
-                description: models in testing
-                format: int32
-                type: integer
               testingRows:
                 description: TestingRows is the amount of rows in testing
                 format: int32
                 type: integer
-              testingStartTime:
-                description: Start of the testing phase
-                format: date-time
-                type: string
               trainDataset:
                 description: TrainDatasetLocation is the location of the train dataset
                 properties:
@@ -1827,10 +2224,6 @@ spec:
                     description: data location type is the type of the data location
                     type: string
                 type: object
-              trainedModels:
-                description: models that were successful during training
-                format: int32
-                type: integer
               trainingDataHash:
                 description: Sha 256 of the data sig
                 properties:
@@ -1847,22 +2240,10 @@ spec:
                     description: Pointer to the validation
                     type: string
                 type: object
-              trainingEndTime:
-                description: End of the training phase.
-                format: date-time
-                type: string
-              trainingModels:
-                description: models which are currently training or testing.
-                format: int32
-                type: integer
               trainingRows:
                 description: TrainingRows is the amount of rows in training
                 format: int32
                 type: integer
-              trainingStartTime:
-                description: Start of the training phase
-                format: date-time
-                type: string
               triggeredBy:
                 description: What triggered the run
                 enum:
@@ -1914,14 +2295,6 @@ spec:
               validationRows:
                 description: Validation row contain the number of validation rows
                   for cases that we have validation.
-                format: int32
-                type: integer
-              waitingToTestModels:
-                description: models waiting testing
-                format: int32
-                type: integer
-              waitingToTrain:
-                description: models waiting for a trainer
                 format: int32
                 type: integer
             type: object
