@@ -358,6 +358,107 @@ webhooks:
       caBundle: CERT
 
 
+  - name: sqlquery.data.modela.ai
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modela.ai"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - sqlqueries
+    clientConfig:
+      service:
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /validate-data-modela-ai-v1alpha1-sqlquery
+      caBundle: CERT
+
+  - name: sqlqueryrun.data.modela.ai
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modela.ai"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - sqlquerieruns
+    clientConfig:
+      service:
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /validate-data-modela-ai-v1alpha1-sqlqueryrun
+      caBundle: CERT
+
+  - name: webrequest.data.modela.ai
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modela.ai"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - webrequests
+    clientConfig:
+      service:
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /validate-data-modela-ai-v1alpha1-webrequest
+      caBundle: CERT
+
+  - name: webrequestrun.data.modela.ai
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Fail
+    admissionReviewVersions:
+      - v1beta1
+      - v1alpha1
+    rules:
+      - apiGroups:
+          - "data.modela.ai"
+        apiVersions:
+          - v1alpha1
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - webrequestruns
+    clientConfig:
+      service:
+        namespace: modela-system
+        name: modela-control-plane-webhook
+        path: /validate-data-modela-ai-v1alpha1-webrequestrun
+      caBundle: CERT
+
+
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration

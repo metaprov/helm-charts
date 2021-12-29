@@ -385,6 +385,106 @@ webhooks:
           path: /mutate-data-modela-ai-v1alpha1-reciperun
         caBundle: CERT
 
+  - name: sqlquery.data.modela.ai
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+        - v1beta1
+        - v1alpha1
+    rules:
+        - apiGroups:
+            - "data.modela.ai"
+          apiVersions:
+            - v1alpha1
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - sqlqueries
+    clientConfig:
+        service:
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-data-modela-ai-v1alpha1-sqlquery
+        caBundle: CERT   
+
+  - name: sqlqueryrun.data.modela.ai
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+        - v1beta1
+        - v1alpha1
+    rules:
+        - apiGroups:
+            - "data.modela.ai"
+          apiVersions:
+            - v1alpha1
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - sqlqueryruns
+    clientConfig:
+        service:
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-data-modela-ai-v1alpha1-sqlqueryrun
+        caBundle: CERT   
+    
+  - name: webrequest.data.modela.ai
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+        - v1beta1
+        - v1alpha1
+    rules:
+        - apiGroups:
+            - "data.modela.ai"
+          apiVersions:
+            - v1alpha1
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - webrequest
+    clientConfig:
+        service:
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-data-modela-ai-v1alpha1-webrequest
+        caBundle: CERT   
+
+  - name: webrequestrun.data.modela.ai
+    failurePolicy: Fail
+    sideEffects: None
+    timeoutSeconds: 5
+    admissionReviewVersions:
+        - v1beta1
+        - v1alpha1
+    rules:
+        - apiGroups:
+            - "data.modela.ai"
+          apiVersions:
+            - v1alpha1
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - webrequestruns
+    clientConfig:
+        service:
+          namespace: modela-system
+          name: modela-control-plane-webhook
+          path: /mutate-data-modela-ai-v1alpha1-webrequestrun
+        caBundle: CERT   
+
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
