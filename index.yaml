@@ -3,7 +3,7 @@ entries:
   modela:
   - apiVersion: v2
     appVersion: v0.4.317
-    created: "2021-12-29T17:51:31.901217553Z"
+    created: "2021-12-29T19:04:54.515718031Z"
     description: Machine Learning Operators
     digest: 3bfbf74a2346b3adf17af886f38d49d2510cc03d4b455dbdea0de455b64f77e3
     home: https://modela.ai
@@ -27,7 +27,7 @@ entries:
   modela-default-tenant:
   - apiVersion: v2
     appVersion: 0.4.317
-    created: "2021-12-29T17:51:31.796726065Z"
+    created: "2021-12-29T19:04:54.500646648Z"
     description: A Helm chart for default tenant
     digest: 427c0ccdc0152a52ed6b19e1e7eb469fdf47a7a6bc991d74e71b4cf0f77d80c4
     home: https://www.modela.ai
@@ -47,4 +47,40 @@ entries:
     urls:
     - https://metaprov.github.io/helm-charts/modela-default-tenant-0.4.317.tgz
     version: 0.4.317
-generated: "2021-12-29T17:51:31.788029858Z"
+  modeld:
+  - apiVersion: v2
+    appVersion: v0.0.1
+    created: "2021-12-29T19:04:54.548263709Z"
+    description: Machine Learning Operators
+    digest: 0cbfd9f8f0865d30aac35652d91ee578775d142922c0f51541f6c7e8ebf6796f
+    home: https://modeld.io
+    keywords:
+    - kubernetes
+    - go
+    - golang
+    - ai
+    - machine learning
+    kubeVersion: '>= 1.15.0'
+    maintainers:
+    - email: support@modeld.io
+      name: metaprov
+      url: https://groups.google.com/forum/#!forum/modeld-discuss
+    name: modeld
+    sources:
+    - https://github.com/metaprov/modeld
+    type: application
+    urls:
+    - https://metaprov.github.io/helm-charts/modeld-0.1.0.tgz
+    version: 0.1.0
+  modeld-default-tenant:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-12-29T19:04:54.549294915Z"
+    description: A Helm chart for default tenant
+    digest: 3cc50ffc42cfdc6fc747a685614f8a7e2ec22277cf9589140ff717f9b72cd450
+    name: modeld-default-tenant
+    type: application
+    urls:
+    - https://metaprov.github.io/helm-charts/modeld-default-tenant-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-12-29T19:04:54.49919984Z"
