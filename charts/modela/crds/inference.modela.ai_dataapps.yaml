@@ -6,48 +6,37 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
-  name: reports.training.modela.ai
+  name: dataapps.inference.modela.ai
 spec:
-  group: training.modela.ai
+  group: inference.modela.ai
   names:
     categories:
-    - training
+    - data
     - modela
-    - all
-    kind: Report
-    listKind: ReportList
-    plural: reports
-    singular: report
+    kind: DataApp
+    listKind: DataAppList
+    plural: dataapps
+    singular: dataapp
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.phase
-      name: Status
+    - jsonPath: .status.conditions[?(@.type=="Ready")].status
+      name: Ready
       type: string
     - jsonPath: .spec.owner
       name: Owner
-      priority: 1
       type: string
     - jsonPath: .spec.versionName
       name: Version
       type: string
-    - jsonPath: .spec.reportType
-      name: Type
-      type: string
-    - jsonPath: .status.startTime
-      name: StartTime
-      type: date
-    - jsonPath: .status.endTime
-      name: CompletionTime
-      type: date
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ReportName represent a report object. A report is a pdf report
-          which contain images and tables about another object
+        description: DataApp represent a dashboard for business users to use a single
+          model.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -62,21 +51,29 @@ spec:
           metadata:
             type: object
           spec:
-            description: ReportSpec specifies the desired state of the ReportName
-              resource
+            description: DataAppSpec contain the desired state of a DataApp
             properties:
-              activeDeadlineSeconds:
-                default: 600
-                description: ActiveDeadlineSeconds is the deadline of a job for this
-                  report.
-                format: int64
-                type: integer
+              accessType:
+                default: cluster-port
+                description: 'The access method specified how external clients will
+                  access the predictor Default: ClusterPort'
+                enum:
+                - cluster-port
+                - node-port
+                - load-balancer
+                - ingress
+                - mesh
+                - none
+                type: string
               custom:
-                description: If the report is custom report, this field holds the
-                  specification
+                description: Custom application
                 properties:
+                  owner:
+                    default: ""
+                    description: The app title
+                    type: string
                   pages:
-                    description: The pages in the report
+                    description: The app pages
                     items:
                       properties:
                         rows:
@@ -239,9 +236,32 @@ spec:
                       type: object
                     type: array
                 type: object
-              entityRef:
-                description: EntityRef specify the entity being report. Currently
-                  entities can be dataset,model or study
+              description:
+                default: ""
+                description: Comments is a description of the webrequest
+                type: string
+              modelName:
+                default: ""
+                description: The name of the predictive app model. The model will
+                  be used
+                type: string
+              owner:
+                default: no-one
+                description: The webrequest owner
+                type: string
+              path:
+                default: ""
+                description: The path of the predictive path
+                type: string
+              port:
+                default: 3000
+                description: The port for the app
+                format: int32
+                maximum: 65535
+                minimum: 1
+                type: integer
+              productRef:
+                description: The product that this predictor serve.
                 properties:
                   apiVersion:
                     description: API version of the referent.
@@ -276,95 +296,62 @@ spec:
                     description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                     type: string
                 type: object
-              format:
-                default: pdf
-                description: Format specify the report format. default is pdf
-                enum:
-                - pdf
-                type: string
-              location:
-                description: Location is the report location in storage.
+              replicas:
+                default: 1
+                description: Number of replicates
+                format: int32
+                type: integer
+              servingsiteRef:
+                description: The serving site that hosts this predictor and the models
                 properties:
-                  bucketName:
-                    default: ""
-                    description: Bucketname is the name of the bucket
+                  apiVersion:
+                    description: API version of the referent.
                     type: string
-                  connectionName:
-                    default: ""
-                    description: ConnectionName is the name of the connection to access
-                      the database
+                  fieldPath:
+                    description: 'If referring to a piece of an object instead of
+                      an entire object, this string should contain a valid JSON/Go
+                      field access statement, such as desiredState.manifest.containers[2].
+                      For example, if the object reference is to a container within
+                      a pod, this would take on a value like: "spec.containers{name}"
+                      (where "name" refers to the name of the container that triggered
+                      the event) or if no container name is specified "spec.containers[2]"
+                      (container with index 2 in this pod). This syntax is chosen
+                      only to have some well-defined way of referencing a part of
+                      an object. TODO: this design is not final and this field is
+                      subject to change in the future.'
                     type: string
-                  database:
-                    default: ""
-                    description: Database , the database.
+                  kind:
+                    description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
                     type: string
-                  path:
-                    default: ""
-                    description: Path to the full data file (e.g. csv file).
+                  name:
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                     type: string
-                  sql:
-                    default: ""
-                    description: SQL statement, in case we choose the view type
+                  namespace:
+                    description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
                     type: string
-                  table:
-                    default: ""
-                    description: Sql or table or topic name.
+                  resourceVersion:
+                    description: 'Specific resourceVersion to which this reference
+                      is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
                     type: string
-                  topic:
-                    default: ""
-                    description: Topic is the name of the topic in case of streaming
-                    type: string
-                  type:
-                    default: object
-                    description: data location type is the type of the data location
+                  uid:
+                    description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                     type: string
                 type: object
-              notifierName:
-                description: NotifierName is a reference to the notifier that is used
-                  to send the report
-                type: string
-              owner:
-                default: no-one
-                description: The owner account name
-                type: string
-              reportType:
-                description: ReportType specify the report type (e.g. classification
-                  / regression)
-                enum:
-                - binary-classification-model
-                - forecast-model
-                - regression-model
-                - multi-classification-model
-                - text-classification-model
-                - classification-dataset
-                - forecast-dataset
-                - text-classification-dataset
-                - regression-dataset
-                - study-report
-                - feature-report
-                - invalid-report
-                - daily-report
-                - weekly-report
-                - monthly-report
-                - summary-report
-                type: string
               versionName:
-                default: latest
-                description: VersionName is the data product version name for this
-                  report.
+                default: ""
+                description: The product version for the webrequest.
                 type: string
               workloadClassName:
-                default: nano-cpu-250m-mem-256mi
-                description: WorkloadClassName is the name of the workload class used
-                  to run this report
+                default: ""
+                description: The workload class to use when running the app pod
                 type: string
             type: object
           status:
-            description: ReportStatus defines the observed state of the report.
+            description: DataAppStatus defines the observed state of DataApp
             properties:
               conditions:
                 items:
-                  description: ReportCondition describes the state of a ReportName
+                  description: DataAppCondition describes the state of a deployment
                     at a certain point.
                   properties:
                     lastTransitionTime:
@@ -380,63 +367,28 @@ spec:
                       description: The reason for the condition's last transition.
                       type: string
                     status:
-                      description: Status of the condition, one of True, False, Unknown.
+                      description: Status of the condition, one of True, False, AutoScaler.
                       type: string
                     type:
-                      description: Type of condition.
+                      description: Type of account condition.
                       type: string
                   required:
                   - status
                   - type
                   type: object
                 type: array
-              endTime:
-                description: EndTime is the time when the report ended generation
-                  and was uploaded to storage be set in happens-before order across
-                  separate operations. It is represented in RFC3339 form and is in
-                  UTC.
-                format: date-time
-                type: string
-              lastError:
-                default: ""
-                description: Last error
-                type: string
               lastUpdated:
                 description: Last time the object was updated
                 format: date-time
                 type: string
-              logs:
-                description: Holds the location of log paths
-                properties:
-                  bucketName:
-                    type: string
-                  paths:
-                    description: Paths is the log paths
-                    items:
-                      type: string
-                    type: array
-                type: object
               observedGeneration:
                 description: ObservedGeneration is the Last generation that was acted
                   on
                 format: int64
                 type: integer
-              phase:
-                default: Pending
-                description: Phase is the phase of the report
-                type: string
-              startTime:
-                description: StartTime is the start time of the report was sent for
-                  generation It is not guaranteed to be set in happens-before order
-                  across separate operations. It is represented in RFC3339 form and
-                  is in UTC.
-                format: date-time
-                type: string
-              uri:
-                description: URI is the report uri in the bucket
-                type: string
             type: object
         required:
+        - metadata
         - spec
         type: object
     served: true
