@@ -4,10 +4,10 @@ metadata:
   name: housing
   namespace: modela-catalog
 spec:
-  url: https://github.com/metaprov/modelaapi/tree/main/datasets/housing
+  url: https://github.com/metaprov/modela-public-datasets/tree/main/datasets/housing
   description: This dataset contains information collected by the U.S Census Service concerning housing in the area of Boston Mass
   task: regression
-  dataUrl: https://raw.githubusercontent.com/metaprov/modelaapi/main/datasets/housing/housing.csv
+  dataUrl: https://raw.githubusercontent.com/metaprov/modela-public-datasets/main/datasets/housing/housing.csv
   citation: ""
   rows: 506
   columns: 14
