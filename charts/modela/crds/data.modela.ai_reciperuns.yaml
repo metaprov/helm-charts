@@ -46,7 +46,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Recipe run represent one execution of the recipe. Execution is
+        description: RecipeRun represent one execution of the recipe. Execution is
           performed by creating a Kubernetes job.
         properties:
           apiVersion:
