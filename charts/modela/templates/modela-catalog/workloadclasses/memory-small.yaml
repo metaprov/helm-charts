@@ -1,0 +1,15 @@
+apiVersion: catalog.modela.ai/v1alpha1
+kind: WorkloadClass
+metadata:
+  name: memory-small
+  namespace: modela-catalog
+spec:
+  resourcesTemplate:
+    workloadClassName:  memory-small
+    requirements:
+      requests:
+        memory: "128Mi"
+        cpu: "250m"
+      limits:
+        memory: "256Mi"
+        cpu: "500m" 

@@ -1,0 +1,15 @@
+apiVersion: catalog.modela.ai/v1alpha1
+kind: WorkloadClass
+metadata:
+  name: gpu-2xlarge
+  namespace: modela-catalog
+spec:
+  resourcesTemplate:
+    workloadClassName:  gpu-2xlarge
+    requirements:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"  

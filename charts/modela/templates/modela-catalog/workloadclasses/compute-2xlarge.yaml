@@ -1,0 +1,16 @@
+apiVersion: catalog.modela.ai/v1alpha1
+kind: WorkloadClass
+metadata:
+  name: compute-2xlarge
+  namespace: modela-catalog
+spec:
+  resourcesTemplate:
+    workloadClassName:  compute-2xlarge
+    requirements:
+      requests:
+        memory: "256Mi"
+        cpu: "2"
+      limits:
+        memory: "512Mi"
+        cpu: "2"  
+  

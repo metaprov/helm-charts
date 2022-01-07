@@ -1,0 +1,15 @@
+apiVersion: catalog.modela.ai/v1alpha1
+kind: WorkloadClass
+metadata:
+  name: memory-large
+  namespace: modela-catalog
+spec:
+  resourcesTemplate:
+    workloadClassName:  memory-large
+    requirements:
+      requests:
+        memory: "512Mi"
+        cpu: "250m"
+      limits:
+        memory: "1024Mi"
+        cpu: "500m"  
