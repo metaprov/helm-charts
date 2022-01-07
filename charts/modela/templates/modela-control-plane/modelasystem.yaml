@@ -1,0 +1,70 @@
+apiVersion: infra.modela.ai/v1alpha1
+kind: ModelaSystem
+metadata:
+  name: system
+  namespace: modela-system
+spec:
+  release: {{ .Chart.AppVersion }}
+  active: true
+  images:
+    controlPlaneImage: {{ .Values.clouds.image.registry }} /metaprov/modela-control-plane :{{ .Chart.AppVersion }}
+    datadockImage: {{ .Values.clouds.image.registry }} /metaprov/modela-datadock:{{ .Chart.AppVersion }}
+    frontendImage: {{ .Values.clouds.image.registry }} /metaprov/modela-frontend:{{ .Chart.AppVersion }}
+    publisherImage: {{ .Values.clouds.image.registry }} /metaprov/modela-publisher:{{ .Chart.AppVersion }}
+    trainerImage: {{ .Values.clouds.image.registry }} /metaprov/modela-trainer:{{ .Chart.AppVersion }}
+    batchPredictorImage: {{ .Values.clouds.image.registry }}/metaprov/modela-batch-predictor:{{ .Chart.AppVersion }}
+    apiproxyImage: {{ .Values.clouds.image.registry }} /metaprov/modela-api-proxy:{{ .Chart.AppVersion }}
+    dataplaneImage: {{ .Values.clouds.image.registry }} /metaprov/modela-data-plane:latest:{{ .Chart.AppVersion }}
+    cloudproxyImage: {{ .Values.clouds.image.registry }} /metaprov/modela-cloud-proxy:{{ .Chart.AppVersion }}
+    databaseProxyImage: {{ .Values.clouds.image.registry }} /metaprov/modela-database-proxy:{{ .Chart.AppVersion }}
+    predictionRouterImage: {{ .Values.clouds.image.registry }} metaprov/modela-prediction-router:{{ .Chart.AppVersion }}
+    modelaSystemImage: {{ .Values.clouds.image.registry }} /metaprov/modela-supervisor:{{ .Chart.AppVersion }}
+    modelaPredictionServerImage: {{ .Values.clouds.image.registry }} /metaprov/modela-prediction-server:{{ .Chart.AppVersion }}
+    modelaDashboardServerImage: {{ .Values.clouds.image.registry }} /metaprov/modela-datashboard:{{ .Chart.AppVersion }}
+    modelaWorkerControlImage:  {{ .Values.clouds.image.registry }} /metaprov/modela-workload:{{ .Chart.AppVersion }}
+    apiGatewayImage: {{ .Values.clouds.image.registry }} /metaprov/modela-apigateway:{{ .Chart.AppVersion }}
+  podTemplate:
+      metadata: 
+        labels:
+          app.kubernetes.io/name: modela-trainer
+      spec:
+        restartPolicy: Never
+        containers:
+          - name: control
+            ports:
+                - containerPort: 8080
+            volumeMounts:
+                - name: data
+                  mountPath: /var/opt/modela/data
+          - name: data
+            image: quay.io/metaprov/modela-data-plane:v0.4.205
+            imagePullPolicy: IfNotPresent
+            ports:
+               - containerPort: 8070
+                 name: http
+               - containerPort: 9090
+                 name: metrics
+               - containerPort: 8008
+                 name: profiling
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "200m"
+              limits:
+                memory: "1Gi"
+                cpu: "1"
+            volumeMounts:
+               - name: data
+                 mountPath: /var/opt/modela/data
+          - name: cloud-proxy
+            image: quay.io/metaprov/modela-cloud-proxy:latest
+            imagePullPolicy: IfNotPresent
+            ports:
+              - name: http
+                containerPort: 8090
+            volumeMounts:
+              - name: data
+                mountPath: /var/opt/modela/data
+        volumes:
+          - name: data
+            emptyDir: {}
