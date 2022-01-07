@@ -1,10 +1,9 @@
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: accounts.infra.modela.ai
 spec:
@@ -100,7 +99,7 @@ spec:
                 description: Email account creation event to user (using the user
                   email)
                 type: boolean
-              favorites:
+              favoriteProducts:
                 description: List of favorite data product
                 items:
                   type: string
