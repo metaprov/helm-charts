@@ -11,7 +11,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-slack-secret
+  secretRef : 
+    name: default-slack-secret
+    namespace: default-tenant
   category: general
 ---
 apiVersion: v1

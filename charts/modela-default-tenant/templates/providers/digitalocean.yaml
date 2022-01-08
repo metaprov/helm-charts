@@ -40,7 +40,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName: default-digitalocean-secret
+  secretRef: 
+    name: default-digitalocean-secret
+    namespace: default-tenant
   category: cloud
   digitalocean:
     token: '[hidden]'

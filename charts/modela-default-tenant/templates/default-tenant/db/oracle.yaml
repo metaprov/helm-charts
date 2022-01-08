@@ -21,7 +21,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-oracle-secret
+  secretRef : 
+    name: default-oracle-secret
+    namespace: default-tenant
   oracle:
     host: ''
     port: 3000

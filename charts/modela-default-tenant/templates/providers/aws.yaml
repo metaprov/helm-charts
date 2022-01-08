@@ -38,7 +38,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-aws-secret
+  secretRef : 
+    name: default-aws-secret
+    namespace: default-tenant
   category: cloud
   aws:
     defaultRegion: us-east-1

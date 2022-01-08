@@ -25,7 +25,9 @@ spec:
   tenantRef:
     name: default-bigquery-secret
     namespace: modela-system
-  secretName : default-bigquery-secret
+  secretRef : 
+    name: default-bigquery-secret
+    namespace: default-tenant
   bigquery:
     host: ''
     port: 3000

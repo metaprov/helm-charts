@@ -21,7 +21,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-exasol-secret
+  secretRef : 
+    name: default-exasol-secret
+    namespace: default-tenant
   exasol:
     host: ''
     port: 3000

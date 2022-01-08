@@ -7,22 +7,22 @@ spec:
   release: {{ .Chart.AppVersion }}
   active: true
   images:
-    controlPlaneImage: {{ .Values.clouds.image.registry }} /metaprov/modela-control-plane :{{ .Chart.AppVersion }}
-    datadockImage: {{ .Values.clouds.image.registry }} /metaprov/modela-datadock:{{ .Chart.AppVersion }}
-    frontendImage: {{ .Values.clouds.image.registry }} /metaprov/modela-frontend:{{ .Chart.AppVersion }}
-    publisherImage: {{ .Values.clouds.image.registry }} /metaprov/modela-publisher:{{ .Chart.AppVersion }}
-    trainerImage: {{ .Values.clouds.image.registry }} /metaprov/modela-trainer:{{ .Chart.AppVersion }}
+    controlPlaneImage: {{ .Values.clouds.image.registry }}/metaprov/modela-control-plane :{{ .Chart.AppVersion }}
+    datadockImage: {{ .Values.clouds.image.registry }}/metaprov/modela-datadock:{{ .Chart.AppVersion }}
+    frontendImage: {{ .Values.clouds.image.registry }}/metaprov/modela-frontend:{{ .Chart.AppVersion }}
+    publisherImage: {{ .Values.clouds.image.registry }}/metaprov/modela-publisher:{{ .Chart.AppVersion }}
+    trainerImage: {{ .Values.clouds.image.registry }}/metaprov/modela-trainer:{{ .Chart.AppVersion }}
     batchPredictorImage: {{ .Values.clouds.image.registry }}/metaprov/modela-batch-predictor:{{ .Chart.AppVersion }}
-    apiproxyImage: {{ .Values.clouds.image.registry }} /metaprov/modela-api-proxy:{{ .Chart.AppVersion }}
-    dataplaneImage: {{ .Values.clouds.image.registry }} /metaprov/modela-data-plane:latest:{{ .Chart.AppVersion }}
-    cloudproxyImage: {{ .Values.clouds.image.registry }} /metaprov/modela-cloud-proxy:{{ .Chart.AppVersion }}
-    databaseProxyImage: {{ .Values.clouds.image.registry }} /metaprov/modela-database-proxy:{{ .Chart.AppVersion }}
-    predictionRouterImage: {{ .Values.clouds.image.registry }} metaprov/modela-prediction-router:{{ .Chart.AppVersion }}
-    modelaSystemImage: {{ .Values.clouds.image.registry }} /metaprov/modela-supervisor:{{ .Chart.AppVersion }}
-    modelaPredictionServerImage: {{ .Values.clouds.image.registry }} /metaprov/modela-prediction-server:{{ .Chart.AppVersion }}
-    modelaDashboardServerImage: {{ .Values.clouds.image.registry }} /metaprov/modela-datashboard:{{ .Chart.AppVersion }}
-    modelaWorkerControlImage:  {{ .Values.clouds.image.registry }} /metaprov/modela-workload:{{ .Chart.AppVersion }}
-    apiGatewayImage: {{ .Values.clouds.image.registry }} /metaprov/modela-apigateway:{{ .Chart.AppVersion }}
+    apiproxyImage: {{ .Values.clouds.image.registry }}/metaprov/modela-api-proxy:{{ .Chart.AppVersion }}
+    dataplaneImage: {{ .Values.clouds.image.registry }}/metaprov/modela-data-plane:latest:{{ .Chart.AppVersion }}
+    cloudproxyImage: {{ .Values.clouds.image.registry }}/metaprov/modela-cloud-proxy:{{ .Chart.AppVersion }}
+    databaseProxyImage: {{ .Values.clouds.image.registry }}/metaprov/modela-database-proxy:{{ .Chart.AppVersion }}
+    predictionRouterImage: {{ .Values.clouds.image.registry }}metaprov/modela-prediction-router:{{ .Chart.AppVersion }}
+    modelaSystemImage: {{ .Values.clouds.image.registry }}/metaprov/modela-supervisor:{{ .Chart.AppVersion }}
+    modelaPredictionServerImage: {{ .Values.clouds.image.registry }}/metaprov/modela-prediction-server:{{ .Chart.AppVersion }}
+    modelaDashboardServerImage: {{ .Values.clouds.image.registry }}/metaprov/modela-datashboard:{{ .Chart.AppVersion }}
+    modelaWorkerControlImage:  {{ .Values.clouds.image.registry }}/metaprov/modela-workload:{{ .Chart.AppVersion }}
+    apiGatewayImage: {{ .Values.clouds.image.registry }}/metaprov/modela-apigateway:{{ .Chart.AppVersion }}
   podTemplate:
       metadata: 
         labels:

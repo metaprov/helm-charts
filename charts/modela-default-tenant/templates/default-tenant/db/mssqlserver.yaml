@@ -21,7 +21,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-mssqlserver-secret
+  secretRef : 
+    name: default-mssqlserver-secret
+    namespace: default-tenant
   mssqlserver:
     host: ''
     port: 3000

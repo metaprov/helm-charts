@@ -11,7 +11,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-azure-secret
+  secretRef : 
+    name: default-azure-secret
+    namespace: default-tenant
   category: cloud
   azureStorage:
     storageAccount: ''

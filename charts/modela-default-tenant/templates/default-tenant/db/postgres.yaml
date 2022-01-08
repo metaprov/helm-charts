@@ -21,7 +21,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-postgres-secret
+  secretRef : 
+    name: default-postgres-secret
+    namespace: 
   postgres:
     host: ''
     port: 3000

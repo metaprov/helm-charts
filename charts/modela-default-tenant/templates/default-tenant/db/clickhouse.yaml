@@ -25,7 +25,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-clickhouse-secret
+  secretRef : 
+    name: default-clickhouse-secret
+    namespace: default-tenant
   clickhouse:
     host: ''
     port: 3000

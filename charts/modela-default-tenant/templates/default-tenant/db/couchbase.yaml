@@ -21,7 +21,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-couchbase-secret
+  secretRef : 
+    name: default-couchbase-secret
+    namespace: default-tenant
   couchbase:
     host: ''
     port: 3000

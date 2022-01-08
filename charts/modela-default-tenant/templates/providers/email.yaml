@@ -31,7 +31,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-email-secret
+  secretRef : 
+    name: default-email-secret
+    namespace: modela-system
   category: general
   smtp:
     host: ''

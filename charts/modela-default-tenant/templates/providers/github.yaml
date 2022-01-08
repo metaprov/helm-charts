@@ -11,7 +11,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-github-secret
+  secretRef : 
+    name: default-github-secret
+    namespace: default-tenant
   category: git
 ---
 apiVersion: v1

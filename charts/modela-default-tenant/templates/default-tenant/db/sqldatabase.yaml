@@ -21,7 +21,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-azuresqldatabase-secret
+  secretRef : 
+    name: default-azuresqldatabase-secret
+    namespace: default-tenant
   azuresqldatabase:
     host: ''
     port: 3000

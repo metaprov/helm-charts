@@ -36,7 +36,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-dockerhub-secret
+  secretRef : 
+    name: default-dockerhub-secret
+    namespace: default-tenant
   category: docker-image-registry
   imageRegistry:
     host: hub.docker.com

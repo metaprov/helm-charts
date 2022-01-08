@@ -21,7 +21,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-redshift-secret
+  secretRef : 
+    name: default-redshift-secret
+    namespace: default-tenant
   redshift:
     host: ''
     port: 3000

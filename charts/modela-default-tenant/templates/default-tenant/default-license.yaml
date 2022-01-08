@@ -8,7 +8,9 @@ spec:
   tenantRef:
     name: default-teant
     namespace: modela-system
-  secretName: default-license-secret
+  secretRef: 
+    name: default-license-secret
+    namespace: default-tenant
   owner: admin
   email: ""
   maxProducts: 5

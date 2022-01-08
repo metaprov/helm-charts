@@ -11,7 +11,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : modela-gcp-secret
+  secretRef : 
+     name: modela-gcp-secret
+     namespace: default-tenant
   category: cloud
   gcpstorage:
     keyFile: ''
