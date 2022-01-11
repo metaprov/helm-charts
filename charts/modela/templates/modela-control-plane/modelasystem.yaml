@@ -14,7 +14,7 @@ spec:
     trainerImage: {{ .Values.clouds.image.registry }}/metaprov/modela-trainer:{{ .Chart.AppVersion }}
     batchPredictorImage: {{ .Values.clouds.image.registry }}/metaprov/modela-batch-predictor:{{ .Chart.AppVersion }}
     apiproxyImage: {{ .Values.clouds.image.registry }}/metaprov/modela-api-proxy:{{ .Chart.AppVersion }}
-    dataplaneImage: {{ .Values.clouds.image.registry }}/metaprov/modela-data-plane:latest:{{ .Chart.AppVersion }}
+    dataplaneImage: {{ .Values.clouds.image.registry }}/metaprov/modela-data-plane:{{ .Chart.AppVersion }}
     cloudproxyImage: {{ .Values.clouds.image.registry }}/metaprov/modela-cloud-proxy:{{ .Chart.AppVersion }}
     databaseProxyImage: {{ .Values.clouds.image.registry }}/metaprov/modela-database-proxy:{{ .Chart.AppVersion }}
     predictionRouterImage: {{ .Values.clouds.image.registry }}metaprov/modela-prediction-router:{{ .Chart.AppVersion }}
