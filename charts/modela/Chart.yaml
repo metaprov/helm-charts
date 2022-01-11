@@ -1,7 +1,7 @@
 apiVersion: v2
 name: modela
-version: v0.4.353
-appVersion: v0.4.352
+version: v0.4.375
+appVersion: v0.4.375
 kubeVersion: ">= 1.15.0"
 description: Machine Learning Operators
 type: application

@@ -317,6 +317,21 @@ spec:
                     - als
                     - bayesian-personalized-ranking
                     type: string
+                  imbalanceHandler:
+                    default: auto
+                    description: The imbalanced handler algorithm
+                    enum:
+                    - adasyn
+                    - baseline-smote
+                    - kmean-smote
+                    - random-over-sampler
+                    - smote
+                    - smotenc
+                    - svmsmote
+                    - none
+                    - auto
+                    - class-weights
+                    type: string
                   maxModels:
                     default: 10
                     description: Max models to create during the search for the best
@@ -838,6 +853,11 @@ spec:
                 description: Set to true if you want the system to push model image
                   to remote docker registry
                 type: boolean
+              modelExplained:
+                default: true
+                description: Set to true if you want the system to create model explentation
+                  for the final models
+                type: boolean
               modelImage:
                 description: Model Image specification.
                 properties:
@@ -932,7 +952,7 @@ spec:
                   earlyStopAfter:
                     default: 0
                     description: If larget than 0, stop the search if no change in
-                      best score occur.
+                      best score occur. By default we do not early stop.
                     format: int32
                     type: integer
                   keepOnlyTopModel:
@@ -973,32 +993,60 @@ spec:
                     - accuracy
                     - average-precision
                     - balanced-accuracy
-                    - brier-score-loss
+                    - pr-auc
+                    - pr-auc-micro
+                    - pr-auc-macro
+                    - pr-auc-weighted
                     - f1
-                    - f1-macro
                     - f1-micro
+                    - f1-macro
                     - f1-weighted
-                    - log-loss
+                    - f1-samples
                     - precision
                     - precision-micro
                     - precision-macro
                     - precision-weighted
+                    - precision-samples
                     - recall
                     - recall-macro
                     - recall-micro
                     - recall-weighted
+                    - recall-samples
+                    - log-loss
                     - auc
+                    - auc-micro
+                    - auc-macro
+                    - auc-weighted
+                    - zero-one
+                    - hamming-loss
+                    - hinge-loss
+                    - jacquard-loss
+                    - mcc
                     - fp
                     - fn
                     - tn
                     - tp
-                    - explained_variance
+                    - tpr
+                    - fpr
+                    - tnr
+                    - matthews-corr-coef
+                    - explained-variance
+                    - max-error
                     - mae
                     - mse
                     - msle
+                    - rmse
+                    - rmsle
                     - median-absolute-error
                     - r2
                     - adj-r2
+                    - mean_poisson_deviance
+                    - mean-gamma-deviance
+                    - mean-tweedie-deviance
+                    - mape
+                    - maze
+                    - mdape
+                    - smape
                     - adjusted-mutual-info-score
                     - adjusted-rand-score
                     - completeness-score
@@ -1007,27 +1055,15 @@ spec:
                     - mutual-info-score
                     - normalized-mutual-info-score
                     - v-measure-score
-                    - rmse
-                    - unknown
-                    - mape
-                    - smape
-                    - mdape
-                    - adjr2
-                    - mcc
-                    - tpr
-                    - fpr
-                    - tnr
-                    - rmsle
-                    - matthews-corr-coef
                     - p50-latency
                     - p95-latency
                     - p99-latency
                     - cpu
-                    - mem
-                    - req-per-sec
-                    - maze
                     - gpu
+                    - mem
                     - gpu-mem
+                    - req-per-sec
+                    - uncertain-prediction-percent
                     - none
                     type: string
                   objective2:
@@ -1038,32 +1074,60 @@ spec:
                     - accuracy
                     - average-precision
                     - balanced-accuracy
-                    - brier-score-loss
+                    - pr-auc
+                    - pr-auc-micro
+                    - pr-auc-macro
+                    - pr-auc-weighted
                     - f1
-                    - f1-macro
                     - f1-micro
+                    - f1-macro
                     - f1-weighted
-                    - log-loss
+                    - f1-samples
                     - precision
                     - precision-micro
                     - precision-macro
                     - precision-weighted
+                    - precision-samples
                     - recall
                     - recall-macro
                     - recall-micro
                     - recall-weighted
+                    - recall-samples
+                    - log-loss
                     - auc
+                    - auc-micro
+                    - auc-macro
+                    - auc-weighted
+                    - zero-one
+                    - hamming-loss
+                    - hinge-loss
+                    - jacquard-loss
+                    - mcc
                     - fp
                     - fn
                     - tn
                     - tp
-                    - explained_variance
+                    - tpr
+                    - fpr
+                    - tnr
+                    - matthews-corr-coef
+                    - explained-variance
+                    - max-error
                     - mae
                     - mse
                     - msle
+                    - rmse
+                    - rmsle
                     - median-absolute-error
                     - r2
                     - adj-r2
+                    - mean_poisson_deviance
+                    - mean-gamma-deviance
+                    - mean-tweedie-deviance
+                    - mape
+                    - maze
+                    - mdape
+                    - smape
                     - adjusted-mutual-info-score
                     - adjusted-rand-score
                     - completeness-score
@@ -1072,27 +1136,15 @@ spec:
                     - mutual-info-score
                     - normalized-mutual-info-score
                     - v-measure-score
-                    - rmse
-                    - unknown
-                    - mape
-                    - smape
-                    - mdape
-                    - adjr2
-                    - mcc
-                    - tpr
-                    - fpr
-                    - tnr
-                    - rmsle
-                    - matthews-corr-coef
                     - p50-latency
                     - p95-latency
                     - p99-latency
                     - cpu
-                    - mem
-                    - req-per-sec
-                    - maze
                     - gpu
+                    - mem
                     - gpu-mem
+                    - req-per-sec
+                    - uncertain-prediction-percent
                     - none
                     type: string
                   pruner:
@@ -1310,31 +1362,42 @@ spec:
                 description: Task specify the machine learning task (e.g classification).
                   This must match the task of the data product.
                 enum:
-                - forecasting
                 - binary-classification
                 - multi-classification
                 - multi-label-classification
-                - text-classification
-                - regression
                 - forecasting
+                - regression
                 - clustering
                 - recommendation
                 - outlier-detection
                 - novelty-detection
                 - topic-modeling
-                - auto
-                - unknown
                 - video-action-recognition
                 - video-classification
                 - video-object-tracking
-                - text-classification
-                - text-multi-label-classification
-                - text-entity-extraction
-                - text-sentiment-analysis
                 - image-classification
                 - image-multi-classification
                 - image-object-detection
                 - image-segmentation
+                - auto
+                - text-ner
+                - text-classification
+                - text-summarization
+                - text-qa
+                - text-sentiment-analysis
+                - text-generation
+                - text-code-generation
+                - text-translation
+                - text-lang-detection
+                - text-grammer-correction
+                - text-paraphrasing
+                - text-intent-classification
+                - text-semantic-similarity
+                - text-keyword-extraction
+                - text-pos
+                - text-tokenization
+                - text-lemma
+                - unknown
                 type: string
               template:
                 default: false
@@ -1394,32 +1457,60 @@ spec:
                       - accuracy
                       - average-precision
                       - balanced-accuracy
-                      - brier-score-loss
+                      - pr-auc
+                      - pr-auc-micro
+                      - pr-auc-macro
+                      - pr-auc-weighted
                       - f1
-                      - f1-macro
                       - f1-micro
+                      - f1-macro
                       - f1-weighted
-                      - log-loss
+                      - f1-samples
                       - precision
                       - precision-micro
                       - precision-macro
                       - precision-weighted
+                      - precision-samples
                       - recall
                       - recall-macro
                       - recall-micro
                       - recall-weighted
+                      - recall-samples
+                      - log-loss
                       - auc
+                      - auc-micro
+                      - auc-macro
+                      - auc-weighted
+                      - zero-one
+                      - hamming-loss
+                      - hinge-loss
+                      - jacquard-loss
+                      - mcc
                       - fp
                       - fn
                       - tn
                       - tp
-                      - explained_variance
+                      - tpr
+                      - fpr
+                      - tnr
+                      - matthews-corr-coef
+                      - explained-variance
+                      - max-error
                       - mae
                       - mse
                       - msle
+                      - rmse
+                      - rmsle
                       - median-absolute-error
                       - r2
                       - adj-r2
+                      - mean_poisson_deviance
+                      - mean-gamma-deviance
+                      - mean-tweedie-deviance
+                      - mape
+                      - maze
+                      - mdape
+                      - smape
                       - adjusted-mutual-info-score
                       - adjusted-rand-score
                       - completeness-score
@@ -1428,27 +1519,15 @@ spec:
                       - mutual-info-score
                       - normalized-mutual-info-score
                       - v-measure-score
-                      - rmse
-                      - unknown
-                      - mape
-                      - smape
-                      - mdape
-                      - adjr2
-                      - mcc
-                      - tpr
-                      - fpr
-                      - tnr
-                      - rmsle
-                      - matthews-corr-coef
                       - p50-latency
                       - p95-latency
                       - p99-latency
                       - cpu
-                      - mem
-                      - req-per-sec
-                      - maze
                       - gpu
+                      - mem
                       - gpu-mem
+                      - req-per-sec
+                      - uncertain-prediction-percent
                       - none
                       type: string
                     type: array
@@ -1605,6 +1684,13 @@ spec:
                     description: Data Split define how to split the data into test
                       and train.
                     properties:
+                      method:
+                        description: Define the split type.
+                        enum:
+                        - random
+                        - split-column
+                        - time
+                        type: string
                       segments:
                         description: Apply the segments first
                         items:
@@ -1770,6 +1856,21 @@ spec:
               bestFE:
                 description: The best feature engineering
                 properties:
+                  imbalance:
+                    default: auto
+                    description: Define how to handle imbalance
+                    enum:
+                    - adasyn
+                    - baseline-smote
+                    - kmean-smote
+                    - random-over-sampler
+                    - smote
+                    - smotenc
+                    - svmsmote
+                    - none
+                    - auto
+                    - class-weights
+                    type: string
                   pipelines:
                     description: List of processing pipelines
                     items:
@@ -1844,11 +1945,25 @@ spec:
                         datetimeTransformation:
                           default: none
                           description: Specify how For datetime data type,
+                          enum:
+                          - extract-datetime-information
+                          - none
+                          - auto
                           type: string
                         discretisation:
                           default: none
                           description: Convert numerical datatypes to categories.
                             Valid only if the number data types.
+                          enum:
+                          - equal-width-discretisation-
+                          - equal-freq-discretisation
+                          - kbin-discretisation
+                          - decision-tree-discretisation
+                          - kernel-centerer-discretisation
+                          - label-binarizer-discretisation
+                          - multi-label-binarizer-discretisation
+                          - none
+                          - auto
                           type: string
                         drop:
                           default: false
@@ -1858,6 +1973,24 @@ spec:
                         encoding:
                           default: none
                           description: Encoder. Apply only to categorical variables
+                          enum:
+                          - one-hot-encoding
+                          - one-hot-encoding-top-categories
+                          - ordinal-encoding
+                          - count-encoding
+                          - target-encoding
+                          - mean-encoding
+                          - probability-ratio-encoding
+                          - weight-of-evidence-encoding
+                          - rare-label-encoding
+                          - binary-encoding
+                          - label-encoding
+                          - hash-encoding
+                          - catboost-encoding
+                          - loo-encoding
+                          - no-encoding
+                          - auto
+                          - none
                           type: string
                         generated:
                           description: Spec to generate one or more columns from existing
@@ -1906,6 +2039,21 @@ spec:
                         imputation:
                           default: none
                           description: imputer
+                          enum:
+                          - remove-rows-with-missing-values
+                          - replace-with-mean
+                          - replace-with-median
+                          - replace-with-arbitrary-value
+                          - replace-with-end-of-tail
+                          - replace-with-random-sample
+                          - freq-category-imputation
+                          - add-missing-value-indicator
+                          - knn
+                          - iterative
+                          - mice
+                          - no-imputation
+                          - auto
+                          - none
                           type: string
                         name:
                           description: The name of this feature engineering pipeline
@@ -1914,6 +2062,13 @@ spec:
                           default: none
                           description: Specify how to handle outliers. Apply only
                             to numeric datatypes.
+                          enum:
+                          - trim-outliers
+                          - winsorizer-outliers
+                          - cap-outliers
+                          - zero-code-outliers
+                          - none
+                          - auto
                           type: string
                         passtrough:
                           default: false
@@ -1923,6 +2078,15 @@ spec:
                         scaling:
                           default: none
                           description: Numeric var scaler, valid only if the
+                          enum:
+                          - standard-scaling
+                          - max-abs-scaling
+                          - min-max-scaling
+                          - normalizion-scaling
+                          - robust-scaling
+                          - scale-to-unit-norm
+                          - none
+                          - auto
                           type: string
                         text:
                           description: Text specify the column transformation for
@@ -1972,6 +2136,15 @@ spec:
                         variableTransformation:
                           default: none
                           description: For numerical data type.
+                          enum:
+                          - log-transformation
+                          - reciprocal-transformation
+                          - sqrt-transformation
+                          - power-transformation
+                          - box-cox-transformation
+                          - yj-transformation
+                          - none
+                          - auto
                           type: string
                         video:
                           description: Video specify the pipeline for video. Not supported
@@ -2008,6 +2181,27 @@ spec:
                         description: the Feature selection pipeline. Steps are applied
                           in the order of the pipeline
                         items:
+                          enum:
+                          - drop-features
+                          - drop-constant-features
+                          - drop-deplicated-features
+                          - drop-correlated-features
+                          - mutal-information-feature-selection
+                          - chisquare-fearture-selection
+                          - anova-feature-selection
+                          - step-forward-feature-selection
+                          - step-backward-feature-selection
+                          - lasso-regression-feature-selection
+                          - tree-importance-feature-selection
+                          - recursive-feature-elimination
+                          - recursive-feature-addition
+                          - select-percentile
+                          - select-kbest
+                          - select-fpr
+                          - select-fdr
+                          - variance-threshold
+                          - none
+                          - auto
                           type: string
                         type: array
                       reserved:
@@ -2062,6 +2256,34 @@ spec:
                 type: string
               ensemble:
                 description: Holds the result of the ensemble phase
+                properties:
+                  endTime:
+                    description: End of the phase.
+                    format: date-time
+                    type: string
+                  failed:
+                    description: models that failed
+                    format: int32
+                    type: integer
+                  startTime:
+                    description: Start of the training phase
+                    format: date-time
+                    type: string
+                  trained:
+                    description: models trained
+                    format: int32
+                    type: integer
+                  training:
+                    description: models in training
+                    format: int32
+                    type: integer
+                  waiting:
+                    description: models waiting for processing
+                    format: int32
+                    type: integer
+                type: object
+              explain:
+                description: Hold the result of running model interpretability
                 properties:
                   endTime:
                     description: End of the phase.
