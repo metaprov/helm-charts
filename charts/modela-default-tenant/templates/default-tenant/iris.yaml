@@ -11,7 +11,7 @@ spec:
     name: default-tenant
     namespace: modela-system
   imageLocation:
-    name: modela/iris-product
+    name: metaprov/iris-product
     registryConnectionName: default-dockerhub-connection
   dataLocation:
     bucketName: default-minio-bucket
@@ -19,5 +19,6 @@ spec:
   servingSiteName: default-serving-site
   labName: default-lab
   task: binary-classification  
-  defaultWorkloadClassName: cpu-1-mem-1gi 
+  resources: 
+      workloadClassName:  general-small     
   owner: admin
