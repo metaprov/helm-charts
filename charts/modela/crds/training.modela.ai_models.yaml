@@ -231,11 +231,73 @@ spec:
                   None'
                 properties:
                   base:
-                    description: A list of base model to ensemble. The ensemble method
+                    description: The meta estimator (e.g. Voting classifier)
+                    properties:
+                      algorithmName:
+                        description: AlgorithmName is a reference to the algorithm
+                          in the catalog
+                        type: string
+                      parameters:
+                        description: Parameters is a list of the algorithm hyper parameters
+                        items:
+                          description: HyperParameterValue represent a specific value
+                            of the learning algorithm hyper-parameter. The value is
+                            chosen by the planner
+                          properties:
+                            name:
+                              description: Reference to the name of the hyper parameter.
+                              type: string
+                            value:
+                              description: Value hold the value if  the hyper paramer
+                                type is string
+                              type: string
+                          required:
+                          - name
+                          - value
+                          type: object
+                        type: array
+                    type: object
+                  estimators:
+                    description: A list of estimators to ensemble. The ensemble method
                       is represented as the algorithm name.
+                    items:
+                      description: ClassicalEstimatorSpec is the specification for
+                        an algorithm and the actual value fof the hyper parameters
+                      properties:
+                        algorithmName:
+                          description: AlgorithmName is a reference to the algorithm
+                            in the catalog
+                          type: string
+                        parameters:
+                          description: Parameters is a list of the algorithm hyper
+                            parameters
+                          items:
+                            description: HyperParameterValue represent a specific
+                              value of the learning algorithm hyper-parameter. The
+                              value is chosen by the planner
+                            properties:
+                              name:
+                                description: Reference to the name of the hyper parameter.
+                                type: string
+                              value:
+                                description: Value hold the value if  the hyper paramer
+                                  type is string
+                                type: string
+                            required:
+                            - name
+                            - value
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  models:
+                    description: Names of the models that were used for the estimators.
                     items:
                       type: string
                     type: array
+                  type:
+                    description: The ensempling method type
+                    type: string
                 type: object
               estimator:
                 description: Estimator is a specification of the ML algorithm and
@@ -386,7 +448,6 @@ spec:
                           - equal-width-discretisation-
                           - equal-freq-discretisation
                           - kbin-discretisation
-                          - decision-tree-discretisation
                           - kernel-centerer-discretisation
                           - label-binarizer-discretisation
                           - multi-label-binarizer-discretisation
@@ -407,10 +468,7 @@ spec:
                           - ordinal-encoding
                           - count-encoding
                           - target-encoding
-                          - mean-encoding
-                          - probability-ratio-encoding
                           - weight-of-evidence-encoding
-                          - rare-label-encoding
                           - binary-encoding
                           - label-encoding
                           - hash-encoding
@@ -472,8 +530,6 @@ spec:
                           - replace-with-mean
                           - replace-with-median
                           - replace-with-arbitrary-value
-                          - replace-with-end-of-tail
-                          - replace-with-random-sample
                           - freq-category-imputation
                           - add-missing-value-indicator
                           - knn
@@ -599,12 +655,22 @@ spec:
                           feature to include
                         format: int32
                         type: integer
-                      lowVarTresholdPct:
-                        default: 5
-                        description: Lowvar specify the filter to remove low variance
-                          features
-                        format: int32
-                        type: integer
+                      embedding:
+                        default: true
+                        description: If true, sample embedding methods as part of
+                          candidate algorithms for feature selection Example of embedded
+                          method are tree based selection
+                        type: boolean
+                      enabled:
+                        default: true
+                        description: Enable the feature selection.
+                        type: boolean
+                      filter:
+                        default: true
+                        description: If true, sample filter methods. Filter method
+                          are based on statistical tests. For example, chi square
+                          and anova tests.
+                        type: boolean
                       pipeline:
                         description: the Feature selection pipeline. Steps are applied
                           in the order of the pipeline
@@ -638,12 +704,28 @@ spec:
                         items:
                           type: string
                         type: array
+                      samplePct:
+                        default: 100
+                        description: Precent of data to sample while preforming the
+                          feature engineering search
+                        format: int32
+                        type: integer
                       topN:
                         default: 0
                         description: Select the Top N is the number of feature to
                           select by importance. If 0, all the features are selected.
                         format: int32
                         type: integer
+                      varianceTresholdPct:
+                        default: 5
+                        description: Lowvar specify the filter to remove low variance
+                          features
+                        format: int32
+                        type: integer
+                      wrapper:
+                        default: true
+                        description: If true, sample wrapper methods,
+                        type: boolean
                     type: object
                 type: object
               flagged:
@@ -994,9 +1076,63 @@ spec:
               interpretability:
                 description: The Interpretability requirements.
                 properties:
-                  shap:
-                    default: true
+                  anchor:
+                    default: false
+                    description: If true generate anchor explentation.
                     type: boolean
+                  counterfactual:
+                    default: false
+                    description: If true generate counter factual
+                    type: boolean
+                  ice:
+                    default: true
+                    description: If true generate ice plots for each feature.
+                    type: boolean
+                  icepairs:
+                    description: Define one or more feature pairs. The system will
+                      generate ice scatter diagram for each pair.
+                    items:
+                      properties:
+                        x:
+                          description: The name of feature A
+                          type: string
+                        "y":
+                          type: string
+                      type: object
+                    type: array
+                  lime:
+                    default: false
+                    description: If true generate lime plot
+                    type: boolean
+                  shap:
+                    default: auto
+                    description: 'Set the shap type. Set to none for not shap value.
+                      This is set automatically by the system based on the model type.
+                      Due to high compute time, currently only two types are supported
+                      : linear and tree.'
+                    enum:
+                    - permutation
+                    - partition
+                    - tree
+                    - kernel
+                    - sampling
+                    - linear
+                    - deep
+                    - gradient
+                    - auto
+                    - none
+                    type: string
+                  shappairs:
+                    description: Generate scatter shap diagram for each pair.
+                    items:
+                      properties:
+                        x:
+                          description: The name of feature A
+                          type: string
+                        "y":
+                          type: string
+                      type: object
+                    type: array
                 type: object
               location:
                 description: Location is the location of the model artifacts (metadata,
@@ -1172,6 +1308,48 @@ spec:
                 description: Reported is set when a report should be created for this
                   model
                 type: boolean
+              serving:
+                description: Specification for serving the model
+                properties:
+                  resources:
+                    description: Specification for resource
+                    properties:
+                      enable:
+                        default: false
+                        description: If true, use custom req
+                        type: boolean
+                      requirements:
+                        description: Custom resource requirments
+                        properties:
+                          limits:
+                            additionalProperties:
+                              anyOf:
+                              - type: integer
+                              - type: string
+                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                              x-kubernetes-int-or-string: true
+                            description: 'Limits describes the maximum amount of compute
+                              resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                            type: object
+                          requests:
+                            additionalProperties:
+                              anyOf:
+                              - type: integer
+                              - type: string
+                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                              x-kubernetes-int-or-string: true
+                            description: 'Requests describes the minimum amount of
+                              compute resources required. If Requests is omitted for
+                              a container, it defaults to Limits if that is explicitly
+                              specified, otherwise to an implementation-defined value.
+                              More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                            type: object
+                        type: object
+                      workloadClassName:
+                        description: Workload class name. Predefined resources
+                        type: string
+                    type: object
+                type: object
               studyName:
                 description: StudyName reference the study for this model. IF empty,
                   the model is stand alone
@@ -1837,8 +2015,25 @@ spec:
               interpretability:
                 description: The Interpretability status for this model
                 properties:
-                  interpretabilityUrl:
-                    description: The URL of the interpretbility model
+                  explainerURI:
+                    description: The URI for the explainer
+                    type: string
+                  importance:
+                    description: Shap based feature importance
+                    items:
+                      properties:
+                        feature:
+                          type: string
+                        importance:
+                          format: float
+                          type: number
+                      type: object
+                    type: array
+                  testShapValuesURI:
+                    description: The location of the test shap value uri
+                    type: string
+                  trainShapValuesURI:
+                    description: The location of the train shap value uri
                     type: string
                   trainingEndTime:
                     description: EndTime represents time when the model interpretability

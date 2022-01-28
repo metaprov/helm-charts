@@ -170,6 +170,10 @@ spec:
                       - theata-method
                       - als
                       - bayesian-personalized-ranking
+                      - voting-classifier
+                      - voting-regressor
+                      - stacking-classifier
+                      - stacking-regressor
                       type: string
                     type: array
                   enabled:
@@ -316,7 +320,97 @@ spec:
                     - theata-method
                     - als
                     - bayesian-personalized-ranking
+                    - voting-classifier
+                    - voting-regressor
+                    - stacking-classifier
+                    - stacking-regressor
                     type: string
+                  featureSelectionTemplate:
+                    description: Specification for feature selection. successful study.
+                    properties:
+                      corrTreshold:
+                        default: 95
+                        description: Remove Features with high correlations
+                        format: int32
+                        type: integer
+                      cumulativeImportancePrecent:
+                        default: 95
+                        description: The cummulative importance of all the importance
+                          feature to include
+                        format: int32
+                        type: integer
+                      embedding:
+                        default: true
+                        description: If true, sample embedding methods as part of
+                          candidate algorithms for feature selection Example of embedded
+                          method are tree based selection
+                        type: boolean
+                      enabled:
+                        default: true
+                        description: Enable the feature selection.
+                        type: boolean
+                      filter:
+                        default: true
+                        description: If true, sample filter methods. Filter method
+                          are based on statistical tests. For example, chi square
+                          and anova tests.
+                        type: boolean
+                      pipeline:
+                        description: the Feature selection pipeline. Steps are applied
+                          in the order of the pipeline
+                        items:
+                          enum:
+                          - drop-features
+                          - drop-constant-features
+                          - drop-deplicated-features
+                          - drop-correlated-features
+                          - mutal-information-feature-selection
+                          - chisquare-fearture-selection
+                          - anova-feature-selection
+                          - step-forward-feature-selection
+                          - step-backward-feature-selection
+                          - lasso-regression-feature-selection
+                          - tree-importance-feature-selection
+                          - recursive-feature-elimination
+                          - recursive-feature-addition
+                          - select-percentile
+                          - select-kbest
+                          - select-fpr
+                          - select-fdr
+                          - variance-threshold
+                          - none
+                          - auto
+                          type: string
+                        type: array
+                      reserved:
+                        description: List of feature names to consider when training
+                          , even after filtering
+                        items:
+                          type: string
+                        type: array
+                      samplePct:
+                        default: 100
+                        description: Precent of data to sample while preforming the
+                          feature engineering search
+                        format: int32
+                        type: integer
+                      topN:
+                        default: 0
+                        description: Select the Top N is the number of feature to
+                          select by importance. If 0, all the features are selected.
+                        format: int32
+                        type: integer
+                      varianceTresholdPct:
+                        default: 5
+                        description: Lowvar specify the filter to remove low variance
+                          features
+                        format: int32
+                        type: integer
+                      wrapper:
+                        default: true
+                        description: If true, sample wrapper methods,
+                        type: boolean
+                    type: object
                   imbalanceHandler:
                     default: auto
                     description: The imbalanced handler algorithm
@@ -349,6 +443,11 @@ spec:
                     description: Number of parallel models
                     format: int32
                     type: integer
+                  reuse:
+                    default: false
+                    description: If true, the system will try to reuse the best feature
+                      engineering pipeline from the last successful study.
+                    type: boolean
                   samplePct:
                     default: 100
                     description: How much to sample from the dataset when performing
@@ -772,6 +871,67 @@ spec:
                             type: boolean
                         type: object
                     type: object
+                type: object
+              interpretability:
+                description: Define interpretability
+                properties:
+                  anchor:
+                    default: false
+                    description: If true generate anchor explentation.
+                    type: boolean
+                  counterfactual:
+                    default: false
+                    description: If true generate counter factual
+                    type: boolean
+                  ice:
+                    default: true
+                    description: If true generate ice plots for each feature.
+                    type: boolean
+                  icepairs:
+                    description: Define one or more feature pairs. The system will
+                      generate ice scatter diagram for each pair.
+                    items:
+                      properties:
+                        x:
+                          description: The name of feature A
+                          type: string
+                        "y":
+                          type: string
+                      type: object
+                    type: array
+                  lime:
+                    default: false
+                    description: If true generate lime plot
+                    type: boolean
+                  shap:
+                    default: auto
+                    description: 'Set the shap type. Set to none for not shap value.
+                      This is set automatically by the system based on the model type.
+                      Due to high compute time, currently only two types are supported
+                      : linear and tree.'
+                    enum:
+                    - permutation
+                    - partition
+                    - tree
+                    - kernel
+                    - sampling
+                    - linear
+                    - deep
+                    - gradient
+                    - auto
+                    - none
+                    type: string
+                  shappairs:
+                    description: Generate scatter shap diagram for each pair.
+                    items:
+                      properties:
+                        x:
+                          description: The name of feature A
+                          type: string
+                        "y":
+                          type: string
+                      type: object
+                    type: array
                 type: object
               labRef:
                 description: LabRef is a reference to the lab where the trainers for
@@ -1329,6 +1489,10 @@ spec:
                           - theata-method
                           - als
                           - bayesian-personalized-ranking
+                          - voting-classifier
+                          - voting-regressor
+                          - stacking-classifier
+                          - stacking-regressor
                           type: string
                         type: array
                       filter:
@@ -1852,6 +2016,10 @@ spec:
                 - theata-method
                 - als
                 - bayesian-personalized-ranking
+                - voting-classifier
+                - voting-regressor
+                - stacking-classifier
+                - stacking-regressor
                 type: string
               bestFE:
                 description: The best feature engineering
@@ -1958,7 +2126,6 @@ spec:
                           - equal-width-discretisation-
                           - equal-freq-discretisation
                           - kbin-discretisation
-                          - decision-tree-discretisation
                           - kernel-centerer-discretisation
                           - label-binarizer-discretisation
                           - multi-label-binarizer-discretisation
@@ -1979,10 +2146,7 @@ spec:
                           - ordinal-encoding
                           - count-encoding
                           - target-encoding
-                          - mean-encoding
-                          - probability-ratio-encoding
                           - weight-of-evidence-encoding
-                          - rare-label-encoding
                           - binary-encoding
                           - label-encoding
                           - hash-encoding
@@ -2044,8 +2208,6 @@ spec:
                           - replace-with-mean
                           - replace-with-median
                           - replace-with-arbitrary-value
-                          - replace-with-end-of-tail
-                          - replace-with-random-sample
                           - freq-category-imputation
                           - add-missing-value-indicator
                           - knn
@@ -2171,12 +2333,22 @@ spec:
                           feature to include
                         format: int32
                         type: integer
-                      lowVarTresholdPct:
-                        default: 5
-                        description: Lowvar specify the filter to remove low variance
-                          features
-                        format: int32
-                        type: integer
+                      embedding:
+                        default: true
+                        description: If true, sample embedding methods as part of
+                          candidate algorithms for feature selection Example of embedded
+                          method are tree based selection
+                        type: boolean
+                      enabled:
+                        default: true
+                        description: Enable the feature selection.
+                        type: boolean
+                      filter:
+                        default: true
+                        description: If true, sample filter methods. Filter method
+                          are based on statistical tests. For example, chi square
+                          and anova tests.
+                        type: boolean
                       pipeline:
                         description: the Feature selection pipeline. Steps are applied
                           in the order of the pipeline
@@ -2210,12 +2382,28 @@ spec:
                         items:
                           type: string
                         type: array
+                      samplePct:
+                        default: 100
+                        description: Precent of data to sample while preforming the
+                          feature engineering search
+                        format: int32
+                        type: integer
                       topN:
                         default: 0
                         description: Select the Top N is the number of feature to
                           select by importance. If 0, all the features are selected.
                         format: int32
                         type: integer
+                      varianceTresholdPct:
+                        default: 5
+                        description: Lowvar specify the filter to remove low variance
+                          features
+                        format: int32
+                        type: integer
+                      wrapper:
+                        default: true
+                        description: If true, sample wrapper methods,
+                        type: boolean
                     type: object
                 type: object
               bestModel:
