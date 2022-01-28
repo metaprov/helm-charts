@@ -11,7 +11,9 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  secretName : default-minio-secret
+  secretRef : 
+    name: default-minio-secret
+    namespace: default-tenant  
   minio:
     accessKey: '[hidden]'
     secretKey: '[hidden]'
