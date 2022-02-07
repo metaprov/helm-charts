@@ -498,6 +498,9 @@ spec:
                             feature and should be dropped. The value is set during
                             the profile process.
                           type: boolean
+                        corrToTarget:
+                          description: Correlation to target
+                          type: number
                         count:
                           description: Number of rows
                           type: number
@@ -541,6 +544,28 @@ spec:
                             and should be removed from consideration. The value is
                             set during the profile process.
                           type: boolean
+                        historgram:
+                          description: The column histogram
+                          properties:
+                            bins:
+                              description: The bins if this histogram describe conitunous
+                                variables
+                              items:
+                                type: number
+                              type: array
+                            categories:
+                              description: The name of the categories, one per bin
+                                is this a categorical histogram Empty is this is not
+                                a categorical variable.
+                              items:
+                                type: string
+                              type: array
+                            values:
+                              description: The set of values per beans
+                              items:
+                                type: number
+                              type: array
+                          type: object
                         id:
                           description: This is updated from the data source. If true,
                             the column is an id column
