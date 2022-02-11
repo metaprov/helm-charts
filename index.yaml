@@ -3,6 +3,29 @@ entries:
   modela:
   - apiVersion: v2
     appVersion: v0.4.462
+    created: "2022-02-11T03:00:32.698406253Z"
+    description: Machine Learning Operators
+    digest: 76c6590a73b5b753c127601684fe68fbad26e05625eb6aec4488a46f84cf0691
+    home: https://modela.ai
+    keywords:
+    - kubernetes
+    - go
+    - golang
+    - ai
+    - machine learning
+    kubeVersion: '>= 1.15.0'
+    maintainers:
+    - email: support@modela.ai
+      name: metaprov
+    name: modela
+    sources:
+    - https://github.com/metaprov/modela
+    type: application
+    urls:
+    - https://github.com/metaprov/helm-charts/releases/download/modela-v0.4.463/modela-v0.4.463.tgz
+    version: v0.4.463
+  - apiVersion: v2
+    appVersion: v0.4.462
     created: "2022-02-11T02:31:09.137547872Z"
     description: Machine Learning Operators
     digest: db449911b390ea810912cd67ccab182bbb71ec4464f1e315bd3b127b7be41b1b
@@ -347,6 +370,28 @@ entries:
     - https://metaprov.github.io/helm-charts/modela-v0.4.317.tgz
     version: v0.4.317
   modela-default-tenant:
+  - apiVersion: v2
+    appVersion: 0.4.462
+    created: "2022-02-11T03:00:32.541173124Z"
+    description: A Helm chart for default tenant
+    digest: b5624a5a3d3b3de5441d5ee0328a06e8711750436ebcb5936b1c9d7d8f5b7c3a
+    home: https://www.modela.ai
+    icon: https://raw.githubusercontent.com/metaprov/modelaapi/main/static/imgs/logo/svg/symbol_horizontal_light.svg
+    keywords:
+    - machine learning
+    - automl
+    - model
+    - ai
+    maintainers:
+    - email: info@metaprov.com
+      name: Metaprov Inc
+    name: modela-default-tenant
+    sources:
+    - https://github.com/metaprov/modelaapi
+    type: application
+    urls:
+    - https://github.com/metaprov/helm-charts/releases/download/modela-default-tenant-0.4.463/modela-default-tenant-0.4.463.tgz
+    version: 0.4.463
   - apiVersion: v2
     appVersion: 0.4.462
     created: "2022-02-11T02:31:08.945918785Z"
@@ -757,4 +802,4 @@ entries:
     urls:
     - https://metaprov.github.io/helm-charts/modeld-default-tenant-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-11T02:31:09.137794481Z"
+generated: "2022-02-11T03:00:32.698626654Z"
