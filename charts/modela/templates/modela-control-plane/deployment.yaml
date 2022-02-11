@@ -134,7 +134,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: modela-postgresql
-                  key: postgresql-password
+                  key: postgres-password
 
       volumes:
         - name: data
