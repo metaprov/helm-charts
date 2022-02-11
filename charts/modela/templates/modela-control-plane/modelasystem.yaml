@@ -20,7 +20,7 @@ spec:
     predictionRouter: {{ .Values.clouds.image.registry }}/metaprov/modela-prediction-router:{{ .Chart.AppVersion }}
     modelaSystem: {{ .Values.clouds.image.registry }}/metaprov/modela-supervisor:{{ .Chart.AppVersion }}
     modelaPredictionServer: {{ .Values.clouds.image.registry }}/metaprov/modela-prediction-server:latest
-    modelaDashboardServer: {{ .Values.clouds.image.registry }}/metaprov/modela-datashboard:latest
+    modelaDashboardServer: {{ .Values.clouds.image.registry }}/metaprov/modela-datashboard-server:latest
     modelaWorkerControl:  {{ .Values.clouds.image.registry }}/metaprov/modela-workload:{{ .Chart.AppVersion }}
     apiGateway: {{ .Values.clouds.image.registry }}/metaprov/modela-apigateway:{{ .Chart.AppVersion }}
   podTemplate:
