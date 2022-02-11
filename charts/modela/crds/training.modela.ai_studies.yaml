@@ -64,8 +64,8 @@ spec:
       name: CompletionTime
       priority: 1
       type: date
-    - jsonPath: .status.lastError
-      name: Last Error
+    - jsonPath: .status.lastFailure
+      name: Last Failure
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
@@ -174,6 +174,8 @@ spec:
                       - voting-regressor
                       - stacking-classifier
                       - stacking-regressor
+                      - hist-gradient-boosting-classifier
+                      - hist-gradient-boosting-regressor
                       type: string
                     type: array
                   enabled:
@@ -324,16 +326,18 @@ spec:
                     - voting-regressor
                     - stacking-classifier
                     - stacking-regressor
+                    - hist-gradient-boosting-classifier
+                    - hist-gradient-boosting-regressor
                     type: string
                   featureSelectionTemplate:
                     description: Specification for feature selection. successful study.
                     properties:
-                      corrTreshold:
+                      corrThreshold:
                         default: 95
                         description: Remove Features with high correlations
                         format: int32
                         type: integer
-                      cumulativeImportancePrecent:
+                      cumulativeImportancePercent:
                         default: 95
                         description: The cummulative importance of all the importance
                           feature to include
@@ -390,7 +394,7 @@ spec:
                         type: array
                       samplePct:
                         default: 100
-                        description: Precent of data to sample while preforming the
+                        description: Percent of data to sample while preforming the
                           feature engineering search
                         format: int32
                         type: integer
@@ -400,7 +404,7 @@ spec:
                           select by importance. If 0, all the features are selected.
                         format: int32
                         type: integer
-                      varianceTresholdPct:
+                      varianceThresholdPct:
                         default: 5
                         description: Lowvar specify the filter to remove low variance
                           features
@@ -1329,7 +1333,7 @@ spec:
                       lower:
                         default: 0
                         description: A minimum value which determines whether pruner
-                          prunes or not. Used only for treshold pruner
+                          prunes or not. Used only for threshold pruner
                         format: int32
                         type: integer
                       minTrials:
@@ -1339,7 +1343,7 @@ spec:
                         type: integer
                       percentile:
                         default: 25
-                        description: Keep specific precent of trials. Used only with
+                        description: Keep specific percent of trials. Used only with
                           percentile pruner
                         format: int32
                         maximum: 100
@@ -1387,15 +1391,15 @@ spec:
                         - none
                         - patient
                         - median
-                        - precentile
+                        - percentile
                         - sh
                         - hyperband
-                        - treshold
+                        - threshold
                         type: string
                       upper:
                         default: 0
                         description: A maximum value which determines whether pruner
-                          prunes or not. Used only for treshold pruner
+                          prunes or not. Used only for threshold pruner
                         format: int32
                         type: integer
                       warmupTrials:
@@ -1503,6 +1507,8 @@ spec:
                           - voting-regressor
                           - stacking-classifier
                           - stacking-regressor
+                          - hist-gradient-boosting-classifier
+                          - hist-gradient-boosting-regressor
                           type: string
                         type: array
                       filter:
@@ -1769,7 +1775,7 @@ spec:
                     type: object
                   samplePct:
                     default: 100
-                    description: Set the precent of dataset to use during training.
+                    description: Set the percent of dataset to use during training.
                       This is usually assigned by the optimizer.
                     format: int32
                     type: integer
@@ -1998,6 +2004,8 @@ spec:
                 - voting-regressor
                 - stacking-classifier
                 - stacking-regressor
+                - hist-gradient-boosting-classifier
+                - hist-gradient-boosting-regressor
                 type: string
               bestFE:
                 description: The best feature engineering
@@ -2210,10 +2218,10 @@ spec:
                           - none
                           - auto
                           type: string
-                        passtrough:
+                        passthrough:
                           default: false
                           description: If true, all the features in this pipeline
-                            will passtrough, without processing.
+                            will passthrough, without processing.
                           type: boolean
                         scaling:
                           default: none
@@ -2300,12 +2308,12 @@ spec:
                   selection:
                     description: Spec for feature selection
                     properties:
-                      corrTreshold:
+                      corrThreshold:
                         default: 95
                         description: Remove Features with high correlations
                         format: int32
                         type: integer
-                      cumulativeImportancePrecent:
+                      cumulativeImportancePercent:
                         default: 95
                         description: The cummulative importance of all the importance
                           feature to include
@@ -2362,7 +2370,7 @@ spec:
                         type: array
                       samplePct:
                         default: 100
-                        description: Precent of data to sample while preforming the
+                        description: Percent of data to sample while preforming the
                           feature engineering search
                         format: int32
                         type: integer
@@ -2372,7 +2380,7 @@ spec:
                           select by importance. If 0, all the features are selected.
                         format: int32
                         type: integer
-                      varianceTresholdPct:
+                      varianceThresholdPct:
                         default: 5
                         description: Lowvar specify the filter to remove low variance
                           features
@@ -2476,6 +2484,13 @@ spec:
                     format: int32
                     type: integer
                 type: object
+              failureMessage:
+                description: Update in case of terminal failure message
+                type: string
+              failureReason:
+                description: Update in case of terminal failure Borrowed from cluster
+                  api controller
+                type: string
               featureEngineering:
                 description: Holds the result of the feature engineering process
                 properties:
@@ -2511,10 +2526,6 @@ spec:
                     format: int32
                     type: integer
                 type: object
-              lastError:
-                default: ""
-                description: Last error
-                type: string
               lastModelID:
                 description: the last model id generated for this study
                 format: int64
@@ -2552,7 +2563,7 @@ spec:
                   processing
                 type: string
               progress:
-                description: Study Progress in precent, the progress takes into account
+                description: Study Progress in percent, the progress takes into account
                   the different stages of the study.
                 format: int32
                 type: integer

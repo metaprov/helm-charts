@@ -414,6 +414,13 @@ spec:
                 description: If this dataset is derived, the name of the dataset that
                   this is derived from.
                 type: string
+              failureMessage:
+                description: Update in case of terminal failure message
+                type: string
+              failureReason:
+                description: Update in case of terminal failure Borrowed from cluster
+                  api controller
+                type: string
               hash:
                 default: ""
                 description: Sha256 signature of the dataset file.
@@ -421,10 +428,6 @@ spec:
               imbalanced:
                 description: Based on the actual data, treat this dataset as imbalanced.
                 type: boolean
-              lastError:
-                default: ""
-                description: Last error
-                type: string
               lastNotificationTime:
                 description: Notification sent
                 format: date-time
@@ -632,7 +635,7 @@ spec:
                           format: int32
                           type: integer
                         p25:
-                          description: Pct25 is the 25 precent point
+                          description: Pct25 is the 25 percent point
                           type: number
                         p50:
                           description: Pct50 is the median
@@ -641,7 +644,7 @@ spec:
                           description: Pct75 is the 75% point
                           type: number
                         percentMissing:
-                          description: Precent missing
+                          description: Percent missing
                           type: number
                         reserved:
                           description: The column is reserved and must be part of

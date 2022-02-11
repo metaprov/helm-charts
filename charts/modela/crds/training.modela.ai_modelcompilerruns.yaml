@@ -42,8 +42,8 @@ spec:
       name: CompletionTime
       priority: 1
       type: date
-    - jsonPath: .status.lastError
-      name: Last Error
+    - jsonPath: .status.failureMessage
+      name: Last Failure
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
@@ -155,14 +155,17 @@ spec:
                   - type
                   type: object
                 type: array
+              failureMessage:
+                description: Update in case of terminal failure message
+                type: string
+              failureReason:
+                description: Update in case of terminal failure Borrowed from cluster
+                  api controller
+                type: string
               folder:
                 description: Folder for pipeline run artifacts. This is assigned by
                   the system The folder contains all the pipeline artifacts - metadata,
                   logs
-                type: string
-              lastError:
-                default: ""
-                description: Last error
                 type: string
               lastUpdated:
                 description: Last time the object was updated
@@ -178,7 +181,7 @@ spec:
                 description: The phase of the pipeline run
                 type: string
               progress:
-                description: Pipeline progress Progress in precent, the progress takes
+                description: Pipeline progress Progress in percent, the progress takes
                   into account the different stages of the pipeline
                 format: int32
                 type: integer
