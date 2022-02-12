@@ -22,3 +22,9 @@ spec:
   resources: 
       workloadClassName:  general-small     
   owner: admin
+  notification:
+    errorTTL: 3600
+    notifierName: "default-slack-notifier"
+    onError: true
+    onSuccess: false
+    successTTL: 3600
