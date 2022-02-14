@@ -487,6 +487,28 @@ entries:
   modela-default-tenant:
   - apiVersion: v2
     appVersion: 0.4.486
+    created: "2022-02-14T14:43:46.343954837Z"
+    description: A Helm chart for default tenant
+    digest: b54aa2c2cd677edb609c2b831daefac2d82959101e974c9c9c2d614cf50d2612
+    home: https://www.modela.ai
+    icon: https://raw.githubusercontent.com/metaprov/modelaapi/main/static/imgs/logo/svg/symbol_horizontal_light.svg
+    keywords:
+    - machine learning
+    - automl
+    - model
+    - ai
+    maintainers:
+    - email: info@metaprov.com
+      name: Metaprov Inc
+    name: modela-default-tenant
+    sources:
+    - https://github.com/metaprov/modelaapi
+    type: application
+    urls:
+    - https://github.com/metaprov/helm-charts/releases/download/modela-default-tenant-0.4.487/modela-default-tenant-0.4.487.tgz
+    version: 0.4.487
+  - apiVersion: v2
+    appVersion: 0.4.486
     created: "2022-02-14T11:47:52.152398765Z"
     description: A Helm chart for default tenant
     digest: 6676db310f6868689cddaf3c6ac294c1bda3b2a1404338620b42a64efcffa3c3
@@ -1049,4 +1071,4 @@ entries:
     urls:
     - https://metaprov.github.io/helm-charts/modeld-default-tenant-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-14T11:47:52.400818872Z"
+generated: "2022-02-14T14:43:46.34432424Z"
