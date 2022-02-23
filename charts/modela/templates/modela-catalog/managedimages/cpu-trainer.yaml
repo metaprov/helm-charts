@@ -1,0 +1,14 @@
+apiVersion: catalog.modela.ai/v1alpha1
+kind: ManagedImage
+metadata:
+  name: modela-cpu-trainer-1
+  namespace: modela-catalog
+spec:
+  description: "modela cpu trainer image"
+  registry: "ghcr.io"
+  repository: "metaprov/modela-trainer"
+  tag: "latest"
+  role: "trainer"
+  active: true
+  maintainedBy: "Metaprov Inc"
+  

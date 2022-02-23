@@ -1,0 +1,13 @@
+apiVersion: catalog.modela.ai/v1alpha1
+kind: ManagedImage
+metadata:
+  name: modela-frnotend-1
+  namespace: modela-catalog
+spec:
+  description: "modela frontend image"
+  registry: "ghcr.io"
+  repository: "metaprov/modela-frontend"
+  tag: "latest"
+  role: "system"  
+  maintainedBy: "Metaprov Inc"
+  

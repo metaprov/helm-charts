@@ -1,0 +1,13 @@
+apiVersion: catalog.modela.ai/v1alpha1
+kind: ManagedImage
+metadata:
+  name: modela-prediction-server-1
+  namespace: modela-catalog
+spec:
+  description: "modela prediction server image"
+  registry: "ghcr.io"
+  repository: "metaprov/modela-prediction-server"
+  tag: "latest"
+  active: true
+  role: "system"  
+  maintainedBy: "Metaprov Inc"

@@ -1,0 +1,14 @@
+apiVersion: catalog.modela.ai/v1alpha1
+kind: ManagedImage
+metadata:
+  name: modela-data-plane-1
+  namespace: modela-catalog
+spec:
+  description: "modela dataplane image"
+  registry: "ghcr.io"
+  repository: "metaprov/modela-data-plane"
+  tag: "latest"
+  role: "system"  
+  active: true
+  maintainedBy: "Metaprov Inc"
+  

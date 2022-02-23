@@ -37,7 +37,7 @@ spec:
                 - name: data
                   mountPath: /var/opt/modela/data
           - name: data
-            image: quay.io/metaprov/modela-data-plane:v0.4.205
+            image: ghcr.io/metaprov/modela-data-plane:v0.4.205
             imagePullPolicy: IfNotPresent
             ports:
                - containerPort: 8070
@@ -57,7 +57,7 @@ spec:
                - name: data
                  mountPath: /var/opt/modela/data
           - name: cloud-proxy
-            image: quay.io/metaprov/modela-cloud-proxy:latest
+            image: ghcr.io/metaprov/modela-cloud-proxy:latest
             imagePullPolicy: IfNotPresent
             ports:
               - name: http

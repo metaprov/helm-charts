@@ -25,7 +25,7 @@ Kubernetes: `>= 1.15.0`
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | apigateway.http.port | int | `8080` |  |
-| apigateway.image.registry | string | `"quay.io"` |  |
+| apigateway.image.registry | string | `"ghcr.io"` |  |
 | apigateway.image.repository | string | `"metaprov/modela-api-gateway"` |  |
 | apigateway.image.tag | string | `"latest"` |  |
 | apigateway.name | string | `"modela-apiproxy"` |  |
@@ -35,7 +35,7 @@ Kubernetes: `>= 1.15.0`
 | apigateway.service.type | string | `"NodePort"` |  |
 | apigateway.serviceAccount | string | `"modela-apigateway"` |  |
 | apiproxy.http.port | int | `8080` |  |
-| apiproxy.image.registry | string | `"quay.io"` |  |
+| apiproxy.image.registry | string | `"ghcr.io"` |  |
 | apiproxy.image.repository | string | `"metaprov/modela-api-proxy"` |  |
 | apiproxy.image.tag | string | `"latest"` |  |
 | apiproxy.name | string | `"modela-apiproxy"` |  |
@@ -45,12 +45,12 @@ Kubernetes: `>= 1.15.0`
 | apiproxy.service.type | string | `"NodePort"` |  |
 | apiproxy.serviceAccount | string | `"modela-apiproxy"` |  |
 | clouds.http.port | int | `8090` |  |
-| clouds.image.registry | string | `"quay.io"` |  |
+| clouds.image.registry | string | `"ghcr.io"` |  |
 | clouds.image.repository | string | `"metaprov/clouds"` |  |
 | clouds.image.tag | string | `"latest"` |  |
 | clouds.name | string | `"clouds"` |  |
 | controlplane.http.port | int | `8080` |  |
-| controlplane.image.registry | string | `"quay.io"` |  |
+| controlplane.image.registry | string | `"ghcr.io"` |  |
 | controlplane.image.repository | string | `"metaprov/modela-control-plane"` |  |
 | controlplane.image.tag | string | `"latest"` |  |
 | controlplane.name | string | `"modela-controlplane"` |  |
@@ -59,7 +59,7 @@ Kubernetes: `>= 1.15.0`
 | controlplane.ports.targetPort | int | `8080` |  |
 | controlplane.serviceAccount | string | `"modela-controlplane"` |  |
 | datadock.http.port | int | `8095` |  |
-| datadock.image.registry | string | `"quay.io"` |  |
+| datadock.image.registry | string | `"ghcr.io"` |  |
 | datadock.image.repository | string | `"metaprov/modela-datadock"` |  |
 | datadock.image.tag | string | `"latest"` |  |
 | datadock.name | string | `"modela-datadock"` |  |
@@ -69,7 +69,7 @@ Kubernetes: `>= 1.15.0`
 | datadock.service.type | string | `"NodePort"` |  |
 | datadock.serviceAccount | string | `"modela-datadock"` |  |
 | dataplane.http.port | int | `8080` |  |
-| dataplane.image.registry | string | `"quay.io"` |  |
+| dataplane.image.registry | string | `"ghcr.io"` |  |
 | dataplane.image.repository | string | `"metaprov/modela-data-plane"` |  |
 | dataplane.image.tag | string | `"latest"` |  |
 | dataplane.name | string | `"model-dataplane"` |  |
@@ -93,7 +93,7 @@ Kubernetes: `>= 1.15.0`
 | global.ha.replicaCount | int | `3` |  |
 | global.imagePullPolicy | string | `"Always"` |  |
 | global.imagePullSecrets | string | `""` |  |
-| global.imageRegistry | string | `"quay.io"` |  |
+| global.imageRegistry | string | `"ghcr.io"` |  |
 | global.logAsJson | bool | `false` |  |
 | global.mtls.allowedClockSkew | string | `"15m"` |  |
 | global.mtls.enabled | bool | `true` |  |
@@ -101,7 +101,7 @@ Kubernetes: `>= 1.15.0`
 | global.prometheus.enabled | bool | `true` |  |
 | global.prometheus.port | int | `9090` |  |
 | global.pullPolicy | string | `"IfNotPresent"` |  |
-| global.registry | string | `"quay.io/metaprov"` |  |
+| global.registry | string | `"ghcr.io/metaprov"` |  |
 | global.tag | string | `"latest"` |  |
 | imagePullSecrets | string | `nil` |  |
 | ingress.certManager | bool | `false` |  |

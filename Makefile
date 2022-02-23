@@ -2,7 +2,7 @@
 HELM_GCS_BUCKET := modela-charts
 TARGETS         := darwin/amd64 linux/amd64 windows/amd64
 SHELL           := bash -o pipefail
-REGISTRY        ?= quay.io/metaprov
+REGISTRY        ?= ghcr.io/metaprov
 HELM_VERSION    := 3.0.0
 CHART_TESTING_VERSION := 2.4.0
 GOPATH          := $(shell go env GOPATH)

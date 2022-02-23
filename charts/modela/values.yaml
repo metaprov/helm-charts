@@ -55,7 +55,7 @@ deployment:
 apigateway:
   replicaCount: 1
   image:
-    registry: quay.io
+    registry: ghcr.io
     repository: metaprov/modela-api-gateway
     tag: latest
     pullPolicy: Always
@@ -70,7 +70,7 @@ apigateway:
 apiproxy:
   replicaCount: 1
   image:
-    registry: quay.io
+    registry: ghcr.io
     repository: metaprov/modela-api-proxy
     tag: latest
     pullPolicy: Always
@@ -85,7 +85,7 @@ apiproxy:
 dbproxy:
   replicaCount: 1
   image:
-    registry: quay.io
+    registry: ghcr.io
     repository: metaprov/modela-database-proxy
     tag: latest
     pullPolicy: Always    
@@ -101,7 +101,7 @@ dbproxy:
 controlplane:
   replicaCount: 1
   image:
-    registry: quay.io
+    registry: ghcr.io
     repository: metaprov/modela-control-plane
     tag: latest
     pullPolicy: Always
@@ -116,7 +116,7 @@ controlplane:
 datadock:
   replicaCount: 1
   image:
-    registry: quay.io
+    registry: ghcr.io
     repository: metaprov/modela-data-dock
     tag: latest
     pullPolicy: Always
@@ -131,7 +131,7 @@ datadock:
 dataplane:
   replicaCount: 1
   image:
-    registry: quay.io
+    registry: ghcr.io
     repository: metaprov/modela-data-plane
     tag: latest
     pullPolicy: Always
@@ -146,7 +146,7 @@ dataplane:
 frontend:
   replicaCount: 1
   image:
-    registry: quay.io
+    registry: ghcr.io
     tag: latest
     repository: metaprov/modela-frontend
     pullPolicy: Always
@@ -162,7 +162,7 @@ frontend:
 clouds:
   replicaCount: 1
   image:
-    registry: quay.io
+    registry: ghcr.io
     tag: latest
     repository: metaprov/modela-cloud-proxy
     pullPolicy: Always
