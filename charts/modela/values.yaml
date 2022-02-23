@@ -60,12 +60,12 @@ apigateway:
     tag: latest
     pullPolicy: Always
   resources:
-    limits:
-      cpu: 250m
-      memory: 128Mi
     requests:
-      cpu: 250m
+      cpu: 100m
       memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
 
 apiproxy:
   replicaCount: 1
@@ -75,11 +75,11 @@ apiproxy:
     tag: latest
     pullPolicy: Always
   resources:
-    limits:
-      cpu: 250m
-      memory: 128Mi
     requests:
-      cpu: 250m
+      cpu: 100m
+      memory: 64Mi
+    limits:
+      cpu: 200m
       memory: 128Mi
 
 dbproxy:
@@ -90,11 +90,11 @@ dbproxy:
     tag: latest
     pullPolicy: Always    
   resources:
-    limits:
-      cpu: 250m
-      memory: 128Mi
     requests:
-      cpu: 250m
+      cpu: 100m
+      memory: 64Mi
+    limits:
+      cpu: 200m
       memory: 128Mi
 
 
@@ -106,11 +106,11 @@ controlplane:
     tag: latest
     pullPolicy: Always
   resources:
-    limits:
-      cpu: 250m
-      memory: 128Mi
     requests:
-      cpu: 250m
+      cpu: 200m
+      memory: 128Mi
+    limit:
+      cpu: 400m
       memory: 128Mi
 
 datadock:
@@ -121,11 +121,11 @@ datadock:
     tag: latest
     pullPolicy: Always
   resources:
-    limits:
-      cpu: 100m
-      memory: 128Mi
     requests:
       cpu: 100m
+      memory: 128Mi
+    limit:
+      cpu: 200m
       memory: 128Mi
 
 dataplane:
@@ -136,12 +136,12 @@ dataplane:
     tag: latest
     pullPolicy: Always
   resources:
-    limits:
-      cpu: 250m
-      memory: 512Mi
     requests:
-      cpu: 250m
+      cpu: 500m
       memory: 512Mi
+    limit:
+      cpu: 1000m
+      memory: 1024Mi
 
 frontend:
   replicaCount: 1
@@ -151,11 +151,11 @@ frontend:
     repository: metaprov/modela-frontend
     pullPolicy: Always
   resources:
-    limits:
-      cpu: 250m
-      memory: 256Mi
     requests:
-      cpu: 250m
+      cpu: 100m
+      memory: 256Mi
+    limit:
+      cpu: 200m
       memory: 256Mi
 
 
@@ -167,12 +167,12 @@ clouds:
     repository: metaprov/modela-cloud-proxy
     pullPolicy: Always
   resources:
-    limits:
-      cpu: "128m"
-      memory: "128Mi"
     requests:
-      cpu: "128m"
-      memory: "128Mi"
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi
 
 ingress:
   name : modela-ingress
