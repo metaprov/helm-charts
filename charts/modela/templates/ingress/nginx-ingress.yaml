@@ -1,52 +1,47 @@
-apiVersion: networking.k8s.io/v1 
+apiVersion: networking.k8s.io/v1 # for versions before 1.14 use extensions/v1beta1
 kind: Ingress
 metadata:
-  name: modela-ingress
+  name: client
   namespace: modela-system
-  labels:
-    app.kubernetes.io/name: {{ .Release.Name }}
-    app.kubernetes.io/component: modela-ingress
-    app.kubernetes.io/part-of: "modela"
-    app.kubernetes.io/managed-by: "helm"
   annotations:
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/cors-allow-origin: '$http_origin'
-    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
     ingress.kubernetes.io/proxy-body-size: 8m
     nginx.org/proxy-connect-timeout: 30s
     nginx.org/proxy-read-timeout: 20s
     nginx.org/client-max-body-size: 50m
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    kubernetes.io/ingress.allow-http: "false"
     nginx.ingress.kubernetes.io/cors-allow-headers: "x-user-agent,x-grpc-web,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization"
+    nginx.ingress.kubernetes.io/add-base-url: "false"
 spec:
-    rules:
-      - host: modela.info
-        http:
-          paths:
-            - path: /
-              backend:
-                service:
-                  name: frontend
-                  port: 
-                    number: 80
-              pathType: ImplementationSpecific      
-
-            - path: /upload
-              backend:
-                service:
-                  name: modela-datadock
-                  port: 
-                    number: 8095
-              pathType: ImplementationSpecific      
-      - host: api.modela.info
-        http:
-          paths:
-            - path: /
-              backend:
-                service:
-                  name: modela-api-proxy
-                  port: 
-                    number: 8080
-              pathType: ImplementationSpecific      
+  ingressClassName: nginx
+  rules:
+    - host: modela-app.vcap.me
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: modela-frontend
+                port:
+                  number: 80
+    - host: modela-api.vcap.me
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: modela-api-proxy
+                port:
+                  number: 8080
+    - host: upload.vcap.me
+      http:
+        paths:
+          - pathType: Prefix
+            path: /upload
+            backend:
+              service:
+                name: modela-data-dock
+                port:
+                  number: 8095
