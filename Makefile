@@ -97,39 +97,49 @@ build/chart/index.yaml.$(YEAR_MONTH_DAY): build/chart/index.yaml
 
 build/chart/: build/chart/index.yaml build/chart/index.yaml.$(YEAR_MONTH_DAY)
 
-
+.PHONY: add-gcloud-repo
 add-gcloud-repo:
 	build/toolchain/bin/helm repo add modela https://storage.googleapis.com/modela-charts/chart/index.yaml
 
+.PHONY: install-helm-gcs
 install-helm-gcs:
 	helm plugin install https://github.com/hayorov/helm-gcs.git
 
+.PHONY: init-helm-bucket
 init-helm-bucket:
 	helm gcs init gs://$(HELM_GCS_BUCKET)
 
 # Add your repository to Helm
+.PHONY: add-helm-repo
 add-helm-repo:
 	helm repo remove modela
 	helm repo add modela gs://$(HELM_GCS_BUCKET)
 
 # Push a chart to your repository
+.PHONY: push-helm-chart
 push-helm-chart: build/chart/modela-$(BASE_VERSION).tgz build/chart/modela-default-tenant-$(BASE_VERSION).tgz
 	helm gcs push --force build/chart/modela-$(BASE_VERSION).tgz modela
 	helm gcs push --force build/chart/modela-default-tenant-$(BASE_VERSION).tgz modela
 
 
 # Update Helm cachehel
+.PHONY: update-helm-cache
 update-helm-cache:
 	helm repo update
 
+.PHONY: fetch-helm-chart
 fetch-helm-chart:
 	helm fetch modela/modela
 
+.PHONY: remove-helm-chart
 remove-helm-chart:
 	helm gcs rm chart modela
 
+.PHONY: add-latest-helm-repo
 add-latest-helm-repo:
 	helm repo add modela-release https://modela-charts.storage.googleapis.com/
 
+
+.PHONY: helm-install-modela
 helm-install-modela:
 	helm install modela1 modela-release/modela
