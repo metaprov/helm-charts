@@ -3,6 +3,29 @@ entries:
   modela:
   - apiVersion: v2
     appVersion: v0.4.507
+    created: "2022-03-01T23:03:10.31342175Z"
+    description: Machine Learning Operators
+    digest: 7ae05254d051cdeb5cf2d1b09f994df3b195788b6da3d3422b9d4bd1e3727e80
+    home: https://modela.ai
+    keywords:
+    - kubernetes
+    - go
+    - golang
+    - ai
+    - machine learning
+    kubeVersion: '>= 1.15.0'
+    maintainers:
+    - email: support@modela.ai
+      name: metaprov
+    name: modela
+    sources:
+    - https://github.com/metaprov/modela
+    type: application
+    urls:
+    - https://github.com/metaprov/helm-charts/releases/download/modela-v0.4.509/modela-v0.4.509.tgz
+    version: v0.4.509
+  - apiVersion: v2
+    appVersion: v0.4.507
     created: "2022-02-25T01:48:47.894811853Z"
     description: Machine Learning Operators
     digest: 2fe619a715b110ac730363a26db9d7d14cdd91d0c6594469a6b8a3ca11ececce
@@ -1139,4 +1162,4 @@ entries:
     urls:
     - https://metaprov.github.io/helm-charts/modeld-default-tenant-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-25T01:48:47.895446761Z"
+generated: "2022-03-01T23:03:10.313697771Z"
