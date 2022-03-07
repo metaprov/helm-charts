@@ -162,14 +162,6 @@ spec:
                     default: ""
                     description: The name of the notifier.
                     type: string
-                  onError:
-                    default: true
-                    description: Fire when error occur
-                    type: boolean
-                  onSuccess:
-                    default: false
-                    description: Fire when success occur.
-                    type: boolean
                   selector:
                     additionalProperties:
                       type: string
@@ -516,11 +508,23 @@ spec:
                 description: Holds the location of log paths
                 properties:
                   bucketName:
+                    description: The bucket logs.
                     type: string
-                  paths:
-                    description: Paths is the log paths
+                  containers:
+                    description: Jobs per containers
                     items:
-                      type: string
+                      description: Define log for one container
+                      properties:
+                        container:
+                          description: The container name
+                          type: string
+                        job:
+                          description: The Job name
+                          type: string
+                        key:
+                          description: The key load
+                          type: string
+                      type: object
                     type: array
                 type: object
               observedGeneration:
@@ -619,7 +623,7 @@ spec:
                             and should be removed from consideration. The value is
                             set during the profile process.
                           type: boolean
-                        historgram:
+                        histogram:
                           description: The column histogram
                           properties:
                             bins:

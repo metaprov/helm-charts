@@ -28,21 +28,30 @@ spec:
     - jsonPath: .spec.owner
       name: Owner
       type: string
-    - jsonPath: .spec.dataLocation.bucketName
-      name: Bucket
-      type: string
-    - jsonPath: .spec.labName
-      name: Lab
-      type: string
-    - jsonPath: .spec.servingSiteName
-      name: Serving Site
-      type: string
-    - jsonPath: .spec.imageLocation.name
-      name: Image Repo
-      type: string
     - jsonPath: .spec.task
       name: Task
       type: string
+    - jsonPath: .spec.public
+      name: Public
+      type: boolean
+    - jsonPath: .status.totalDatasources
+      name: Datasources
+      type: integer
+    - jsonPath: .status.datasets
+      name: Datasets
+      type: integer
+    - jsonPath: .status.studies
+      name: Studies
+      type: integer
+    - jsonPath: .status.models
+      name: Models
+      type: integer
+    - jsonPath: .status.predictors
+      name: Predictors
+      type: integer
+    - jsonPath: .status.apps
+      name: Apps
+      type: integer
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -245,14 +254,6 @@ spec:
                     default: ""
                     description: The name of the notifier.
                     type: string
-                  onError:
-                    default: true
-                    description: Fire when error occur
-                    type: boolean
-                  onSuccess:
-                    default: false
-                    description: Fire when success occur.
-                    type: boolean
                   selector:
                     additionalProperties:
                       type: string
@@ -271,6 +272,86 @@ spec:
                 default: no-one
                 description: The data product owner
                 type: string
+              permissions:
+                description: The premissions for this product
+                properties:
+                  stakeholders:
+                    items:
+                      properties:
+                        account:
+                          type: string
+                        roles:
+                          description: assign roles to account
+                          items:
+                            description: 'ObjectReference contains enough information
+                              to let you inspect or modify the referred object. ---
+                              New uses of this type are discouraged because of difficulty
+                              describing its usage when embedded in APIs. 1. Ignored
+                              fields.  It includes many fields which are not generally
+                              honored.  For instance, ResourceVersion and FieldPath
+                              are both very rarely valid in actual usage. 2. Invalid
+                              usage help.  It is impossible to add specific help for
+                              individual usage.  In most embedded usages, there are
+                              particular restrictions like, "must refer only to types
+                              A and B" or "UID not honored" or "name must be restricted".
+                              Those cannot be well described when embedded. 3. Inconsistent
+                              validation.  Because the usages are different, the validation
+                              rules are different by usage, which makes it hard for
+                              users to predict what will happen. 4. The fields are
+                              both imprecise and overly precise.  Kind is not a precise
+                              mapping to a URL. This can produce ambiguity during
+                              interpretation and require a REST mapping.  In most
+                              cases, the dependency is on the group,resource tuple
+                              and the version of the actual struct is irrelevant.
+                              5. We cannot easily change it.  Because this type is
+                              embedded in many locations, updates to this type will
+                              affect numerous schemas.  Don''t make new APIs embed
+                              an underspecified API type they do not control. Instead
+                              of using this type, create a locally provided and used
+                              type that is well-focused on your reference. For example,
+                              ServiceReferences for admission registration: https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533
+                              .'
+                            properties:
+                              apiVersion:
+                                description: API version of the referent.
+                                type: string
+                              fieldPath:
+                                description: 'If referring to a piece of an object
+                                  instead of an entire object, this string should
+                                  contain a valid JSON/Go field access statement,
+                                  such as desiredState.manifest.containers[2]. For
+                                  example, if the object reference is to a container
+                                  within a pod, this would take on a value like: "spec.containers{name}"
+                                  (where "name" refers to the name of the container
+                                  that triggered the event) or if no container name
+                                  is specified "spec.containers[2]" (container with
+                                  index 2 in this pod). This syntax is chosen only
+                                  to have some well-defined way of referencing a part
+                                  of an object. TODO: this design is not final and
+                                  this field is subject to change in the future.'
+                                type: string
+                              kind:
+                                description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                                type: string
+                              name:
+                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                type: string
+                              namespace:
+                                description: 'Namespace of the referent. More info:
+                                  https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                                type: string
+                              resourceVersion:
+                                description: 'Specific resourceVersion to which this
+                                  reference is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                                type: string
+                              uid:
+                                description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                                type: string
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                type: object
               priority:
                 default: medium
                 description: Default Priority level assigned to jobs for this data
@@ -281,6 +362,10 @@ spec:
                 - high
                 - urgent
                 type: string
+              public:
+                default: false
+                description: If true, the data product is public.
+                type: boolean
               resources:
                 description: DefaultResource will be used if the resources are not
                   specified.
@@ -404,32 +489,6 @@ spec:
                 maxLength: 63
                 pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
                 type: string
-              stakeholders:
-                description: Stake holders refer to a list of stackholders, which
-                  have interest in the product.
-                items:
-                  description: Represent a stack holder in the product. Each stake
-                    holder can hove one or more roles.
-                  properties:
-                    accountName:
-                      default: no-one
-                      description: The account name of the stake holder
-                      type: string
-                    roles:
-                      description: The roles assigned to the stake holder
-                      items:
-                        description: RoleName is the type of role a user can have
-                        enum:
-                        - administrator
-                        - business-stakeholder
-                        - data-scientist
-                        - data-engineer
-                        - ml-engineer
-                        - sre
-                        type: string
-                      type: array
-                  type: object
-                type: array
               task:
                 description: Task denote the machine learning task of the product
                   (classification/regression,etc.)
@@ -547,18 +606,6 @@ spec:
                 description: Update in case of terminal failure Borrowed from cluster
                   api controller
                 type: string
-              lastDataset:
-                description: Last time the dataset was created
-                format: date-time
-                type: string
-              lastPrediction:
-                description: Last time prediction
-                format: date-time
-                type: string
-              lastStudy:
-                description: Last time the study was updated
-                format: date-time
-                type: string
               lastUpdated:
                 description: Last time the object was updated
                 format: date-time
@@ -567,6 +614,39 @@ spec:
                 description: ObservedGeneration is the Last generation that was acted
                   on
                 format: int64
+                type: integer
+              totalApps:
+                format: int32
+                type: integer
+              totalBuilders:
+                format: int32
+                type: integer
+              totalDataPipelineRuns:
+                format: int32
+                type: integer
+              totalDataPipelines:
+                format: int32
+                type: integer
+              totalDatasets:
+                format: int32
+                type: integer
+              totalDatasources:
+                format: int32
+                type: integer
+              totalModelPipelineRuns:
+                format: int32
+                type: integer
+              totalModelPipelines:
+                format: int32
+                type: integer
+              totalModels:
+                format: int32
+                type: integer
+              totalPredictors:
+                format: int32
+                type: integer
+              totalStudies:
+                format: int32
                 type: integer
             type: object
         required:

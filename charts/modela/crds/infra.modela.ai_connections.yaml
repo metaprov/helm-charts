@@ -359,6 +359,27 @@ spec:
                     description: Token for digital ocean
                     type: string
                 type: object
+              discrod:
+                properties:
+                  contentType:
+                    default: application/json
+                    description: Content type
+                    type: string
+                  headers:
+                    additionalProperties:
+                      type: string
+                    description: custom headers to send
+                    type: object
+                  ssl:
+                    type: boolean
+                  token:
+                    description: The webhook secret token
+                    type: string
+                  url:
+                    default: ""
+                    description: Discrod webhook
+                    type: string
+                type: object
               dremio:
                 properties:
                   host:
@@ -1119,21 +1140,45 @@ spec:
                 type: object
               smtp:
                 properties:
+                  email:
+                    description: The smtp email
+                    type: string
+                  helo:
+                    default: ""
+                    description: The SMTP domain name
+                    type: string
                   host:
                     default: ""
+                    description: SMTP server Host
                     type: string
                   password:
                     default: ""
+                    description: Password when using user name and password
                     type: string
+                  passwordAuth:
+                    default: true
+                    description: Use user name password auth
+                    type: boolean
                   port:
                     default: 25
+                    description: SMTP Server Port
                     format: int32
                     maximum: 65535
                     minimum: 1
                     type: integer
-                  userName:
-                    default: ""
+                  ssl:
+                    default: false
+                    description: Use SSL when connecting to SMTP server
+                    type: boolean
+                  username:
+                    description: User name when using user name and password
                     type: string
+                  verifyHost:
+                    default: false
+                    type: boolean
+                  verifyPeer:
+                    default: false
+                    type: boolean
                 type: object
               snowflake:
                 properties:
@@ -1345,6 +1390,20 @@ spec:
                 type: object
               webhook:
                 properties:
+                  contentType:
+                    default: application/json
+                    description: Content type
+                    type: string
+                  headers:
+                    additionalProperties:
+                      type: string
+                    description: custom headers to send
+                    type: object
+                  ssl:
+                    type: boolean
+                  token:
+                    description: The webhook secret token
+                    type: string
                   url:
                     default: ""
                     type: string

@@ -63,10 +63,23 @@ spec:
                 default: ""
                 description: User provided description
                 type: string
-              from:
+              email:
                 default: ""
-                description: The sender address. For example, from email.
+                description: The email to send messages to. This is only relvent when
+                  using email notifier.
                 type: string
+              enabled:
+                default: true
+                description: Is this notifier can send notification
+                type: boolean
+              error:
+                default: true
+                description: Send error messages
+                type: boolean
+              info:
+                default: false
+                description: Send info messages
+                type: boolean
               owner:
                 default: no-one
                 description: The owner account name
@@ -107,10 +120,9 @@ spec:
                     description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                     type: string
                 type: object
-              to:
-                default: ""
-                description: Address within the provider to send the notifiaction
-                  to.
+              type:
+                default: webhook
+                description: Notifier type
                 type: string
             required:
             - connectionName

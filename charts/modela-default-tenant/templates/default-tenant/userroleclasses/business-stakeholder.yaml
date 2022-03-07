@@ -1,0 +1,47 @@
+apiVersion: infra.modela.ai/v1alpha1
+kind: UserRoleClass
+metadata:
+  name: business
+  namespace: default-tenant
+spec:
+    rules:
+      - resource: "alerts"
+        verbs: ["get","list"]  
+      - resource: "attachments"
+        verbs: ["get","list"]  
+      - resource: "modelasystems"
+        verbs: ["list"]  
+      - resource: "notifiers"
+        verbs: ["list"]  
+      - resource: "virtualbuckets"
+        verbs: ["list"]  
+      - resource: "dataproducts"
+        verbs: ["list","get"]
+      - resource: "dataproductversions"
+        verbs: ["list","get"]  
+      - resource: "datasets"
+        verbs: ["list","get"]  
+      - resource: "datasources"
+        verbs: ["list","get"]  
+      - resource: "recipes"
+        verbs: ["list","get"]  
+      - resource: "reciperuns"
+        verbs: ["list","get"]  
+      - resource: "models"
+        verbs: ["list","get"]
+      - resource: "modelautobuilders"
+        verbs: ["list","get"]
+      - resource: "studies"
+        verbs: ["list","get"]        
+      - resource: "reports"
+        verbs: ["list","get"]        
+      - resource: "modelpipelines"
+        verbs: ["list","get"]        
+      - resource: "predictors"
+        verbs: ["list","get"]        
+      - resource: "predictions"
+        verbs: ["list","get"]        
+      - resource: "cronpredictions"
+        verbs: ["list","get"]        
+      - resource: "dataapp"
+        verbs: ["list","get"]        
