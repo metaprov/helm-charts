@@ -109,7 +109,7 @@ controlplane:
     requests:
       cpu: 200m
       memory: 128Mi
-    limit:
+    limits:
       cpu: 400m
       memory: 128Mi
 
@@ -124,7 +124,7 @@ datadock:
     requests:
       cpu: 100m
       memory: 128Mi
-    limit:
+    limits:
       cpu: 200m
       memory: 128Mi
 
@@ -139,7 +139,7 @@ dataplane:
     requests:
       cpu: 500m
       memory: 512Mi
-    limit:
+    limits:
       cpu: 1000m
       memory: 1024Mi
 
@@ -154,7 +154,7 @@ frontend:
     requests:
       cpu: 100m
       memory: 256Mi
-    limit:
+    limits:
       cpu: 200m
       memory: 256Mi
 
