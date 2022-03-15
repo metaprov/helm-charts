@@ -4,25 +4,8 @@ metadata:
   name: system
   namespace: modela-system
 spec:
-  release: {{ .Chart.AppVersion }}
-  active: true
-  images:
-    controlPlane: {{ .Values.clouds.image.registry }}/metaprov/modela-control-plane :{{ .Chart.AppVersion }}
-    datadock: {{ .Values.clouds.image.registry }}/metaprov/modela-datadock:{{ .Chart.AppVersion }}
-    frontend: {{ .Values.clouds.image.registry }}/metaprov/modela-frontend:{{ .Chart.AppVersion }}
-    publisher: {{ .Values.clouds.image.registry }}/metaprov/modela-publisher:{{ .Chart.AppVersion }}
-    trainer: {{ .Values.clouds.image.registry }}/metaprov/modela-trainer:{{ .Chart.AppVersion }}
-    batchPredictor: {{ .Values.clouds.image.registry }}/metaprov/modela-batch-predictor:{{ .Chart.AppVersion }}
-    apiproxy: {{ .Values.clouds.image.registry }}/metaprov/modela-api-proxy:{{ .Chart.AppVersion }}
-    dataplane: {{ .Values.clouds.image.registry }}/metaprov/modela-data-plane:{{ .Chart.AppVersion }}
-    cloudproxy: {{ .Values.clouds.image.registry }}/metaprov/modela-cloud-proxy:{{ .Chart.AppVersion }}
-    databaseProxy: {{ .Values.clouds.image.registry }}/metaprov/modela-database-proxy:{{ .Chart.AppVersion }}
-    predictionRouter: {{ .Values.clouds.image.registry }}/metaprov/modela-prediction-router:{{ .Chart.AppVersion }}
-    modelaSystem: {{ .Values.clouds.image.registry }}/metaprov/modela-supervisor:{{ .Chart.AppVersion }}
-    modelaPredictionServer: {{ .Values.clouds.image.registry }}/metaprov/modela-prediction-server:latest
-    modelaDashboardServer: {{ .Values.clouds.image.registry }}/metaprov/modela-datashboard-server:latest
-    modelaWorkerControl:  {{ .Values.clouds.image.registry }}/metaprov/modela-workload:{{ .Chart.AppVersion }}
-    apiGateway: {{ .Values.clouds.image.registry }}/metaprov/modela-apigateway:{{ .Chart.AppVersion }}
+  release: v0.4.350
+  active: true  
   podTemplate:
       metadata: 
         labels:
