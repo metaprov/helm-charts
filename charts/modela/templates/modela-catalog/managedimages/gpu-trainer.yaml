@@ -1,15 +1,15 @@
 apiVersion: catalog.modela.ai/v1alpha1
 kind: ManagedImage
 metadata:
-  name: modela-gpu-trainer-1
+  name: modela-gpu-trainer-latest
   namespace: modela-catalog
 spec:
   description: "modela GPU trainer image"
   registry: "ghcr.io"
   repository: "metaprov/modela-trainer"
-  tag: "latest"
+  tag: latest
   gpu: true
-  role: "trainer"
+  role: trainer
   active: true
   maintainedBy: "Metaprov Inc"
   

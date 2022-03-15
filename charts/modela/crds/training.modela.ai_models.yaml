@@ -1351,10 +1351,6 @@ spec:
                             description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                             type: string
                         type: object
-                      enable:
-                        default: false
-                        description: If true, use custom req
-                        type: boolean
                       gpuImage:
                         description: Reference to the managed gpu trainer image
                         properties:
@@ -1419,9 +1415,6 @@ spec:
                               More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                             type: object
                         type: object
-                      workloadClassName:
-                        description: Workload class name. Predefined resources
-                        type: string
                     type: object
                 type: object
               studyName:
@@ -1748,10 +1741,6 @@ spec:
                             description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                             type: string
                         type: object
-                      enable:
-                        default: false
-                        description: If true, use custom req
-                        type: boolean
                       gpuImage:
                         description: Reference to the managed gpu trainer image
                         properties:
@@ -1816,9 +1805,6 @@ spec:
                               More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                             type: object
                         type: object
-                      workloadClassName:
-                        description: Workload class name. Predefined resources
-                        type: string
                     type: object
                   samplePct:
                     default: 100
@@ -1879,12 +1865,15 @@ spec:
                       and train.
                     properties:
                       method:
+                        default: auto
                         description: Define the split type.
                         enum:
                         - random
                         - split-column
                         - time
                         - random-stratified
+                        - auto
+                        - test-dataset
                         type: string
                       segments:
                         description: Apply the segments first
@@ -1919,6 +1908,11 @@ spec:
                         maximum: 100
                         minimum: 0
                         type: integer
+                      testDataset:
+                        default: ""
+                        description: The name of the test dataset. If a test dataset
+                          is specified
+                        type: string
                       train:
                         default: 80
                         description: Training is a percent number (0-100) which specify
@@ -1927,6 +1921,10 @@ spec:
                         maximum: 100
                         minimum: 1
                         type: integer
+                      trainDataset:
+                        default: ""
+                        description: The name of the train dataset.
+                        type: string
                       validation:
                         default: 0
                         description: Validation is percent of dataset rows which would
@@ -2133,9 +2131,6 @@ spec:
               cvScore:
                 description: CVScrore is the score using on the training set.
                 type: number
-              dataImage:
-                description: The image used during training for data operations.
-                type: string
               endTime:
                 description: CompletionTime represent the time that the model is marked
                   as ready
@@ -2206,6 +2201,19 @@ spec:
               imageName:
                 description: ImageName is the image name of the model
                 type: string
+              images:
+                description: The team that trained this model
+                properties:
+                  dataImage:
+                    description: The image used during training for data operations.
+                    type: string
+                  publisherImage:
+                    description: The image used during training for data operations.
+                    type: string
+                  trainerImage:
+                    description: The image used during training
+                    type: string
+                type: object
               importance:
                 description: Importance is list of feature importance based on the
                   alg of this model, sorted by importance
@@ -2696,9 +2704,6 @@ spec:
                 type: object
               trainedBy:
                 description: The account that trained the model
-                type: string
-              trainerImage:
-                description: The image used during training
                 type: string
               trainingDataHash:
                 description: Sha 256 of the data sig

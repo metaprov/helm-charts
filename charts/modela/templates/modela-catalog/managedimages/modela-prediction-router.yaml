@@ -1,7 +1,7 @@
 apiVersion: catalog.modela.ai/v1alpha1
 kind: ManagedImage
 metadata:
-  name: modela-prediction-router-1
+  name: modela-prediction-router-latest
   namespace: modela-catalog
 spec:
   description: "prediction router image"
@@ -9,6 +9,6 @@ spec:
   repository: "metaprov/modela-prediction-router"
   tag: "latest"
   active: true
-  role: "system"  
+  role: prediction-router  
   maintainedBy: "Metaprov Inc"
   

@@ -1,14 +1,14 @@
 apiVersion: catalog.modela.ai/v1alpha1
 kind: ManagedImage
 metadata:
-  name: modela-cloud-proxy
+  name: modela-cloud-proxy-latest
   namespace: modela-catalog
 spec:
   description: "modela cloud proxy image"
   registry: "ghcr.io"
   repository: "metaprov/modela-cloud-proxy"
-  tag: "latest"  
-  role: "system"
+  tag: latest  
+  role: cloud-proxy
   active: true  
   maintainedBy: "Metaprov Inc"
   

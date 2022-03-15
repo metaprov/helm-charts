@@ -1,15 +1,15 @@
 apiVersion: catalog.modela.ai/v1alpha1
 kind: ManagedImage
 metadata:
-  name: modela-api-proxy
+  name: modela-api-proxy-latest
   namespace: modela-catalog
 spec:
   description: "modela dataplane image"
   registry: "ghcr.io"
   repository: "metaprov/modela-api-proxy"
-  tag: "latest"
+  tag: latest
   gpu: false
-  role: "system"
+  role: system
   active: true
   maintainedBy: "Metaprov Inc"
   

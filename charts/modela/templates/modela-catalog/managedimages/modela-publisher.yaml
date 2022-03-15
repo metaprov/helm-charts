@@ -1,13 +1,14 @@
 apiVersion: catalog.modela.ai/v1alpha1
 kind: ManagedImage
 metadata:
-  name: modela-publisher-1
+  name: modela-publisher-latest
   namespace: modela-catalog
 spec:
   description: "modela publisher image"
   registry: "ghcr.io"
   repository: "metaprov/modela-publisher"
-  tag: "latest"  
-  role: "system"  
+  tag: latest  
+  role: publisher  
+  active: true
   maintainedBy: "Metaprov Inc"
   

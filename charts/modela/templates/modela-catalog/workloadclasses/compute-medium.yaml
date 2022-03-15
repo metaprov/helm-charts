@@ -5,13 +5,18 @@ metadata:
   namespace: modela-catalog
 spec:
   resourcesTemplate:
-    workloadClassName:  compute-medium
+    cpuImage:
+      name:  modela-cpu-trainer-latest
+      namespace: modela-catalog 
+    gpuImage:
+      name:  modela-gpu-trainer-latest
+      namespace: modela-catalog       
     requirements:
         requests:
-          memory: "64Mi"
-          cpu: "1"
+          memory: "256Mi"
+          cpu: "0.5"
         limits:
-          memory: "128Mi"
+          memory: "512Mi"
           cpu: "1"  
   
   

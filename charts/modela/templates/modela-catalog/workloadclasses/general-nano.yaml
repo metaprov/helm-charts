@@ -5,7 +5,6 @@ metadata:
   namespace: modela-catalog
 spec:
   resourcesTemplate:
-    workloadClassName:  general-nano
     requirements:
       requests:
         memory: "64Mi"

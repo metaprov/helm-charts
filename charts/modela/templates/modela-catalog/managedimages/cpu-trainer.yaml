@@ -1,7 +1,7 @@
 apiVersion: catalog.modela.ai/v1alpha1
 kind: ManagedImage
 metadata:
-  name: modela-cpu-trainer-1
+  name: modela-cpu-trainer-latest
   namespace: modela-catalog
 spec:
   description: "modela cpu trainer image"
