@@ -18,12 +18,9 @@ spec:
     name: default-tenant
     namespace: modela-system
   type: "user"
-  userName: "admin"
+  username: "admin"
   firstName: "admin"
   lastName: "admin"
   email: "admin@example"
   phone: "444-4444-444"
-  productBindings:
-    - entity: iris-product
-      role: administrator
-
+  
