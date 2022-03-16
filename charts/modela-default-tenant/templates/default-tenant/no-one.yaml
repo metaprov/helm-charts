@@ -21,7 +21,7 @@ spec:
     name: default-tenant
     namespace: modela-system
   type: "user"
-  userName: "no-one"
+  username: "no-one"
   firstName: "no"
   lastName: "one"
   email: "no-one@example"
