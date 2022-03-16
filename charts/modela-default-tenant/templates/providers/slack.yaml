@@ -18,7 +18,7 @@ spec:
   slack:
     webhookUrl: '[hidden]'    
     channel:   '[hidden]'     
-    userName: '[hidden]'    
+    username: '[hidden]'    
     token: '[hidden]'   
 ---
 apiVersion: v1
