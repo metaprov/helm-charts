@@ -4,10 +4,13 @@ metadata:
   name: default-email-notifier
   namespace: default-tenant
 spec:
-  owner: admin
+  type: email
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  to: {{ .Values.email.to }}
-  from: {{ .Values.email.from}}
+  email: admin@example.com
   connectionName: default-smtp-connection
+  owner: admin
+
+  
+  
