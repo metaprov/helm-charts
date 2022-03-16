@@ -90,7 +90,7 @@ lab:
 servingsite:
   create: true
   name: default-servingsite
-  fdqn: serving.modela.ai
+  fqdn: serving.modela.ai
 
 adminaccount:
   create: true

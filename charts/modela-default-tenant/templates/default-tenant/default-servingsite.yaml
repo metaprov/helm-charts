@@ -5,7 +5,7 @@ metadata:
   namespace: default-tenant
 spec:
   owner: admin
-  fdqn: {{ .Values.servingsite.fdqn }}
+  fqdn: {{ .Values.servingsite.fqdn }}
   tenantRef:
     name: default-tenant
     namespace: modela-system
