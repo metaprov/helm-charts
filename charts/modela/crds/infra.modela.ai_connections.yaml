@@ -30,8 +30,9 @@ spec:
     - jsonPath: .spec.category
       name: Category
       type: string
-    - jsonPath: .spec.secretName
+    - jsonPath: .spec.secretRef.name
       name: Secret
+      priority: 1
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
@@ -371,6 +372,7 @@ spec:
                     description: custom headers to send
                     type: object
                   ssl:
+                    default: false
                     type: boolean
                   token:
                     description: The webhook secret token
@@ -1400,6 +1402,7 @@ spec:
                     description: custom headers to send
                     type: object
                   ssl:
+                    default: false
                     type: boolean
                   token:
                     description: The webhook secret token

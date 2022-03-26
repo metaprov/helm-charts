@@ -33,12 +33,6 @@ spec:
     - jsonPath: .spec.reportType
       name: Type
       type: string
-    - jsonPath: .status.startTime
-      name: StartTime
-      type: date
-    - jsonPath: .status.endTime
-      name: CompletionTime
-      type: date
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -70,6 +64,10 @@ spec:
                   report.
                 format: int64
                 type: integer
+              cronReportName:
+                default: ""
+                description: the name of the cron report that generated this report
+                type: string
               custom:
                 description: If the report is custom report, this field holds the
                   specification
@@ -186,6 +184,7 @@ spec:
                                           type: string
                                       type: object
                                     spacer:
+                                      default: false
                                       description: If true this column is an empty
                                         spacer
                                       type: boolean
@@ -194,6 +193,7 @@ spec:
                                     table:
                                       properties:
                                         border:
+                                          default: false
                                           description: Show borther
                                           type: boolean
                                         columns:
@@ -221,6 +221,7 @@ spec:
                                           format: int32
                                           type: integer
                                         showIndex:
+                                          default: false
                                           description: Show index column
                                           type: boolean
                                       type: object

@@ -4,9 +4,12 @@ metadata:
   name: default-slack-notifier
   namespace: default-tenant
 spec:
-  owner: admin
+  channels:
+    - connectionName: default-slack-connection
+      enabled: true
+      error: true
+      info: true
   tenantRef:
-    name: default-tenant
-    namespace: modela-system
-  connectionName: default-slack-connection
-
+      name: default-tenant
+      namespace: modela-system
+  owner: admin

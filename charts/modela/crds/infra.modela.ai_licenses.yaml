@@ -36,12 +36,15 @@ spec:
       type: string
     - jsonPath: .spec.maxTrainers
       name: Max Trainers
+      priority: 1
       type: string
     - jsonPath: .spec.maxServers
       name: Max Nodes
+      priority: 1
       type: string
     - jsonPath: .spec.maxUsers
       name: Max Users
+      priority: 1
       type: string
     - jsonPath: .spec.expireAt
       name: Expire At
@@ -71,6 +74,7 @@ spec:
             description: LicenseSpec defines the desired state of License
             properties:
               chatbot:
+                default: false
                 description: Is chatbot feature supported
                 type: boolean
               email:
@@ -81,6 +85,7 @@ spec:
                 format: date-time
                 type: string
               forecast:
+                default: false
                 description: Forcast denote if forecast feature supported
                 type: boolean
               maxDataPlanes:
@@ -108,6 +113,7 @@ spec:
                 minimum: 0
                 type: integer
               nlp:
+                default: false
                 description: NLP is nlp feature supported
                 type: boolean
               notifierName:
@@ -183,6 +189,7 @@ spec:
                 format: date-time
                 type: string
               vision:
+                default: false
                 description: Is vision feature supported
                 type: boolean
             type: object

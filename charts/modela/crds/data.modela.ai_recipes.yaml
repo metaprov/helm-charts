@@ -31,7 +31,10 @@ spec:
     - jsonPath: .spec.versionName
       name: Version
       type: string
-    - jsonPath: .status.lastRun
+    - jsonPath: .spec.description
+      name: Description
+      type: string
+    - jsonPath: .status.lastRun.at
       name: Last Run
       type: date
     - jsonPath: .metadata.creationTimestamp
@@ -133,6 +136,7 @@ spec:
                 description: Output is the desired output
                 properties:
                   createDataset:
+                    default: false
                     description: CreateDataset if true, create a new dataset when
                       the recipe is done.
                     type: boolean
@@ -399,11 +403,40 @@ spec:
                   api controller
                 type: string
               lastRun:
-                description: Last run is the last time a run was created
-                format: date-time
-                type: string
+                description: Last run is the last time a data pipeline run was created
+                properties:
+                  at:
+                    description: The last run time
+                    format: date-time
+                    type: string
+                  duration:
+                    description: Last run duration in seconds
+                    format: int32
+                    type: integer
+                  failureMessage:
+                    description: Update in case of terminal failure message
+                    type: string
+                  failureReason:
+                    description: Update in case of terminal failure Borrowed from
+                      cluster api controller
+                    type: string
+                  outcome:
+                    description: the outcome of the last run
+                    enum:
+                    - random
+                    - split-column
+                    - time
+                    - random-stratified
+                    - auto
+                    - test-dataset
+                    type: string
+                type: object
               lastUpdated:
                 description: Last time the object was updated
+                format: date-time
+                type: string
+              nextRun:
+                description: The time of the next schedule run
                 format: date-time
                 type: string
               observedGeneration:

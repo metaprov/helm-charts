@@ -4,13 +4,12 @@ metadata:
   name: default-email-notifier
   namespace: default-tenant
 spec:
-  type: email
+  channels:
+    - connectionName: default-smtp-connection
+      enabled: true
+      error: true
+      info: true  
   tenantRef:
     name: default-tenant
     namespace: modela-system
-  email: admin@example.com
-  connectionName: default-smtp-connection
   owner: admin
-
-  
-  
