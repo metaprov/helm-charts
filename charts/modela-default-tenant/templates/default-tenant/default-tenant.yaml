@@ -10,3 +10,9 @@ spec:
   defaultServingSiteRef:
       name: default-serving-site
       namespace: default-tenant
+  permissions:
+    stakeholders:
+      - account: admin
+        roles:
+          - name: administrator
+            namespace: default-tenant      
