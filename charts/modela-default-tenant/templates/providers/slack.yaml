@@ -15,10 +15,7 @@ spec:
     name: default-slack-secret
     namespace: default-tenant
   category: messaging
-  slack:
-    webhookUrl: '[hidden]'    
-    channel:   '[hidden]'     
-    username: '[hidden]'    
+  slack:    
     token: '[hidden]'   
 ---
 apiVersion: v1
