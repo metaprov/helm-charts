@@ -9,6 +9,7 @@ spec:
       enabled: true
       error: true
       info: true
+      destination: test
   tenantRef:
       name: default-tenant
       namespace: modela-system

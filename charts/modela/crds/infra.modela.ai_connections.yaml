@@ -1127,16 +1127,7 @@ spec:
                 type: object
               slack:
                 properties:
-                  channel:
-                    default: ""
-                    type: string
                   token:
-                    default: ""
-                    type: string
-                  username:
-                    default: ""
-                    type: string
-                  webhookUrl:
                     default: ""
                     type: string
                 type: object

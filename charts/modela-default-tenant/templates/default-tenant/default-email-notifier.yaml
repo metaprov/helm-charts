@@ -9,6 +9,7 @@ spec:
       enabled: true
       error: true
       info: true  
+      destination: tsagi@metaprov.com
   tenantRef:
     name: default-tenant
     namespace: modela-system

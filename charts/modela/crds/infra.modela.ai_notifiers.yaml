@@ -58,6 +58,10 @@ spec:
                     connectionName:
                       default: ""
                       type: string
+                    destination:
+                      description: The notification destination. Can be an email if
+                        using smtp connection or a slack channel.
+                      type: string
                     enabled:
                       default: true
                       description: Is this notifier can send notification

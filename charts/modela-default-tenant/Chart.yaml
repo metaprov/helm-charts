@@ -1,8 +1,8 @@
 apiVersion: v2
 name: modela-default-tenant
 description: A Helm chart for default tenant
-version: 0.4.641
-appVersion: 0.4.641
+version: 0.4.652
+appVersion: 0.4.652
 icon: https://raw.githubusercontent.com/metaprov/modelaapi/main/static/imgs/logo/svg/symbol_horizontal_light.svg
 keywords:
     - machine learning

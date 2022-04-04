@@ -160,7 +160,7 @@ spec:
                 description: The histogram values
                 properties:
                   bins:
-                    description: The bins if this histogram describe conitunous variables
+                    description: The bins if this histogram describe continous variables
                     items:
                       type: number
                     type: array
@@ -171,7 +171,7 @@ spec:
                       type: string
                     type: array
                   values:
-                    description: The set of values per beans
+                    description: The set of values per bin
                     items:
                       type: number
                     type: array
