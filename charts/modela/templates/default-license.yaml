@@ -5,13 +5,9 @@ metadata:
   namespace: default-tenant
 spec:
   owner: admin
-  tenantRef:
-    name: default-teant
-    namespace: modela-system
   secretRef: 
     name: default-license-secret
     namespace: default-tenant
-  owner: admin
   email: ""
   maxProducts: 5
   maxTrainers: 1
