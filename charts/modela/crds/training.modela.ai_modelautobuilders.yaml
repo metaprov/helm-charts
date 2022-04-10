@@ -997,6 +997,10 @@ spec:
                 maxLength: 253
                 pattern: '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
                 type: string
+              fast:
+                default: false
+                description: Specify fast mode for model auto builder.
+                type: boolean
               featureEngineering:
                 default: false
                 description: If true specify feature engineering
@@ -1440,7 +1444,7 @@ spec:
                       description: The reason for the condition's last transition.
                       type: string
                     status:
-                      description: Status of the condition, one of True, False, AutoScaler.
+                      description: Status of the condition, one of True, False, Unknown.
                       type: string
                     type:
                       description: Type of account condition.
