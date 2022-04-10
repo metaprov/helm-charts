@@ -3,6 +3,29 @@ entries:
   modela:
   - apiVersion: v2
     appVersion: v0.4.680
+    created: "2022-04-10T14:03:36.622545841Z"
+    description: Machine Learning Operators
+    digest: d828bf48f8486b371a52ab0d2abc8b2d95383610cbbbe02f075cfd2da283208b
+    home: https://modela.ai
+    keywords:
+    - kubernetes
+    - go
+    - golang
+    - ai
+    - machine learning
+    kubeVersion: '>= 1.15.0'
+    maintainers:
+    - email: support@modela.ai
+      name: metaprov
+    name: modela
+    sources:
+    - https://github.com/metaprov/modela
+    type: application
+    urls:
+    - https://github.com/metaprov/helm-charts/releases/download/modela-v0.4.681/modela-v0.4.681.tgz
+    version: v0.4.681
+  - apiVersion: v2
+    appVersion: v0.4.680
     created: "2022-04-10T02:12:37.604938597Z"
     description: Machine Learning Operators
     digest: bb68ee1c688d149a25aa2a4abb886262cd6f0f6ef4a6061d747158175d1db4d3
@@ -1060,6 +1083,28 @@ entries:
     - https://metaprov.github.io/helm-charts/modela-v0.4.317.tgz
     version: v0.4.317
   modela-default-tenant:
+  - apiVersion: v2
+    appVersion: 0.4.680
+    created: "2022-04-10T14:03:36.460587424Z"
+    description: A Helm chart for default tenant
+    digest: 5c66857a0f61885627e96ffd666d8c69f96286d1c5c51b065c899b0094dcc850
+    home: https://www.modela.ai
+    icon: https://raw.githubusercontent.com/metaprov/modelaapi/main/static/imgs/logo/svg/symbol_horizontal_light.svg
+    keywords:
+    - machine learning
+    - automl
+    - model
+    - ai
+    maintainers:
+    - email: info@metaprov.com
+      name: Metaprov Inc
+    name: modela-default-tenant
+    sources:
+    - https://github.com/metaprov/modelaapi
+    type: application
+    urls:
+    - https://github.com/metaprov/helm-charts/releases/download/modela-default-tenant-0.4.681/modela-default-tenant-0.4.681.tgz
+    version: 0.4.681
   - apiVersion: v2
     appVersion: 0.4.680
     created: "2022-04-10T02:12:37.438971687Z"
@@ -2130,4 +2175,4 @@ entries:
     urls:
     - https://metaprov.github.io/helm-charts/modeld-default-tenant-0.1.0.tgz
     version: 0.1.0
-generated: "2022-04-10T02:12:37.605869009Z"
+generated: "2022-04-10T14:03:36.623662042Z"
