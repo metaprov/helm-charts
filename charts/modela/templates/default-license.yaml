@@ -2,12 +2,11 @@ apiVersion: infra.modela.ai/v1alpha1
 kind: License
 metadata:
   name: default-license
-  namespace: default-tenant
+  namespace: modela-system
 spec:
-  owner: admin
   secretRef: 
     name: default-license-secret
-    namespace: default-tenant
+    namespace: modela-system
   email: ""
   maxProducts: 5
   maxTrainers: 1
@@ -21,4 +20,3 @@ spec:
   productName: "modela.ai free"
   priceName: "lite"
   notifierName:  default-email-notifier
-  
