@@ -44,7 +44,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ServingSite is a namespace used for serving
+        description: ServingSite represents a namespace where model serving workloads
+          are executed under
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -59,8 +60,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ServingSiteSpec represents a namespace where model serving
-              workloads are executed under
+            description: ServingSiteSpec defines the desired state of a Lab
             properties:
               clusterName:
                 default: ""
@@ -81,15 +81,32 @@ spec:
                   the FQDN as `model-serving.modela.ai` will automatically serve Predictors
                   using the REST API at `predictors.model-serving.modela.ai`
                 type: string
-              ingressName:
-                default: ""
-                description: IngressName specifies the name of the Kubernetes Ingress
-                  resource which the ServingSite uses to define external access points
-                  for resources that accept traffic to their services (i.e. Predictors).
+              ingress:
+                description: Ingress specifies of the Kubernetes Ingress resource
+                  which the ServingSite uses to define external access points for
+                  resources that accept traffic to their services (i.e. Predictors).
                   This field is set automatically during the creation of the ServingSite
                   and neither the contents of the Ingress nor the IngressName should
                   be modified by an end-user
-                type: string
+                properties:
+                  enabled:
+                    default: false
+                    description: Indicates if the ingress is enabled
+                    type: boolean
+                  ingressClassName:
+                    default: ""
+                    description: IngressClassName is the name of the ingress class.
+                    type: string
+                  ingressName:
+                    default: ""
+                    description: IngressName specifies the name of the Kubernetes
+                      Ingress resource which the ServingSite uses to define external
+                      access points for resources that accept traffic to their services
+                      (i.e. Predictors). This field is set automatically during the
+                      creation of the ServingSite and neither the contents of the
+                      Ingress nor the IngressName should be modified by an end-user
+                    type: string
+                type: object
               limits:
                 description: Limits specifies the hard resource limits that can be
                   allocated for workloads created under the ServingSite

@@ -9,3 +9,5 @@ spec:
   tenantRef:
     name: default-tenant
     namespace: modela-system
+  ingress:
+    enabled: false  
