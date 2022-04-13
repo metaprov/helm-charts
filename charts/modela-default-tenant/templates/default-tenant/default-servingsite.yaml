@@ -9,7 +9,6 @@ spec:
     name: default-tenant
     namespace: modela-system
   ingress:
-    fqdn: {{ .Values.servingsite.fqdn }}
-    enabled: false  
+    fqdn: {{ .Values.servingsite.fqdn }}    
     grpc: true
     rest: false
