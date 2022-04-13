@@ -5,9 +5,11 @@ metadata:
   namespace: default-tenant
 spec:
   owner: admin
-  fqdn: {{ .Values.servingsite.fqdn }}
   tenantRef:
     name: default-tenant
     namespace: modela-system
   ingress:
+    fqdn: {{ .Values.servingsite.fqdn }}
     enabled: false  
+    grpc: true
+    rest: false
