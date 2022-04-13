@@ -2,6 +2,29 @@ apiVersion: v1
 entries:
   modela:
   - apiVersion: v2
+    appVersion: v0.4.703
+    created: "2022-04-13T18:38:53.704061317Z"
+    description: Machine Learning Operators
+    digest: e86f3878e88d81ccfbb3f5a9307904064cddc6f4feebdbf9c29ef7d39f3e1c13
+    home: https://modela.ai
+    keywords:
+    - kubernetes
+    - go
+    - golang
+    - ai
+    - machine learning
+    kubeVersion: '>= 1.15.0'
+    maintainers:
+    - email: support@modela.ai
+      name: metaprov
+    name: modela
+    sources:
+    - https://github.com/metaprov/modela
+    type: application
+    urls:
+    - https://github.com/metaprov/helm-charts/releases/download/modela-v0.4.703/modela-v0.4.703.tgz
+    version: v0.4.703
+  - apiVersion: v2
     appVersion: v0.4.700
     created: "2022-04-13T15:26:39.94125328Z"
     description: Machine Learning Operators
@@ -1245,6 +1268,28 @@ entries:
     version: v0.4.317
   modela-default-tenant:
   - apiVersion: v2
+    appVersion: 0.4.703
+    created: "2022-04-13T18:38:53.559710296Z"
+    description: A Helm chart for default tenant
+    digest: 696923a26ed7c5a4341267fa1b4b40567f9fdc762d598d74386c5ee7e771e489
+    home: https://www.modela.ai
+    icon: https://raw.githubusercontent.com/metaprov/modelaapi/main/static/imgs/logo/svg/symbol_horizontal_light.svg
+    keywords:
+    - machine learning
+    - automl
+    - model
+    - ai
+    maintainers:
+    - email: info@metaprov.com
+      name: Metaprov Inc
+    name: modela-default-tenant
+    sources:
+    - https://github.com/metaprov/modelaapi
+    type: application
+    urls:
+    - https://github.com/metaprov/helm-charts/releases/download/modela-default-tenant-0.4.703/modela-default-tenant-0.4.703.tgz
+    version: 0.4.703
+  - apiVersion: v2
     appVersion: 0.4.700
     created: "2022-04-13T15:26:39.65804593Z"
     description: A Helm chart for default tenant
@@ -2402,4 +2447,4 @@ entries:
     urls:
     - https://metaprov.github.io/helm-charts/modeld-default-tenant-0.1.0.tgz
     version: 0.1.0
-generated: "2022-04-13T15:26:39.942140988Z"
+generated: "2022-04-13T18:38:53.705085825Z"
