@@ -73,14 +73,6 @@ spec:
                 default: ""
                 description: The user-provided description of the object
                 type: string
-              fqdn:
-                default: serving.vcap.me
-                description: FQDN specifies the fully-qualified domain name that the
-                  ServingSite's Ingress will use as the base host for the endpoint
-                  of services deployed under the ServingSite. For example, setting
-                  the FQDN as `model-serving.modela.ai` will automatically serve Predictors
-                  using the REST API at `predictors.model-serving.modela.ai`
-                type: string
               ingress:
                 description: Ingress specifies of the Kubernetes Ingress resource
                   which the ServingSite uses to define external access points for
@@ -89,23 +81,36 @@ spec:
                   and neither the contents of the Ingress nor the IngressName should
                   be modified by an end-user
                 properties:
-                  enabled:
-                    default: false
-                    description: Indicates if the ingress is enabled
+                  fqdn:
+                    default: serving.vcap.me
+                    description: FQDN specifies the fully-qualified domain name that
+                      the ServingSite's Ingress will use as the base host for the
+                      endpoint of services deployed under the ServingSite. For example,
+                      setting the FQDN as `model-serving.modela.ai` will automatically
+                      serve Predictors using the REST API at `predictors.model-serving.modela.ai`
+                    type: string
+                  grpc:
+                    default: true
+                    description: Grpc indicates if the ServingSite will create an
+                      Ingress resource to serve GRPC prediction traffic. All Predictor
+                      resources created under the ServingSite will receive a unique
+                      host in the Ingress determined by the name of the Predictor
+                      and the FQDN of the ServingSite (i.e. my-predictor.model-serving.modela.ai)
                     type: boolean
                   ingressClassName:
-                    default: ""
-                    description: IngressClassName is the name of the ingress class.
+                    default: nginx
+                    description: IngressClassName is the name of the ingress class
+                      that will be applied to created Ingress resources (defaults
+                      to nginx)
                     type: string
-                  ingressName:
-                    default: ""
-                    description: IngressName specifies the name of the Kubernetes
-                      Ingress resource which the ServingSite uses to define external
-                      access points for resources that accept traffic to their services
-                      (i.e. Predictors). This field is set automatically during the
-                      creation of the ServingSite and neither the contents of the
-                      Ingress nor the IngressName should be modified by an end-user
-                    type: string
+                  rest:
+                    default: true
+                    description: Rest indicates if the ServingSite will create an
+                      Ingress resource to serve REST prediction traffic. All REST
+                      traffic will be served under a single host determined by the
+                      FQDN of the ServingSite (i.e. predictors.model-serving.modela.ai).
+                      RestIngress must be enabled to serve DataApps over Ingress
+                    type: boolean
                 type: object
               limits:
                 description: Limits specifies the hard resource limits that can be
@@ -365,6 +370,14 @@ spec:
                 description: In the case of failure, the ServingSite resource controller
                   will set this field with a failure reason
                 type: string
+              grpcIngressName:
+                description: GRPC IngressName specifies the name of the Kubernetes
+                  Ingress resource which the ServingSite uses to define external access
+                  points for resources that accept traffic to their services (i.e.
+                  Predictors). This field is set automatically during the creation
+                  of the ServingSite and neither the contents of the Ingress nor the
+                  IngressName should be modified by an end-user
+                type: string
               inactivePredictors:
                 description: The number of inactive (non-deployed) predictors
                 format: int32
@@ -384,6 +397,14 @@ spec:
                   on
                 format: int64
                 type: integer
+              restIngressName:
+                description: Rest IngressName specifies the name of the Kubernetes
+                  Ingress resource which the ServingSite uses to define external access
+                  points for resources that accept traffic to their services (i.e.
+                  Predictors). This field is set automatically during the creation
+                  of the ServingSite and neither the contents of the Ingress nor the
+                  IngressName should be modified by an end-user
+                type: string
               totalPredictorAccuracyFailed:
                 description: The number of predictors that have detected average inaccurate
                   results
