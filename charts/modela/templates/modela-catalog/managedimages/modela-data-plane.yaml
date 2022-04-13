@@ -7,7 +7,7 @@ spec:
   description: "modela dataplane image"
   registry: "ghcr.io"
   repository: "metaprov/modela-data-plane"
-  tag: latest
+  tag: {{ .Chart.AppVersion }}
   role: dataplane  
   active: true
   maintainedBy: "Metaprov Inc"
