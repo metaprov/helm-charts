@@ -3,6 +3,29 @@ entries:
   modela:
   - apiVersion: v2
     appVersion: v0.4.703
+    created: "2022-04-13T19:53:05.241086251Z"
+    description: Machine Learning Operators
+    digest: 80c67740c8e0e4bf63cecc0217990b6edcce84278087bb7cb86e7f4a6aeb203b
+    home: https://modela.ai
+    keywords:
+    - kubernetes
+    - go
+    - golang
+    - ai
+    - machine learning
+    kubeVersion: '>= 1.15.0'
+    maintainers:
+    - email: support@modela.ai
+      name: metaprov
+    name: modela
+    sources:
+    - https://github.com/metaprov/modela
+    type: application
+    urls:
+    - https://github.com/metaprov/helm-charts/releases/download/modela-v0.4.706/modela-v0.4.706.tgz
+    version: v0.4.706
+  - apiVersion: v2
+    appVersion: v0.4.703
     created: "2022-04-13T19:50:10.47580071Z"
     description: Machine Learning Operators
     digest: bc58ab607de5bf0f240081b6c13cffe438a074a5e41c7baeee7f24f7a70c5a38
@@ -1315,6 +1338,28 @@ entries:
   modela-default-tenant:
   - apiVersion: v2
     appVersion: 0.4.703
+    created: "2022-04-13T19:53:05.044425693Z"
+    description: A Helm chart for default tenant
+    digest: 932ec6f81cd4c14ba92f76f3f149fc60809e15835cc414d0bd266d424171cb6d
+    home: https://www.modela.ai
+    icon: https://raw.githubusercontent.com/metaprov/modelaapi/main/static/imgs/logo/svg/symbol_horizontal_light.svg
+    keywords:
+    - machine learning
+    - automl
+    - model
+    - ai
+    maintainers:
+    - email: info@metaprov.com
+      name: Metaprov Inc
+    name: modela-default-tenant
+    sources:
+    - https://github.com/metaprov/modelaapi
+    type: application
+    urls:
+    - https://github.com/metaprov/helm-charts/releases/download/modela-default-tenant-0.4.706/modela-default-tenant-0.4.706.tgz
+    version: 0.4.706
+  - apiVersion: v2
+    appVersion: 0.4.703
     created: "2022-04-13T18:51:44.386074543Z"
     description: A Helm chart for default tenant
     digest: 1974590d8e752d46979c4f61b50b4b005037ea1de7e4c01dc9e5349b0af628c9
@@ -2515,4 +2560,4 @@ entries:
     urls:
     - https://metaprov.github.io/helm-charts/modeld-default-tenant-0.1.0.tgz
     version: 0.1.0
-generated: "2022-04-13T19:50:10.477021756Z"
+generated: "2022-04-13T19:53:05.242202074Z"
