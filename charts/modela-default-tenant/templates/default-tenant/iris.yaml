@@ -4,6 +4,7 @@ metadata:
   namespace: default-tenant
   name: iris-product
 spec:
+  color: blue
   gitLocation:
     gitConnectionName: default-git-repository
     url: ""
