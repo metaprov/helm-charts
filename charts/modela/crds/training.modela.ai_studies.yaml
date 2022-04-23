@@ -74,7 +74,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Study represents an the search for the best machine learning
+        description: Study represents an automatic search for the best machine learning
           model for a given dataset
         properties:
           apiVersion:
@@ -98,25 +98,17 @@ spec:
                 description: Aborted indicates that the execution of the Study and
                   associated Models should be permanently stopped
                 type: boolean
-              activeDeadlineSeconds:
-                default: 600
-                description: The deadline for any Jobs associated with the Study to
-                  be completed in seconds
-                format: int64
-                minimum: 0
-                type: integer
               baseline:
                 description: Baseline specifies the parameters to generate baseline
                   (default hyper-parameters) models
                 properties:
                   all:
                     default: false
-                    description: Indicates if models will be created for all algorithms,
-                      ignoring the Baselines field
+                    description: Indicates if models will be created for every algorithm
                     type: boolean
                   baselines:
-                    description: Baselines contains the collection of algorithms to
-                      create models for
+                    description: Baselines contains the collection of algorithms that
+                      models will be created with
                     items:
                       enum:
                       - knn-regressor
@@ -191,8 +183,8 @@ spec:
                     type: boolean
                 type: object
               compilation:
-                description: CompilerSpec specifies the configuration to a compile
-                  the best model to a binary (currently unimplemented)
+                description: CompilerSpec specifies the configuration to compile the
+                  best-selected model to a binary (currently unimplemented)
                 properties:
                   compiler:
                     default: none
@@ -225,8 +217,9 @@ spec:
                     type: array
                 type: object
               datasetName:
-                description: The name of the Dataset resource which will be split
-                  into training, testing, and validation datasets to be used in training
+                description: The name of the Dataset resource that will be used to
+                  train models with. The dataset will be split into individual training,
+                  testing, and validation datasets
                 type: string
               description:
                 default: ""
@@ -899,9 +892,14 @@ spec:
                 properties:
                   collectAtStudyEnd:
                     default: true
+                    description: Indicates if all models of the Study, excluding the
+                      highest-performing model, will be archived
                     type: boolean
                   keepOnlyBestModelPerAlgorithm:
                     default: false
+                    description: Indicates if multiple models with the same algorithm
+                      are produced by the Study, the model with the lowest score will
+                      be garbage-collected
                     type: boolean
                 type: object
               interpretability:
@@ -1034,13 +1032,14 @@ spec:
                     type: string
                   path:
                     default: ""
-                    description: "The path to a flat-file inside an object storage
+                    description: The path to a flat-file inside an object storage
                       system. When using the Modela API to upload files (through the
                       FileService API), Modela will upload the data to a predetermined
-                      path with the following format: \n `modela/depot/tenants/{tenant}/dataproducts/{dataproduct}/dataproductversions/{version}/{resource_type}/{resource_name}/data/raw/{file_name}`
-                      \n The path does not need to adhere to this format; you can
-                      still pass the path of a file inside a bucket not managed by
-                      Modela"
+                      path based on the Tenant, DataProduct, DataProductVersion, and
+                      resource type of the resource in relation to the file being
+                      uploaded. The path does not need to adhere to this format; you
+                      can still pass the path of a file inside a bucket not managed
+                      by Modela
                     type: string
                   sql:
                     default: ""
@@ -1072,20 +1071,19 @@ spec:
                 type: boolean
               modelImage:
                 description: ModelImage specifies the configuration to upload Docker
-                  images of models to a Docker image registry
+                  images of models to an image registry
                 properties:
                   exist:
                     default: false
-                    description: Is the release to
                     type: boolean
                   imageName:
                     default: ""
-                    description: Full image name to use
+                    description: The full name of the image to upload to
                     type: string
                   registryConnectionName:
                     default: ""
-                    description: The name of the connection object, the name must
-                      be provided in order to push the image.
+                    description: The name of the Connection resource to an external
+                      Docker image registry
                     type: string
                 type: object
               modelImagePushed:
@@ -1155,11 +1153,10 @@ spec:
                 properties:
                   enabled:
                     default: false
-                    description: Indicate the all models should be tests
+                    description: Indicates if the schedule is enabled
                     type: boolean
                   startAt:
-                    description: Set the start time, by default this is set to the
-                      start time of the study
+                    description: The time at which the Study will begin execution
                     format: date-time
                     type: string
                 type: object
@@ -1203,8 +1200,8 @@ spec:
                       the model search will forcibly stop
                     type: number
                   objective:
-                    description: Objective is the objective defined how the study
-                      controller will compare model performance.
+                    description: The objective metric that will be measured against
+                      all models to evaluate their performance
                     enum:
                     - accuracy
                     - average-precision
@@ -1284,8 +1281,9 @@ spec:
                     type: string
                   objective2:
                     default: none
-                    description: Objective2 is the second objective to consider during
-                      optimization.
+                    description: The second objective metric that will be measured
+                      and evaluated in tandem with the primary objective. The optimizer
+                      will attempt to optimize both metrics
                     enum:
                     - accuracy
                     - average-precision
@@ -1365,9 +1363,9 @@ spec:
                     type: string
                   pruner:
                     description: Pruner specifies the configuration to run a model
-                      search using a pruner algorithm. Using a pruning algorithm allows
-                      you to train a large number of candidate models with a subset
-                      of the dataset
+                      search using a pruning algorithm. Using a pruning algorithm
+                      allows you to train a large number of candidate models with
+                      a subset of the dataset
                     properties:
                       intervalTrials:
                         default: 1
@@ -1433,7 +1431,7 @@ spec:
                         type: integer
                       type:
                         default: median
-                        description: The pruner to use during model search.
+                        description: The type of pruner to use during model search
                         enum:
                         - none
                         - patient
@@ -1491,8 +1489,8 @@ spec:
                     properties:
                       allowlist:
                         description: AllowList contains the collection of algorithms
-                          available to the parent Study. If AllowList is empty, all
-                          algorithms will be available for training
+                          available to the Study specifying the AlgorithmSearchSpaceSpec.
+                          If empty, all algorithms will be available for training
                         items:
                           enum:
                           - knn-regressor
@@ -1580,8 +1578,7 @@ spec:
                     type: integer
                 type: object
               task:
-                description: The machine learning task type of the Study (i.e. regression,
-                  classification)
+                description: The machine learning task type (i.e. regression, classification)
                 enum:
                 - binary-classification
                 - multi-classification
@@ -1625,6 +1622,12 @@ spec:
                 description: Indicates if the Study is a template, in which case it
                   will not be executed
                 type: boolean
+              timeoutInSecs:
+                default: 14400
+                description: 'Overall study timeout. The study will be aborted if
+                  we reached this timeout. Default : 4H'
+                format: int32
+                type: integer
               trainingTemplate:
                 description: TrainingTemplate specifies the configuration to train
                   and evaluate models
@@ -1633,6 +1636,19 @@ spec:
                     description: Checkpoint specifies the location to store model
                       checkpoints
                     properties:
+                      checkpointInterval:
+                        default: 10
+                        description: The interval, in minutes, at which a snapshot
+                          of a partially trained model will be saved. Applicable to
+                          models with long training times for resiliency if training
+                          is suddenly stopped
+                        format: int32
+                        minimum: 0
+                        type: integer
+                      enabled:
+                        default: false
+                        description: Indicates if checkpointing is enabled.
+                        type: boolean
                       location:
                         description: The location of the model checkpoint
                         properties:
@@ -1663,14 +1679,15 @@ spec:
                             type: string
                           path:
                             default: ""
-                            description: "The path to a flat-file inside an object
+                            description: The path to a flat-file inside an object
                               storage system. When using the Modela API to upload
                               files (through the FileService API), Modela will upload
-                              the data to a predetermined path with the following
-                              format: \n `modela/depot/tenants/{tenant}/dataproducts/{dataproduct}/dataproductversions/{version}/{resource_type}/{resource_name}/data/raw/{file_name}`
-                              \n The path does not need to adhere to this format;
-                              you can still pass the path of a file inside a bucket
-                              not managed by Modela"
+                              the data to a predetermined path based on the Tenant,
+                              DataProduct, DataProductVersion, and resource type of
+                              the resource in relation to the file being uploaded.
+                              The path does not need to adhere to this format; you
+                              can still pass the path of a file inside a bucket not
+                              managed by Modela
                             type: string
                           sql:
                             default: ""
@@ -1697,15 +1714,6 @@ spec:
                             type: string
                         type: object
                     type: object
-                  checkpointInterval:
-                    default: 10
-                    description: The interval, in minutes, at which a snapshot of
-                      a partially trained model will be saved. Applicable to models
-                      with long training times for resiliency if training is suddenly
-                      stopped
-                    format: int32
-                    minimum: 0
-                    type: integer
                   cv:
                     default: true
                     description: Indicates if cross-validation should be used to score
@@ -1871,6 +1879,15 @@ spec:
                         description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                         type: string
                     type: object
+                  loglevel:
+                    default: info
+                    description: The training log level
+                    enum:
+                    - trace
+                    - debug
+                    - info
+                    - error
+                    type: string
                   nodeCount:
                     default: 1
                     description: The number of nodes to use, in the case of distributed
@@ -2070,7 +2087,7 @@ spec:
                         items:
                           properties:
                             columnName:
-                              description: The dataset column name
+                              description: The name of the column
                               type: string
                             op:
                               description: The segment operation
@@ -2131,6 +2148,12 @@ spec:
                         minimum: 0
                         type: integer
                     type: object
+                  timeoutInSecs:
+                    default: 600
+                    description: Max time to train or test a single model (in sec).
+                      Default is 10 mintues
+                    format: int32
+                    type: integer
                 type: object
               ttl:
                 default: 0
@@ -2156,27 +2179,29 @@ spec:
                 description: BaselineStatus contains the status of the baseline phase
                 properties:
                   completed:
-                    description: models trained
+                    description: The number of models that have been successfully
+                      trained
                     format: int32
                     type: integer
                   endTime:
-                    description: End of the phase.
+                    description: The time at which the phase concluded
                     format: date-time
                     type: string
                   failed:
-                    description: models that failed
+                    description: The number of models that experienced an error whilst
+                      training
                     format: int32
                     type: integer
                   running:
-                    description: models in training
+                    description: The number of models currently being trained
                     format: int32
                     type: integer
                   startTime:
-                    description: Start of the training phase
+                    description: The time at which the phase started
                     format: date-time
                     type: string
                   waiting:
-                    description: models waiting for processing
+                    description: The number of models pending training
                     format: int32
                     type: integer
                 type: object
@@ -2629,27 +2654,29 @@ spec:
                 description: EnsembleStatus contains the status of the ensemble phase
                 properties:
                   completed:
-                    description: models trained
+                    description: The number of models that have been successfully
+                      trained
                     format: int32
                     type: integer
                   endTime:
-                    description: End of the phase.
+                    description: The time at which the phase concluded
                     format: date-time
                     type: string
                   failed:
-                    description: models that failed
+                    description: The number of models that experienced an error whilst
+                      training
                     format: int32
                     type: integer
                   running:
-                    description: models in training
+                    description: The number of models currently being trained
                     format: int32
                     type: integer
                   startTime:
-                    description: Start of the training phase
+                    description: The time at which the phase started
                     format: date-time
                     type: string
                   waiting:
-                    description: models waiting for processing
+                    description: The number of models pending training
                     format: int32
                     type: integer
                 type: object
@@ -2657,27 +2684,29 @@ spec:
                 description: ExplainStatus contains the status of the explaining phase
                 properties:
                   completed:
-                    description: models trained
+                    description: The number of models that have been successfully
+                      trained
                     format: int32
                     type: integer
                   endTime:
-                    description: End of the phase.
+                    description: The time at which the phase concluded
                     format: date-time
                     type: string
                   failed:
-                    description: models that failed
+                    description: The number of models that experienced an error whilst
+                      training
                     format: int32
                     type: integer
                   running:
-                    description: models in training
+                    description: The number of models currently being trained
                     format: int32
                     type: integer
                   startTime:
-                    description: Start of the training phase
+                    description: The time at which the phase started
                     format: date-time
                     type: string
                   waiting:
-                    description: models waiting for processing
+                    description: The number of models pending training
                     format: int32
                     type: integer
                 type: object
@@ -2694,27 +2723,29 @@ spec:
                   engineering phase
                 properties:
                   completed:
-                    description: models trained
+                    description: The number of models that have been successfully
+                      trained
                     format: int32
                     type: integer
                   endTime:
-                    description: End of the phase.
+                    description: The time at which the phase concluded
                     format: date-time
                     type: string
                   failed:
-                    description: models that failed
+                    description: The number of models that experienced an error whilst
+                      training
                     format: int32
                     type: integer
                   running:
-                    description: models in training
+                    description: The number of models currently being trained
                     format: int32
                     type: integer
                   startTime:
-                    description: Start of the training phase
+                    description: The time at which the phase started
                     format: date-time
                     type: string
                   waiting:
-                    description: models waiting for processing
+                    description: The number of models pending training
                     format: int32
                     type: integer
                 type: object
@@ -2723,22 +2754,31 @@ spec:
                   to the Study
                 properties:
                   collected:
+                    description: The number of models that were collected, equal to
+                      len(Models)
                     format: int32
                     type: integer
                   models:
-                    description: List of models, collected.
+                    description: The collection of models that were archived
                     items:
-                      description: model cv results
+                      description: ModelResult contains the records of a single garbage-collected
+                        model
                       properties:
                         alg:
+                          description: The type of estimator of the model
                           type: string
                         error:
+                          description: Indicates if the model experience an error
+                            whilst training
                           type: boolean
                         name:
+                          description: The name of the model
                           type: string
                         score:
+                          description: The objective score of the model
                           type: number
                         trialID:
+                          description: The optimizer trial ID of the model
                           format: int32
                           type: integer
                       type: object
@@ -2809,27 +2849,29 @@ spec:
                   phase
                 properties:
                   completed:
-                    description: models trained
+                    description: The number of models that have been successfully
+                      trained
                     format: int32
                     type: integer
                   endTime:
-                    description: End of the phase.
+                    description: The time at which the phase concluded
                     format: date-time
                     type: string
                   failed:
-                    description: models that failed
+                    description: The number of models that experienced an error whilst
+                      training
                     format: int32
                     type: integer
                   running:
-                    description: models in training
+                    description: The number of models currently being trained
                     format: int32
                     type: integer
                   startTime:
-                    description: Start of the training phase
+                    description: The time at which the phase started
                     format: date-time
                     type: string
                   waiting:
-                    description: models waiting for processing
+                    description: The number of models pending training
                     format: int32
                     type: integer
                 type: object
@@ -2842,27 +2884,29 @@ spec:
                 description: TestStatus contains the status of the testing phase
                 properties:
                   completed:
-                    description: models trained
+                    description: The number of models that have been successfully
+                      trained
                     format: int32
                     type: integer
                   endTime:
-                    description: End of the phase.
+                    description: The time at which the phase concluded
                     format: date-time
                     type: string
                   failed:
-                    description: models that failed
+                    description: The number of models that experienced an error whilst
+                      training
                     format: int32
                     type: integer
                   running:
-                    description: models in training
+                    description: The number of models currently being trained
                     format: int32
                     type: integer
                   startTime:
-                    description: Start of the training phase
+                    description: The time at which the phase started
                     format: date-time
                     type: string
                   waiting:
-                    description: models waiting for processing
+                    description: The number of models pending training
                     format: int32
                     type: integer
                 type: object
@@ -2895,13 +2939,14 @@ spec:
                     type: string
                   path:
                     default: ""
-                    description: "The path to a flat-file inside an object storage
+                    description: The path to a flat-file inside an object storage
                       system. When using the Modela API to upload files (through the
                       FileService API), Modela will upload the data to a predetermined
-                      path with the following format: \n `modela/depot/tenants/{tenant}/dataproducts/{dataproduct}/dataproductversions/{version}/{resource_type}/{resource_name}/data/raw/{file_name}`
-                      \n The path does not need to adhere to this format; you can
-                      still pass the path of a file inside a bucket not managed by
-                      Modela"
+                      path based on the Tenant, DataProduct, DataProductVersion, and
+                      resource type of the resource in relation to the file being
+                      uploaded. The path does not need to adhere to this format; you
+                      can still pass the path of a file inside a bucket not managed
+                      by Modela
                     type: string
                   sql:
                     default: ""
@@ -2958,13 +3003,14 @@ spec:
                     type: string
                   path:
                     default: ""
-                    description: "The path to a flat-file inside an object storage
+                    description: The path to a flat-file inside an object storage
                       system. When using the Modela API to upload files (through the
                       FileService API), Modela will upload the data to a predetermined
-                      path with the following format: \n `modela/depot/tenants/{tenant}/dataproducts/{dataproduct}/dataproductversions/{version}/{resource_type}/{resource_name}/data/raw/{file_name}`
-                      \n The path does not need to adhere to this format; you can
-                      still pass the path of a file inside a bucket not managed by
-                      Modela"
+                      path based on the Tenant, DataProduct, DataProductVersion, and
+                      resource type of the resource in relation to the file being
+                      uploaded. The path does not need to adhere to this format; you
+                      can still pass the path of a file inside a bucket not managed
+                      by Modela
                     type: string
                   sql:
                     default: ""
@@ -3045,13 +3091,14 @@ spec:
                     type: string
                   path:
                     default: ""
-                    description: "The path to a flat-file inside an object storage
+                    description: The path to a flat-file inside an object storage
                       system. When using the Modela API to upload files (through the
                       FileService API), Modela will upload the data to a predetermined
-                      path with the following format: \n `modela/depot/tenants/{tenant}/dataproducts/{dataproduct}/dataproductversions/{version}/{resource_type}/{resource_name}/data/raw/{file_name}`
-                      \n The path does not need to adhere to this format; you can
-                      still pass the path of a file inside a bucket not managed by
-                      Modela"
+                      path based on the Tenant, DataProduct, DataProductVersion, and
+                      resource type of the resource in relation to the file being
+                      uploaded. The path does not need to adhere to this format; you
+                      can still pass the path of a file inside a bucket not managed
+                      by Modela
                     type: string
                   sql:
                     default: ""

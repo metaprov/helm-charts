@@ -26,11 +26,14 @@ spec:
       jsonPath: .spec.owner
       name: Owner
       type: string
-    - jsonPath: .spec.fqdn
+    - jsonPath: .spec.ingress.fqdn
       name: FQDN
       type: string
-    - jsonPath: .spec.ingressName
-      name: Ingress
+    - jsonPath: .status.grpcIngressName
+      name: GRPC Ingress
+      type: string
+    - jsonPath: .status.restIngressName
+      name: REST Ingress
       type: string
     - jsonPath: .status.activePredictors
       name: Predictors
@@ -78,6 +81,11 @@ spec:
                   that can route traffic to the resources which exist under the ServingSite's
                   namespace
                 properties:
+                  clusterIssuerName:
+                    default: ""
+                    description: ClusterIssuerName is a cert manager resource that
+                      provide TLS certificate to the ingress.
+                    type: string
                   fqdn:
                     default: serving.vcap.me
                     description: FQDN specifies the fully-qualified domain name that
