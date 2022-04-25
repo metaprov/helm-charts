@@ -1164,12 +1164,27 @@ spec:
                 description: Search specifies the configuration to perform the model
                   search for the best algorithm and hyper-parameters
                 properties:
-                  earlyStopAfter:
-                    default: 0
+                  earlyStop:
                     description: The number of new models produced by the search which,
                       if there is no improvement in score, the model search will conclude
-                    format: int32
-                    type: integer
+                    properties:
+                      enabled:
+                        default: true
+                        description: Indicates if ensemble models will be created
+                        type: boolean
+                      initial:
+                        default: 20
+                        description: The number of models before we start checking
+                          for early stopping.
+                        format: int32
+                        type: integer
+                      "n":
+                        default: 5
+                        description: The number of iteration for which we check if
+                          there were no improvement.
+                        format: int32
+                        type: integer
+                    type: object
                   maxCost:
                     default: 100
                     description: The maximum cost that can be incurred before stopping
@@ -1946,6 +1961,10 @@ spec:
                             description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                             type: string
                         type: object
+                      custom:
+                        default: false
+                        description: If true, ignore the workload class name.
+                        type: boolean
                       gpuImage:
                         description: Reference to the managed GPU trainer image, used
                           internally
@@ -2848,6 +2867,15 @@ spec:
                 description: SearchStatus contains the status of the model search
                   phase
                 properties:
+                  actualIterationWithNoProgress:
+                    description: Actual number of models where no progress was made.
+                      This used to decide on early stop.
+                    format: int32
+                    type: integer
+                  bestScore:
+                    description: Best score so far in the search. The best score is
+                      the value of the objective.
+                    type: number
                   completed:
                     description: The number of models that have been successfully
                       trained
