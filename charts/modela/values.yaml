@@ -52,12 +52,13 @@ deployment:
   updateStrategy:
       type: Recreate
 
+distribution: stable
+
 apigateway:
   replicaCount: 1
   image:
     registry: ghcr.io
     repository: metaprov/modela-api-gateway
-    tag: latest
     pullPolicy: Always
   resources:
     requests:
@@ -72,7 +73,6 @@ apiproxy:
   image:
     registry: ghcr.io
     repository: metaprov/modela-api-proxy
-    tag: latest
     pullPolicy: Always
   resources:
     requests:
@@ -87,7 +87,6 @@ dbproxy:
   image:
     registry: ghcr.io
     repository: metaprov/modela-database-proxy
-    tag: latest
     pullPolicy: Always    
   resources:
     requests:
@@ -103,7 +102,6 @@ controlplane:
   image:
     registry: ghcr.io
     repository: metaprov/modela-control-plane
-    tag: latest
     pullPolicy: Always
   resources:
     requests:
@@ -118,7 +116,6 @@ datadock:
   image:
     registry: ghcr.io
     repository: metaprov/modela-data-dock
-    tag: latest
     pullPolicy: Always
   resources:
     requests:
@@ -133,7 +130,6 @@ dataplane:
   image:
     registry: ghcr.io
     repository: metaprov/modela-data-plane
-    tag: latest
     pullPolicy: Always
   resources:
     requests:
@@ -147,7 +143,6 @@ frontend:
   replicaCount: 1
   image:
     registry: ghcr.io
-    tag: latest
     repository: metaprov/modela-frontend
     pullPolicy: Always
   resources:
@@ -163,7 +158,6 @@ clouds:
   replicaCount: 1
   image:
     registry: ghcr.io
-    tag: latest
     repository: metaprov/modela-cloud-proxy
     pullPolicy: Always
   resources:

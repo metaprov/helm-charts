@@ -7,7 +7,7 @@ spec:
   description: "modela GPU trainer image"
   registry: "ghcr.io"
   repository: "metaprov/modela-trainer"
-  tag: latest
+  tag: {{ .Values.distribution }}
   gpu: true
   role: trainer
   active: true

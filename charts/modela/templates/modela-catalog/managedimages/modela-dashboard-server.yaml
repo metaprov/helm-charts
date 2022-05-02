@@ -7,7 +7,7 @@ spec:
   description: "modela dashboard server image"
   registry: "ghcr.io"
   repository: "metaprov/modela-dashboard-server"
-  tag: "latest"
+  tag: {{ .Values.distribution }}
   role: dashboard  
   active: true
   maintainedBy: "Metaprov Inc"  

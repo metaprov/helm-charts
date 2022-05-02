@@ -7,7 +7,7 @@ spec:
   description: "modela cloud proxy image"
   registry: "ghcr.io"
   repository: "metaprov/modela-cloud-proxy"
-  tag: latest  
+  tag: {{ .Values.distribution }} 
   role: cloud-proxy
   active: true  
   maintainedBy: "Metaprov Inc"

@@ -25,7 +25,7 @@ spec:
       serviceAccountName: modela-api-gateway
       containers:
         - name: main
-          image: "{{ .Values.apigateway.image.registry }}/{{ .Values.apigateway.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.apigateway.image.registry }}/{{ .Values.apigateway.image.repository }}:{{ .Values.distribution }}"
           imagePullPolicy: {{ .Values.apigateway.image.pullPolicy }}
           ports:
             - containerPort: 8080
@@ -84,7 +84,7 @@ spec:
               value: "8080"
 
         - name: clouds
-          image: "{{ .Values.clouds.image.registry }}/{{ .Values.clouds.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.clouds.image.registry }}/{{ .Values.clouds.image.repository }}:{{ .Values.distribution }}"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090

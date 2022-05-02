@@ -7,7 +7,7 @@ spec:
   description: "modela dataplane image"
   registry: "ghcr.io"
   repository: "metaprov/modela-api-proxy"
-  tag: latest
+  tag: {{ .Values.distribution }}
   gpu: false
   role: system
   active: true

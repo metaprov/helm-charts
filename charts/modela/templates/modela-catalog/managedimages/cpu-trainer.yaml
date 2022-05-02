@@ -7,7 +7,7 @@ spec:
   description: "modela cpu trainer image"
   registry: "ghcr.io"
   repository: "metaprov/modela-trainer"
-  tag: "latest"
+  tag: {{ .Values.distribution }}
   role: "trainer"
   active: true
   maintainedBy: "Metaprov Inc"

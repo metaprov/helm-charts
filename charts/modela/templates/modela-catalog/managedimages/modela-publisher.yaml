@@ -7,7 +7,7 @@ spec:
   description: "modela publisher image"
   registry: "ghcr.io"
   repository: "metaprov/modela-publisher"
-  tag: latest  
+  tag: {{ .Values.distribution }}
   role: publisher  
   active: true
   maintainedBy: "Metaprov Inc"

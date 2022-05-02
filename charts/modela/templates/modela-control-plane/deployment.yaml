@@ -24,7 +24,7 @@ spec:
       serviceAccountName: modela-control-plane
       containers:
         - name: main
-          image: "{{ .Values.controlplane.image.registry }}/{{ .Values.controlplane.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.controlplane.image.registry }}/{{ .Values.controlplane.image.repository }}:{{ .Values.distribution }}"
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
           volumeMounts:
             - name: data
@@ -63,7 +63,7 @@ spec:
             periodSeconds: 10
 
         - name: cloud-proxy
-          image: "{{ .Values.clouds.image.registry }}/{{ .Values.clouds.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.clouds.image.registry }}/{{ .Values.clouds.image.repository }}:{{ .Values.distribution }}"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090
@@ -92,7 +92,7 @@ spec:
                     key: cache-path
 
         - name: db-proxy
-          image: "{{ .Values.dbproxy.image.registry }}/{{ .Values.dbproxy.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.dbproxy.image.registry }}/{{ .Values.dbproxy.image.repository }}:{{ .Values.distribution }}"
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8091

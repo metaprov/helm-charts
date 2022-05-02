@@ -23,7 +23,7 @@ spec:
       serviceAccountName: modela-api-proxy
       containers:
         - name: main
-          image: "{{ .Values.apiproxy.image.registry }}/{{ .Values.apiproxy.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.apiproxy.image.registry }}/{{ .Values.apiproxy.image.repository }}:{{ .Values.distribution }}"
           imagePullPolicy: {{ .Values.apiproxy.image.pullPolicy }}
           ports:
             - containerPort: 8080
