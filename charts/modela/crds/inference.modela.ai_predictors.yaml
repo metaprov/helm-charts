@@ -65,14 +65,14 @@ spec:
           metadata:
             type: object
           spec:
-            description: PredictorSpec define the desired state of a Predictor
+            description: PredictorSpec defines the desired state of a Predictor
             properties:
               accessType:
                 default: cluster-ip
                 description: The Kubernetes-native access method which specifies how
                   the Kubernetes Service created by the Predictor will be exposed.
                   See https://modela.ai/docs/docs/serving/production/#access-method
-                  for a detailed description of each access type
+                  for a detailed description of each access type (defaults to cluster-ip)
                 enum:
                 - cluster-ip
                 - node-port
@@ -87,40 +87,42 @@ spec:
                 properties:
                   bucketName:
                     default: ""
-                    description: In the case of the location type being object storage,
-                      BucketName is the name of the VirtualBucket resource that exists
-                      in the same tenant as the resource specifying the DataLocation.
-                      Modela will connect to the external object storage system and
-                      pull the file from the path specified by the Path field
+                    description: In the case of the location type being an object
+                      storage system, BucketName is the name of the VirtualBucket
+                      resource that exists in the same tenant as the resource specifying
+                      the DataLocation. Modela will connect to the external object
+                      storage system, and will access the file from the path specified
+                      by the Path field
                     type: string
                   connectionName:
                     default: ""
-                    description: In the case of the location type being a database,
-                      ConnectionName is the name of the Connection resource in the
-                      same tenant namespace as the resource which specifies the DataLocation.
-                      Modela will connect to the database specified by the Connection
-                      and execute the query specified by the `SQL` field
+                    description: In the case of the type of location being a database,
+                      ConnectionName specifies the name of the Connection resource
+                      that exists in the same tenant as the resource specifying the
+                      DataLocation. Modela will attempt to connect to the database
+                      using the credentials specified in the Connection, and will
+                      execute the query specified by the SQL field
                     type: string
                   database:
                     default: ""
-                    description: The name of a database that exists inside a database
-                      server that exists at the connection specified by the `ConnectionName`
-                      field
+                    description: The name of a database inside the database system
+                      specified by the ConnectionName field
                     type: string
                   path:
                     default: ""
-                    description: "The path to a flat-file inside an object storage
+                    description: The path to a flat-file inside an object storage
                       system. When using the Modela API to upload files (through the
                       FileService API), Modela will upload the data to a predetermined
-                      path with the following format: \n `\"modela/depot/tenants/{tenant}/dataproducts/{dataproduct}/dataproductversions/{version}/{resource_type}/{resource_name}/data/raw/{file_name}`
-                      \n The path does not need to adhere to this format; you can
-                      still pass the path of a file inside a bucket not managed by
-                      Modela"
+                      path based on the Tenant, DataProduct, DataProductVersion, and
+                      resource type of the resource in relation to the file being
+                      uploaded. The path does not need to adhere to this format; you
+                      can still pass the path of a file inside a bucket not managed
+                      by Modela
                     type: string
                   sql:
                     default: ""
                     description: The SQL statement which will be executed to query
-                      data from a table
+                      data from the table specified by Table
                     type: string
                   table:
                     default: ""
@@ -218,7 +220,7 @@ spec:
               models:
                 description: The collection of model deployment specifications that
                   define which Model resources will be deployed to the Predictor service
-                  and how they will be deployed. Each model should be associated with
+                  and how they will be deployed. Each model should be trained with
                   the same type of dataset and possess a unique version
                 items:
                   description: ModelDeploymentSpec describes how a single model should
@@ -355,10 +357,12 @@ spec:
                   validations:
                     description: List of model validation
                     items:
+                      description: ModelValidation defines a single validation to
+                        be run against a model
                       properties:
                         agg:
-                          description: Agg is used when we measured aggregate performance,
-                            for example median or average
+                          description: Agg specifies the type of aggregate when measuring
+                            aggregate performance (e.g. median, average)
                           enum:
                           - min
                           - max
@@ -368,8 +372,8 @@ spec:
                         column:
                           type: string
                         datasetName:
-                          description: Labeled dataset used to test the model, when
-                            measuring a performance metric
+                          description: The name of a labeled dataset used to test
+                            the model, when measuring a performance metric
                           type: string
                         driftFreq:
                           description: / The Horizon unit
@@ -473,11 +477,11 @@ spec:
                         minPercent:
                           type: number
                         prevModel:
-                          description: PrevModel compare to model
+                          description: PrevModel specifies a previous model to compare
+                            against
                           type: string
                         type:
-                          description: ModelValidationName is the name of one model
-                            monitoring validation
+                          description: The type of model validation
                           type: string
                       type: object
                     type: array
@@ -489,11 +493,12 @@ spec:
                   to the Predictor's backend service
                 format: int32
                 maximum: 65535
-                minimum: 1
+                minimum: 0
                 type: integer
               owner:
                 default: no-one
-                description: The owner account name
+                description: The name of the Account which created the object, which
+                  exists in the same tenant as the object
                 type: string
               path:
                 default: ""
@@ -512,14 +517,14 @@ spec:
                   the port and forward GRPC traffic to the backend pods
                 format: int32
                 maximum: 65535
-                minimum: 1
+                minimum: 1024
                 type: integer
               predictionThreshold:
                 description: The prediction threshold
                 type: number
               productRef:
-                description: The reference to the DataProduct resource that the Predictor
-                  exists under
+                description: The reference to the DataProduct that the resource exists
+                  under
                 properties:
                   apiVersion:
                     description: API version of the referent.
@@ -587,9 +592,9 @@ spec:
                 type: object
               replicas:
                 default: 1
-                description: The number of replicas (how many instances of the prediction
-                  service will be instantiated to handle prediction traffic) in the
-                  case that automatic scaling is disabled
+                description: The number of replicas for the Kubernetes Deployment
+                  associated with the Predictor, which will instantiate multiple copies
+                  of the service in the case that automatic scaling is disabled
                 format: int32
                 maximum: 10
                 minimum: 1
@@ -635,6 +640,10 @@ spec:
                         description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                         type: string
                     type: object
+                  custom:
+                    default: false
+                    description: If true, ignore the workload class name.
+                    type: boolean
                   gpuImage:
                     description: Reference to the managed GPU trainer image, used
                       internally
@@ -709,7 +718,7 @@ spec:
               rest:
                 default: false
                 description: Indicates if the prediction service should expose an
-                  additional port to serve the GRPCInferenceService API using REST.
+                  additional port to serve the GRPCInferenceService API through REST.
                   The port one digit above the number specified by the Port field
                   will be exposed to accept HTTP/1.1 traffic
                 type: boolean
@@ -804,7 +813,7 @@ spec:
                 - unknown
                 type: string
               template:
-                description: The pod template for the prediction proxy service. The
+                description: The pod template for the Predictor's proxy service. The
                   system will create a deployment for the service based on the template
                 properties:
                   apiVersion:
@@ -8226,9 +8235,12 @@ spec:
                 type: string
               versionName:
                 default: ""
-                description: The name of the DataProductVersion that exists on the
-                  same DataProduct namespace as the Predictor
+                description: The name of the DataProductVersion which describes the
+                  version of the resource that exists in the same DataProduct namespace
+                  as the resource
                 type: string
+            required:
+            - productRef
             type: object
           status:
             description: PredictorStatus contain the current state of the Predictor
@@ -8255,7 +8267,7 @@ spec:
                       description: Status of the condition, one of True, False, Unknown
                       type: string
                     type:
-                      description: Type of account condition
+                      description: Type of Predictor condition
                       type: string
                   required:
                   - status
@@ -8299,8 +8311,8 @@ spec:
                     format: int32
                     type: integer
                   service:
-                    description: True, if there is system is a problem with the service
-                      Indicates if there is a problem with the Predictor's service
+                    description: Indicates if there is a problem with the Predictor's
+                      service
                     type: boolean
                   totalP95Requests:
                     description: The response time for 95% of predictions served
@@ -8768,7 +8780,7 @@ spec:
                     type: string
                 type: object
               targetColumn:
-                description: The target column of the Predictor
+                description: The target feature of the model that the Predictor serves
                 type: string
             type: object
         required:

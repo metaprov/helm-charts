@@ -111,6 +111,10 @@ spec:
                             description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                             type: string
                         type: object
+                      custom:
+                        default: false
+                        description: If true, ignore the workload class name.
+                        type: boolean
                       gpuImage:
                         description: Reference to the managed GPU trainer image, used
                           internally
@@ -193,10 +197,12 @@ spec:
                     description: Validations is the specification of tests to run
                       in this stage
                     items:
+                      description: ModelValidation defines a single validation to
+                        be run against a model
                       properties:
                         agg:
-                          description: Agg is used when we measured aggregate performance,
-                            for example median or average
+                          description: Agg specifies the type of aggregate when measuring
+                            aggregate performance (e.g. median, average)
                           enum:
                           - min
                           - max
@@ -206,8 +212,8 @@ spec:
                         column:
                           type: string
                         datasetName:
-                          description: Labeled dataset used to test the model, when
-                            measuring a performance metric
+                          description: The name of a labeled dataset used to test
+                            the model, when measuring a performance metric
                           type: string
                         driftFreq:
                           description: / The Horizon unit
@@ -311,11 +317,11 @@ spec:
                         minPercent:
                           type: number
                         prevModel:
-                          description: PrevModel compare to model
+                          description: PrevModel specifies a previous model to compare
+                            against
                           type: string
                         type:
-                          description: ModelValidationName is the name of one model
-                            monitoring validation
+                          description: The type of model validation
                           type: string
                       type: object
                     type: array
@@ -401,6 +407,10 @@ spec:
                             description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                             type: string
                         type: object
+                      custom:
+                        default: false
+                        description: If true, ignore the workload class name.
+                        type: boolean
                       gpuImage:
                         description: Reference to the managed GPU trainer image, used
                           internally
@@ -482,10 +492,12 @@ spec:
                     description: Validations is the specification of tests to run
                       in this stage
                     items:
+                      description: ModelValidation defines a single validation to
+                        be run against a model
                       properties:
                         agg:
-                          description: Agg is used when we measured aggregate performance,
-                            for example median or average
+                          description: Agg specifies the type of aggregate when measuring
+                            aggregate performance (e.g. median, average)
                           enum:
                           - min
                           - max
@@ -495,8 +507,8 @@ spec:
                         column:
                           type: string
                         datasetName:
-                          description: Labeled dataset used to test the model, when
-                            measuring a performance metric
+                          description: The name of a labeled dataset used to test
+                            the model, when measuring a performance metric
                           type: string
                         driftFreq:
                           description: / The Horizon unit
@@ -600,11 +612,11 @@ spec:
                         minPercent:
                           type: number
                         prevModel:
-                          description: PrevModel compare to model
+                          description: PrevModel specifies a previous model to compare
+                            against
                           type: string
                         type:
-                          description: ModelValidationName is the name of one model
-                            monitoring validation
+                          description: The type of model validation
                           type: string
                       type: object
                     type: array
@@ -714,6 +726,10 @@ spec:
                             description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                             type: string
                         type: object
+                      custom:
+                        default: false
+                        description: If true, ignore the workload class name.
+                        type: boolean
                       gpuImage:
                         description: Reference to the managed GPU trainer image, used
                           internally
@@ -864,10 +880,12 @@ spec:
                     description: Validations is the List of expectation run against
                       the deployed model before moving production traffic to the model
                     items:
+                      description: ModelValidation defines a single validation to
+                        be run against a model
                       properties:
                         agg:
-                          description: Agg is used when we measured aggregate performance,
-                            for example median or average
+                          description: Agg specifies the type of aggregate when measuring
+                            aggregate performance (e.g. median, average)
                           enum:
                           - min
                           - max
@@ -877,8 +895,8 @@ spec:
                         column:
                           type: string
                         datasetName:
-                          description: Labeled dataset used to test the model, when
-                            measuring a performance metric
+                          description: The name of a labeled dataset used to test
+                            the model, when measuring a performance metric
                           type: string
                         driftFreq:
                           description: / The Horizon unit
@@ -982,11 +1000,11 @@ spec:
                         minPercent:
                           type: number
                         prevModel:
-                          description: PrevModel compare to model
+                          description: PrevModel specifies a previous model to compare
+                            against
                           type: string
                         type:
-                          description: ModelValidationName is the name of one model
-                            monitoring validation
+                          description: The type of model validation
                           type: string
                       type: object
                     type: array
@@ -1050,10 +1068,12 @@ spec:
                     description: Validations defines the machine learning test cases
                       to run against the new trained model.
                     items:
+                      description: ModelValidation defines a single validation to
+                        be run against a model
                       properties:
                         agg:
-                          description: Agg is used when we measured aggregate performance,
-                            for example median or average
+                          description: Agg specifies the type of aggregate when measuring
+                            aggregate performance (e.g. median, average)
                           enum:
                           - min
                           - max
@@ -1063,8 +1083,8 @@ spec:
                         column:
                           type: string
                         datasetName:
-                          description: Labeled dataset used to test the model, when
-                            measuring a performance metric
+                          description: The name of a labeled dataset used to test
+                            the model, when measuring a performance metric
                           type: string
                         driftFreq:
                           description: / The Horizon unit
@@ -1168,11 +1188,11 @@ spec:
                         minPercent:
                           type: number
                         prevModel:
-                          description: PrevModel compare to model
+                          description: PrevModel specifies a previous model to compare
+                            against
                           type: string
                         type:
-                          description: ModelValidationName is the name of one model
-                            monitoring validation
+                          description: The type of model validation
                           type: string
                       type: object
                     type: array
@@ -1225,6 +1245,10 @@ spec:
                             description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                             type: string
                         type: object
+                      custom:
+                        default: false
+                        description: If true, ignore the workload class name.
+                        type: boolean
                       gpuImage:
                         description: Reference to the managed GPU trainer image, used
                           internally
@@ -1307,10 +1331,12 @@ spec:
                     description: Validations defines the machine learning test cases
                       to run against the new trained model.
                     items:
+                      description: ModelValidation defines a single validation to
+                        be run against a model
                       properties:
                         agg:
-                          description: Agg is used when we measured aggregate performance,
-                            for example median or average
+                          description: Agg specifies the type of aggregate when measuring
+                            aggregate performance (e.g. median, average)
                           enum:
                           - min
                           - max
@@ -1320,8 +1346,8 @@ spec:
                         column:
                           type: string
                         datasetName:
-                          description: Labeled dataset used to test the model, when
-                            measuring a performance metric
+                          description: The name of a labeled dataset used to test
+                            the model, when measuring a performance metric
                           type: string
                         driftFreq:
                           description: / The Horizon unit
@@ -1425,11 +1451,11 @@ spec:
                         minPercent:
                           type: number
                         prevModel:
-                          description: PrevModel compare to model
+                          description: PrevModel specifies a previous model to compare
+                            against
                           type: string
                         type:
-                          description: ModelValidationName is the name of one model
-                            monitoring validation
+                          description: The type of model validation
                           type: string
                       type: object
                     type: array
@@ -1480,22 +1506,23 @@ spec:
                 description: Last run is the last time a model pipeline run was created
                 properties:
                   completionTime:
-                    description: The last run time
+                    description: The time at which the run concluded
                     format: date-time
                     type: string
                   duration:
-                    description: In the case of failure, the Dataset resource controller
-                      will set this field with a failure reason
+                    description: The duration of the run in seconds
                     format: int32
                     type: integer
                   failureMessage:
-                    description: In the case of failure, the failure message
+                    description: In the case of failure, the resource controller which
+                      created the run will set this field with a failure message
                     type: string
                   failureReason:
-                    description: In the case of failure, the failure reason Borrowed
-                      from cluster api controller
+                    description: In the case of failure, the resource controller which
+                      created the run will set this field with a failure reason
                     type: string
                   name:
+                    description: The name of the run
                     type: string
                   status:
                     description: The status of the last run

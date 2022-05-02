@@ -7,7 +7,7 @@ spec:
   description: "modela data dock"
   registry: "ghcr.io"
   repository: "metaprov/modela-data-dock"
-  tag: latest
+  tag: {{ .Chart.AppVersion }}
   role: system  
   active: true  
   maintainedBy: "Metaprov Inc"
