@@ -58,7 +58,7 @@ spec:
                     key: cache-path
 
         - name: cloud-proxy
-          image: "{{ .Values.clouds.image.registry }}/{{ .Values.clouds.image.repository }}:{{ .Values.distribution }}"
+          image: "{{ .Values.clouds.image.registry }}/{{ .Values.clouds.image.repository }}:latest"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090
