@@ -235,31 +235,6 @@ spec:
                 description: Ensemble specifies the configuration to create an ensemble
                   model
                 properties:
-                  base:
-                    description: The base estimator
-                    properties:
-                      algorithmName:
-                        description: AlgorithmName is a reference to the algorithm
-                          in the catalog
-                        type: string
-                      parameters:
-                        description: Parameters is a list of the algorithm hyper parameters
-                        items:
-                          description: HyperParameterValue represent an individual
-                            hyper-parameter of a machine earning algorithm
-                          properties:
-                            name:
-                              description: The name of the hyper-parameter
-                              type: string
-                            value:
-                              description: The value of the hyper-parameter
-                              type: string
-                          required:
-                          - name
-                          - value
-                          type: object
-                        type: array
-                    type: object
                   estimators:
                     description: The collection of estimators to be used in the ensemble,
                       derived from Models
@@ -291,6 +266,31 @@ spec:
                           type: array
                       type: object
                     type: array
+                  final:
+                    description: The base estimator
+                    properties:
+                      algorithmName:
+                        description: AlgorithmName is a reference to the algorithm
+                          in the catalog
+                        type: string
+                      parameters:
+                        description: Parameters is a list of the algorithm hyper parameters
+                        items:
+                          description: HyperParameterValue represent an individual
+                            hyper-parameter of a machine earning algorithm
+                          properties:
+                            name:
+                              description: The name of the hyper-parameter
+                              type: string
+                            value:
+                              description: The value of the hyper-parameter
+                              type: string
+                          required:
+                          - name
+                          - value
+                          type: object
+                        type: array
+                    type: object
                   models:
                     description: The collection of models (by their name) to be used
                       as estimators in the ensemble
@@ -704,7 +704,7 @@ spec:
                           enum:
                           - drop-features
                           - drop-constant-features
-                          - drop-deplicated-features
+                          - drop-duplicated-features
                           - drop-correlated-features
                           - mutual-information
                           - chisquare
@@ -1077,6 +1077,11 @@ spec:
                 description: Forecasted indicates that the Model should perform a
                   forecast
                 type: boolean
+              genDriftDetector:
+                default: false
+                description: GenDriftDetector indicates if we should generate a drift
+                  detector model for this model
+                type: boolean
               governance:
                 description: Governance specifies the model governance requirements
                   (currently unimplemented)
@@ -1368,6 +1373,19 @@ spec:
                   be applied to a Predictor that will be created if the model is set
                   to be released
                 properties:
+                  format:
+                    default: cloudpickle
+                    enum:
+                    - protobuf
+                    - pickle
+                    - cloudpickle
+                    - mlleap
+                    - mlmodel
+                    - h5
+                    - onyx
+                    - pmml
+                    - pt
+                    type: string
                   resources:
                     description: ResourceSpec specifies the amount of resources that
                       will be allocated to a workload
@@ -1481,6 +1499,7 @@ spec:
                             type: object
                         type: object
                       workloadName:
+                        default: general-large
                         description: If this resource is based on the workload, this
                           field contain the name of the workload. The name of a WorkloadClass.
                           The system will use the resource requirements described
@@ -1929,6 +1948,7 @@ spec:
                             type: object
                         type: object
                       workloadName:
+                        default: general-large
                         description: If this resource is based on the workload, this
                           field contain the name of the workload. The name of a WorkloadClass.
                           The system will use the resource requirements described

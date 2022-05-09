@@ -173,6 +173,7 @@ spec:
                       - stacking-regressor
                       - hist-gradient-boosting-classifier
                       - hist-gradient-boosting-regressor
+                      - linear-regression
                       type: string
                     type: array
                   enabled:
@@ -226,6 +227,18 @@ spec:
                 description: The user-provided description of the Study
                 maxLength: 512
                 type: string
+              driftDetection:
+                description: The spec for generting a density model for this study.
+                properties:
+                  enabled:
+                    default: false
+                    description: Indicates if density models should be created.
+                    type: boolean
+                  outlierAlgorithm:
+                    default: isolation-forest
+                    description: The density model alg.
+                    type: string
+                type: object
               ensembles:
                 description: Ensembles specifies to parameters to generate ensemble
                   models
@@ -335,6 +348,7 @@ spec:
                     - stacking-regressor
                     - hist-gradient-boosting-classifier
                     - hist-gradient-boosting-regressor
+                    - linear-regression
                     type: string
                   featureSelectionTemplate:
                     description: Specification for feature selection. successful study.
@@ -372,7 +386,7 @@ spec:
                           enum:
                           - drop-features
                           - drop-constant-features
-                          - drop-deplicated-features
+                          - drop-duplicated-features
                           - drop-correlated-features
                           - mutual-information
                           - chisquare
@@ -902,6 +916,30 @@ spec:
                       be garbage-collected
                     type: boolean
                 type: object
+              imbalanceHandler:
+                description: Set the imbalance dataset handling.
+                properties:
+                  enabled:
+                    default: true
+                    description: Indicates if ensemble models will be created
+                    type: boolean
+                  imbalance:
+                    default: auto
+                    description: set the imbalance handler. By default set to auto.
+                      The method which will be used to handle an imbalanced dataset
+                    enum:
+                    - adasyn
+                    - baseline-smote
+                    - kmean-smote
+                    - random-over-sampler
+                    - smote
+                    - smotenc
+                    - svmsmote
+                    - none
+                    - auto
+                    - class-weights
+                    type: string
+                type: object
               interpretability:
                 description: Interpretability specifies the parameters to create interpretability
                   visualizations for the final model
@@ -1178,10 +1216,10 @@ spec:
                           for early stopping.
                         format: int32
                         type: integer
-                      "n":
+                      minModelsWithNoProgress:
                         default: 5
-                        description: The number of iteration for which we check if
-                          there were no improvement.
+                        description: The number of models for which we check if there
+                          were no improvement.
                         format: int32
                         type: integer
                     type: object
@@ -1570,6 +1608,7 @@ spec:
                           - stacking-regressor
                           - hist-gradient-boosting-classifier
                           - hist-gradient-boosting-regressor
+                          - linear-regression
                           type: string
                         type: array
                     type: object
@@ -1591,6 +1630,144 @@ spec:
                     maximum: 50
                     minimum: 0
                     type: integer
+                type: object
+              servingTemplate:
+                description: Model serving template specifies the configuration to
+                  train and evaluate models
+                properties:
+                  format:
+                    default: cloudpickle
+                    enum:
+                    - protobuf
+                    - pickle
+                    - cloudpickle
+                    - mlleap
+                    - mlmodel
+                    - h5
+                    - onyx
+                    - pmml
+                    - pt
+                    type: string
+                  resources:
+                    description: ResourceSpec specifies the amount of resources that
+                      will be allocated to a workload
+                    properties:
+                      cpuImage:
+                        description: Reference to the managed CPU trainer image, used
+                          internally
+                        properties:
+                          apiVersion:
+                            description: API version of the referent.
+                            type: string
+                          fieldPath:
+                            description: 'If referring to a piece of an object instead
+                              of an entire object, this string should contain a valid
+                              JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                              For example, if the object reference is to a container
+                              within a pod, this would take on a value like: "spec.containers{name}"
+                              (where "name" refers to the name of the container that
+                              triggered the event) or if no container name is specified
+                              "spec.containers[2]" (container with index 2 in this
+                              pod). This syntax is chosen only to have some well-defined
+                              way of referencing a part of an object. TODO: this design
+                              is not final and this field is subject to change in
+                              the future.'
+                            type: string
+                          kind:
+                            description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                            type: string
+                          namespace:
+                            description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                            type: string
+                          resourceVersion:
+                            description: 'Specific resourceVersion to which this reference
+                              is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                            type: string
+                          uid:
+                            description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                            type: string
+                        type: object
+                      custom:
+                        default: false
+                        description: If true, ignore the workload class name.
+                        type: boolean
+                      gpuImage:
+                        description: Reference to the managed GPU trainer image, used
+                          internally
+                        properties:
+                          apiVersion:
+                            description: API version of the referent.
+                            type: string
+                          fieldPath:
+                            description: 'If referring to a piece of an object instead
+                              of an entire object, this string should contain a valid
+                              JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                              For example, if the object reference is to a container
+                              within a pod, this would take on a value like: "spec.containers{name}"
+                              (where "name" refers to the name of the container that
+                              triggered the event) or if no container name is specified
+                              "spec.containers[2]" (container with index 2 in this
+                              pod). This syntax is chosen only to have some well-defined
+                              way of referencing a part of an object. TODO: this design
+                              is not final and this field is subject to change in
+                              the future.'
+                            type: string
+                          kind:
+                            description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                            type: string
+                          namespace:
+                            description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                            type: string
+                          resourceVersion:
+                            description: 'Specific resourceVersion to which this reference
+                              is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                            type: string
+                          uid:
+                            description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                            type: string
+                        type: object
+                      requirements:
+                        description: The custom resource requirements for the workload,
+                          which are used if `WorkloadName` is not set
+                        properties:
+                          limits:
+                            additionalProperties:
+                              anyOf:
+                              - type: integer
+                              - type: string
+                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                              x-kubernetes-int-or-string: true
+                            description: 'Limits describes the maximum amount of compute
+                              resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                            type: object
+                          requests:
+                            additionalProperties:
+                              anyOf:
+                              - type: integer
+                              - type: string
+                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                              x-kubernetes-int-or-string: true
+                            description: 'Requests describes the minimum amount of
+                              compute resources required. If Requests is omitted for
+                              a container, it defaults to Limits if that is explicitly
+                              specified, otherwise to an implementation-defined value.
+                              More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                            type: object
+                        type: object
+                      workloadName:
+                        default: general-large
+                        description: If this resource is based on the workload, this
+                          field contain the name of the workload. The name of a WorkloadClass.
+                          The system will use the resource requirements described
+                          by the WorkloadClass
+                        type: string
+                    type: object
                 type: object
               task:
                 description: The machine learning task type (i.e. regression, classification)
@@ -2032,6 +2209,7 @@ spec:
                             type: object
                         type: object
                       workloadName:
+                        default: general-large
                         description: If this resource is based on the workload, this
                           field contain the name of the workload. The name of a WorkloadClass.
                           The system will use the resource requirements described
@@ -2579,7 +2757,7 @@ spec:
                           enum:
                           - drop-features
                           - drop-constant-features
-                          - drop-deplicated-features
+                          - drop-duplicated-features
                           - drop-correlated-features
                           - mutual-information
                           - chisquare
@@ -2848,6 +3026,13 @@ spec:
                   on
                 format: int64
                 type: integer
+              outlierDetection:
+                description: OutlierDetection is the status for outlier detection.
+                properties:
+                  outlierModelURI:
+                    description: The location of the prediction outlier detection
+                    type: string
+                type: object
               phase:
                 default: Pending
                 description: The phase of the Study
@@ -2867,11 +3052,6 @@ spec:
                 description: SearchStatus contains the status of the model search
                   phase
                 properties:
-                  actualIterationWithNoProgress:
-                    description: Actual number of models where no progress was made.
-                      This used to decide on early stop.
-                    format: int32
-                    type: integer
                   bestScore:
                     description: Best score so far in the search. The best score is
                       the value of the objective.
@@ -2888,6 +3068,11 @@ spec:
                   failed:
                     description: The number of models that experienced an error whilst
                       training
+                    format: int32
+                    type: integer
+                  modelsWithNoProgress:
+                    description: Actual number of models where no progress was made.
+                      This used to decide on early stop.
                     format: int32
                     type: integer
                   running:
