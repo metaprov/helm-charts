@@ -7,7 +7,7 @@ spec:
   description: "modela prediction server image"
   registry: "ghcr.io"
   repository: "metaprov/modela-prediction-server"
-  tag: {{ .Chart.AppVersion }}
+  tag: {{ .Values.distribution }}
   active: true
   role: predictor
   maintainedBy: "Metaprov Inc"

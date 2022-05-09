@@ -7,7 +7,7 @@ spec:
   description: "modela API Gateway image"
   registry: "ghcr.io"
   repository: "metaprov/modela-api-gateway"
-  tag: {{ .Chart.AppVersion }}
+  tag: {{ .Values.distribution }}
   role: "system"
   active: true
   maintainedBy: "Metaprov Inc"

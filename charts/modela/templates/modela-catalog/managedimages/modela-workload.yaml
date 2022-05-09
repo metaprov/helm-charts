@@ -7,7 +7,7 @@ spec:
   description: "modela workload image"
   registry: "ghcr.io"
   repository: "metaprov/modela-workload"
-  tag: {{ .Chart.AppVersion }}
+  tag: {{ .Values.distribution }}
   active: true
   role: workload  
   maintainedBy: "Metaprov Inc"

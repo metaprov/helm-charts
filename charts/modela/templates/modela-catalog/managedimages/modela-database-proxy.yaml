@@ -7,7 +7,7 @@ spec:
   description: "modela database proxy image"
   registry: "ghcr.io"
   repository: "metaprov/modela-database-proxy"
-  tag: {{ .Chart.AppVersion }}
+  tag: {{ .Values.distribution }}
   role: system  
   active: true
   maintainedBy: "Metaprov Inc"

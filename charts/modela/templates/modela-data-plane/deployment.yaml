@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: main
-          image: "{{ .Values.dataplane.image.registry }}/{{ .Values.dataplane.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.dataplane.image.registry }}/{{ .Values.dataplane.image.repository }}:{{ .Values.distribution }}"
           imagePullPolicy: {{ .Values.dataplane.image.pullPolicy }}
           ports:
             - containerPort: 8080
@@ -52,7 +52,7 @@ spec:
 
 
         - name: clouds
-          image: "{{ .Values.clouds.image.registry }}/{{ .Values.clouds.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.clouds.image.registry }}/{{ .Values.clouds.image.repository }}:{{ .Values.distribution }}"
           imagePullPolicy: {{ .Values.clouds.image.pullPolicy }}
           ports:
             - containerPort: 8090

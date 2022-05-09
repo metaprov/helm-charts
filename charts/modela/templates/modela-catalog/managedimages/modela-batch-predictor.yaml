@@ -7,7 +7,7 @@ spec:
   description: "modela batch predictor image"
   registry: "ghcr.io"
   repository: "metaprov/modela-batch-predictor"
-  tag: {{ .Chart.AppVersion }}
+  tag: {{ .Values.distribution }}
   role: batch-prediction
   active: true
   maintainedBy: "Metaprov Inc"
