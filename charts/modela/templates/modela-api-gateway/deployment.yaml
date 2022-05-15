@@ -42,16 +42,18 @@ spec:
               requests:
                 cpu: "{{.Values.apigateway.resources.requests.cpu}}"
                 memory: "{{.Values.apigateway.resources.requests.memory}}"
-          readinessProbe:
-            exec:
-              command: ["/bin/grpc_health_probe", "-addr=:8080"]
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
           livenessProbe:
-              exec:
-                command: ["/bin/grpc_health_probe", "-addr=:8080"]
-              initialDelaySeconds: 10
-              timeoutSeconds: 5
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 10
           env:
             - name: PRIVATE_KEY
               valueFrom:
@@ -99,12 +101,15 @@ spec:
             requests:
               cpu: "{{.Values.clouds.resources.requests.cpu}}"
               memory: "{{.Values.clouds.resources.requests.memory}}"
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 9090
+          readinessProbe:
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8090"]
             initialDelaySeconds: 5
-            periodSeconds: 10
+          livenessProbe:
+              exec:
+                command: ["/bin/grpc_health_probe", "-addr=:8090"]
+              initialDelaySeconds: 10
+
           env:
              - name: GRPC_TRACE
                value: "all"

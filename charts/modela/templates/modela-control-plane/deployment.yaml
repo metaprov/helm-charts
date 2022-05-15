@@ -78,12 +78,14 @@ spec:
             requests:
               cpu: "{{.Values.clouds.resources.requests.cpu}}"
               memory: "{{.Values.clouds.resources.requests.memory}}"
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 9090
+          readinessProbe:
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8090"]
             initialDelaySeconds: 5
-            periodSeconds: 10
+          livenessProbe:
+              exec:
+                command: ["/bin/grpc_health_probe", "-addr=:8090"]
+              initialDelaySeconds: 10
           env:
             - name: CACHE_PATH
               valueFrom:
@@ -101,12 +103,14 @@ spec:
               name: metrics
             - containerPort: 8008
               name: profiling
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 9090
+          readinessProbe:
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8091"]
             initialDelaySeconds: 5
-            periodSeconds: 10
+          livenessProbe:
+              exec:
+                command: ["/bin/grpc_health_probe", "-addr=:8091"]
+              initialDelaySeconds: 10
           resources:
             limits:
               cpu: "{{.Values.dbproxy.resources.limits.cpu}}"

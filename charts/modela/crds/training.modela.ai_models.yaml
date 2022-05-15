@@ -584,7 +584,7 @@ spec:
                           - standard-scaling
                           - max-abs-scaling
                           - min-max-scaling
-                          - normalizion-scaling
+                          - normalization-scaling
                           - robust-scaling
                           - scale-to-unit-norm
                           - none
@@ -1677,11 +1677,6 @@ spec:
                     description: Indicates if model training will be distributed across
                       multiple nodes (currently unimplemented)
                     type: boolean
-                  earlyStop:
-                    default: false
-                    description: Indicates if the parent Study should stop sampling
-                      new models if there is no improvement in score
-                    type: boolean
                   evalMetrics:
                     description: EvalMetrics specifies the collection of metrics that
                       will be evaluated after model training is complete
@@ -1764,6 +1759,12 @@ spec:
                       - none
                       type: string
                     type: array
+                  featureImportance:
+                    default: true
+                    description: Indicates if feature importance for the model will
+                      be computed as part of training. Some algorithms (e.g. Random
+                      Forest) have built in support for feature importance
+                    type: boolean
                   folds:
                     default: 5
                     description: The number of folds to use during cross-validation
@@ -1812,7 +1813,8 @@ spec:
                     type: object
                   loglevel:
                     default: info
-                    description: The training log level
+                    description: The maximum log level for logs produced by Jobs associated
+                      with the Model
                     enum:
                     - trace
                     - debug
@@ -2059,7 +2061,8 @@ spec:
                         description: The name of the Dataset resource which will be
                           used as the testing dataset, applicable if the split type
                           uses test-dataset. If enabled, the training dataset will
-                          not be split and used as-is
+                          not be split and used as-is If empty, we will not use test
+                          dataset
                         type: string
                       train:
                         default: 80
@@ -2083,11 +2086,18 @@ spec:
                         maximum: 50
                         minimum: 0
                         type: integer
+                      validationDataset:
+                        default: ""
+                        description: The name of the Dataset resource which will be
+                          used as the validation dataset, applicable if the split
+                          type uses test-dataset. If enabled, the training dataset
+                          will not be split and used as-is
+                        type: string
                     type: object
                   timeoutInSecs:
                     default: 600
-                    description: Max time to train or test a single model (in sec).
-                      Default is 10 mintues
+                    description: The maximum time, in seconds, that Jobs associated
+                      with the Model can run for before being forcefully cancelled.
                     format: int32
                     type: integer
                 type: object

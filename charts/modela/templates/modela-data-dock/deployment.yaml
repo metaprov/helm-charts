@@ -45,7 +45,7 @@ spec:
           livenessProbe:
               httpGet:
                 path: /healthz
-                port: 9090
+                port: 8095
               initialDelaySeconds: 5
               periodSeconds: 10
           env:
@@ -73,12 +73,14 @@ spec:
             requests:
               cpu: "{{.Values.clouds.resources.requests.cpu}}"
               memory: "{{.Values.clouds.resources.requests.memory}}"
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 9090
+          readinessProbe:
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8090"]
             initialDelaySeconds: 5
-            periodSeconds: 10
+          livenessProbe:
+              exec:
+                command: ["/bin/grpc_health_probe", "-addr=:8090"]
+              initialDelaySeconds: 10
           env:
             - name: CACHE_PATH
               valueFrom:

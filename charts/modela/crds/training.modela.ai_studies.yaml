@@ -915,18 +915,23 @@ spec:
                       are produced by the Study, the model with the lowest score will
                       be garbage-collected
                     type: boolean
+                  keepPrunedModels:
+                    default: false
+                    description: Indicates if we should keep pruned models model with
+                      the lowest score will be garbage-collected
+                    type: boolean
                 type: object
               imbalanceHandler:
                 description: Set the imbalance dataset handling.
                 properties:
                   enabled:
                     default: true
-                    description: Indicates if ensemble models will be created
+                    description: Indicates if imbalance handling is enabled
                     type: boolean
                   imbalance:
                     default: auto
-                    description: set the imbalance handler. By default set to auto.
-                      The method which will be used to handle an imbalanced dataset
+                    description: The technique that will be used to handle the imbalanced
+                      dataset
                     enum:
                     - adasyn
                     - baseline-smote
@@ -1208,18 +1213,18 @@ spec:
                     properties:
                       enabled:
                         default: true
-                        description: Indicates if ensemble models will be created
+                        description: Indicates if early stopping is enabled
                         type: boolean
                       initial:
                         default: 20
-                        description: The number of models before we start checking
-                          for early stopping.
+                        description: The number of models to train before model objective
+                          metrics will begin to be checked for early stopping
                         format: int32
                         type: integer
                       minModelsWithNoProgress:
                         default: 5
-                        description: The number of models for which we check if there
-                          were no improvement.
+                        description: The number of models with no improvement in score
+                          that are required to abort the model search
                         format: int32
                         type: integer
                     type: object
@@ -1240,17 +1245,18 @@ spec:
                     minimum: 1
                     type: integer
                   maxTime:
-                    default: 30
-                    description: The maximum number of time, in seconds, that the
-                      model search can run for
+                    default: 60
+                    description: The maximum number of minutes, that the model search
+                      can run for
                     format: int32
                     maximum: 10000
                     minimum: 1
                     type: integer
-                  minScore:
-                    default: 0
-                    description: The minimum score of a candidate model, after which
-                      the model search will forcibly stop
+                  minBestScore:
+                    default: 9999999999
+                    description: The minimum best score needed to finish the search.
+                      The system will finish the search when the minimum is reached.
+                      Note that this number can be negative for a regression.
                     type: number
                   objective:
                     description: The objective metric that will be measured against
@@ -1335,8 +1341,8 @@ spec:
                   objective2:
                     default: none
                     description: The second objective metric that will be measured
-                      and evaluated in tandem with the primary objective. The optimizer
-                      will attempt to optimize both metrics
+                      and evaluated in tandem with the primary objective. The model
+                      search optimizer will attempt to optimize both metrics
                     enum:
                     - accuracy
                     - average-precision
@@ -1632,8 +1638,9 @@ spec:
                     type: integer
                 type: object
               servingTemplate:
-                description: Model serving template specifies the configuration to
-                  train and evaluate models
+                description: ServingTemplate specifies the model format and resource
+                  requirements that will be applied to the Predictor created for the
+                  Model that will be selected by the Study
                 properties:
                   format:
                     default: cloudpickle
@@ -1816,8 +1823,8 @@ spec:
                 type: boolean
               timeoutInSecs:
                 default: 14400
-                description: 'Overall study timeout. The study will be aborted if
-                  we reached this timeout. Default : 4H'
+                description: The time, in seconds, after which the execution of the
+                  Study will be forcefully aborted (4 hours, by default)
                 format: int32
                 type: integer
               trainingTemplate:
@@ -1938,11 +1945,6 @@ spec:
                     description: Indicates if model training will be distributed across
                       multiple nodes (currently unimplemented)
                     type: boolean
-                  earlyStop:
-                    default: false
-                    description: Indicates if the parent Study should stop sampling
-                      new models if there is no improvement in score
-                    type: boolean
                   evalMetrics:
                     description: EvalMetrics specifies the collection of metrics that
                       will be evaluated after model training is complete
@@ -2025,6 +2027,12 @@ spec:
                       - none
                       type: string
                     type: array
+                  featureImportance:
+                    default: true
+                    description: Indicates if feature importance for the model will
+                      be computed as part of training. Some algorithms (e.g. Random
+                      Forest) have built in support for feature importance
+                    type: boolean
                   folds:
                     default: 5
                     description: The number of folds to use during cross-validation
@@ -2073,7 +2081,8 @@ spec:
                     type: object
                   loglevel:
                     default: info
-                    description: The training log level
+                    description: The maximum log level for logs produced by Jobs associated
+                      with the Model
                     enum:
                     - trace
                     - debug
@@ -2320,7 +2329,8 @@ spec:
                         description: The name of the Dataset resource which will be
                           used as the testing dataset, applicable if the split type
                           uses test-dataset. If enabled, the training dataset will
-                          not be split and used as-is
+                          not be split and used as-is If empty, we will not use test
+                          dataset
                         type: string
                       train:
                         default: 80
@@ -2344,11 +2354,18 @@ spec:
                         maximum: 50
                         minimum: 0
                         type: integer
+                      validationDataset:
+                        default: ""
+                        description: The name of the Dataset resource which will be
+                          used as the validation dataset, applicable if the split
+                          type uses test-dataset. If enabled, the training dataset
+                          will not be split and used as-is
+                        type: string
                     type: object
                   timeoutInSecs:
                     default: 600
-                    description: Max time to train or test a single model (in sec).
-                      Default is 10 mintues
+                    description: The maximum time, in seconds, that Jobs associated
+                      with the Model can run for before being forcefully cancelled.
                     format: int32
                     type: integer
                 type: object
@@ -2375,6 +2392,10 @@ spec:
               baseline:
                 description: BaselineStatus contains the status of the baseline phase
                 properties:
+                  bestScore:
+                    description: Best score so far in this phase. The best score is
+                      the value of the objective.
+                    type: number
                   completed:
                     description: The number of models that have been successfully
                       trained
@@ -2387,6 +2408,11 @@ spec:
                   failed:
                     description: The number of models that experienced an error whilst
                       training
+                    format: int32
+                    type: integer
+                  modelsWithNoProgress:
+                    description: Actual number of models where no progress was made.
+                      This used to decide on early stop.
                     format: int32
                     type: integer
                   running:
@@ -2637,7 +2663,7 @@ spec:
                           - standard-scaling
                           - max-abs-scaling
                           - min-max-scaling
-                          - normalizion-scaling
+                          - normalization-scaling
                           - robust-scaling
                           - scale-to-unit-norm
                           - none
@@ -2842,6 +2868,13 @@ spec:
                       type: string
                   type: object
                 type: array
+              driftDetection:
+                description: OutlierDetection is the status for outlier detection
+                properties:
+                  outlierModelURI:
+                    description: The location of the prediction outlier detection
+                    type: string
+                type: object
               endTime:
                 description: EndTime represents the time at which the Study was marked
                   as completed, failed, or aborted
@@ -2850,6 +2883,10 @@ spec:
               ensemble:
                 description: EnsembleStatus contains the status of the ensemble phase
                 properties:
+                  bestScore:
+                    description: Best score so far in this phase. The best score is
+                      the value of the objective.
+                    type: number
                   completed:
                     description: The number of models that have been successfully
                       trained
@@ -2862,6 +2899,11 @@ spec:
                   failed:
                     description: The number of models that experienced an error whilst
                       training
+                    format: int32
+                    type: integer
+                  modelsWithNoProgress:
+                    description: Actual number of models where no progress was made.
+                      This used to decide on early stop.
                     format: int32
                     type: integer
                   running:
@@ -2880,6 +2922,10 @@ spec:
               explain:
                 description: ExplainStatus contains the status of the explaining phase
                 properties:
+                  bestScore:
+                    description: Best score so far in this phase. The best score is
+                      the value of the objective.
+                    type: number
                   completed:
                     description: The number of models that have been successfully
                       trained
@@ -2892,6 +2938,11 @@ spec:
                   failed:
                     description: The number of models that experienced an error whilst
                       training
+                    format: int32
+                    type: integer
+                  modelsWithNoProgress:
+                    description: Actual number of models where no progress was made.
+                      This used to decide on early stop.
                     format: int32
                     type: integer
                   running:
@@ -2919,6 +2970,10 @@ spec:
                 description: FeatureEngineeringStatus contains the status of the feature
                   engineering phase
                 properties:
+                  bestScore:
+                    description: Best score so far in this phase. The best score is
+                      the value of the objective.
+                    type: number
                   completed:
                     description: The number of models that have been successfully
                       trained
@@ -2931,6 +2986,11 @@ spec:
                   failed:
                     description: The number of models that experienced an error whilst
                       training
+                    format: int32
+                    type: integer
+                  modelsWithNoProgress:
+                    description: Actual number of models where no progress was made.
+                      This used to decide on early stop.
                     format: int32
                     type: integer
                   running:
@@ -3026,13 +3086,6 @@ spec:
                   on
                 format: int64
                 type: integer
-              outlierDetection:
-                description: OutlierDetection is the status for outlier detection.
-                properties:
-                  outlierModelURI:
-                    description: The location of the prediction outlier detection
-                    type: string
-                type: object
               phase:
                 default: Pending
                 description: The phase of the Study
@@ -3046,6 +3099,11 @@ spec:
                 format: int32
                 type: integer
               reportName:
+                description: Reference to the report object that was generated for
+                  the dataset, which exists in the same Data Product namespace as
+                  the object
+                type: string
+              reportUri:
                 description: The name of the Report resource produced by the Study
                 type: string
               search:
@@ -3053,7 +3111,7 @@ spec:
                   phase
                 properties:
                   bestScore:
-                    description: Best score so far in the search. The best score is
+                    description: Best score so far in this phase. The best score is
                       the value of the objective.
                     type: number
                   completed:
@@ -3096,6 +3154,10 @@ spec:
               test:
                 description: TestStatus contains the status of the testing phase
                 properties:
+                  bestScore:
+                    description: Best score so far in this phase. The best score is
+                      the value of the objective.
+                    type: number
                   completed:
                     description: The number of models that have been successfully
                       trained
@@ -3108,6 +3170,11 @@ spec:
                   failed:
                     description: The number of models that experienced an error whilst
                       training
+                    format: int32
+                    type: integer
+                  modelsWithNoProgress:
+                    description: Actual number of models where no progress was made.
+                      This used to decide on early stop.
                     format: int32
                     type: integer
                   running:

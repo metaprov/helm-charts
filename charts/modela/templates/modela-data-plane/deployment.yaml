@@ -39,7 +39,14 @@ spec:
             requests:
               cpu: "{{.Values.dataplane.resources.requests.cpu}}"
               memory: "{{.Values.dataplane.resources.requests.memory}}"
-    
+          readinessProbe:
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+            initialDelaySeconds: 5
+          livenessProbe:
+              exec:
+                command: ["/bin/grpc_health_probe", "-addr=:8080"]
+              initialDelaySeconds: 10              
           volumeMounts:
             - name: data
               mountPath: /var/opt/modela/data
@@ -71,12 +78,14 @@ spec:
             requests:
               cpu: "{{.Values.clouds.resources.requests.cpu}}"
               memory: "{{.Values.clouds.resources.requests.memory}}"
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 9090
+          readinessProbe:
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8090"]
             initialDelaySeconds: 5
-            periodSeconds: 10
+          livenessProbe:
+              exec:
+                command: ["/bin/grpc_health_probe", "-addr=:8090"]
+              initialDelaySeconds: 10
           env:
             - name: CACHE_PATH
               valueFrom:
