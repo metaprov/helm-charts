@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.0
   creationTimestamp: null
   name: studies.training.modela.ai
 spec:
@@ -140,7 +140,6 @@ spec:
                       - prophet
                       - knn-classifier
                       - ada-boost-classifier
-                      - bernoulli-nb
                       - decision-tree-classifier
                       - extra-tree-classifier
                       - linear-svc
@@ -174,6 +173,9 @@ spec:
                       - hist-gradient-boosting-classifier
                       - hist-gradient-boosting-regressor
                       - linear-regression
+                      - bernoulli-nb
+                      - gaussian-nb
+                      - multinomial-nb
                       type: string
                     type: array
                   enabled:
@@ -183,6 +185,11 @@ spec:
                       Study's search space with default hyper-parameters
                     type: boolean
                 type: object
+              codeGenerated:
+                default: false
+                description: Not implemented. For future use. If true,generate code
+                  when the best model
+                type: boolean
               compilation:
                 description: CompilerSpec specifies the configuration to compile the
                   best-selected model to a binary (currently unimplemented)
@@ -228,7 +235,7 @@ spec:
                 maxLength: 512
                 type: string
               driftDetection:
-                description: The spec for generting a density model for this study.
+                description: The spec for generating a density model for this study.
                 properties:
                   enabled:
                     default: false
@@ -277,6 +284,28 @@ spec:
                       search should be automatically removed at the conclusion of
                       the search
                     type: boolean
+                  earlyStop:
+                    description: The number of new models produced by the fe search
+                      which, if there is no improvement in score, the model search
+                      will conclude
+                    properties:
+                      enabled:
+                        default: true
+                        description: Indicates if early stopping is enabled
+                        type: boolean
+                      initial:
+                        default: 20
+                        description: The number of models to train before model objective
+                          metrics will begin to be checked for early stopping
+                        format: int32
+                        type: integer
+                      minModelsWithNoProgress:
+                        default: 5
+                        description: The number of models with no improvement in score
+                          that are required to abort the model search
+                        format: int32
+                        type: integer
+                    type: object
                   enabled:
                     default: true
                     description: Indicates if the feature engineering search will
@@ -315,7 +344,6 @@ spec:
                     - prophet
                     - knn-classifier
                     - ada-boost-classifier
-                    - bernoulli-nb
                     - decision-tree-classifier
                     - extra-tree-classifier
                     - linear-svc
@@ -349,6 +377,9 @@ spec:
                     - hist-gradient-boosting-classifier
                     - hist-gradient-boosting-regressor
                     - linear-regression
+                    - bernoulli-nb
+                    - gaussian-nb
+                    - multinomial-nb
                     type: string
                   featureSelectionTemplate:
                     description: Specification for feature selection. successful study.
@@ -356,12 +387,6 @@ spec:
                       corrThreshold:
                         default: 95
                         description: The threshold to remove features with high correlations
-                        format: int32
-                        type: integer
-                      cumulativeImportancePercent:
-                        default: 95
-                        description: The cumulative importance threshold of features
-                          to be included
                         format: int32
                         type: integer
                       embedding:
@@ -379,6 +404,18 @@ spec:
                           part of the candidate algorithms (e.g. chi-square or anova
                           tests)
                         type: boolean
+                      maxFeatures:
+                        default: 0
+                        description: The number of features that will be selected
+                          based on importance. If TopN is 0, all features will be
+                          selected
+                        format: int32
+                        type: integer
+                      percentile:
+                        default: 20
+                        description: Percent of features to keep
+                        format: int32
+                        type: integer
                       pipeline:
                         description: The collection of feature selection methods that
                           will be applied in order to the dataset
@@ -412,19 +449,6 @@ spec:
                         items:
                           type: string
                         type: array
-                      samplePct:
-                        default: 100
-                        description: The number percentage (0 through 100) of the
-                          dataset to sample
-                        format: int32
-                        type: integer
-                      topN:
-                        default: 0
-                        description: The number of features that will be selected
-                          based on importance. If TopN is 0, all features will be
-                          selected
-                        format: int32
-                        type: integer
                       varianceThresholdPct:
                         default: 5
                         description: The threshold as a percentage to remove low variance
@@ -518,12 +542,6 @@ spec:
                               - avg
                               - median
                               type: string
-                            distinc:
-                              description: The distinct values of the column for this
-                                level
-                              items:
-                                type: string
-                              type: array
                             freq:
                               description: The freq of the level
                               enum:
@@ -543,6 +561,12 @@ spec:
                             string:
                               description: The name of the level - the column name
                               type: string
+                            values:
+                              description: The distinct values of the column for this
+                                level
+                              items:
+                                type: string
+                              type: array
                           type: object
                         type: array
                       itemLevel:
@@ -557,12 +581,6 @@ spec:
                             - avg
                             - median
                             type: string
-                          distinc:
-                            description: The distinct values of the column for this
-                              level
-                            items:
-                              type: string
-                            type: array
                           freq:
                             description: The freq of the level
                             enum:
@@ -582,6 +600,12 @@ spec:
                           string:
                             description: The name of the level - the column name
                             type: string
+                          values:
+                            description: The distinct values of the column for this
+                              level
+                            items:
+                              type: string
+                            type: array
                         type: object
                       notifierName:
                         description: Optional notifier to use when the forecast is
@@ -1084,6 +1108,43 @@ spec:
                       can still pass the path of a file inside a bucket not managed
                       by Modela
                     type: string
+                  resourceRef:
+                    description: Resource Ref is a reference to another resource that
+                      contain the data , e.g. public dataset or another dataset
+                    properties:
+                      apiVersion:
+                        description: API version of the referent.
+                        type: string
+                      fieldPath:
+                        description: 'If referring to a piece of an object instead
+                          of an entire object, this string should contain a valid
+                          JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                          For example, if the object reference is to a container within
+                          a pod, this would take on a value like: "spec.containers{name}"
+                          (where "name" refers to the name of the container that triggered
+                          the event) or if no container name is specified "spec.containers[2]"
+                          (container with index 2 in this pod). This syntax is chosen
+                          only to have some well-defined way of referencing a part
+                          of an object. TODO: this design is not final and this field
+                          is subject to change in the future.'
+                        type: string
+                      kind:
+                        description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                        type: string
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                        type: string
+                      namespace:
+                        description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                        type: string
+                      resourceVersion:
+                        description: 'Specific resourceVersion to which this reference
+                          is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                        type: string
+                      uid:
+                        description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                        type: string
+                    type: object
                   sql:
                     default: ""
                     description: The SQL statement which will be executed to query
@@ -1104,6 +1165,10 @@ spec:
                       Minio), a SQL location like a table or a view, a data stream
                       (i.e. Kafka, currently unsupported), or a web location (currently
                       unsupported)
+                    type: string
+                  url:
+                    default: ""
+                    description: The url of the web resource, can be http or git location
                     type: string
                 type: object
               modelExplained:
@@ -1426,92 +1491,158 @@ spec:
                       allows you to train a large number of candidate models with
                       a subset of the dataset
                     properties:
-                      intervalTrials:
-                        default: 1
-                        description: Interval in number of steps between the pruning
-                          checks
-                        format: int32
-                        type: integer
-                      lower:
-                        default: 0
-                        description: A minimum value which determines whether pruner
-                          prunes or not. Used only for threshold pruner
-                        format: int32
-                        type: integer
-                      minTrials:
-                        default: 1
-                        description: Minimum number of reported trials.
-                        format: int32
-                        type: integer
-                      percentile:
-                        default: 25
-                        description: Keep specific percent of trials. Used only with
-                          percentile pruner
-                        format: int32
-                        maximum: 100
-                        minimum: 0
-                        type: integer
-                      shOptions:
-                        description: SHOptions is the desired options for successive
-                          halving search. All other models are saved into an archive.
+                      hyperband:
                         properties:
-                          eliminationRate:
+                          bootstrapCount:
+                            default: 0
+                            description: Parameter specifying the number of trials
+                              required in a rung before any trial can be promoted
+                            format: int32
+                            type: integer
+                          maxResources:
+                            default: 1
+                            description: A parameter for specifying the maximum resource
+                              allocated to a trial
+                            format: int32
+                            type: integer
+                          minResources:
+                            default: 1
+                            description: "A parameter for specifying the minimum resource
+                              allocated to a trial noted as \U0001D45F in the paper"
+                            format: int32
+                            type: integer
+                          reductionFactor:
                             default: 3
-                            description: The denominator for the fraction of models
-                              that will be promoted to the next round (i.e. an EliminationRate
-                              of 3 will only promote 1/3rd models to the next round)
+                            description: A parameter for specifying reduction factor
+                              of promotable trials
                             format: int32
-                            minimum: 0
                             type: integer
-                          maxBudget:
-                            default: 81
-                            description: The maximum budget allocated to models during
-                              the successive halving search. For classical models,
-                              this represents the number percentage (0 through 100)
-                              of data that can be allocated to the model for training
-                            format: int32
-                            minimum: 0
-                            type: integer
-                          modality:
-                            default: epochs
-                            description: The type of modality, based on the type of
-                              model For classical models, it should be based on data
-                              percentage For deep models, it should be based on epochs
-                            enum:
-                            - data
-                            - epochs
-                            type: string
                         type: object
-                      startupTrials:
-                        default: 5
-                        description: Pruning is disabled until the given number of
-                          trials finish in the same study.
-                        format: int32
-                        type: integer
+                      median:
+                        properties:
+                          intervalSteps:
+                            default: 1
+                            description: Interval in number of steps between the pruning
+                              checks
+                            format: int32
+                            type: integer
+                          minTrials:
+                            default: 1
+                            description: Minimum number of reported trials.
+                            format: int32
+                            type: integer
+                          startupTrials:
+                            default: 5
+                            description: Pruning is disabled until the given number
+                              of trials finish in the same study.
+                            format: int32
+                            type: integer
+                          warmupSteps:
+                            default: 0
+                            description: Pruning is disabled until the trial exceeds
+                              the given number of step
+                            format: int32
+                            type: integer
+                        type: object
+                      percentile:
+                        properties:
+                          intervalTrials:
+                            default: 1
+                            description: Interval in number of steps between the pruning
+                              checks
+                            format: int32
+                            type: integer
+                          minTrials:
+                            default: 1
+                            description: Minimum number of reported trials.
+                            format: int32
+                            type: integer
+                          percentile:
+                            default: 25
+                            description: Percentile which must be between 0 and 100
+                              inclusive
+                            format: int32
+                            maximum: 100
+                            minimum: 0
+                            type: integer
+                          startupTrials:
+                            default: 5
+                            description: Pruning is disabled until the given number
+                              of trials finish in the same study.
+                            format: int32
+                            type: integer
+                          warmupSteps:
+                            default: 0
+                            description: Pruning is disabled until the trial exceeds
+                              the given number of step
+                            format: int32
+                            type: integer
+                        type: object
+                      successiveHalving:
+                        properties:
+                          bootstrapCount:
+                            default: 0
+                            description: Minimum number of trials that need to complete
+                              a rung before any trial is considered for promotion
+                              into the next rung.
+                            format: int32
+                            type: integer
+                          minEarlyStoppingRate:
+                            default: 0
+                            description: A parameter for specifying the minimum early-stopping
+                              rate
+                            format: int32
+                            type: integer
+                          minResources:
+                            default: 1
+                            description: Minimum number of reported trials.
+                            format: int32
+                            type: integer
+                          reductionFactor:
+                            default: 4
+                            description: A parameter for specifying reduction factor
+                              of promotable trials
+                            format: int32
+                            type: integer
+                        type: object
+                      threshold:
+                        properties:
+                          intervalSteps:
+                            default: 1
+                            description: Interval in number of steps between the pruning
+                              checks
+                            format: int32
+                            type: integer
+                          lower:
+                            default: 0
+                            description: A minimum value which determines whether
+                              pruner prunes or not. If an intermediate value is smaller
+                              than lower, it prunes.
+                            type: number
+                          upper:
+                            default: 0
+                            description: A maximum value which determines whether
+                              pruner prunes or not. If an intermediate value is larger
+                              than upper, it prunes.
+                            type: number
+                          warmupSteps:
+                            default: 0
+                            description: Pruning is disabled until the trial exceeds
+                              the given number of step
+                            format: int32
+                            type: integer
+                        type: object
                       type:
-                        default: median
+                        default: median-pruner
                         description: The type of pruner to use during model search
                         enum:
-                        - none
-                        - patient
-                        - median
-                        - percentile
-                        - sh
-                        - hyperband
-                        - threshold
+                        - patient-pruner
+                        - median-pruner
+                        - percentile-pruner
+                        - successive-halving-pruner
+                        - hyperband-pruner
+                        - threshold-pruner
                         type: string
-                      upper:
-                        default: 0
-                        description: A maximum value which determines whether pruner
-                          prunes or not. Used only for threshold pruner
-                        format: int32
-                        type: integer
-                      warmupTrials:
-                        default: 0
-                        description: Pruning is disabled until the trial exceeds the
-                          given number of step
-                        format: int32
-                        type: integer
                     type: object
                   retainTop:
                     default: 1
@@ -1581,7 +1712,6 @@ spec:
                           - prophet
                           - knn-classifier
                           - ada-boost-classifier
-                          - bernoulli-nb
                           - decision-tree-classifier
                           - extra-tree-classifier
                           - linear-svc
@@ -1615,6 +1745,9 @@ spec:
                           - hist-gradient-boosting-classifier
                           - hist-gradient-boosting-regressor
                           - linear-regression
+                          - bernoulli-nb
+                          - gaussian-nb
+                          - multinomial-nb
                           type: string
                         type: array
                     type: object
@@ -1776,37 +1909,29 @@ spec:
                         type: string
                     type: object
                 type: object
-              task:
+              subtask:
+                default: none
                 description: The machine learning task type (i.e. regression, classification)
                 enum:
-                - binary-classification
-                - multi-classification
-                - multi-label-classification
-                - forecasting
-                - regression
-                - clustering
-                - recommendation
-                - outlier-detection
-                - novelty-detection
-                - topic-modeling
-                - video-action-recognition
-                - video-classification
-                - video-object-tracking
-                - image-classification
-                - image-multi-classification
-                - image-object-detection
-                - image-segmentation
-                - auto
                 - text-ner
                 - text-classification
-                - text-summarization
+                - text-multi-classification
+                - text-regression
+                - text-multi-label-classification
+                - text-conversation
+                - text-lang-generation
+                - text-lang-model
+                - text-multi-modal
+                - text-ner
                 - text-qa
+                - text-summarization
+                - text-sentence-pair
+                - text-representation-generation
                 - text-sentiment-analysis
-                - text-generation
                 - text-code-generation
                 - text-translation
                 - text-lang-detection
-                - text-grammer-correction
+                - text-grammar-correction
                 - text-paraphrasing
                 - text-intent-classification
                 - text-semantic-similarity
@@ -1814,6 +1939,24 @@ spec:
                 - text-pos
                 - text-tokenization
                 - text-lemma
+                - image-classification
+                - image-multi-label-classification
+                - image-object-detection
+                - image-segmentation
+                - none
+                type: string
+              task:
+                description: The machine learning task type (i.e. regression, classification)
+                enum:
+                - binary-classification
+                - multi-classification
+                - forecasting
+                - regression
+                - clustering
+                - recommendation
+                - outlier-detection
+                - novelty-detection
+                - auto
                 - unknown
                 type: string
               template:
@@ -1888,6 +2031,47 @@ spec:
                               can still pass the path of a file inside a bucket not
                               managed by Modela
                             type: string
+                          resourceRef:
+                            description: Resource Ref is a reference to another resource
+                              that contain the data , e.g. public dataset or another
+                              dataset
+                            properties:
+                              apiVersion:
+                                description: API version of the referent.
+                                type: string
+                              fieldPath:
+                                description: 'If referring to a piece of an object
+                                  instead of an entire object, this string should
+                                  contain a valid JSON/Go field access statement,
+                                  such as desiredState.manifest.containers[2]. For
+                                  example, if the object reference is to a container
+                                  within a pod, this would take on a value like: "spec.containers{name}"
+                                  (where "name" refers to the name of the container
+                                  that triggered the event) or if no container name
+                                  is specified "spec.containers[2]" (container with
+                                  index 2 in this pod). This syntax is chosen only
+                                  to have some well-defined way of referencing a part
+                                  of an object. TODO: this design is not final and
+                                  this field is subject to change in the future.'
+                                type: string
+                              kind:
+                                description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                                type: string
+                              name:
+                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                type: string
+                              namespace:
+                                description: 'Namespace of the referent. More info:
+                                  https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                                type: string
+                              resourceVersion:
+                                description: 'Specific resourceVersion to which this
+                                  reference is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                                type: string
+                              uid:
+                                description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                                type: string
+                            type: object
                           sql:
                             default: ""
                             description: The SQL statement which will be executed
@@ -1910,6 +2094,11 @@ spec:
                               system (i.e. Minio), a SQL location like a table or
                               a view, a data stream (i.e. Kafka, currently unsupported),
                               or a web location (currently unsupported)
+                            type: string
+                          url:
+                            default: ""
+                            description: The url of the web resource, can be http
+                              or git location
                             type: string
                         type: object
                     type: object
@@ -2079,7 +2268,7 @@ spec:
                         description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                         type: string
                     type: object
-                  loglevel:
+                  logLevel:
                     default: info
                     description: The maximum log level for logs produced by Jobs associated
                       with the Model
@@ -2641,7 +2830,7 @@ spec:
                         outlierHandling:
                           default: none
                           description: The method to use when handling outliers Apply
-                            only to numeric datatypes.
+                            only to numeric data types.
                           enum:
                           - trim-outliers
                           - winsorizer-outliers
@@ -2755,12 +2944,6 @@ spec:
                         description: The threshold to remove features with high correlations
                         format: int32
                         type: integer
-                      cumulativeImportancePercent:
-                        default: 95
-                        description: The cumulative importance threshold of features
-                          to be included
-                        format: int32
-                        type: integer
                       embedding:
                         default: true
                         description: Indicates if embedded methods will be tested
@@ -2776,6 +2959,18 @@ spec:
                           part of the candidate algorithms (e.g. chi-square or anova
                           tests)
                         type: boolean
+                      maxFeatures:
+                        default: 0
+                        description: The number of features that will be selected
+                          based on importance. If TopN is 0, all features will be
+                          selected
+                        format: int32
+                        type: integer
+                      percentile:
+                        default: 20
+                        description: Percent of features to keep
+                        format: int32
+                        type: integer
                       pipeline:
                         description: The collection of feature selection methods that
                           will be applied in order to the dataset
@@ -2809,19 +3004,6 @@ spec:
                         items:
                           type: string
                         type: array
-                      samplePct:
-                        default: 100
-                        description: The number percentage (0 through 100) of the
-                          dataset to sample
-                        format: int32
-                        type: integer
-                      topN:
-                        default: 0
-                        description: The number of features that will be selected
-                          based on importance. If TopN is 0, all features will be
-                          selected
-                        format: int32
-                        type: integer
                       varianceThresholdPct:
                         default: 5
                         description: The threshold as a percentage to remove low variance
@@ -3228,6 +3410,43 @@ spec:
                       can still pass the path of a file inside a bucket not managed
                       by Modela
                     type: string
+                  resourceRef:
+                    description: Resource Ref is a reference to another resource that
+                      contain the data , e.g. public dataset or another dataset
+                    properties:
+                      apiVersion:
+                        description: API version of the referent.
+                        type: string
+                      fieldPath:
+                        description: 'If referring to a piece of an object instead
+                          of an entire object, this string should contain a valid
+                          JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                          For example, if the object reference is to a container within
+                          a pod, this would take on a value like: "spec.containers{name}"
+                          (where "name" refers to the name of the container that triggered
+                          the event) or if no container name is specified "spec.containers[2]"
+                          (container with index 2 in this pod). This syntax is chosen
+                          only to have some well-defined way of referencing a part
+                          of an object. TODO: this design is not final and this field
+                          is subject to change in the future.'
+                        type: string
+                      kind:
+                        description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                        type: string
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                        type: string
+                      namespace:
+                        description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                        type: string
+                      resourceVersion:
+                        description: 'Specific resourceVersion to which this reference
+                          is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                        type: string
+                      uid:
+                        description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                        type: string
+                    type: object
                   sql:
                     default: ""
                     description: The SQL statement which will be executed to query
@@ -3248,6 +3467,10 @@ spec:
                       Minio), a SQL location like a table or a view, a data stream
                       (i.e. Kafka, currently unsupported), or a web location (currently
                       unsupported)
+                    type: string
+                  url:
+                    default: ""
+                    description: The url of the web resource, can be http or git location
                     type: string
                 type: object
               testingRows:
@@ -3292,6 +3515,43 @@ spec:
                       can still pass the path of a file inside a bucket not managed
                       by Modela
                     type: string
+                  resourceRef:
+                    description: Resource Ref is a reference to another resource that
+                      contain the data , e.g. public dataset or another dataset
+                    properties:
+                      apiVersion:
+                        description: API version of the referent.
+                        type: string
+                      fieldPath:
+                        description: 'If referring to a piece of an object instead
+                          of an entire object, this string should contain a valid
+                          JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                          For example, if the object reference is to a container within
+                          a pod, this would take on a value like: "spec.containers{name}"
+                          (where "name" refers to the name of the container that triggered
+                          the event) or if no container name is specified "spec.containers[2]"
+                          (container with index 2 in this pod). This syntax is chosen
+                          only to have some well-defined way of referencing a part
+                          of an object. TODO: this design is not final and this field
+                          is subject to change in the future.'
+                        type: string
+                      kind:
+                        description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                        type: string
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                        type: string
+                      namespace:
+                        description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                        type: string
+                      resourceVersion:
+                        description: 'Specific resourceVersion to which this reference
+                          is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                        type: string
+                      uid:
+                        description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                        type: string
+                    type: object
                   sql:
                     default: ""
                     description: The SQL statement which will be executed to query
@@ -3312,6 +3572,10 @@ spec:
                       Minio), a SQL location like a table or a view, a data stream
                       (i.e. Kafka, currently unsupported), or a web location (currently
                       unsupported)
+                    type: string
+                  url:
+                    default: ""
+                    description: The url of the web resource, can be http or git location
                     type: string
                 type: object
               trainingDataHash:
@@ -3380,6 +3644,43 @@ spec:
                       can still pass the path of a file inside a bucket not managed
                       by Modela
                     type: string
+                  resourceRef:
+                    description: Resource Ref is a reference to another resource that
+                      contain the data , e.g. public dataset or another dataset
+                    properties:
+                      apiVersion:
+                        description: API version of the referent.
+                        type: string
+                      fieldPath:
+                        description: 'If referring to a piece of an object instead
+                          of an entire object, this string should contain a valid
+                          JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                          For example, if the object reference is to a container within
+                          a pod, this would take on a value like: "spec.containers{name}"
+                          (where "name" refers to the name of the container that triggered
+                          the event) or if no container name is specified "spec.containers[2]"
+                          (container with index 2 in this pod). This syntax is chosen
+                          only to have some well-defined way of referencing a part
+                          of an object. TODO: this design is not final and this field
+                          is subject to change in the future.'
+                        type: string
+                      kind:
+                        description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                        type: string
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                        type: string
+                      namespace:
+                        description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                        type: string
+                      resourceVersion:
+                        description: 'Specific resourceVersion to which this reference
+                          is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                        type: string
+                      uid:
+                        description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                        type: string
+                    type: object
                   sql:
                     default: ""
                     description: The SQL statement which will be executed to query
@@ -3401,6 +3702,10 @@ spec:
                       (i.e. Kafka, currently unsupported), or a web location (currently
                       unsupported)
                     type: string
+                  url:
+                    default: ""
+                    description: The url of the web resource, can be http or git location
+                    type: string
                 type: object
               validationRows:
                 description: The number of rows in the validation dataset
@@ -3412,9 +3717,3 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

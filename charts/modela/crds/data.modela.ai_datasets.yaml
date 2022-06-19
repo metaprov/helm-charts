@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.0
   creationTimestamp: null
   name: datasets.data.modela.ai
 spec:
@@ -202,6 +202,43 @@ spec:
                       can still pass the path of a file inside a bucket not managed
                       by Modela
                     type: string
+                  resourceRef:
+                    description: Resource Ref is a reference to another resource that
+                      contain the data , e.g. public dataset or another dataset
+                    properties:
+                      apiVersion:
+                        description: API version of the referent.
+                        type: string
+                      fieldPath:
+                        description: 'If referring to a piece of an object instead
+                          of an entire object, this string should contain a valid
+                          JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                          For example, if the object reference is to a container within
+                          a pod, this would take on a value like: "spec.containers{name}"
+                          (where "name" refers to the name of the container that triggered
+                          the event) or if no container name is specified "spec.containers[2]"
+                          (container with index 2 in this pod). This syntax is chosen
+                          only to have some well-defined way of referencing a part
+                          of an object. TODO: this design is not final and this field
+                          is subject to change in the future.'
+                        type: string
+                      kind:
+                        description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                        type: string
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                        type: string
+                      namespace:
+                        description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                        type: string
+                      resourceVersion:
+                        description: 'Specific resourceVersion to which this reference
+                          is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                        type: string
+                      uid:
+                        description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                        type: string
+                    type: object
                   sql:
                     default: ""
                     description: The SQL statement which will be executed to query
@@ -222,6 +259,10 @@ spec:
                       Minio), a SQL location like a table or a view, a data stream
                       (i.e. Kafka, currently unsupported), or a web location (currently
                       unsupported)
+                    type: string
+                  url:
+                    default: ""
+                    description: The url of the web resource, can be http or git location
                     type: string
                 type: object
               notification:
@@ -292,6 +333,43 @@ spec:
                       can still pass the path of a file inside a bucket not managed
                       by Modela
                     type: string
+                  resourceRef:
+                    description: Resource Ref is a reference to another resource that
+                      contain the data , e.g. public dataset or another dataset
+                    properties:
+                      apiVersion:
+                        description: API version of the referent.
+                        type: string
+                      fieldPath:
+                        description: 'If referring to a piece of an object instead
+                          of an entire object, this string should contain a valid
+                          JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                          For example, if the object reference is to a container within
+                          a pod, this would take on a value like: "spec.containers{name}"
+                          (where "name" refers to the name of the container that triggered
+                          the event) or if no container name is specified "spec.containers[2]"
+                          (container with index 2 in this pod). This syntax is chosen
+                          only to have some well-defined way of referencing a part
+                          of an object. TODO: this design is not final and this field
+                          is subject to change in the future.'
+                        type: string
+                      kind:
+                        description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                        type: string
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                        type: string
+                      namespace:
+                        description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                        type: string
+                      resourceVersion:
+                        description: 'Specific resourceVersion to which this reference
+                          is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                        type: string
+                      uid:
+                        description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                        type: string
+                    type: object
                   sql:
                     default: ""
                     description: The SQL statement which will be executed to query
@@ -312,6 +390,10 @@ spec:
                       Minio), a SQL location like a table or a view, a data stream
                       (i.e. Kafka, currently unsupported), or a web location (currently
                       unsupported)
+                    type: string
+                  url:
+                    default: ""
+                    description: The url of the web resource, can be http or git location
                     type: string
                 type: object
               owner:
@@ -490,6 +572,43 @@ spec:
                   of the data in the case that it is being read directly from a database,
                   and must be converted to a flat-file type such as a CSV as a result
                 type: boolean
+              subtask:
+                default: none
+                description: The machine learning sub task relevant to the Dataset.
+                  This field *must* be the same as the Data Source of the object
+                enum:
+                - text-ner
+                - text-classification
+                - text-multi-classification
+                - text-regression
+                - text-multi-label-classification
+                - text-conversation
+                - text-lang-generation
+                - text-lang-model
+                - text-multi-modal
+                - text-ner
+                - text-qa
+                - text-summarization
+                - text-sentence-pair
+                - text-representation-generation
+                - text-sentiment-analysis
+                - text-code-generation
+                - text-translation
+                - text-lang-detection
+                - text-grammar-correction
+                - text-paraphrasing
+                - text-intent-classification
+                - text-semantic-similarity
+                - text-keyword-extraction
+                - text-pos
+                - text-tokenization
+                - text-lemma
+                - image-classification
+                - image-multi-label-classification
+                - image-object-detection
+                - image-segmentation
+                - none
+                type: string
               synthetic:
                 default: false
                 description: Indicates if synthetic data should be generated (currently
@@ -507,39 +626,13 @@ spec:
                 enum:
                 - binary-classification
                 - multi-classification
-                - multi-label-classification
                 - forecasting
                 - regression
                 - clustering
                 - recommendation
                 - outlier-detection
                 - novelty-detection
-                - topic-modeling
-                - video-action-recognition
-                - video-classification
-                - video-object-tracking
-                - image-classification
-                - image-multi-classification
-                - image-object-detection
-                - image-segmentation
                 - auto
-                - text-ner
-                - text-classification
-                - text-summarization
-                - text-qa
-                - text-sentiment-analysis
-                - text-generation
-                - text-code-generation
-                - text-translation
-                - text-lang-detection
-                - text-grammer-correction
-                - text-paraphrasing
-                - text-intent-classification
-                - text-semantic-similarity
-                - text-keyword-extraction
-                - text-pos
-                - text-tokenization
-                - text-lemma
                 - unknown
                 type: string
               type:
@@ -569,6 +662,10 @@ spec:
           status:
             description: DatasetStatus defines the observed state of a Dataset object
             properties:
+              anomaliesUri:
+                description: The location of anomaly file. The file contain the list
+                  of rows that were marked as anomaly by an isolation forest. algorithm
+                type: string
               conditions:
                 items:
                   description: DatasetCondition describes the state of a dataset at
@@ -803,6 +900,10 @@ spec:
                         importance:
                           description: The feature importance of the column
                           type: number
+                        index:
+                          description: The column index in the dataset
+                          format: int32
+                          type: integer
                         indexOfPeculiarity:
                           description: Used for text attributes
                           type: number
@@ -854,10 +955,20 @@ spec:
                             as specified by the Dataset's DataSource
                           type: boolean
                         outliers:
-                          description: The amount of outliers detected in the columns
-                            values
-                          format: int32
-                          type: integer
+                          description: Outlier statistics.
+                          properties:
+                            lower:
+                              description: number of outliers below
+                              format: int32
+                              type: integer
+                            percent:
+                              description: percent of outliers.
+                              type: number
+                            upper:
+                              description: number of outliers above
+                              format: int32
+                              type: integer
+                          type: object
                         p25:
                           description: The 25% point of all the values of the column
                             in order
@@ -998,9 +1109,3 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
